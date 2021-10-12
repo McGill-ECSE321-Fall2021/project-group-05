@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: Windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -27,8 +27,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
       working-directory: OnlineLibrary-Backend
-    - name: Deploy to Heroku
-      uses: akhileshns/heroku-deploy@v3.12.12
+    - uses: akhileshns/heroku-deploy@v3.12.12
       with:
         heroku_api_key: 64118b4c-0551-49a2-8fa2-45cee48f24b0
         heroku_app_name: "onlinelibrary-backend-05a"
