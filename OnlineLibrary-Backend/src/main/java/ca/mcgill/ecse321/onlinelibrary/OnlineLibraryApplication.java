@@ -2,7 +2,7 @@ package ca.mcgill.ecse321.onlinelibrary;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.SpringApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @SpringBootApplication
 public class OnlineLibraryApplication {
@@ -11,7 +11,7 @@ public class OnlineLibraryApplication {
 		SpringApplication.run(OnlineLibraryApplication.class, args);
 	}
 
-	@RequestMapping("/")
+	@GetMapping("/test")
 	public String greeting(){
 		return "Hello world!";
 	}
