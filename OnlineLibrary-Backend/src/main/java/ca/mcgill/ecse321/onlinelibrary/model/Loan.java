@@ -1,64 +1,72 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 //
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import java.sql.Date;
 import java.sql.Time;
 
-//@Entity
+@Entity
+@Table(name = "loan")
 public class Loan {
-//	private int id;
-//	private Date returnDate;
-//	private int numberOfRenewals;
-//	
-//	private ReservableItem item;
-//	//private User user;
-//	
-//	//Need to confirm what we do with constructors
-//	public Loan (int value) {
-//		this.id = value;
-//	}
-//	//If we require an id in the constructor, we probably don't want a method to setId
-//	public void setId (int value) {
-//		this.id=value;
-//	}
-//	
-//	@Id
-//	public int getId() {
-//		return this.id;
-//	}
-//	
-//	public void setReturnDate(Date aDate) {
-//		this.returnDate = aDate;
-//	}
-//	
-//	public Date getReturnDate() {
-//		return this.returnDate;
-//	}
-//	
-//	public void setNumberOfRenewals (int numberOfRenewals) {
-//		this.numberOfRenewals = numberOfRenewals;
-//	}
-//	
-//	public int getNumberOfRenewals () {
-//		return this.numberOfRenewals;
-//	}
-//	
-//	//@OneToOne(cascade = { CascadeType.ALL })
-//	public ReservableItem getReservableItem () {
-//		return this.item;
-//	}
-//	
-//	public void setReservableItem (ReservableItem item) {
-//		this.item = item;
-//	}
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
+	private int id;
+	public void setId (int value) {
+		this.id=value;
+	}
+	
+	public int getId() {
+		return this.id;
+	}
+	
+	private Date returnDate;
+	public void setReturnDate(Date date) {
+		this.returnDate = date;
+	}
+	
+	public Date getReturnDate() {
+		return this.returnDate;
+	}
+	
+	private int numberOfRenewals;
+	
+	public void setNumberOfRenewals (int numberOfRenewals) {
+	this.numberOfRenewals = numberOfRenewals;
+	}
+
+	public int getNumberOfRenewals () {
+		return this.numberOfRenewals;
+	}
+	
+	
+	@OneToOne(cascade = { CascadeType.ALL })
+	@JoinColumn(name = "library_item_id")
+	private ReservableItem item;
+	public ReservableItem getReservableItem () {
+		return this.item;
+	}
+	
+	public void setReservableItem (ReservableItem item) {
+		this.item = item;
+	}
+	
+	//private User user;
+	
+
+
 	
 }
