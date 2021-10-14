@@ -13,14 +13,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "reservableItem")
 public abstract class ReservableItem extends LibraryItem{
 	
 	public enum ItemStatus {Available, CheckedOut, Reserved}
 	
 	private ItemStatus status;
 	
-	@Autowired
+	
 	public void setStatus (ItemStatus status) {
 		this.status = status;
 	}
@@ -29,17 +28,18 @@ public abstract class ReservableItem extends LibraryItem{
 		return this.status;
 	}
 	
-	private Loan loan;
-	@OneToOne(cascade = { CascadeType.ALL })
-	@JoinColumn(name = "loan_id")
-	public Loan getLoan(){
-		return this.loan;
-	}
 	
-	@Autowired
-	public void setLoan (Loan loan) {
-		this.loan=loan;
-	}
+//	private Loan loan;
+//	@OneToOne(cascade = { CascadeType.ALL })
+//	@JoinColumn(name = "loan_id")
+//	public Loan getLoan(){
+//		return this.loan;
+//	}
+//	
+//	@Autowired
+//	public void setLoan (Loan loan) {
+//		this.loan=loan;
+//	}
 	
 	
 }
