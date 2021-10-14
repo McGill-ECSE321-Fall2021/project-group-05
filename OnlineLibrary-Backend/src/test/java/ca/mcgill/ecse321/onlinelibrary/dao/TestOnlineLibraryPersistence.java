@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import ca.mcgill.ecse321.onlinelibrary.model.Album;
+import ca.mcgill.ecse321.onlinelibrary.model.Movie;
 
 
 @ExtendWith(SpringExtension.class)
@@ -17,17 +19,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TestOnlineLibraryPersistence {
 
     @Autowired
-    private LibraryItemRepository libraryItemRepository;
-    @Autowired
-    private ReservableItemRepository reservableItemRepository;
-    @Autowired
     private BookRepository bookRepository;
+	@Autowired
+	private MovieRepository movieRepository;
+	@Autowired
+	private AlbumRepository albumRepository;
 
     @AfterEach
     public void clearDatabase() {
-        libraryItemRepository.deleteAll();
-        reservableItemRepository.deleteAll();
         bookRepository.deleteAll();
+		movieRepository.deleteAll();
+		albumRepository.deleteAll();
     }
 
     @Test
@@ -41,4 +43,26 @@ public class TestOnlineLibraryPersistence {
         assertEquals(id, book.getId());
         assertEquals(ItemStatus.CheckedOut, book.getStatus());
     }
+	@Test
+	public void testPersistAndLoadMovie() {
+		Movie movie = new Movie();
+		movie.setStatus(ItemStatus.Available);
+		movieRepository.save(movie);
+		int id = movie.getId();
+		movie = null;
+		movie = movieRepository.findMovieById(id);
+		assertEquals(id, movie.getId());
+		assertEquals(ItemStatus.Available, movie.getStatus());
+	}
+	@Test
+	public void testPersistAndLoadAlbum() {
+		Album album = new Album();
+		album.setStatus(ItemStatus.Reserved);
+		albumRepository.save(album);
+		int id = album.getId();
+		album = null;
+		album = albumRepository.findAlbumById(id);
+		assertEquals(id, album.getId());
+		assertEquals(ItemStatus.Reserved, album.getStatus());
+	}
 }
