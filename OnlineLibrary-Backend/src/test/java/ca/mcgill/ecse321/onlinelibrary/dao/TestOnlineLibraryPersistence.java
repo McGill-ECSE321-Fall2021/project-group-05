@@ -21,8 +21,6 @@ public class TestOnlineLibraryPersistence {
     @Autowired
     private ReservableItemRepository reservableItemRepository;
     @Autowired
-	@Autowired 
-    @Autowired
     private BookRepository bookRepository;
 
     @AfterEach
@@ -33,14 +31,15 @@ public class TestOnlineLibraryPersistence {
     }
 
     @Test
-		Integer id = 789;
-		Book book = new Book();
-		book.setId(id);
-		book.setStatus(ItemStatus.CheckedOut);
-		bookRepository.save(book);
-		book = null;
-		book = bookRepository.findBookById(id);
-		assertEquals(id, book.getId());
-		assertEquals(ItemStatus.CheckedOut, book.getStatus());
-	}
+    public void testPersistAndLoadBook() {
+        Book book = new Book();
+        book.setStatus(ItemStatus.CheckedOut);
+        bookRepository.save(book);
+        int id = book.getId();
+        System.out.println(id);
+        book = null;
+        book = bookRepository.findBookById(id);
+        assertEquals(id, book.getId());
+        assertEquals(ItemStatus.CheckedOut, book.getStatus());
+    }
 }
