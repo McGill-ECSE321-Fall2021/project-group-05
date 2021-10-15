@@ -29,17 +29,5 @@ public abstract class ReservableItem extends LibraryItem{
 	}
 	
 	
-//	private Loan loan;
-//	@OneToOne(cascade = { CascadeType.ALL })
-//	@JoinColumn(name = "loan_id")
-//	public Loan getLoan(){
-//		return this.loan;
-//	}
-//	
-//	@Autowired
-//	public void setLoan (Loan loan) {
-//		this.loan=loan;
-//	}
-	
-	
+
 }
