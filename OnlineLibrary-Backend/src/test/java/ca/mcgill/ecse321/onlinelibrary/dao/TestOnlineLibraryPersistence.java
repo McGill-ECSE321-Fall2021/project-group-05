@@ -36,7 +36,6 @@ public class TestOnlineLibraryPersistence {
         book.setStatus(ItemStatus.CheckedOut);
         bookRepository.save(book);
         int id = book.getId();
-        System.out.println(id);
         book = null;
         book = bookRepository.findBookById(id);
         assertEquals(id, book.getId());
