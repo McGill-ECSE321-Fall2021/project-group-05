@@ -24,10 +24,16 @@ public class Holiday {
     }
 	
 	// Setters
-	public void setStartDate(Date startDate) {
+	public boolean setStartDate(Date startDate) {
+		boolean wasSet = false;
 		this.startDate = startDate;
+		wasSet = true;
+		return wasSet;
 	}
-	public void setEndDate(Date endDate) {
+	public boolean setEndDate(Date endDate) {
+		boolean wasSet = false;
 		this.endDate = endDate;
+		wasSet = true;
+		return wasSet;
 	}
 }
