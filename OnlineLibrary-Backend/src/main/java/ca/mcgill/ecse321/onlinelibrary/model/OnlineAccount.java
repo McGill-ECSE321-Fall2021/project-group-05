@@ -18,7 +18,7 @@ public class OnlineAccount {
 	private String emailAddress;
 
 	// Associations
-	@OneToOne(optional = false)
+	@OneToOne(optional = false, targetEntity = User.class)
 	private User accountOwner;
 
 	// Constructor
@@ -83,8 +83,7 @@ public class OnlineAccount {
 			return wasSet;
 		}
 
-		OnlineAccount existingOnlineAccount = aNewAccountOwner
-				.getOnlineAccount();
+		OnlineAccount existingOnlineAccount = aNewAccountOwner.getOnlineAccount();
 		if (existingOnlineAccount != null && !equals(existingOnlineAccount)) {
 			// Unable to setAccountOwner, the current accountOwner already has a
 			// onlineAccount, which would be orphaned if it were re-assigned
@@ -112,15 +111,11 @@ public class OnlineAccount {
 
 	@Override
 	public String toString() {
-		return super.toString() + "[" + "id" + ":" + getId() + ","
-				+ "passwordHash" + ":" + getPasswordHash() + "," + "username"
-				+ ":" + getUsername() + "," + "emailAddress" + ":"
-				+ getEmailAddress() + "]"
-				+ System.getProperties().getProperty("line.separator") + "  "
-				+ "accountOwner = "
+		return super.toString() + "[" + "id" + ":" + getId() + "," + "passwordHash" + ":" + getPasswordHash() + ","
+				+ "username" + ":" + getUsername() + "," + "emailAddress" + ":" + getEmailAddress() + "]"
+				+ System.getProperties().getProperty("line.separator") + "  " + "accountOwner = "
 				+ (getAccountOwner() != null
-				? Integer.toHexString(
-						System.identityHashCode(getAccountOwner()))
+				? Integer.toHexString(System.identityHashCode(getAccountOwner()))
 						: "null");
 	}
 }

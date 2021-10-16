@@ -1,11 +1,9 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
-import java.util.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -19,10 +17,8 @@ public class User {
 	private String fullName;
 
 	// Associations
-	@OneToOne(optional = true)
+	@OneToOne(optional = false, targetEntity = OnlineAccount.class)
 	private OnlineAccount onlineAccount;
-	@OneToMany
-	private List<Loan> loans;
 
 	// Constructors
 	protected User() {
@@ -31,8 +27,6 @@ public class User {
 	public User(String address, String fullName) {
 		this.address = address;
 		this.fullName = fullName;
-
-		this.loans = new ArrayList<Loan>();
 	}
 
 	// Interface
@@ -64,31 +58,6 @@ public class User {
 		return onlineAccount;
 	}
 
-	public Loan getLoan(int index) {
-		Loan aLoan = loans.get(index);
-		return aLoan;
-	}
-
-	public List<Loan> getLoans() {
-		List<Loan> newLoans = Collections.unmodifiableList(loans);
-		return newLoans;
-	}
-
-	public int numberOfLoans() {
-		int number = loans.size();
-		return number;
-	}
-
-	public boolean hasLoans() {
-		boolean has = loans.size() > 0;
-		return has;
-	}
-
-	public int indexOfLoan(Loan aLoan) {
-		int index = loans.indexOf(aLoan);
-		return index;
-	}
-
 	public boolean setOnlineAccount(OnlineAccount aNewOnlineAccount) {
 		boolean wasSet = false;
 		if (onlineAccount != null && !onlineAccount.equals(aNewOnlineAccount)
@@ -99,9 +68,7 @@ public class User {
 		}
 
 		onlineAccount = aNewOnlineAccount;
-		User anOldAccountOwner = aNewOnlineAccount != null
-				? aNewOnlineAccount.getAccountOwner()
-						: null;
+		User anOldAccountOwner = aNewOnlineAccount != null ? aNewOnlineAccount.getAccountOwner() : null;
 
 		if (!this.equals(anOldAccountOwner)) {
 			if (anOldAccountOwner != null) {
@@ -113,45 +80,5 @@ public class User {
 		}
 		wasSet = true;
 		return wasSet;
-	}
-
-	public boolean addLoan(Loan aLoan) {
-		boolean wasAdded = false;
-		if (loans.contains(aLoan)) {
-			return false;
-		}
-		// TODO Add back check for too many loans?
-
-		User existingUser = aLoan.getUser();
-		boolean isNewUser = existingUser != null && !this.equals(existingUser);
-		if (isNewUser) {
-			aLoan.setUser(this);
-		} else {
-			loans.add(aLoan);
-		}
-		wasAdded = true;
-		return wasAdded;
-	}
-
-	public boolean removeLoan(Loan aLoan) {
-		boolean wasRemoved = false;
-		// Unable to remove aLoan, as it must always have a user
-		if (!this.equals(aLoan.getUser())) {
-			loans.remove(aLoan);
-			wasRemoved = true;
-		}
-		return wasRemoved;
-	}
-
-	@Override
-	public String toString() {
-		return super.toString() + "[" + "id" + ":" + getId() + "," + "address"
-				+ ":" + getAddress() + "," + "fullName" + ":" + getFullName()
-				+ "]" + System.getProperties().getProperty("line.separator")
-				+ "  " + "onlineAccount = "
-				+ (getOnlineAccount() != null
-				? Integer.toHexString(
-						System.identityHashCode(getOnlineAccount()))
-						: "null");
 	}
 }
