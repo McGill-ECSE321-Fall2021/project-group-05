@@ -100,16 +100,28 @@ public class TestOnlineLibraryPersistence {
 
 	@Test
 	public void testPersistAndLoadUser() {
+		// Create user with online account
 		User originalUser = new User("123 McGill Street", "Obi-Wan Kenobi");
+		OnlineAccount originalOnlineAccount = new OnlineAccount("12345", "obi1kenobi", "obiwan.kenobi@mail.mcgill.ca",
+				originalUser);
 
+		// Persist user
 		userRepository.save(originalUser);
+		onlineAccountRepository.save(originalOnlineAccount);
+
+		// Get IDs and drop references to objects
 		Integer userId = originalUser.getId();
+		Integer onlineAccountId = originalOnlineAccount.getId();
 		originalUser = null;
+		originalOnlineAccount = null;
 
+		// Load user and verify attributes and association
 		User retrievedUser = userRepository.findUserById(userId);
-
 		assertNotNull(retrievedUser);
 		assertEquals("123 McGill Street", retrievedUser.getAddress());
 		assertEquals("Obi-Wan Kenobi", retrievedUser.getFullName());
+		OnlineAccount retrievedOnlineAccount = retrievedUser.getOnlineAccount();
+		assertNotNull(retrievedOnlineAccount);
+		assertEquals(onlineAccountId, retrievedOnlineAccount.getId());
 	}
 }
