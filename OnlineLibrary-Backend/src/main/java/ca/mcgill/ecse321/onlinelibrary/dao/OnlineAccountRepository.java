@@ -6,7 +6,7 @@ import ca.mcgill.ecse321.onlinelibrary.model.User;
 
 public interface OnlineAccountRepository extends CrudRepository<OnlineAccount, Integer> {
 
-	public OnlineAccount findOnlineAccountById(Integer id);
+	public OnlineAccount findOnlineAccountById(int id);
 
 	public OnlineAccount findOnlineAccountByUser(User user);
 }
