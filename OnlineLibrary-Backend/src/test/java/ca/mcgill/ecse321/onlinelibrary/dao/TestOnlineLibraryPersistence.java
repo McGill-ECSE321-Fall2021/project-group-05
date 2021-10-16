@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
 
 import ca.mcgill.ecse321.onlinelibrary.model.Album;
 import ca.mcgill.ecse321.onlinelibrary.model.Movie;
@@ -114,8 +115,7 @@ public class TestOnlineLibraryPersistence {
 		ReservableItem reservableItem = new Book();
 		Loan loan = new Loan();
 		loan.setReservableItem(reservableItem);
-		long dateMS = 11;
-		Date date = new Date(dateMS);
+		Date date = Date.valueOf(LocalDate.of(2021, 10, 16));
 		loan.setReturnDate(date);
 		int numberOfRenewals = 2;
 		loan.setNumberOfRenewals(numberOfRenewals);

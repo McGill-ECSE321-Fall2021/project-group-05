@@ -22,19 +22,20 @@ public class Loan {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private Integer id;
 	
+	private Date returnDate;
+	private int numberOfRenewals;
 	
-	public void setId (int value) {
-		this.id=value;
-	}
+	@OneToOne(cascade = { CascadeType.ALL }, optional=false)
+	@JoinColumn(name = "library_item_id")
+	private ReservableItem item;
 	
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 	
 	
-	private Date returnDate;
 	public void setReturnDate(Date date) {
 		this.returnDate = date;
 	}
@@ -43,7 +44,7 @@ public class Loan {
 		return this.returnDate;
 	}
 	
-	private int numberOfRenewals;
+	
 	
 	public void setNumberOfRenewals (int numberOfRenewals) {
 	this.numberOfRenewals = numberOfRenewals;
@@ -53,10 +54,6 @@ public class Loan {
 		return this.numberOfRenewals;
 	}
 	
-	
-	@OneToOne(cascade = { CascadeType.ALL }, optional=false)
-	@JoinColumn(name = "library_item_id")
-	private ReservableItem item;
 	public ReservableItem getReservableItem () {
 		return this.item;
 	}
