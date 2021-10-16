@@ -1,56 +1,59 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
+
 import java.sql.Date;
 import javax.persistence.*;
 
 @Entity
 public class ArchiveInfo extends LibraryItemInfo {
-	
+
 	private String title;
 	private String description;
 	private Date publicationDate;
 
 	public boolean setTitle(String aTitle) {
-	boolean wasSet = false;
-	title = aTitle;
-	wasSet = true;
-	return wasSet;
+		boolean wasSet = false;
+		title = aTitle;
+		wasSet = true;
+		return wasSet;
 	}
-	 
+
 	public boolean setDescription(String aDescription) {
-	boolean wasSet = false;
-	description = aDescription;
-	wasSet = true;
-	return wasSet;
+		boolean wasSet = false;
+		description = aDescription;
+		wasSet = true;
+		return wasSet;
 	}
-	 
+
 	public boolean setPublicationDate(Date aPublicationDate) {
-	boolean wasSet = false;
-	publicationDate = aPublicationDate;
-	wasSet = true;
-	return wasSet;
+		boolean wasSet = false;
+		publicationDate = aPublicationDate;
+		wasSet = true;
+		return wasSet;
 	}
 
 	public String getTitle() {
-	return title;
+		return title;
 	}
 
 	public String getDescription() {
-	return description;
+		return description;
 	}
-	 
+
 	public Date getPublicationDate() {
-	return publicationDate;
+		return publicationDate;
 	}
-	 
+
 	public void delete() {
-	super.delete();
+		super.delete();
 	}
 
 	public String toString() {
-	return super.toString() + "["+
-	"title" + ":" + getTitle()+ "," +
-	"description" + ":" + getDescription()+ "]" + System.getProperties().getProperty("line.separator") +
-	"  " + "publicationDate" + "=" + (getPublicationDate() != null ? !getPublicationDate().equals(this)  ? getPublicationDate().toString().replaceAll("  ","    ") : "this" : "null");
+		return super.toString() + "[" + "title" + ":" + getTitle() + "," + "description" + ":" + getDescription() + "]"
+				+ System.getProperties().getProperty("line.separator") + "  " + "publicationDate" + "="
+				+ (getPublicationDate() != null
+						? !getPublicationDate().equals(this) ? getPublicationDate().toString().replaceAll("  ", "    ")
+								: "this"
+						: "null");
 	}
-	
+
 }
