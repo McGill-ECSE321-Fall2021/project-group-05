@@ -74,6 +74,8 @@ This online library system serves a library in a small town. It assists libraria
           <li>Review requirements and domain model</li>
           <li>Creation of LibraryOpeningHours, Holiday, RoomBooking and Room class files, repositories and their corresponding persistence unit tests</li>	
           <li>Addition of issue-linking CI tool for better organization of dependent issues</li>
+	  <li>Review Pull Requests</li>
+	  <li>Write a detailed use-case specification for the opening hours setup use-case</li>
         </ul>
       </td>
       <td></td>
