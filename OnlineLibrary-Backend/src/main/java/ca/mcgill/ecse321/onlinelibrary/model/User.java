@@ -7,9 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 
 @Entity
 public class User {
@@ -27,10 +24,10 @@ public class User {
 	@OneToMany
 	private List<Loan> loans;
 
-	@Autowired
-	Environment env;
+	// Constructors
+	protected User() {
+	}
 
-	// Constructor
 	public User(String address, String fullName) {
 		this.address = address;
 		this.fullName = fullName;
@@ -118,31 +115,12 @@ public class User {
 		return wasSet;
 	}
 
-	public int maximumNumberOfLoans() {
-		int defaultMaxNumLoans = 5;
-		String maxNumLoansStr = env.getProperty("library.MAX_NUM_LOANS");
-
-		// Property not found: default to 5
-		if (StringUtils.isEmpty(maxNumLoansStr)) {
-			return defaultMaxNumLoans;
-		}
-
-		// Parse to int and return
-		try {
-			return Integer.parseInt(maxNumLoansStr);
-		} catch (NumberFormatException e) {
-			return defaultMaxNumLoans;
-		}
-	}
-
 	public boolean addLoan(Loan aLoan) {
 		boolean wasAdded = false;
 		if (loans.contains(aLoan)) {
 			return false;
 		}
-		if (numberOfLoans() >= maximumNumberOfLoans()) {
-			return wasAdded;
-		}
+		// TODO Add back check for too many loans?
 
 		User existingUser = aLoan.getUser();
 		boolean isNewUser = existingUser != null && !this.equals(existingUser);
