@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
 import java.util.*;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
+@Entity
 public class User {
 
 	// Attributes
