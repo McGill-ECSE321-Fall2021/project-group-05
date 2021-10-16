@@ -128,6 +128,7 @@ public class TestOnlineLibraryPersistence {
 		assertEquals(onlineAccountId, retrievedOnlineAccount.getId());
 	}
 
+	@Test
 	public void testPersistAndLoadOnlineAccount() {
 		// Create user with online account
 		User originalUser = new User("66 McGill Street", "Anakin Skywalker");
