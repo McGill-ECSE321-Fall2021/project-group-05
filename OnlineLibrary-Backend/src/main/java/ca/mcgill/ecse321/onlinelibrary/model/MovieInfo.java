@@ -1,16 +1,11 @@
-import java.util.*;
+package ca.mcgill.ecse321.onlinelibrary.model;
+import javax.persistence.*;
 
+@Entity
 public class MovieInfo extends ReservableItemInfo{
 	private String genre;
 	private String director;
 	private int length;
-
-	public MovieInfo(int aId, String aGenre, String aDirector, int aLength) {
-	super(aId);
-	genre = aGenre;
-	director = aDirector;
-	length = aLength;
-	}
 
 	public boolean setGenre(String aGenre) {
 	boolean wasSet = false;

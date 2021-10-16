@@ -1,13 +1,13 @@
+package ca.mcgill.ecse321.onlinelibrary.model;
+import javax.persistence.*;
 
+@Entity
 public abstract class LibraryItemInfo {
 	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
-	
-	//CONSTRUCTOR
-	public LibraryItemInfo(int aId) {
-		id = aId;
-	}
-	
+
 	public boolean setId(int aId) {
 	boolean wasSet = false;
 	id = aId;

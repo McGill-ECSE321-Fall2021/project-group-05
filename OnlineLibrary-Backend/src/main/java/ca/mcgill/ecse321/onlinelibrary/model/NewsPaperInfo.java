@@ -1,16 +1,12 @@
+package ca.mcgill.ecse321.onlinelibrary.model;
 import java.sql.Date;
+import javax.persistence.*;
 
+@Entity
 public class NewsPaperInfo extends LibraryItemInfo{
 	private Date publication;
 	private String frequency;
 	private int number;
-
-	public NewsPaperInfo(int aId, Date aPublication, String aFrequency, int aNumber) {
-	super(aId);
-	publication = aPublication;
-	frequency = aFrequency;
-	number = aNumber;
-	}
 
 	public boolean setPublication(Date aPublication) {
 	boolean wasSet = false;

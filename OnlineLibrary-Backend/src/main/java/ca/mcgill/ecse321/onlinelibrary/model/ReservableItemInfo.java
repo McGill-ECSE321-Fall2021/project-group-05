@@ -1,20 +1,19 @@
+package ca.mcgill.ecse321.onlinelibrary.model;
 import java.util.*;
+import javax.persistence.*;
 
+@Entity
 public abstract class ReservableItemInfo extends LibraryItemInfo{
 	
 	//Seb : is this actually useful? Louis needs it?
-	private List<User> users;
-	
-	public ReservableItemInfo(int aId) {
-	super(aId);
-	users = new ArrayList<User>();
-	}
+	private Set<User> users;
 
 	public User getUser(int index) {
 	User aUser = users.get(index);
 	return aUser;
 	}
-	 
+	
+	@ManyToMany
 	public List<User> getUsers() {
 	List<User> newUsers = Collections.unmodifiableList(users);
 	return newUsers;

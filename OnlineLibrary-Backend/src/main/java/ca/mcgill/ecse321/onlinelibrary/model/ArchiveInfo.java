@@ -1,19 +1,14 @@
+package ca.mcgill.ecse321.onlinelibrary.model;
 import java.sql.Date;
+import javax.persistence.*;
 
+@Entity
 public class ArchiveInfo extends LibraryItemInfo {
 	
 	private String title;
 	private String description;
 	private Date publicationDate;
 
-	// CONSTRUCTOR
-	public ArchiveInfo(int aId, String aTitle, String aDescription, Date aPublicationDate) {
-	super(aId);
-	title = aTitle;
-	description = aDescription;
-	publicationDate = aPublicationDate;
-	}
-	
 	public boolean setTitle(String aTitle) {
 	boolean wasSet = false;
 	title = aTitle;

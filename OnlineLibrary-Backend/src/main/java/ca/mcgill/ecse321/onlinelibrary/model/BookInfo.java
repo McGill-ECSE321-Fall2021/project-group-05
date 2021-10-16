@@ -1,16 +1,12 @@
-import java.util.*;
+package ca.mcgill.ecse321.onlinelibrary.model;
+import javax.persistence.*;
 
+@Entity
 public class BookInfo extends ReservableItemInfo{
 	private String title;
 	private int numberOfPage;
 	private String author;
-
-	public BookInfo(int aId, String aTitle, int aNumberOfPage, String aAuthor) {
-	super(aId);
-	title = aTitle;
-	numberOfPage = aNumberOfPage;
-	author = aAuthor;
-	}
+	private int isbn;
 
 	public boolean setTitle(String aTitle) {
 	boolean wasSet = false;
@@ -54,5 +50,14 @@ public class BookInfo extends ReservableItemInfo{
 	"title" + ":" + getTitle()+ "," +
 	"numberOfPage" + ":" + getNumberOfPage()+ "," +
 	"author" + ":" + getAuthor()+ "]";
+	}
+
+	public int getIsbn(){
+		return this.isbn;
+	}
+
+	public Boolean setIsbn(int isbn){
+		this.isbn = isbn;
+		return true;
 	}
 }

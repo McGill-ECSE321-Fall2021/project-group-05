@@ -1,16 +1,11 @@
-import java.util.*;
+package ca.mcgill.ecse321.onlinelibrary.model;
+import javax.persistence.*;
 
+@Entity
 public class AlbumInfo extends ReservableItemInfo{
 	private String title;
 	private String composerPerformer;
 	private String genre;
-
-	public AlbumInfo(int aId, String aTitle, String aComposerPerformer, String aGenre) {
-	super(aId);
-	title = aTitle;
-	composerPerformer = aComposerPerformer;
-	genre = aGenre;
-	}
 
 	public boolean setTitle(String aTitle) {
 	boolean wasSet = false;

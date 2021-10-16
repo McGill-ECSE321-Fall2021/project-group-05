@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.dao;
 
 import ca.mcgill.ecse321.onlinelibrary.model.Book;
+import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -26,12 +27,13 @@ public class TestOnlineLibraryPersistence {
 	@Autowired
 	private MovieRepository movieRepository;
 	@Autowired
-
 	private AlbumRepository albumRepository;
 	@Autowired
 	private ArchiveRepository archiveRepository;
 	@Autowired
 	private NewspaperRepository newspaperRepository;
+	@Autowired
+	private BookInfoRepository bookinfoRepository;
 
 	@AfterEach
 	public void clearDatabase() {
@@ -98,5 +100,16 @@ public class TestOnlineLibraryPersistence {
 		newspaper = newspaperRepository.findNewspaperById(id);
 		assertNotNull(newspaper);
 		assertEquals(id, newspaper.getId());
+	}
+
+	@Test 
+	public void testPersistBookInfo(){
+		BookInfo bookinfo = new BookInfo();
+		bookinfoRepository.save(bookinfo);
+		int isbn = bookinfo.getIsbn();
+		bookinfo = null;
+		bookinfo = bookinfoRepository.findBookInfoByIsbn(isbn);
+		assertNotNull(bookinfo);
+		assertEquals(isbn, bookinfo.getIsbn());
 	}
 }
