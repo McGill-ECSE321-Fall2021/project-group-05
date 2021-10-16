@@ -54,6 +54,11 @@ public class TestOnlineLibraryPersistence {
 		albumRepository.deleteAll();
 		archiveRepository.deleteAll();
 		newspaperRepository.deleteAll();
+		bookinfoRepository.deleteAll();
+		movieInfoRepository.deleteAll();
+		albumInfoRepository.deleteAll();
+		newsPaperInfoRepository.deleteAll();
+		archiveInfoRepository.deleteAll();
 	}
 
 	@Test
@@ -117,55 +122,70 @@ public class TestOnlineLibraryPersistence {
 	@Test 
 	public void testPersistBookInfo(){
 		BookInfo bookinfo = new BookInfo();
+		String title = "How to code in Java";
+		bookinfo.setTitle(title);
 		bookinfoRepository.save(bookinfo);
-		int isbn = bookinfo.getIsbn();
+		int id = bookinfo.getId();
 		bookinfo = null;
-		bookinfo = bookinfoRepository.findBookInfoByIsbn(isbn);
+		bookinfo = bookinfoRepository.findBookInfoById(id);
 		assertNotNull(bookinfo);
-		assertEquals(isbn, bookinfo.getIsbn());
+		assertEquals(id, bookinfo.getId());
+		assertEquals(title, bookinfo.getTitle());
 	}
 
 	@Test
 	public void testPersistMovieInfo(){
 		MovieInfo movieInfo = new MovieInfo();
+		String director = "Kiro";
+		movieInfo.setDirector(director);
 		movieInfoRepository.save(movieInfo);
 		int id = movieInfo.getId();
 		movieInfo = null;
 		movieInfo = movieInfoRepository.findMovieInfoById(id);
 		assertNotNull(movieInfo);
 		assertEquals(id, movieInfo.getId());
+		assertEquals(director, movieInfo.getDirector());
 	}
 
 	@Test
 	public void testPersistAlbumInfo(){
 		AlbumInfo albumInfo = new AlbumInfo();
+		String title = "Studying music";
+		albumInfo.setTitle(title);
 		albumInfoRepository.save(albumInfo);
 		int id = albumInfo.getId();
 		albumInfo = null;
 		albumInfo = albumInfoRepository.findAlbumInfoById(id);
 		assertNotNull(albumInfo);
 		assertEquals(id, albumInfo.getId());
+		assertEquals(title, albumInfo.getTitle());
 	}
 
 	@Test
 	public void testPersistNewsPaperInfo(){
 		NewsPaperInfo newsPaperInfo = new NewsPaperInfo();
+		int number = 5673;
+		newsPaperInfo.setNumber(number);
 		newsPaperInfoRepository.save(newsPaperInfo);
 		int id = newsPaperInfo.getId();
 		newsPaperInfo = null;
 		newsPaperInfo = newsPaperInfoRepository.findNewsPaperInfoById(id);
 		assertNotNull(newsPaperInfo);
 		assertEquals(id, newsPaperInfo.getId());
+		assertEquals(number, newsPaperInfo.getNumber());
 	}
 
 	@Test
 	public void testPersistArchiveInfo(){
 		ArchiveInfo archiveInfo = new ArchiveInfo();
+		String title = "History of Java";
+		archiveInfo.setTitle(title);
 		archiveInfoRepository.save(archiveInfo);
 		int id = archiveInfo.getId();
 		archiveInfo = null;
 		archiveInfo = archiveInfoRepository.findArchiveInfoById(id);
 		assertNotNull(archiveInfo);
 		assertEquals(id, archiveInfo.getId());
+		assertEquals(title, archiveInfo.getTitle());
 	}
 }
