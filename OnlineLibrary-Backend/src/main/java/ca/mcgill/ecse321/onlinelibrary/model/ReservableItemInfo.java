@@ -4,21 +4,12 @@ import java.util.*;
 import javax.persistence.*;
 
 @Entity
-<<<<<<< HEAD
-public abstract class ReservableItemInfo extends LibraryItemInfo{
-	
-	//Seb : is this actually useful? Louis needs it?
-	//TestSeb
-	//Test2
-	private Set<User> users;
-=======
-public abstract class ReservableItemInfo extends LibraryItemInfo {
 
+public abstract class ReservableItemInfo extends LibraryItemInfo {
 	// Seb : is this actually useful? Louis needs it?
 	@ManyToMany
 	@OrderColumn
 	private List<User> users;
->>>>>>> 6847ec43416387196db678e8076ca46011cbc835
 
 	public User getUser(int index) {
 		User aUser = users.get(index);
