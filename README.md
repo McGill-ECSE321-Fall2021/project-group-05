@@ -35,6 +35,9 @@ This online library system serves a library in a small town. It assists libraria
           <li>Write rough draft of requirements</li>
           <li>Design domain model</li>
           <li>Review requirements and domain model</li>
+	  <li>Creation of class Loan, LibraryItem, ReservableItem </li> 
+	  <li>Creation of class Book, Movie, Album, Newspaper, Archive </li>
+	  <li>Write a detailed use-case specification for reserving a library item</li>
         </ul>
       </td>
       <td></td>
