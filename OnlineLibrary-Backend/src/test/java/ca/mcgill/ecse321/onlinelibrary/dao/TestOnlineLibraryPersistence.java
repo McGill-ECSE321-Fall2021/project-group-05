@@ -1,5 +1,8 @@
 package ca.mcgill.ecse321.onlinelibrary.dao;
 
+import ca.mcgill.ecse321.onlinelibrary.model.Book;
+import ca.mcgill.ecse321.onlinelibrary.model.Loan;
+import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
@@ -16,10 +19,15 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+
 import ca.mcgill.ecse321.onlinelibrary.model.Album;
 import ca.mcgill.ecse321.onlinelibrary.model.Movie;
 import ca.mcgill.ecse321.onlinelibrary.model.Archive;
 import ca.mcgill.ecse321.onlinelibrary.model.Newspaper;
+import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem;
 import ca.mcgill.ecse321.onlinelibrary.model.Book;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 
@@ -40,7 +48,8 @@ public class TestOnlineLibraryPersistence {
 	private ArchiveRepository archiveRepository;
 	@Autowired
 	private NewspaperRepository newspaperRepository;
-	
+	@Autowired
+	private LoanRepository loanRepository;
 	@Autowired
 	private LibraryOpeningHoursRepository libraryOpeningHoursRepository;
 	@Autowired
@@ -48,6 +57,7 @@ public class TestOnlineLibraryPersistence {
 
 	@AfterEach
 	public void clearDatabase() {
+		loanRepository.deleteAll();
 		bookRepository.deleteAll();
 		movieRepository.deleteAll();
 		albumRepository.deleteAll();
@@ -116,6 +126,27 @@ public class TestOnlineLibraryPersistence {
 	}
 	
 	@Test
+	public void testPersistAndLoadLoan() {
+		
+		ReservableItem reservableItem = new Book();
+		Loan loan = new Loan();
+		loan.setReservableItem(reservableItem);
+		Date date = Date.valueOf(LocalDate.of(2021, 10, 16));
+		loan.setReturnDate(date);
+		int numberOfRenewals = 2;
+		loan.setNumberOfRenewals(numberOfRenewals);
+		loanRepository.save(loan);
+		int id = loan.getId();
+		loan = null;
+		loan = loanRepository.findLoanById(id);
+		assertNotNull(loan);
+		assertEquals(id, loan.getId());
+		assertEquals(reservableItem.getId(), loan.getReservableItem().getId());
+		assertEquals(numberOfRenewals, loan.getNumberOfRenewals());
+		assertEquals(date.toString(), loan.getReturnDate().toString());
+		
+	}
+	
 	public void testPersistAndLoadLibraryOpeningHours() {
 		Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
 		Time startTime = java.sql.Time.valueOf(LocalTime.of(11, 35));
