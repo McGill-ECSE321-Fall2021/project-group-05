@@ -46,11 +46,7 @@ public class Loan {
 		if (aUser == null) {
 			return wasSet;
 		}
-
-		// User already at maximum
-		if (aUser.numberOfLoans() >= aUser.maximumNumberOfLoans()) {
-			return wasSet;
-		}
+		// TODO Add back check for too many loans?
 
 		User existingUser = user;
 		user = aUser;

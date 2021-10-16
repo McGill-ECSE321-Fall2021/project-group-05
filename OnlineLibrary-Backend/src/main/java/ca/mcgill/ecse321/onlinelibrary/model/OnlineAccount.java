@@ -22,6 +22,10 @@ public class OnlineAccount {
 	private User accountOwner;
 
 	// Constructor
+	protected OnlineAccount() {
+
+	}
+
 	public OnlineAccount(String aPasswordHash, String aUsername,
 			String aEmailAddress, User aAccountOwner) {
 		passwordHash = aPasswordHash;
