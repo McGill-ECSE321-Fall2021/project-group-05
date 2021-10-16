@@ -62,6 +62,8 @@ This online library system serves a library in a small town. It assists libraria
           <li>Write rough draft of requirements</li>
           <li>Write final draft of requirements</li>
           <li>Review requirements and domain model</li>
+          <li>Creation of LibraryOpeningHours, Holiday, RoomBooking and Room class files, repositories and their corresponding persistence unit tests</li>	
+          <li>Addition of issue-linking CI tool for better organization of dependent issues</li>
         </ul>
       </td>
       <td></td>
