@@ -14,8 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import ca.mcgill.ecse321.onlinelibrary.model.Album;
+import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.Movie;
+import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.Archive;
+import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.Newspaper;
 
 @ExtendWith(SpringExtension.class)
@@ -34,6 +38,14 @@ public class TestOnlineLibraryPersistence {
 	private NewspaperRepository newspaperRepository;
 	@Autowired
 	private BookInfoRepository bookinfoRepository;
+	@Autowired 
+	private MovieInfoRepository movieInfoRepository;
+	@Autowired
+	private AlbumInfoRepository albumInfoRepository;
+	@Autowired
+	private NewsPaperInfoRepository newsPaperInfoRepository;
+	@Autowired
+	private ArchiveInfoRepository archiveInfoRepository;
 
 	@AfterEach
 	public void clearDatabase() {
@@ -111,5 +123,49 @@ public class TestOnlineLibraryPersistence {
 		bookinfo = bookinfoRepository.findBookInfoByIsbn(isbn);
 		assertNotNull(bookinfo);
 		assertEquals(isbn, bookinfo.getIsbn());
+	}
+
+	@Test
+	public void testPersistMovieInfo(){
+		MovieInfo movieInfo = new MovieInfo();
+		movieInfoRepository.save(movieInfo);
+		int id = movieInfo.getId();
+		movieInfo = null;
+		movieInfo = movieInfoRepository.findMovieInfoById(id);
+		assertNotNull(movieInfo);
+		assertEquals(id, movieInfo.getId());
+	}
+
+	@Test
+	public void testPersistAlbumInfo(){
+		AlbumInfo albumInfo = new AlbumInfo();
+		albumInfoRepository.save(albumInfo);
+		int id = albumInfo.getId();
+		albumInfo = null;
+		albumInfo = albumInfoRepository.findAlbumInfoById(id);
+		assertNotNull(albumInfo);
+		assertEquals(id, albumInfo.getId());
+	}
+
+	@Test
+	public void testPersistNewsPaperInfo(){
+		NewsPaperInfo newsPaperInfo = new NewsPaperInfo();
+		newsPaperInfoRepository.save(newsPaperInfo);
+		int id = newsPaperInfo.getId();
+		newsPaperInfo = null;
+		newsPaperInfo = newsPaperInfoRepository.findNewsPaperInfoById(id);
+		assertNotNull(newsPaperInfo);
+		assertEquals(id, newsPaperInfo.getId());
+	}
+
+	@Test
+	public void testPersistArchiveInfo(){
+		ArchiveInfo archiveInfo = new ArchiveInfo();
+		archiveInfoRepository.save(archiveInfo);
+		int id = archiveInfo.getId();
+		archiveInfo = null;
+		archiveInfo = archiveInfoRepository.findArchiveInfoById(id);
+		assertNotNull(archiveInfo);
+		assertEquals(id, archiveInfo.getId());
 	}
 }
