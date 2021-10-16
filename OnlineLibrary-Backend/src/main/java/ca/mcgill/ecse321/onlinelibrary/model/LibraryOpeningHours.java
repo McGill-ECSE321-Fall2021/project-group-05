@@ -30,19 +30,19 @@ public class LibraryOpeningHours {
     }
 	
 	// Setters
-	public void setDate(Date date) {
+	public boolean setDate(Date date) {
 		boolean wasSet = false;
         	this.date = date;
 	    	wasSet = true;
 	    	return wasSet;	
     	}
-	public void setStartTime(Time startTime) {
+	public boolean setStartTime(Time startTime) {
 		boolean wasSet = false;
 		this.startTime = startTime;
 	    	wasSet = true;
 	    	return wasSet;	
 	}
-	public void setEndTime(Time endTime) {
+	public boolean setEndTime(Time endTime) {
 		boolean wasSet = false;
 		this.endTime = endTime;
 	    	wasSet = true;
