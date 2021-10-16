@@ -1,6 +1,6 @@
 package ca.mcgill.ecse321.onlinelibrary.dao;
 
-import ca.mcgill.ecse321.onlinelibrary.model.Book;
+import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -8,14 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import ca.mcgill.ecse321.onlinelibrary.model.Album;
-import ca.mcgill.ecse321.onlinelibrary.model.Movie;
-import ca.mcgill.ecse321.onlinelibrary.model.Archive;
-import ca.mcgill.ecse321.onlinelibrary.model.Newspaper;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -32,6 +26,10 @@ public class TestOnlineLibraryPersistence {
 	private ArchiveRepository archiveRepository;
 	@Autowired
 	private NewspaperRepository newspaperRepository;
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private OnlineAccountRepository onlineAccountRepository;
 
 	@AfterEach
 	public void clearDatabase() {
@@ -98,5 +96,20 @@ public class TestOnlineLibraryPersistence {
 		newspaper = newspaperRepository.findNewspaperById(id);
 		assertNotNull(newspaper);
 		assertEquals(id, newspaper.getId());
+	}
+
+	@Test
+	public void testPersistAndLoadUser() {
+		User originalUser = new User("123 McGill Street", "Obi-Wan Kenobi");
+
+		userRepository.save(originalUser);
+		Integer userId = originalUser.getId();
+		originalUser = null;
+
+		User retrievedUser = userRepository.findUserById(userId);
+
+		assertNotNull(retrievedUser);
+		assertEquals("123 McGill Street", retrievedUser.getAddress());
+		assertEquals("Obi-Wan Kenobi", retrievedUser.getFullName());
 	}
 }
