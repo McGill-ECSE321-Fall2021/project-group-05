@@ -28,6 +28,7 @@ import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem;
 import ca.mcgill.ecse321.onlinelibrary.model.LibraryOpeningHours;
 import ca.mcgill.ecse321.onlinelibrary.model.Holiday;
 import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
+import ca.mcgill.ecse321.onlinelibrary.model.LibrarianShift;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -51,6 +52,8 @@ public class TestOnlineLibraryPersistence {
 	private HolidayRepository holidayRepository;
 	@Autowired
 	private LibrarianRepository librarianRepository;
+	@Autowired
+	private LibrarianShiftRepository librarianShiftRepository;
 
 	@AfterEach
 	public void clearDatabase() {
@@ -63,6 +66,7 @@ public class TestOnlineLibraryPersistence {
 		libraryOpeningHoursRepository.deleteAll();
 		holidayRepository.deleteAll();
 		librarianRepository.deleteAll();
+		librarianShiftRepository.deleteAll();
 	}
 
 	@Test
@@ -210,5 +214,29 @@ public class TestOnlineLibraryPersistence {
 		assertTrue(newLibrarian.isHead());
 
 		// TODO Check associations
+	}
+
+	@Test
+	public void testPersistAndLoadLibrarianShift() {
+		// Create and persist librarian shift
+		LibrarianShift originalShift = new LibrarianShift(Date.valueOf("2022-10-16"), Time.valueOf("9:00:00"),
+				Time.valueOf("17:00:00"));
+		originalShift = librarianShiftRepository.save(originalShift);
+
+		// Get ID and drop reference
+		int shiftId = originalShift.getId();
+		originalShift = null;
+
+		LibrarianShift newShift = librarianShiftRepository.findLibrarianShiftById(shiftId);
+
+		// Check attributes
+		assertNotNull(newShift);
+
+		// Check associations
+		assertEquals(Date.valueOf("2022-10-16"), newShift.getDate());
+		assertEquals(Time.valueOf("9:00:00"), newShift.getStartTime());
+		assertEquals(Time.valueOf("17:00:00"), newShift.getEndTime());
+
+		// TODO Check association
 	}
 }
