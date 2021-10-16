@@ -1,7 +1,11 @@
 package ca.mcgill.ecse321.onlinelibrary.dao;
 
-import ca.mcgill.ecse321.onlinelibrary.model.Book;
-import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Month;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +20,11 @@ import ca.mcgill.ecse321.onlinelibrary.model.Album;
 import ca.mcgill.ecse321.onlinelibrary.model.Movie;
 import ca.mcgill.ecse321.onlinelibrary.model.Archive;
 import ca.mcgill.ecse321.onlinelibrary.model.Newspaper;
+import ca.mcgill.ecse321.onlinelibrary.model.Book;
+import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
+
+import ca.mcgill.ecse321.onlinelibrary.model.LibraryOpeningHours;
+import ca.mcgill.ecse321.onlinelibrary.model.Holiday;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -26,12 +35,16 @@ public class TestOnlineLibraryPersistence {
 	@Autowired
 	private MovieRepository movieRepository;
 	@Autowired
-
 	private AlbumRepository albumRepository;
 	@Autowired
 	private ArchiveRepository archiveRepository;
 	@Autowired
 	private NewspaperRepository newspaperRepository;
+	
+	@Autowired
+	private LibraryOpeningHoursRepository libraryOpeningHoursRepository;
+	@Autowired
+	private HolidayRepository holidayRepository;
 
 	@AfterEach
 	public void clearDatabase() {
@@ -40,6 +53,8 @@ public class TestOnlineLibraryPersistence {
 		albumRepository.deleteAll();
 		archiveRepository.deleteAll();
 		newspaperRepository.deleteAll();
+		libraryOpeningHoursRepository.deleteAll();
+		holidayRepository.deleteAll();
 	}
 
 	@Test
@@ -98,5 +113,52 @@ public class TestOnlineLibraryPersistence {
 		newspaper = newspaperRepository.findNewspaperById(id);
 		assertNotNull(newspaper);
 		assertEquals(id, newspaper.getId());
+	}
+	
+	@Test
+	public void testPersistAndLoadLibraryOpeningHours() {
+		Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
+		Time startTime = java.sql.Time.valueOf(LocalTime.of(11, 35));
+		Time endTime = java.sql.Time.valueOf(LocalTime.of(13, 25));
+		
+		LibraryOpeningHours libraryOpeningHours = new LibraryOpeningHours();
+		
+		libraryOpeningHours.setDate(date);
+		libraryOpeningHours.setStartTime(startTime);
+		libraryOpeningHours.setEndTime(endTime);
+		
+		libraryOpeningHoursRepository.save(libraryOpeningHours);
+		int id = libraryOpeningHours.getId();
+		
+		libraryOpeningHours = null;
+		libraryOpeningHours = libraryOpeningHoursRepository.findLibraryOpeningHoursById(id);
+		
+		assertNotNull(libraryOpeningHours);
+		assertEquals(id, libraryOpeningHours.getId());
+		assertEquals(date, libraryOpeningHours.getDate());
+		assertEquals(startTime, libraryOpeningHours.getStartTime());
+		assertEquals(endTime, libraryOpeningHours.getEndTime());
+	}
+	
+	@Test
+	public void testPersistAndLoadHoliday() {
+		Date startDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 30));
+		Date endDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
+		
+		Holiday holiday = new Holiday();
+		
+		holiday.setStartDate(startDate);
+		holiday.setEndDate(endDate);
+		
+		holidayRepository.save(holiday);
+		int id = holiday.getId();
+		
+		holiday = null;
+		holiday = holidayRepository.findHolidayById(id);
+		
+		assertNotNull(holiday);
+		assertEquals(id, holiday.getId());
+		assertEquals(startDate, holiday.getStartDate());
+		assertEquals(endDate, holiday.getEndDate());
 	}
 }
