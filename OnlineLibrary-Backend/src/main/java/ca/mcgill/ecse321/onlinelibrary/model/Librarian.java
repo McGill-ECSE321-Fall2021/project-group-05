@@ -1,9 +1,9 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,8 +23,8 @@ public class Librarian {
 	private boolean isHead;
 
 	// Associations
-	@OneToMany
-	private Set<LibrarianShift> shifts;
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<LibrarianShift> shifts;
 
 	// Constructors
 	protected Librarian() {
@@ -36,7 +36,7 @@ public class Librarian {
 		this.passwordHash = passwordHash;
 		this.isHead = isHead;
 
-		this.shifts = new HashSet<LibrarianShift>();
+		this.shifts = new ArrayList<LibrarianShift>();
 	}
 
 	// Interface
@@ -72,19 +72,19 @@ public class Librarian {
 		return this.isHead;
 	}
 
-	public Set<LibrarianShift> getShifts() {
-		return Collections.unmodifiableSet(this.shifts);
+	public List<LibrarianShift> getShifts() {
+		return Collections.unmodifiableList(this.shifts);
 	}
 
 	public boolean addShift(LibrarianShift newShift) {
-		if (newShift == null || shifts.contains(newShift))
+		if (newShift == null || this.shifts.contains(newShift))
 			return false;
 
-		boolean isNewLibrarian = this.equals(newShift.getLibrarian());
+		boolean isNewLibrarian = !this.equals(newShift.getLibrarian());
 		if (isNewLibrarian)
 			newShift.setLibrarian(this);
 		else
-			shifts.add(newShift);
+			this.shifts.add(newShift);
 
 		return true;
 	}

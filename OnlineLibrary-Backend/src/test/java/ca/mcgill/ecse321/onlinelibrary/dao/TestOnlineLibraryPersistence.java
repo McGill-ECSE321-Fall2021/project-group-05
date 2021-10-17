@@ -1,34 +1,21 @@
 package ca.mcgill.ecse321.onlinelibrary.dao;
 
-import ca.mcgill.ecse321.onlinelibrary.model.Book;
-import ca.mcgill.ecse321.onlinelibrary.model.Loan;
+import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import ca.mcgill.ecse321.onlinelibrary.model.Album;
-import ca.mcgill.ecse321.onlinelibrary.model.Movie;
-import ca.mcgill.ecse321.onlinelibrary.model.Archive;
-import ca.mcgill.ecse321.onlinelibrary.model.Newspaper;
-import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem;
-import ca.mcgill.ecse321.onlinelibrary.model.LibraryOpeningHours;
-import ca.mcgill.ecse321.onlinelibrary.model.Holiday;
-import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
-import ca.mcgill.ecse321.onlinelibrary.model.LibrarianShift;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -66,7 +53,6 @@ public class TestOnlineLibraryPersistence {
 		libraryOpeningHoursRepository.deleteAll();
 		holidayRepository.deleteAll();
 		librarianRepository.deleteAll();
-		librarianShiftRepository.deleteAll();
 	}
 
 	@Test
@@ -196,16 +182,21 @@ public class TestOnlineLibraryPersistence {
 	}
 
 	@Test
+	@Transactional
 	public void testPersistAndLoadLibrarian() {
-		// Create and persist librarian
+		// Create and persist librarian with shift
 		Librarian originalLibrarian = new Librarian("Jocasta Nu", "jocasta-nu", "12345", true);
+		LibrarianShift originalShift = new LibrarianShift(Date.valueOf("2022-10-16"), Time.valueOf("9:00:00"),
+				Time.valueOf("17:00:00"), originalLibrarian);
 		originalLibrarian = librarianRepository.save(originalLibrarian);
 
-		// Get ID and drop reference to librarian
-		int id = originalLibrarian.getId();
-		originalLibrarian = null;
+		// Get ID and drop reference
+		int librarianId = originalLibrarian.getId();
+		int shiftId = originalShift.getId();
+		originalShift = null;
 
-		Librarian newLibrarian = librarianRepository.findLibrarianById(id);
+		Librarian newLibrarian = librarianRepository.findLibrarianById(librarianId);
+
 		// Check attributes
 		assertNotNull(newLibrarian);
 		assertEquals("Jocasta Nu", newLibrarian.getFullName());
@@ -213,30 +204,37 @@ public class TestOnlineLibraryPersistence {
 		assertEquals("12345", newLibrarian.getPasswordHash());
 		assertTrue(newLibrarian.isHead());
 
-		// TODO Check associations
+		// Check association
+		assertEquals(1, newLibrarian.getShifts().size());
+		LibrarianShift newShift = newLibrarian.getShifts().get(0);
+		assertNotNull(newShift);
+		assertEquals(shiftId, newShift.getId());
 	}
 
 	@Test
 	public void testPersistAndLoadLibrarianShift() {
-		// Create and persist librarian shift
+		// Create and persist librarian with shift
+		Librarian originalLibrarian = new Librarian("Jocasta Nu", "jocasta-nu", "12345", true);
 		LibrarianShift originalShift = new LibrarianShift(Date.valueOf("2022-10-16"), Time.valueOf("9:00:00"),
-				Time.valueOf("17:00:00"));
-		originalShift = librarianShiftRepository.save(originalShift);
+				Time.valueOf("17:00:00"), originalLibrarian);
+		originalLibrarian = librarianRepository.save(originalLibrarian);
 
 		// Get ID and drop reference
+		int librarianId = originalLibrarian.getId();
 		int shiftId = originalShift.getId();
 		originalShift = null;
 
 		LibrarianShift newShift = librarianShiftRepository.findLibrarianShiftById(shiftId);
-
-		// Check attributes
 		assertNotNull(newShift);
 
-		// Check associations
+		// Check attributes
 		assertEquals(Date.valueOf("2022-10-16"), newShift.getDate());
 		assertEquals(Time.valueOf("9:00:00"), newShift.getStartTime());
 		assertEquals(Time.valueOf("17:00:00"), newShift.getEndTime());
 
-		// TODO Check association
+		// Check association
+		Librarian newLibrarian = newShift.getLibrarian();
+		assertNotNull(newLibrarian);
+		assertEquals(librarianId, newLibrarian.getId());
 	}
 }

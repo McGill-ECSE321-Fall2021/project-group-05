@@ -3,7 +3,6 @@ package ca.mcgill.ecse321.onlinelibrary.model;
 import java.sql.Date;
 import java.sql.Time;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,7 +21,7 @@ public class LibrarianShift {
 	private Time endTime;
 
 	// Association
-	@ManyToOne(optional = false, cascade = CascadeType.ALL)
+	@ManyToOne(optional = false)
 	private Librarian librarian;
 
 	// Constructors
@@ -37,6 +36,7 @@ public class LibrarianShift {
 		if (librarian == null)
 			throw new IllegalArgumentException("A Librarian is required for every LibrarianShift.");
 		this.librarian = librarian;
+		librarian.addShift(this);
 	}
 
 	// Interface
