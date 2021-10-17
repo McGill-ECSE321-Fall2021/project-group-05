@@ -6,6 +6,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 public class OnlineAccount {
 
@@ -19,6 +22,7 @@ public class OnlineAccount {
 
 	// Associations
 	@OneToOne(optional = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Member accountOwner;
 
 	// Constructors

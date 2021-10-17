@@ -18,7 +18,7 @@ public class Member {
 	private String fullName;
 
 	// Associations
-	@OneToOne(optional = true, cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToOne(optional = true, cascade = {CascadeType.PERSIST})
 	private OnlineAccount onlineAccount;
 	// Association with Loan is directed (Loan -> Member) for simplicity
 	// TODO Add back Loans here
