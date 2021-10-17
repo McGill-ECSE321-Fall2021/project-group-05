@@ -1,4 +1,4 @@
-name: Main CI: build, test, and deploy to Heroku
+name: Main CI push
 
 on:
   push:
