@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+
 import java.sql.Date;
 
 @Entity
@@ -21,7 +22,7 @@ public class Loan {
 	@OneToOne(optional = false)
 	@JoinColumn(name = "library_item_id")
 	private ReservableItem item;
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private Member member;
 
 	// Constructors
