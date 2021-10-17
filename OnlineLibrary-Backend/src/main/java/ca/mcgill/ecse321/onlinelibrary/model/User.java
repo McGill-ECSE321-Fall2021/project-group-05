@@ -1,6 +1,9 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,9 +22,9 @@ public class User {
 	private String fullName;
 
 	// Associations
-	@OneToOne(optional = true)
+	@OneToOne(optional = true, cascade = CascadeType.ALL)
 	private OnlineAccount onlineAccount;
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Loan> loans;
 
 	// Constructors
@@ -64,29 +67,9 @@ public class User {
 		return onlineAccount;
 	}
 
-	public Loan getLoan(int index) {
-		Loan aLoan = loans.get(index);
-		return aLoan;
-	}
-
 	public List<Loan> getLoans() {
 		List<Loan> newLoans = Collections.unmodifiableList(loans);
 		return newLoans;
-	}
-
-	public int numberOfLoans() {
-		int number = loans.size();
-		return number;
-	}
-
-	public boolean hasLoans() {
-		boolean has = loans.size() > 0;
-		return has;
-	}
-
-	public int indexOfLoan(Loan aLoan) {
-		int index = loans.indexOf(aLoan);
-		return index;
 	}
 
 	public boolean setOnlineAccount(OnlineAccount aNewOnlineAccount) {
@@ -145,13 +128,11 @@ public class User {
 
 	@Override
 	public String toString() {
-		return super.toString() + "[" + "id" + ":" + getId() + "," + "address"
-				+ ":" + getAddress() + "," + "fullName" + ":" + getFullName()
-				+ "]" + System.getProperties().getProperty("line.separator")
-				+ "  " + "onlineAccount = "
+		return super.toString() + "[" + "id" + ":" + getId() + "," + "address" + ":" + getAddress() + "," + "fullName"
+				+ ":" + getFullName() + "]" + System.getProperties().getProperty("line.separator") + "  "
+				+ "onlineAccount = "
 				+ (getOnlineAccount() != null
-				? Integer.toHexString(
-						System.identityHashCode(getOnlineAccount()))
+						? Integer.toHexString(System.identityHashCode(getOnlineAccount()))
 						: "null");
 	}
 }
