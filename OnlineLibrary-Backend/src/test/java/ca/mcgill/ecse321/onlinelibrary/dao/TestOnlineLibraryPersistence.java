@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 
+import javax.transaction.Transactional;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +19,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -205,6 +208,7 @@ public class TestOnlineLibraryPersistence {
 		assertEquals(endDate, holiday.getEndDate());
 	}
 
+	@Transactional
 	@Test
 	public void testPersistAndLoadMember() {
 		// Create and persist member with online account and 2 loans
@@ -213,12 +217,28 @@ public class TestOnlineLibraryPersistence {
 				originalMember);
 		originalMember.setOnlineAccount(originalAccount);
 		originalMember = memberRepository.save(originalMember);
+		Book book = new Book();
+		book.setStatus(ItemStatus.CheckedOut);
+		bookRepository.save(book);
+		Movie movie = new Movie();
+		movie.setStatus(ItemStatus.CheckedOut);
+		movieRepository.save(movie);
+		Loan originalBookLoan = new Loan(Date.valueOf("2022-10-20"), book, originalMember);
+		originalMember.addLoan(originalBookLoan);
+		loanRepository.save(originalBookLoan);
+		Loan originalMovieLoan = new Loan(Date.valueOf("2022-10-20"), movie, originalMember);
+		originalMember.addLoan(originalMovieLoan);
+		loanRepository.save(originalMovieLoan);
 
 		// Get ID and drop references
 		int memberId = originalMember.getId();
 		int accountId = originalAccount.getId();
+		int bookLoanId = originalBookLoan.getId();
+		int movieLoanId = originalMovieLoan.getId();
 		originalMember = null;
 		originalAccount = null;
+		originalBookLoan = null;
+		originalMovieLoan = null;
 
 		Member retrievedMember = memberRepository.findMemberById(memberId);
 		assertNotNull(retrievedMember);
@@ -227,10 +247,22 @@ public class TestOnlineLibraryPersistence {
 		assertEquals("212 McGill Street", retrievedMember.getAddress());
 		assertEquals("Obi-Wan Kenobi", retrievedMember.getFullName());
 
-		// Check association
+		// Check associations
 		OnlineAccount retrievedAccount = retrievedMember.getOnlineAccount();
 		assertNotNull(retrievedAccount);
 		assertEquals(accountId, retrievedAccount.getId());
+
+		assertEquals(2, retrievedMember.getLoans().size());
+		boolean bookLoanFound = false;
+		boolean movieLoanFound = false;
+		for (Loan l : retrievedMember.getLoans()) {
+			if (bookLoanId == l.getId())
+				bookLoanFound = true;
+			else if (movieLoanId == l.getId())
+				movieLoanFound = true;
+		}
+		assertTrue(bookLoanFound);
+		assertTrue(movieLoanFound);
 	}
 
 	@Test

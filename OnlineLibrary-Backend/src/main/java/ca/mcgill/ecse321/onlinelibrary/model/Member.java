@@ -1,10 +1,15 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -20,8 +25,8 @@ public class Member {
 	// Associations
 	@OneToOne(optional = true, cascade = {CascadeType.PERSIST})
 	private OnlineAccount onlineAccount;
-	// Association with Loan is directed (Loan -> Member) for simplicity
-	// TODO Add back Loans here
+	@OneToMany(cascade = {CascadeType.PERSIST})
+	private List<Loan> loans;
 
 	// Constructors
 	protected Member() {
@@ -30,6 +35,8 @@ public class Member {
 	public Member(String address, String fullName) {
 		this.address = address;
 		this.fullName = fullName;
+
+		this.loans = new ArrayList<Loan>();
 	}
 
 	// Interface
@@ -59,5 +66,17 @@ public class Member {
 
 	public void setOnlineAccount(OnlineAccount newOnlineAccount) {
 		this.onlineAccount = newOnlineAccount;
+	}
+
+	public List<Loan> getLoans() {
+		return Collections.unmodifiableList(this.loans);
+	}
+
+	public void addLoan(Loan newLoan) {
+		this.loans.add(newLoan);
+	}
+
+	public void removeLoan(Loan loanToRemove) {
+		this.loans.remove(loanToRemove);
 	}
 }

@@ -8,6 +8,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.sql.Date;
 
 @Entity
@@ -21,8 +24,10 @@ public class Loan {
 
 	@OneToOne(optional = false)
 	@JoinColumn(name = "library_item_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private ReservableItem item;
 	@ManyToOne(optional = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Member member;
 
 	// Constructors
