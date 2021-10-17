@@ -87,6 +87,9 @@ This online library system serves a library in a small town. It assists libraria
           <li>Write rough draft of requirements</li>
           <li>Write final draft of requirements</li>
           <li>Review requirements and domain model</li>
+	  <li>Creation of class BookInfo, MovieInfo, AlbumInfo, NewsPaperInfo, ArchiveInfo, ReservableItemInfo, LibraryItemInfo</li>
+	  <li>Creation of use-case specification page in wiki and assignation of each use-case specifications to teammates</li>
+	  <li>Write a detailed use-case specification for the checkout items use-case</li>
         </ul>
       </td>
       <td></td>
