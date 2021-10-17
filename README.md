@@ -2,6 +2,8 @@
 ## Overview
 This online library system serves a library in a small town. It assists librarians in day-to-day operations like managing the library catalog, checking items in and out, and registering new users. It also provides access to the library catalog and reservation system for online users. The web app is available [here](https://onlinelibrary-backend-05a.herokuapp.com/test).
 
+Further documentation may be accessed via the [wiki](https://github.com/McGill-ECSE321-Fall2021/project-group-05/wiki).
+
 ## Deliverable 1
 <table>
   <tbody>
@@ -87,6 +89,11 @@ This online library system serves a library in a small town. It assists libraria
           <li>Write rough draft of requirements</li>
           <li>Write final draft of requirements</li>
           <li>Review requirements and domain model</li>
+	  <li>Creation of class BookInfo, MovieInfo, AlbumInfo, NewsPaperInfo, ArchiveInfo, ReservableItemInfo, LibraryItemInfo</li>
+	  <li>Creation of use-case specification page in wiki and assignation of each use-case specifications to teammates</li>
+	  <li>Help teammates test the code and make their use-case specification</li>
+	  <li>Write a detailed use-case specification for the checkout items use-case</li>
+	  <li>Review all the use-case specifications</li>
         </ul>
       </td>
       <td></td>

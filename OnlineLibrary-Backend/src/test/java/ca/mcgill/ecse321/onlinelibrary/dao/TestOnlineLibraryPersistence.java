@@ -7,9 +7,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
-
 import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,18 +44,15 @@ public class TestOnlineLibraryPersistence {
 	private LibraryOpeningHoursRepository libraryOpeningHoursRepository;
 	@Autowired
 	private HolidayRepository holidayRepository;
+	@Autowired
+	private LibrarianRepository librarianRepository;
+	@Autowired
+	private LibrarianShiftRepository librarianShiftRepository;
 
 	@AfterEach
 	public void clearDatabase() {
-		Iterable<Member> m = memberRepository.findAll();
-		Iterable<OnlineAccount> oa = onlineAccountRepository.findAll();
-
 		loanRepository.deleteAll();
 		onlineAccountRepository.deleteAll();
-
-		m = memberRepository.findAll();
-		oa = onlineAccountRepository.findAll();
-
 		memberRepository.deleteAll();
 		bookRepository.deleteAll();
 		movieRepository.deleteAll();
@@ -66,6 +61,7 @@ public class TestOnlineLibraryPersistence {
 		newspaperRepository.deleteAll();
 		libraryOpeningHoursRepository.deleteAll();
 		holidayRepository.deleteAll();
+		librarianRepository.deleteAll();
 	}
 
 	@Test
@@ -128,7 +124,6 @@ public class TestOnlineLibraryPersistence {
 
 	@Test
 	public void testPersistAndLoadLoan() {
-
 		Member member = new Member("123 McGill Street", "Luke Skywalker");
 		memberRepository.save(member);
 		Book reservableItem = new Book();
@@ -137,17 +132,20 @@ public class TestOnlineLibraryPersistence {
 		Loan loan = new Loan(date, reservableItem, member);
 		int numberOfRenewals = 2;
 		loan.setNumberOfRenewals(numberOfRenewals);
+		reservableItem.setLoan(loan);
+		member.addLoan(loan);
 		loanRepository.save(loan);
 
 		int loanId = loan.getId();
 		int bookId = reservableItem.getId();
 		int memberId = member.getId();
 		loan = null;
+		member = null;
+		reservableItem = null;
 
 		loan = loanRepository.findLoanById(loanId);
 		assertNotNull(loan);
 		assertEquals(loanId, loan.getId());
-		assertEquals(reservableItem.getId(), loan.getReservableItem().getId());
 		assertEquals(numberOfRenewals, loan.getNumberOfRenewals());
 		assertEquals(date.toString(), loan.getReturnDate().toString());
 
@@ -161,7 +159,6 @@ public class TestOnlineLibraryPersistence {
 		assertEquals(memberId, retrievedMember.getId());
 	}
 
-	@Test
 	public void testPersistAndLoadLibraryOpeningHours() {
 		Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
 		Time startTime = java.sql.Time.valueOf(LocalTime.of(11, 35));
@@ -291,5 +288,62 @@ public class TestOnlineLibraryPersistence {
 		Member retrievedMember = retrievedAccount.getAccountOwner();
 		assertNotNull(retrievedMember);
 		assertEquals(memberId, retrievedMember.getId());
+	}
+
+	@Test
+	@Transactional
+	public void testPersistAndLoadLibrarian() {
+		// Create and persist librarian with shift
+		Librarian originalLibrarian = new Librarian("Jocasta Nu", "jocasta-nu", "12345", true);
+		LibrarianShift originalShift = new LibrarianShift(Date.valueOf("2022-10-16"), Time.valueOf("9:00:00"),
+				Time.valueOf("17:00:00"), originalLibrarian);
+		originalLibrarian = librarianRepository.save(originalLibrarian);
+
+		// Get ID and drop reference
+		int librarianId = originalLibrarian.getId();
+		int shiftId = originalShift.getId();
+		originalShift = null;
+
+		Librarian newLibrarian = librarianRepository.findLibrarianById(librarianId);
+
+		// Check attributes
+		assertNotNull(newLibrarian);
+		assertEquals("Jocasta Nu", newLibrarian.getFullName());
+		assertEquals("jocasta-nu", newLibrarian.getUsername());
+		assertEquals("12345", newLibrarian.getPasswordHash());
+		assertTrue(newLibrarian.isHead());
+
+		// Check association
+		assertEquals(1, newLibrarian.getShifts().size());
+		LibrarianShift newShift = newLibrarian.getShifts().get(0);
+		assertNotNull(newShift);
+		assertEquals(shiftId, newShift.getId());
+	}
+
+	@Test
+	public void testPersistAndLoadLibrarianShift() {
+		// Create and persist librarian with shift
+		Librarian originalLibrarian = new Librarian("Jocasta Nu", "jocasta-nu", "12345", true);
+		LibrarianShift originalShift = new LibrarianShift(Date.valueOf("2022-10-16"), Time.valueOf("9:00:00"),
+				Time.valueOf("17:00:00"), originalLibrarian);
+		originalLibrarian = librarianRepository.save(originalLibrarian);
+
+		// Get ID and drop reference
+		int librarianId = originalLibrarian.getId();
+		int shiftId = originalShift.getId();
+		originalShift = null;
+
+		LibrarianShift newShift = librarianShiftRepository.findLibrarianShiftById(shiftId);
+		assertNotNull(newShift);
+
+		// Check attributes
+		assertEquals(Date.valueOf("2022-10-16"), newShift.getDate());
+		assertEquals(Time.valueOf("9:00:00"), newShift.getStartTime());
+		assertEquals(Time.valueOf("17:00:00"), newShift.getEndTime());
+
+		// Check association
+		Librarian newLibrarian = newShift.getLibrarian();
+		assertNotNull(newLibrarian);
+		assertEquals(librarianId, newLibrarian.getId());
 	}
 }
