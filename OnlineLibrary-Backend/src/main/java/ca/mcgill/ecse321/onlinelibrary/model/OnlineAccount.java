@@ -6,6 +6,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 public class OnlineAccount {
 
@@ -19,108 +22,53 @@ public class OnlineAccount {
 
 	// Associations
 	@OneToOne(optional = false)
-	private User accountOwner;
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private Member accountOwner;
 
-	// Constructor
+	// Constructors
 	protected OnlineAccount() {
-
 	}
 
-	public OnlineAccount(String aPasswordHash, String aUsername,
-			String aEmailAddress, User aAccountOwner) {
-		passwordHash = aPasswordHash;
-		username = aUsername;
-		emailAddress = aEmailAddress;
-		boolean didAddAccountOwner = setAccountOwner(aAccountOwner);
-		if (!didAddAccountOwner) {
-			throw new RuntimeException(
-					"Unable to create onlineAccount due to accountOwner. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-		}
+	public OnlineAccount(String passwordHash, String username, String emailAddress, Member accountOwner) {
+		this.passwordHash = passwordHash;
+		this.username = username;
+		this.emailAddress = emailAddress;
+
+		if (accountOwner == null)
+			throw new IllegalArgumentException("An account owner is required for every online account");
+		this.accountOwner = accountOwner;
 	}
 
 	// Interface
-	public void setId(Integer newId) {
-		this.id = newId;
+	public Integer getId() {
+		return this.id;
+	}
+
+	public String getPasswordHash() {
+		return this.passwordHash;
 	}
 
 	public void setPasswordHash(String newPasswordHash) {
 		this.passwordHash = newPasswordHash;
 	}
 
+	public String getUsername() {
+		return this.username;
+	}
+
 	public void setUsername(String newUsername) {
 		this.username = newUsername;
+	}
+
+	public String getEmailAddress() {
+		return this.emailAddress;
 	}
 
 	public void setEmailAddress(String newEmailAddress) {
 		this.emailAddress = newEmailAddress;
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
-	public String getPasswordHash() {
-		return passwordHash;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public String getEmailAddress() {
-		return emailAddress;
-	}
-
-	public User getAccountOwner() {
-		return accountOwner;
-	}
-
-	public boolean setAccountOwner(User aNewAccountOwner) {
-		boolean wasSet = false;
-		if (aNewAccountOwner == null) {
-			// Unable to setAccountOwner to null, as onlineAccount must always
-			// be associated to a accountOwner
-			return wasSet;
-		}
-
-		OnlineAccount existingOnlineAccount = aNewAccountOwner
-				.getOnlineAccount();
-		if (existingOnlineAccount != null && !equals(existingOnlineAccount)) {
-			// Unable to setAccountOwner, the current accountOwner already has a
-			// onlineAccount, which would be orphaned if it were re-assigned
-			return wasSet;
-		}
-
-		User anOldAccountOwner = accountOwner;
-		accountOwner = aNewAccountOwner;
-		accountOwner.setOnlineAccount(this);
-
-		if (anOldAccountOwner != null) {
-			anOldAccountOwner.setOnlineAccount(null);
-		}
-		wasSet = true;
-		return wasSet;
-	}
-
-	public void delete() {
-		User existingAccountOwner = accountOwner;
-		accountOwner = null;
-		if (existingAccountOwner != null) {
-			existingAccountOwner.setOnlineAccount(null);
-		}
-	}
-
-	@Override
-	public String toString() {
-		return super.toString() + "[" + "id" + ":" + getId() + ","
-				+ "passwordHash" + ":" + getPasswordHash() + "," + "username"
-				+ ":" + getUsername() + "," + "emailAddress" + ":"
-				+ getEmailAddress() + "]"
-				+ System.getProperties().getProperty("line.separator") + "  "
-				+ "accountOwner = "
-				+ (getAccountOwner() != null
-				? Integer.toHexString(
-						System.identityHashCode(getAccountOwner()))
-						: "null");
+	public Member getAccountOwner() {
+		return this.accountOwner;
 	}
 }
