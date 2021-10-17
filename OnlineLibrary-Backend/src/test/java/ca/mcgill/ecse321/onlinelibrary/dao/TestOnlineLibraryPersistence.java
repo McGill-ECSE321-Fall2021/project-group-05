@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 
+import javax.transaction.Transactional;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -45,12 +48,13 @@ public class TestOnlineLibraryPersistence {
 	@AfterEach
 	public void clearDatabase() {
 		loanRepository.deleteAll();
+		onlineAccountRepository.deleteAll();
+		memberRepository.deleteAll();
 		bookRepository.deleteAll();
 		movieRepository.deleteAll();
 		albumRepository.deleteAll();
 		archiveRepository.deleteAll();
 		newspaperRepository.deleteAll();
-		memberRepository.deleteAll();
 		libraryOpeningHoursRepository.deleteAll();
 		holidayRepository.deleteAll();
 	}
@@ -116,23 +120,36 @@ public class TestOnlineLibraryPersistence {
 	@Test
 	public void testPersistAndLoadLoan() {
 
-		ReservableItem reservableItem = new Book();
-		Loan loan = new Loan(reservableItem);
-		loan.setReservableItem(reservableItem);
+		Member member = new Member("123 McGill Street", "Luke Skywalker");
+		memberRepository.save(member);
+		Book reservableItem = new Book();
+		bookRepository.save(reservableItem);
 		Date date = Date.valueOf(LocalDate.of(2021, 10, 16));
-		loan.setReturnDate(date);
+		Loan loan = new Loan(date, reservableItem, member);
 		int numberOfRenewals = 2;
 		loan.setNumberOfRenewals(numberOfRenewals);
 		loanRepository.save(loan);
-		int id = loan.getId();
+
+		int loanId = loan.getId();
+		int bookId = reservableItem.getId();
+		int memberId = member.getId();
 		loan = null;
-		loan = loanRepository.findLoanById(id);
+
+		loan = loanRepository.findLoanById(loanId);
 		assertNotNull(loan);
-		assertEquals(id, loan.getId());
+		assertEquals(loanId, loan.getId());
 		assertEquals(reservableItem.getId(), loan.getReservableItem().getId());
 		assertEquals(numberOfRenewals, loan.getNumberOfRenewals());
 		assertEquals(date.toString(), loan.getReturnDate().toString());
 
+		// Check associations
+		ReservableItem retrievedItem = loan.getReservableItem();
+		assertNotNull(retrievedItem);
+		assertEquals(bookId, retrievedItem.getId());
+
+		Member retrievedMember = loan.getMember();
+		assertNotNull(retrievedMember);
+		assertEquals(memberId, retrievedMember.getId());
 	}
 
 	@Test
@@ -183,43 +200,83 @@ public class TestOnlineLibraryPersistence {
 	}
 
 	@Test
+	@Transactional
 	public void testPersistAndLoadMember() {
-		// Create and persist member
-		Member originalMember = new Member("123 McGill Street", "Obi-Wan Kenobi");
+		// Create and persist member with online account and 2 loans
+		Member originalMember = new Member("212 McGill Street", "Obi-Wan Kenobi");
+		OnlineAccount originalAccount = new OnlineAccount("212", "obi1kenobi", "obi-wan.kenobi@mail.mcgill.ca",
+				originalMember);
 		originalMember = memberRepository.save(originalMember);
+		Book book = new Book();
+		book.setStatus(ItemStatus.CheckedOut);
+		bookRepository.save(book);
+		Movie movie = new Movie();
+		movie.setStatus(ItemStatus.CheckedOut);
+		movieRepository.save(movie);
+		Loan originalBookLoan = new Loan(Date.valueOf("2022-10-20"), book, originalMember);
+		loanRepository.save(originalBookLoan);
+		Loan originalMovieLoan = new Loan(Date.valueOf("2022-10-20"), movie, originalMember);
+		loanRepository.save(originalMovieLoan);
 
-		// Get ID and drop reference
+		// Get ID and drop references
 		int memberId = originalMember.getId();
+		int accountId = originalAccount.getId();
+		int bookLoanId = originalBookLoan.getId();
+		int movieLoanId = originalMovieLoan.getId();
 		originalMember = null;
+		originalAccount = null;
+		originalBookLoan = null;
+		originalMovieLoan = null;
 
-		Member newMember = memberRepository.findMemberById(memberId);
-		assertNotNull(newMember);
+		Member retrievedMember = memberRepository.findMemberById(memberId);
+		assertNotNull(retrievedMember);
 
 		// Check attributes
-		assertEquals("123 McGill Street", newMember.getAddress());
-		assertEquals("Obi-Wan Kenobi", newMember.getFullName());
+		assertEquals("212 McGill Street", retrievedMember.getAddress());
+		assertEquals("Obi-Wan Kenobi", retrievedMember.getFullName());
 
-		// TODO Check association
+		// Check associations
+		OnlineAccount retrievedAccount = retrievedMember.getOnlineAccount();
+		assertNotNull(retrievedAccount);
+		assertEquals(accountId, retrievedAccount.getId());
+
+		assertEquals(2, retrievedMember.getLoans().size());
+		boolean bookLoanFound = false;
+		boolean movieLoanFound = false;
+		for (Loan l : retrievedMember.getLoans()) {
+			if (bookLoanId == l.getId())
+				bookLoanFound = true;
+			else if (movieLoanId == l.getId())
+				movieLoanFound = true;
+		}
+		assertTrue(bookLoanFound);
+		assertTrue(movieLoanFound);
 	}
 
 	@Test
 	public void testPersistAndLoadOnlineAccount() {
-		// Create and persist OnlineAccount
-		OnlineAccount originalAccount = new OnlineAccount("501", "chosen1", "anakin.skywalker@mail.mcgill.ca");
-		originalAccount = onlineAccountRepository.save(originalAccount);
+		// Create and persist member with online account
+		Member originalMember = new Member("501 McGill Street", "Anakin Skywalker");
+		OnlineAccount originalAccount = new OnlineAccount("501", "chosen1", "anakin.skywalker@mail.mcgill.ca",
+				originalMember);
+		originalMember = memberRepository.save(originalMember);
 
 		// Get ID and drop reference
+		int memberId = originalMember.getId();
 		int accountId = originalAccount.getId();
 		originalAccount = null;
 
-		OnlineAccount newAccount = onlineAccountRepository.findOnlineAccountById(accountId);
-		assertNotNull(newAccount);
+		OnlineAccount retrievedAccount = onlineAccountRepository.findOnlineAccountById(accountId);
+		assertNotNull(retrievedAccount);
 
 		// Check attributes
-		assertEquals("501", newAccount.getPasswordHash());
-		assertEquals("chosen1", newAccount.getUsername());
-		assertEquals("anakin.skywalker@mail.mcgill.ca", newAccount.getEmailAddress());
+		assertEquals("501", retrievedAccount.getPasswordHash());
+		assertEquals("chosen1", retrievedAccount.getUsername());
+		assertEquals("anakin.skywalker@mail.mcgill.ca", retrievedAccount.getEmailAddress());
 
-		// TODO Check association
+		// Check association
+		Member retrievedMember = retrievedAccount.getAccountOwner();
+		assertNotNull(retrievedMember);
+		assertEquals(memberId, retrievedMember.getId());
 	}
 }

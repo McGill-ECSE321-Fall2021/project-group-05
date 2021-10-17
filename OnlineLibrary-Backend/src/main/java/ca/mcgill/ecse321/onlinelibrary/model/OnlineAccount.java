@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class OnlineAccount {
@@ -16,16 +17,23 @@ public class OnlineAccount {
 	private String username;
 	private String emailAddress;
 
-	// TODO Associations
+	// Associations
+	@OneToOne(optional = false)
+	private Member accountOwner;
 
 	// Constructors
 	protected OnlineAccount() {
 	}
 
-	public OnlineAccount(String passwordHash, String username, String emailAddress) {
+	public OnlineAccount(String passwordHash, String username, String emailAddress, Member accountOwner) {
 		this.passwordHash = passwordHash;
 		this.username = username;
 		this.emailAddress = emailAddress;
+
+		if (accountOwner == null)
+			throw new IllegalArgumentException("An account owner is required for every online account");
+		this.accountOwner = accountOwner;
+		accountOwner.setOnlineAccount(this);
 	}
 
 	// Interface
@@ -55,5 +63,9 @@ public class OnlineAccount {
 
 	public void setEmailAddress(String newEmailAddress) {
 		this.emailAddress = newEmailAddress;
+	}
+
+	public Member getAccountOwner() {
+		return this.accountOwner;
 	}
 }
