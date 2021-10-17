@@ -32,7 +32,7 @@ public class TestOnlineLibraryPersistence {
 	@Autowired
 	private NewspaperRepository newspaperRepository;
 	@Autowired
-	private UserRepository userRepository;
+	private MemberRepository memberRepository;
 	@Autowired
 	private OnlineAccountRepository onlineAccountRepository;
 	@Autowired
@@ -50,7 +50,7 @@ public class TestOnlineLibraryPersistence {
 		albumRepository.deleteAll();
 		archiveRepository.deleteAll();
 		newspaperRepository.deleteAll();
-		userRepository.deleteAll();
+		memberRepository.deleteAll();
 		libraryOpeningHoursRepository.deleteAll();
 		holidayRepository.deleteAll();
 	}
@@ -117,7 +117,7 @@ public class TestOnlineLibraryPersistence {
 	public void testPersistAndLoadLoan() {
 
 		ReservableItem reservableItem = new Book();
-		Loan loan = new Loan();
+		Loan loan = new Loan(reservableItem);
 		loan.setReservableItem(reservableItem);
 		Date date = Date.valueOf(LocalDate.of(2021, 10, 16));
 		loan.setReturnDate(date);
@@ -182,79 +182,44 @@ public class TestOnlineLibraryPersistence {
 		assertEquals(endDate, holiday.getEndDate());
 	}
 
-	// @Test
-	// public void testPersistAndLoadUser() {
-	// User originalUser = new User("123 McGill Street", "Obi-Wan Kenobi");
-	// originalUser = userRepository.save(originalUser);
-	//
-	// int userId = originalUser.getId();
-	// originalUser = null;
-	//
-	// User newUser = userRepository.findUserById(userId);
-	// assertNotNull(newUser);
-	// assertEquals("123 McGill Street", newUser.getAddress());
-	// assertEquals("Obi-Wan Kenobi", newUser.getFullName());
-	//
-	// // // Create user with online account
-	// // User originalUser = new User("123 McGill Street", "Obi-Wan Kenobi");
-	// // OnlineAccount originalOnlineAccount = new OnlineAccount("12345",
-	// // "obi1kenobi", "obiwan.kenobi@mail.mcgill.ca",
-	// // originalUser);
-	// //
-	// // // Persist user
-	// // originalUser = userRepository.save(originalUser);
-	// // // onlineAccountRepository.save(originalOnlineAccount);
-	// //
-	// // // Get IDs and drop references to objects
-	// // int userId = originalUser.getId();
-	// // int onlineAccountId = originalOnlineAccount.getId();
-	// // originalUser = null;
-	// // originalOnlineAccount = null;
-	// //
-	// // User retrievedUser = userRepository.findUserById(userId);
-	// //
-	// // // Check attributes
-	// // assertNotNull(retrievedUser);
-	// // assertEquals("123 McGill Street", retrievedUser.getAddress());
-	// // assertEquals("Obi-Wan Kenobi", retrievedUser.getFullName());
-	// //
-	// // // Check association
-	// // OnlineAccount retrievedOnlineAccount =
-	// // retrievedUser.getOnlineAccount();
-	// // assertNotNull(retrievedOnlineAccount);
-	// // assertEquals(onlineAccountId, retrievedOnlineAccount.getId());
-	// }
+	@Test
+	public void testPersistAndLoadMember() {
+		// Create and persist member
+		Member originalMember = new Member("123 McGill Street", "Obi-Wan Kenobi");
+		originalMember = memberRepository.save(originalMember);
 
-	// @Test
-	// public void testPersistAndLoadOnlineAccount() {
-	// // Create user with online account
-	// User originalUser = new User("66 McGill Street", "Anakin Skywalker");
-	// OnlineAccount originalOnlineAccount = new OnlineAccount("501",
-	// "chosen-one", "anakin.skywalker@mail.mcgill.ca",
-	// originalUser);
-	//
-	// // Persist user and online account
-	// userRepository.save(originalUser);
-	//
-	// // Get ID and drop references to objects
-	// Integer userId = originalUser.getId();
-	// Integer onlineAccountId = originalOnlineAccount.getId();
-	// originalUser = null;
-	// originalOnlineAccount = null;
-	//
-	// OnlineAccount retrievedOnlineAccount =
-	// onlineAccountRepository.findOnlineAccountById(onlineAccountId);
-	//
-	// // Check attributes
-	// assertNotNull(retrievedOnlineAccount);
-	// assertEquals("501", retrievedOnlineAccount.getPasswordHash());
-	// assertEquals("chosen-one", retrievedOnlineAccount.getUsername());
-	// assertEquals("anakin.skywalker@mail.mcgill.ca",
-	// retrievedOnlineAccount.getEmailAddress());
-	//
-	// // Check association
-	// User retrievedUser = retrievedOnlineAccount.getAccountOwner();
-	// assertNotNull(retrievedUser);
-	// assertEquals(userId, retrievedUser.getId());
-	// }
+		// Get ID and drop reference
+		int memberId = originalMember.getId();
+		originalMember = null;
+
+		Member newMember = memberRepository.findMemberById(memberId);
+		assertNotNull(newMember);
+
+		// Check attributes
+		assertEquals("123 McGill Street", newMember.getAddress());
+		assertEquals("Obi-Wan Kenobi", newMember.getFullName());
+
+		// TODO Check association
+	}
+
+	@Test
+	public void testPersistAndLoadOnlineAccount() {
+		// Create and persist OnlineAccount
+		OnlineAccount originalAccount = new OnlineAccount("501", "chosen1", "anakin.skywalker@mail.mcgill.ca");
+		originalAccount = onlineAccountRepository.save(originalAccount);
+
+		// Get ID and drop reference
+		int accountId = originalAccount.getId();
+		originalAccount = null;
+
+		OnlineAccount newAccount = onlineAccountRepository.findOnlineAccountById(accountId);
+		assertNotNull(newAccount);
+
+		// Check attributes
+		assertEquals("501", newAccount.getPasswordHash());
+		assertEquals("chosen1", newAccount.getUsername());
+		assertEquals("anakin.skywalker@mail.mcgill.ca", newAccount.getEmailAddress());
+
+		// TODO Check association
+	}
 }

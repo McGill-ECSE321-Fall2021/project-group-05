@@ -15,15 +15,20 @@ public class Loan {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-
 	private Date returnDate;
 	private int numberOfRenewals;
 
-	@OneToOne(cascade = { CascadeType.ALL }, optional=false)
+	@OneToOne(cascade = {CascadeType.ALL}, optional = false)
 	@JoinColumn(name = "library_item_id")
 	private ReservableItem item;
-	@OneToOne(cascade = CascadeType.ALL, optional = false)
-	private User user;
+
+	// Constructors
+	protected Loan() {
+	}
+
+	public Loan(ReservableItem item) {
+		this.item = item;
+	}
 
 	public Integer getId() {
 		return this.id;
@@ -51,13 +56,5 @@ public class Loan {
 
 	public void setReservableItem (ReservableItem item) {
 		this.item = item;
-	}
-
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User newUser) {
-		this.user = newUser;
 	}
 }
