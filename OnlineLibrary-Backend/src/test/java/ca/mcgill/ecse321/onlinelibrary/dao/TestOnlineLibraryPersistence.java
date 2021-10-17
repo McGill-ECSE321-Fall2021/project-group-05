@@ -2,6 +2,12 @@ package ca.mcgill.ecse321.onlinelibrary.dao;
 
 import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Month;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,16 +35,24 @@ public class TestOnlineLibraryPersistence {
 	private UserRepository userRepository;
 	@Autowired
 	private OnlineAccountRepository onlineAccountRepository;
+	@Autowired
+	private LoanRepository loanRepository;
+	@Autowired
+	private LibraryOpeningHoursRepository libraryOpeningHoursRepository;
+	@Autowired
+	private HolidayRepository holidayRepository;
 
 	@AfterEach
 	public void clearDatabase() {
+		loanRepository.deleteAll();
 		bookRepository.deleteAll();
 		movieRepository.deleteAll();
 		albumRepository.deleteAll();
 		archiveRepository.deleteAll();
 		newspaperRepository.deleteAll();
 		userRepository.deleteAll();
-		onlineAccountRepository.deleteAll();
+		libraryOpeningHoursRepository.deleteAll();
+		holidayRepository.deleteAll();
 	}
 
 	@Test
@@ -97,6 +111,75 @@ public class TestOnlineLibraryPersistence {
 		newspaper = newspaperRepository.findNewspaperById(id);
 		assertNotNull(newspaper);
 		assertEquals(id, newspaper.getId());
+	}
+
+	@Test
+	public void testPersistAndLoadLoan() {
+
+		ReservableItem reservableItem = new Book();
+		Loan loan = new Loan();
+		loan.setReservableItem(reservableItem);
+		Date date = Date.valueOf(LocalDate.of(2021, 10, 16));
+		loan.setReturnDate(date);
+		int numberOfRenewals = 2;
+		loan.setNumberOfRenewals(numberOfRenewals);
+		loanRepository.save(loan);
+		int id = loan.getId();
+		loan = null;
+		loan = loanRepository.findLoanById(id);
+		assertNotNull(loan);
+		assertEquals(id, loan.getId());
+		assertEquals(reservableItem.getId(), loan.getReservableItem().getId());
+		assertEquals(numberOfRenewals, loan.getNumberOfRenewals());
+		assertEquals(date.toString(), loan.getReturnDate().toString());
+
+	}
+
+	@Test
+	public void testPersistAndLoadLibraryOpeningHours() {
+		Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
+		Time startTime = java.sql.Time.valueOf(LocalTime.of(11, 35));
+		Time endTime = java.sql.Time.valueOf(LocalTime.of(13, 25));
+
+		LibraryOpeningHours libraryOpeningHours = new LibraryOpeningHours();
+
+		libraryOpeningHours.setDate(date);
+		libraryOpeningHours.setStartTime(startTime);
+		libraryOpeningHours.setEndTime(endTime);
+
+		libraryOpeningHoursRepository.save(libraryOpeningHours);
+		int id = libraryOpeningHours.getId();
+
+		libraryOpeningHours = null;
+		libraryOpeningHours = libraryOpeningHoursRepository.findLibraryOpeningHoursById(id);
+
+		assertNotNull(libraryOpeningHours);
+		assertEquals(id, libraryOpeningHours.getId());
+		assertEquals(date, libraryOpeningHours.getDate());
+		assertEquals(startTime, libraryOpeningHours.getStartTime());
+		assertEquals(endTime, libraryOpeningHours.getEndTime());
+	}
+
+	@Test
+	public void testPersistAndLoadHoliday() {
+		Date startDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 30));
+		Date endDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
+
+		Holiday holiday = new Holiday();
+
+		holiday.setStartDate(startDate);
+		holiday.setEndDate(endDate);
+
+		holidayRepository.save(holiday);
+		int id = holiday.getId();
+
+		holiday = null;
+		holiday = holidayRepository.findHolidayById(id);
+
+		assertNotNull(holiday);
+		assertEquals(id, holiday.getId());
+		assertEquals(startDate, holiday.getStartDate());
+		assertEquals(endDate, holiday.getEndDate());
 	}
 
 	// @Test

@@ -23,7 +23,6 @@ public class OnlineAccount {
 
 	// Constructor
 	protected OnlineAccount() {
-
 	}
 
 	public OnlineAccount(String aPasswordHash, String aUsername,
