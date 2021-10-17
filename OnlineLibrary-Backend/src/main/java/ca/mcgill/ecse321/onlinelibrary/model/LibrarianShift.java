@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class LibrarianShift {
@@ -19,14 +20,23 @@ public class LibrarianShift {
 	private Time startTime;
 	private Time endTime;
 
+	// Association
+	@ManyToOne(optional = false)
+	private Librarian librarian;
+
 	// Constructors
 	protected LibrarianShift() {
 	}
 
-	public LibrarianShift(Date date, Time startTime, Time endTime) {
+	public LibrarianShift(Date date, Time startTime, Time endTime, Librarian librarian) {
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
+
+		if (librarian == null)
+			throw new IllegalArgumentException("A Librarian is required for every LibrarianShift.");
+		this.librarian = librarian;
+		librarian.addShift(this);
 	}
 
 	// Interface
@@ -56,5 +66,23 @@ public class LibrarianShift {
 
 	public void setEndTime(Time newEndTime) {
 		this.endTime = newEndTime;
+	}
+
+	public Librarian getLibrarian() {
+		return this.librarian;
+	}
+
+	public void setLibrarian(Librarian newLibrarian) {
+		if (newLibrarian == null)
+			throw new IllegalArgumentException("A Librarian is required for every LibrarianShift.");
+		if (newLibrarian == this.librarian)
+			return;
+
+		Librarian existingLibrarian = this.librarian;
+		this.librarian = newLibrarian;
+
+		if (existingLibrarian != null)
+			existingLibrarian.removeShift(this);
+		this.librarian.addShift(this);
 	}
 }

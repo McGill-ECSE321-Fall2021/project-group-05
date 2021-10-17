@@ -1,9 +1,14 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Librarian {
@@ -17,6 +22,10 @@ public class Librarian {
 	private String passwordHash;
 	private boolean isHead;
 
+	// Associations
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<LibrarianShift> shifts;
+
 	// Constructors
 	protected Librarian() {
 	}
@@ -26,6 +35,8 @@ public class Librarian {
 		this.username = username;
 		this.passwordHash = passwordHash;
 		this.isHead = isHead;
+
+		this.shifts = new ArrayList<LibrarianShift>();
 	}
 
 	// Interface
@@ -59,5 +70,30 @@ public class Librarian {
 
 	public boolean isHead() {
 		return this.isHead;
+	}
+
+	public List<LibrarianShift> getShifts() {
+		return Collections.unmodifiableList(this.shifts);
+	}
+
+	public boolean addShift(LibrarianShift newShift) {
+		if (newShift == null || this.shifts.contains(newShift))
+			return false;
+
+		boolean isNewLibrarian = !this.equals(newShift.getLibrarian());
+		if (isNewLibrarian)
+			newShift.setLibrarian(this);
+		else
+			this.shifts.add(newShift);
+
+		return true;
+	}
+
+	public boolean removeShift(LibrarianShift shiftToRemove) {
+		if (this.equals(shiftToRemove.getLibrarian()))
+			return false;
+
+		this.shifts.remove(shiftToRemove);
+		return true;
 	}
 }
