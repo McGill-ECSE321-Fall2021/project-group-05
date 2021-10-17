@@ -9,42 +9,42 @@ public abstract class ReservableItemInfo extends LibraryItemInfo {
 	// Seb : is this actually useful? Louis needs it?
 	@ManyToMany
 	@OrderColumn
-	private List<User> users;
+	private List<Member> members;
 
-	public User getUser(int index) {
-		User aUser = users.get(index);
-		return aUser;
+	public Member getMember(int index) {
+		Member aMember= members.get(index);
+		return aMember;
 	}
 
-	public void setUser(User aUser){
-		if(users == null) 
-			users = new ArrayList<User>();
-		if (users.contains(aUser))
+	public void setMember(Member aMember){
+		if(members == null) 
+			members = new ArrayList<Member>();
+		if (members.contains(aMember))
 			return;
-		users.add(aUser);
+		members.add(aMember);
 	}
 
-	public List<User> getUsers() {
-		List<User> newUsers = Collections.unmodifiableList(users);
-		return newUsers;
+	public List<Member> getMembers() {
+		List<Member> newMembers = Collections.unmodifiableList(members);
+		return newMembers;
 	}
 
-	public int numberOfUsers() {
-		int number = users.size();
+	public int numberOfMembers() {
+		int number = members.size();
 		return number;
 	}
 
-	public boolean hasUsers() {
-		boolean has = users.size() > 0;
+	public boolean hasMembers() {
+		boolean has = members.size() > 0;
 		return has;
 	}
 
-	public int indexOfUser(User aUser) {
-		int index = users.indexOf(aUser);
+	public int indexOfMember(Member aMember) {
+		int index = members.indexOf(aMember);
 		return index;
 	}
 
-	public static int minimumNumberOfUsers() {
+	public static int minimumNumberOfMembers() {
 		return 0;
 	}
 

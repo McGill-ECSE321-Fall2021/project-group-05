@@ -1,5 +1,5 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
-public class User {
+public class Member {
     
 }
