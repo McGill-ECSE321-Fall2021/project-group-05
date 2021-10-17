@@ -33,7 +33,6 @@ public class OnlineAccount {
 		if (accountOwner == null)
 			throw new IllegalArgumentException("An account owner is required for every online account");
 		this.accountOwner = accountOwner;
-		accountOwner.setOnlineAccount(this);
 	}
 
 	// Interface
