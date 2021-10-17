@@ -43,17 +43,4 @@ public class ArchiveInfo extends LibraryItemInfo {
 		return publicationDate;
 	}
 
-	public void delete() {
-		super.delete();
-	}
-
-	public String toString() {
-		return super.toString() + "[" + "title" + ":" + getTitle() + "," + "description" + ":" + getDescription() + "]"
-				+ System.getProperties().getProperty("line.separator") + "  " + "publicationDate" + "="
-				+ (getPublicationDate() != null
-						? !getPublicationDate().equals(this) ? getPublicationDate().toString().replaceAll("  ", "    ")
-								: "this"
-						: "null");
-	}
-
 }

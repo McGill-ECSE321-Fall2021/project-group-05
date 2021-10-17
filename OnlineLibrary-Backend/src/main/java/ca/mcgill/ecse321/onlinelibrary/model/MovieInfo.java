@@ -41,12 +41,4 @@ public class MovieInfo extends ReservableItemInfo {
 		return length;
 	}
 
-	public void delete() {
-		super.delete();
-	}
-
-	public String toString() {
-		return super.toString() + "[" + "genre" + ":" + getGenre() + "," + "director" + ":" + getDirector() + ","
-				+ "length" + ":" + getLength() + "]";
-	}
 }

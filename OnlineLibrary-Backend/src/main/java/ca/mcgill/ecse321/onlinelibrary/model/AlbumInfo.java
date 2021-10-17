@@ -41,12 +41,4 @@ public class AlbumInfo extends ReservableItemInfo {
 		return genre;
 	}
 
-	public void delete() {
-		super.delete();
-	}
-
-	public String toString() {
-		return super.toString() + "[" + "title" + ":" + getTitle() + "," + "composerPerformer" + ":"
-				+ getComposerPerformer() + "," + "genre" + ":" + getGenre() + "]";
-	}
 }

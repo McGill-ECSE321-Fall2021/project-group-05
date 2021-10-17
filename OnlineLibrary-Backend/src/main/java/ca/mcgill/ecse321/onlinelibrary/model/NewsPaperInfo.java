@@ -42,15 +42,4 @@ public class NewsPaperInfo extends LibraryItemInfo {
 		return number;
 	}
 
-	public void delete() {
-		super.delete();
-	}
-
-	public String toString() {
-		return super.toString() + "[" + "frequency" + ":" + getFrequency() + "," + "number" + ":" + getNumber() + "]"
-				+ System.getProperties().getProperty("line.separator") + "  " + "publication" + "="
-				+ (getPublication() != null
-						? !getPublication().equals(this) ? getPublication().toString().replaceAll("  ", "    ") : "this"
-						: "null");
-	}
 }

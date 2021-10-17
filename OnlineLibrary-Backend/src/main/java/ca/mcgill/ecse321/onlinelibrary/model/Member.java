@@ -1,5 +1,8 @@
-package ca.mcgill.ecse321.onlinelibrary.model;
+// package ca.mcgill.ecse321.onlinelibrary.model;
 
-public class Member {
+// import javax.persistence.Entity;
+
+// @Entity
+// public class Member {
     
-}
+// }

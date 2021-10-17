@@ -20,10 +20,4 @@ public abstract class LibraryItemInfo {
 		return id;
 	}
 
-	public void delete() {
-	}
-
-	public String toString() {
-		return super.toString() + "[" + "id" + ":" + getId() + "]";
-	}
 }

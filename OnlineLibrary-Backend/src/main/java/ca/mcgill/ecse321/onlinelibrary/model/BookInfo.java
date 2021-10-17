@@ -42,15 +42,6 @@ public class BookInfo extends ReservableItemInfo {
 		return author;
 	}
 
-	public void delete() {
-		super.delete();
-	}
-
-	public String toString() {
-		return super.toString() + "[" + "title" + ":" + getTitle() + "," + "numberOfPage" + ":" + getNumberOfPage()
-				+ "," + "author" + ":" + getAuthor() + "]";
-	}
-
 	public int getIsbn() {
 		return this.isbn;
 	}
