@@ -1,83 +1,63 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import java.sql.Date;
 
 @Entity
 public class Loan {
 
-	// Attributes
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
-	// Associations
-	@ManyToOne
+	private Date returnDate;
+	private int numberOfRenewals;
+
+	@OneToOne(cascade = { CascadeType.ALL }, optional=false)
+	@JoinColumn(name = "library_item_id")
+	private ReservableItem item;
+	@OneToOne(cascade = CascadeType.ALL, optional = false)
 	private User user;
 
-	// Constructor
-	public Loan(User user) {
-		boolean didAddUser = setUser(user);
-		if (!didAddUser) {
-			throw new RuntimeException(
-					"Unable to create loan due to user. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-		}
-	}
-
-	// Interface
-	public void setId(Integer newId) {
-		this.id = newId;
-	}
-
 	public Integer getId() {
-		return id;
+		return this.id;
+	}
+
+	public void setReturnDate(Date date) {
+		this.returnDate = date;
+	}
+
+	public Date getReturnDate() {
+		return this.returnDate;
+	}
+
+	public void setNumberOfRenewals (int numberOfRenewals) {
+		this.numberOfRenewals = numberOfRenewals;
+	}
+
+	public int getNumberOfRenewals () {
+		return this.numberOfRenewals;
+	}
+
+	public ReservableItem getReservableItem () {
+		return this.item;
+	}
+
+	public void setReservableItem (ReservableItem item) {
+		this.item = item;
 	}
 
 	public User getUser() {
-		return user;
+		return this.user;
 	}
 
-	public boolean setUser(User aUser) {
-		boolean wasSet = false;
-		// Must provide user to loan
-		if (aUser == null) {
-			return wasSet;
-		}
-		// TODO Add back check for too many loans?
-
-		User existingUser = user;
-		user = aUser;
-		if (existingUser != null && !existingUser.equals(aUser)) {
-			boolean didRemove = existingUser.removeLoan(this);
-			if (!didRemove) {
-				user = existingUser;
-				return wasSet;
-			}
-		}
-		user.addLoan(this);
-		wasSet = true;
-		return wasSet;
-	}
-
-	public void delete() {
-		User placeholderUser = user;
-		this.user = null;
-		if (placeholderUser != null) {
-			placeholderUser.removeLoan(this);
-		}
-	}
-
-	@Override
-	public String toString() {
-		return super.toString() + "[" + "id" + ":" + getId() + "]"
-				+ System.getProperties().getProperty("line.separator") + "  "
-				+ "user = "
-				+ (getUser() != null
-				? Integer
-						.toHexString(System.identityHashCode(getUser()))
-						: "null");
+	public void setUser(User newUser) {
+		this.user = newUser;
 	}
 }

@@ -1,6 +1,6 @@
 # OnlineLibrary
 ## Overview
-This online library system serves a library in a small town. It assists librarians in day-to-day operations like managing the library catalog, checking items in and out, and registering new users. It also provides access to the library catalog and reservation system for online users.
+This online library system serves a library in a small town. It assists librarians in day-to-day operations like managing the library catalog, checking items in and out, and registering new users. It also provides access to the library catalog and reservation system for online users. The web app is available [here](https://onlinelibrary-backend-05a.herokuapp.com/test).
 
 ## Deliverable 1
 <table>
@@ -16,7 +16,14 @@ This online library system serves a library in a small town. It assists libraria
         <ul>
           <li>Write rough draft of requirements</li>
           <li>Design domain model</li>
-          <li>Review requirements and domain model</li>
+	  <li>Review requirements and domain model</li>
+	  <li>Document the rationale for key decisions for the domain model in the wiki</li>
+	  <li>Create use-case diagrams for all 15 most important requirements</li>
+	  <li>Develop and test the database ORM layer for classes LibraryItem, ReservableItem, Book, Movie, Album, Newspaper, and Archive</li>
+	  <li>Review other teammates' code and PRs</li>
+	  <li>Help teammates set up their development environment</li>
+	  <li>Document code conventions for the project</li>
+	  <li>Write a detailed use-case specification for the online account registration use-case</li>
         </ul>
       </td>
       <td></td>
@@ -28,6 +35,9 @@ This online library system serves a library in a small town. It assists libraria
           <li>Write rough draft of requirements</li>
           <li>Design domain model</li>
           <li>Review requirements and domain model</li>
+	  <li>Creation of class Loan, LibraryItem, ReservableItem </li> 
+	  <li>Creation of class Book, Movie, Album, Newspaper, Archive </li>
+	  <li>Write a detailed use-case specification for reserving a library item</li>
         </ul>
       </td>
       <td></td>
@@ -62,6 +72,10 @@ This online library system serves a library in a small town. It assists libraria
           <li>Write rough draft of requirements</li>
           <li>Write final draft of requirements</li>
           <li>Review requirements and domain model</li>
+          <li>Creation of LibraryOpeningHours, Holiday, RoomBooking and Room class files, repositories and their corresponding persistence unit tests</li>	
+          <li>Addition of issue-linking CI tool for better organization of dependent issues</li>
+	  <li>Review Pull Requests</li>
+	  <li>Write a detailed use-case specification for the opening hours setup use-case</li>
         </ul>
       </td>
       <td></td>

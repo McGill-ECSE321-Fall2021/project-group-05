@@ -132,7 +132,7 @@ public class User {
 				+ ":" + getFullName() + "]" + System.getProperties().getProperty("line.separator") + "  "
 				+ "onlineAccount = "
 				+ (getOnlineAccount() != null
-						? Integer.toHexString(System.identityHashCode(getOnlineAccount()))
+				? Integer.toHexString(System.identityHashCode(getOnlineAccount()))
 						: "null");
 	}
 }
