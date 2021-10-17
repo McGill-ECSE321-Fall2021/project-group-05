@@ -1,9 +1,7 @@
-name: Java CI with Gradle
+name: Main CI: build, test, and deploy to Heroku
 
 on:
   push:
-    branches: main
-  pull_request:
     branches: main
 
 jobs:
