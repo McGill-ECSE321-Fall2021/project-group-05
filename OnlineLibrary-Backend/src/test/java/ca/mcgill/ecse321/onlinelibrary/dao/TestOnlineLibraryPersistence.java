@@ -241,8 +241,8 @@ public class TestOnlineLibraryPersistence {
 		reservableItemInfo.addMember(member2);
 		List<ReservableItemInfo> expectedReservedList = member.getReservedItems();
 		List<Member> expectedMemberList = reservableItemInfo.getMembers();
-		member.setReservedList(reservableItemInfo);	//Shouldn't do anything
-		member2.setReservedList(reservableItemInfo);
+		member.addReservation(reservableItemInfo);	//Shouldn't do anything
+		member2.addReservation(reservableItemInfo);
 		List<ReservableItemInfo> actualReservedList = member.getReservedItems();
 		List<Member> actualMemberList = reservableItemInfo.getMembers();
 

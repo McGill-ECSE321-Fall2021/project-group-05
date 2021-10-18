@@ -10,6 +10,10 @@ public abstract class ReservableItemInfo extends LibraryItemInfo {
 	@OrderColumn
 	private List<Member> waitlist;
 
+	public ReservableItemInfo(){
+		this.waitlist = new ArrayList<Member>();
+	}
+
 	/**
 	 * Returns the member according to the order of priority, just as a queue.
 	 * For example, if index=0, it will return the next person who reserved the item.
@@ -30,13 +34,11 @@ public abstract class ReservableItemInfo extends LibraryItemInfo {
 	 * @param aMember The member that wants to reserve the book
 	 */
 	public void addMember(Member aMember){
-		if(waitlist == null)
-			waitlist = new ArrayList<Member>();
 		if (waitlist.contains(aMember))
 			return;
 		waitlist.add(aMember);
 
-		aMember.setReservedList(this);
+		aMember.addReservation(this);
 	}
 
 	// TODO removeMember()?

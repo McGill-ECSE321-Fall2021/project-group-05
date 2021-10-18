@@ -38,8 +38,9 @@ public class Member {
 	public Member(String address, String fullName) {
 		this.address = address;
 		this.fullName = fullName;
-
+		
 		this.loans = new ArrayList<Loan>();
+		this.reservedItems = new ArrayList<ReservableItemInfo>();
 	}
 
 	// Interface
@@ -87,7 +88,7 @@ public class Member {
 		return this.reservedItems;
 	}
 
-	public void setReservedList(ReservableItemInfo reservableItemInfo){
+	public void addReservation(ReservableItemInfo reservableItemInfo){
 		if(this.reservedItems == null)
 			this.reservedItems = new ArrayList<ReservableItemInfo>();
 		if(reservedItems.contains(reservableItemInfo))
