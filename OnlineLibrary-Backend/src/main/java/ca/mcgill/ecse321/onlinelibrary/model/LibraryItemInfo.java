@@ -9,7 +9,7 @@ public abstract class LibraryItemInfo {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
