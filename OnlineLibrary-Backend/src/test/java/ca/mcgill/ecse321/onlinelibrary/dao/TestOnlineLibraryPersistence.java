@@ -239,42 +239,49 @@ public class TestOnlineLibraryPersistence {
 		
 		reservableItemInfo.setMember(member);
 		reservableItemInfo.setMember(member2);
-		List expectedReservedList = member.getReservedItems();
-		List expectedMemberList = reservableItemInfo.getMembers();
+		List<ReservableItemInfo> expectedReservedList = member.getReservedItems();
+		List<Member> expectedMemberList = reservableItemInfo.getMembers();
 		member.setReservedList(reservableItemInfo);	//Shouldn't do anything
 		member2.setReservedList(reservableItemInfo);
-		List actualReservedList = member.getReservedItems();
-		List actualMemberList = reservableItemInfo.getMembers();
+		List<ReservableItemInfo> actualReservedList = member.getReservedItems();
+		List<Member> actualMemberList = reservableItemInfo.getMembers();
 
 		assertEquals(expectedReservedList, actualReservedList);
 		assertEquals(expectedMemberList, actualMemberList);
 	}
 	
-	// @Test
-	// public void testReservationPersitence(){
-	// 	Member member = new Member("Lala Land", "Marcos Polo");
-	// 	Member member2 = new Member("Mimi Land", "Samourai");
-	// 	ReservableItemInfo reservableItemInfo = new MovieInfo();
-		
-	// 	reservableItemInfo.setMember(member);
-	// 	reservableItemInfo.setMember(member2);		
+	@Test
+	@Transactional
+	public void testReservationPersitence(){
+		String memberAdress = "Lala Land";
+		String memberName = "Marcos Polo";
+		Member member = new Member(memberAdress, memberName);
+		String member2Adress = "Happy Land";
+		String member2Name = "Greg";
+		Member member2 = new Member(member2Adress, member2Name);
+		memberRepository.save(member);
+		memberRepository.save(member2);
+		MovieInfo movieInfo = new MovieInfo();
+		String director = "Seb";
+		movieInfo.setDirector(director);
+		movieInfo.setMember(member);
+		movieInfo.setMember(member2);
+		movieInfoRepository.save(movieInfo);
 
-	// 	int id = reservableItemInfo.getId();
-	// 	List expected = reservableItemInfo.getMembers();
-	// 	reservableItemInfoRepository.save(reservableItemInfo);
+		List<Member> reservations = movieInfo.getMembers();
+		int id = movieInfo.getId();		
 
-	// 	member = null;
-	// 	member2 = null;
-	// 	reservableItemInfo = null;
+		movieInfo = null;
+		member = null;
+		member2 = null;
 
-	// 	reservableItemInfo = reservableItemInfoRepository.findReservableItemInfoById(id);
+		MovieInfo mInfo = movieInfoRepository.findMovieInfoById(id);
 
-	// 	assertNotNull(reservableItemInfo);
+		assertNotNull(mInfo);
+		assertEquals(director, mInfo.getDirector());
+		assertEquals(reservations, mInfo.getMembers());
 
-	// 	List actual = reservableItemInfo.getMembers();
-
-	// 	assertEquals(expected, actual);
-	// }
+	}
 
 	@Test
 	public void testPersistAndLoadLoan() {

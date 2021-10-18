@@ -8,7 +8,8 @@ public abstract class ReservableItemInfo extends LibraryItemInfo {
 	// Seb : is this actually useful? Louis needs it?
 	@ManyToMany
 	@OrderColumn
-	private List<Member> members;
+	// @JoinColumn(updatable = true, insertable = true, nullable = true)
+	private List<Member> waitlist;
 
 	/**
 	 * Returns the member according to the order of priority, just as a queue.
@@ -17,7 +18,7 @@ public abstract class ReservableItemInfo extends LibraryItemInfo {
 	 * @return the member in "index" positionin the queue
 	 */
 	public Member getMember(int index) {
-		Member aMember= members.get(index);
+		Member aMember= waitlist.get(index);
 		return aMember;
 	}
 
@@ -30,17 +31,17 @@ public abstract class ReservableItemInfo extends LibraryItemInfo {
 	 * @param aMember The member that wants to reserve the book
 	 */
 	public void setMember(Member aMember){
-		if(members == null) 
-			members = new ArrayList<Member>();
-		if (members.contains(aMember))
+		if(waitlist == null) 
+			waitlist = new ArrayList<Member>();
+		if (waitlist.contains(aMember))
 			return;
-		members.add(aMember);
+		waitlist.add(aMember);
 
 		aMember.setReservedList(this);
 	}
 
 	public List<Member> getMembers() {
-		List<Member> newMembers = Collections.unmodifiableList(members);
+		List<Member> newMembers = Collections.unmodifiableList(waitlist);
 		return newMembers;
 	}
 
@@ -48,12 +49,12 @@ public abstract class ReservableItemInfo extends LibraryItemInfo {
 	 * returns how many people are in the queue of reservation for the book
 	 */
 	public int numberOfMembers() {
-		int number = members.size();
+		int number = waitlist.size();
 		return number;
 	}
 
 	public boolean hasMembers() {
-		boolean has = (members != null) && (members.size() > 0);
+		boolean has = (waitlist != null) && (waitlist.size() > 0);
 		return has;
 	}
 
@@ -64,9 +65,9 @@ public abstract class ReservableItemInfo extends LibraryItemInfo {
 	 * @return the position of the member
 	 */
 	public int indexOfMember(Member aMember) {
-		if (members == null)
+		if (waitlist == null)
 			return -1;
-		int index = members.indexOf(aMember);
+		int index = waitlist.indexOf(aMember);
 		return index;
 	}
 
