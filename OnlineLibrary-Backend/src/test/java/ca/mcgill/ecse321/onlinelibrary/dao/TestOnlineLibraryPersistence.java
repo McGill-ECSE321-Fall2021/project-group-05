@@ -51,7 +51,7 @@ public class TestOnlineLibraryPersistence {
 	private NewspaperRepository newspaperRepository;
 	@Autowired
 	private BookInfoRepository bookinfoRepository;
-	@Autowired 
+	@Autowired
 	private MovieInfoRepository movieInfoRepository;
 	@Autowired
 	private AlbumInfoRepository albumInfoRepository;
@@ -84,7 +84,7 @@ public class TestOnlineLibraryPersistence {
 	public void clearDatabase() {
 		loanRepository.deleteAll();
 		onlineAccountRepository.deleteAll();
-		roomBookingRepository.deleteAll(); 
+		roomBookingRepository.deleteAll();
 		memberRepository.deleteAll();
 		bookRepository.deleteAll();
 		movieRepository.deleteAll();
@@ -161,7 +161,7 @@ public class TestOnlineLibraryPersistence {
 		assertEquals(id, newspaper.getId());
 	}
 
-	@Test 
+	@Test
 	public void testPersistBookInfo(){
 		BookInfo bookinfo = new BookInfo();
 		String title = "How to code in Java";
@@ -236,9 +236,9 @@ public class TestOnlineLibraryPersistence {
 		Member member = new Member("Lala Land", "Marcos Polo");
 		Member member2 = new Member("Mimi Land", "Samourai");
 		ReservableItemInfo reservableItemInfo = new MovieInfo();
-		
-		reservableItemInfo.setMember(member);
-		reservableItemInfo.setMember(member2);
+
+		reservableItemInfo.addMember(member);
+		reservableItemInfo.addMember(member2);
 		List<ReservableItemInfo> expectedReservedList = member.getReservedItems();
 		List<Member> expectedMemberList = reservableItemInfo.getMembers();
 		member.setReservedList(reservableItemInfo);	//Shouldn't do anything
@@ -249,7 +249,7 @@ public class TestOnlineLibraryPersistence {
 		assertEquals(expectedReservedList, actualReservedList);
 		assertEquals(expectedMemberList, actualMemberList);
 	}
-	
+
 	@Test
 	@Transactional
 	public void testReservationPersitence(){
@@ -264,12 +264,12 @@ public class TestOnlineLibraryPersistence {
 		MovieInfo movieInfo = new MovieInfo();
 		String director = "Seb";
 		movieInfo.setDirector(director);
-		movieInfo.setMember(member);
-		movieInfo.setMember(member2);
+		movieInfo.addMember(member);
+		movieInfo.addMember(member2);
 		movieInfoRepository.save(movieInfo);
 
 		List<Member> reservations = movieInfo.getMembers();
-		int id = movieInfo.getId();		
+		int id = movieInfo.getId();
 
 		movieInfo = null;
 		member = null;
@@ -515,7 +515,7 @@ public class TestOnlineLibraryPersistence {
 		assertNotNull(newLibrarian);
 		assertEquals(librarianId, newLibrarian.getId());
 	}
-	
+
 	@Test
 	public void testPersistAndLoadRoom() {
 		// Create Room
@@ -524,22 +524,22 @@ public class TestOnlineLibraryPersistence {
 		Room room = new Room();
 		room.setCapacity(capacity);
 		room.setName(name);
-		
+
 		// Persiste Room
 		roomRepository.save(room);
 		int id = room.getId();
-		
+
 		// Forget & Retrieve Room
 		room = null;
 		room = roomRepository.findRoomById(id);
-		
+
 		// Check attributes
 		assertNotNull(room);
 		assertEquals(id, room.getId());
 		assertEquals(capacity, room.getCapacity());
 		assertEquals(name, room.getName());
 	}
-	
+
 	@Test
 	public void testPersistAndLoadRoomBooking() {
 		// Create Member
@@ -579,21 +579,21 @@ public class TestOnlineLibraryPersistence {
 		roomBooking.setEndTime(endTime);
 		roomBooking.setRoom(room);
 		roomBooking.setMember(originalMember);
-		
+
 		// Persist RoomBooking
 		roomBookingRepository.save(roomBooking);
 		int id = roomBooking.getId();
-		
+
 		// Forget & Retrieve RoomBooking
 		roomBooking = null;
 		roomBooking = roomBookingRepository.findRoomBookingById(id);
-		
+
 		// Check attributes
 		assertNotNull(roomBooking);
 		assertEquals(id, roomBooking.getId());
 		assertEquals(startTime, roomBooking.getStartTime());
 		assertEquals(endTime, roomBooking.getEndTime());
-		
+
 		// Check associations (* -> 1)
 		assertEquals(room.getId(), roomBooking.getRoom().getId());
 		assertEquals(originalMember.getId(), roomBooking.getMember().getId());

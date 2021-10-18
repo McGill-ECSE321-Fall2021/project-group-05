@@ -29,7 +29,7 @@ public class Member {
 	@OneToMany(cascade = {CascadeType.PERSIST})
 	private List<Loan> loans;
 	@ManyToMany
-	private List<ReservableItemInfo> reservedItems; 
+	private List<ReservableItemInfo> reservedItems;
 
 	// Constructors
 	protected Member() {
@@ -94,6 +94,6 @@ public class Member {
 			return;
 		this.reservedItems.add(reservableItemInfo);
 
-		reservableItemInfo.setMember(this);
+		reservableItemInfo.addMember(this);
 	}
 }

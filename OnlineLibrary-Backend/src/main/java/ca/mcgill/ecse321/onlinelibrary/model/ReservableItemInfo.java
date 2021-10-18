@@ -8,7 +8,6 @@ public abstract class ReservableItemInfo extends LibraryItemInfo {
 	// Seb : is this actually useful? Louis needs it?
 	@ManyToMany
 	@OrderColumn
-	// @JoinColumn(updatable = true, insertable = true, nullable = true)
 	private List<Member> waitlist;
 
 	/**
@@ -30,8 +29,8 @@ public abstract class ReservableItemInfo extends LibraryItemInfo {
 	 * it will create a queue
 	 * @param aMember The member that wants to reserve the book
 	 */
-	public void setMember(Member aMember){
-		if(waitlist == null) 
+	public void addMember(Member aMember){
+		if(waitlist == null)
 			waitlist = new ArrayList<Member>();
 		if (waitlist.contains(aMember))
 			return;
@@ -39,6 +38,8 @@ public abstract class ReservableItemInfo extends LibraryItemInfo {
 
 		aMember.setReservedList(this);
 	}
+
+	// TODO removeMember()?
 
 	public List<Member> getMembers() {
 		List<Member> newMembers = Collections.unmodifiableList(waitlist);
