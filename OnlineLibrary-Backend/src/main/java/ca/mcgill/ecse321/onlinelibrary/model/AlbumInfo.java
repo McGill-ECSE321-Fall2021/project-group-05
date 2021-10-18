@@ -22,11 +22,8 @@ public class AlbumInfo extends ReservableItemInfo {
 		return wasSet;
 	}
 
-	public boolean setGenre(String aGenre) {
-		boolean wasSet = false;
+	public void setGenre(String aGenre) {
 		genre = aGenre;
-		wasSet = true;
-		return wasSet;
 	}
 
 	public String getTitle() {

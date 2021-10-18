@@ -9,25 +9,16 @@ public class NewsPaperInfo extends LibraryItemInfo {
 	private String frequency;
 	private int number;
 
-	public boolean setPublication(Date aPublication) {
-		boolean wasSet = false;
+	public void setPublication(Date aPublication) {
 		publication = aPublication;
-		wasSet = true;
-		return wasSet;
 	}
 
-	public boolean setFrequency(String aFrequency) {
-		boolean wasSet = false;
+	public void setFrequency(String aFrequency) {
 		frequency = aFrequency;
-		wasSet = true;
-		return wasSet;
 	}
 
-	public boolean setNumber(int aNumber) {
-		boolean wasSet = false;
+	public void setNumber(int aNumber) {
 		number = aNumber;
-		wasSet = true;
-		return wasSet;
 	}
 
 	public Date getPublication() {

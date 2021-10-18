@@ -8,25 +8,16 @@ public class MovieInfo extends ReservableItemInfo {
 	private String director;
 	private int length;
 
-	public boolean setGenre(String aGenre) {
-		boolean wasSet = false;
+	public void setGenre(String aGenre) {
 		genre = aGenre;
-		wasSet = true;
-		return wasSet;
 	}
 
-	public boolean setDirector(String aDirector) {
-		boolean wasSet = false;
+	public void setDirector(String aDirector) {
 		director = aDirector;
-		wasSet = true;
-		return wasSet;
 	}
 
-	public boolean setLength(int aLength) {
-		boolean wasSet = false;
+	public void setLength(int aLength) {
 		length = aLength;
-		wasSet = true;
-		return wasSet;
 	}
 
 	public String getGenre() {

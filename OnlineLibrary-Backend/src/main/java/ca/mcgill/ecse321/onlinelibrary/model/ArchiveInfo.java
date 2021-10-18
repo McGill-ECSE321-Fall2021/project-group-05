@@ -10,25 +10,16 @@ public class ArchiveInfo extends LibraryItemInfo {
 	private String description;
 	private Date publicationDate;
 
-	public boolean setTitle(String aTitle) {
-		boolean wasSet = false;
+	public void setTitle(String aTitle) {
 		title = aTitle;
-		wasSet = true;
-		return wasSet;
 	}
 
-	public boolean setDescription(String aDescription) {
-		boolean wasSet = false;
+	public void setDescription(String aDescription) {
 		description = aDescription;
-		wasSet = true;
-		return wasSet;
 	}
 
-	public boolean setPublicationDate(Date aPublicationDate) {
-		boolean wasSet = false;
+	public void setPublicationDate(Date aPublicationDate) {
 		publicationDate = aPublicationDate;
-		wasSet = true;
-		return wasSet;
 	}
 
 	public String getTitle() {

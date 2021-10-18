@@ -10,25 +10,16 @@ public class BookInfo extends ReservableItemInfo {
 	@Column(unique = true)
 	private int isbn;
 
-	public boolean setTitle(String aTitle) {
-		boolean wasSet = false;
+	public void setTitle(String aTitle) {
 		title = aTitle;
-		wasSet = true;
-		return wasSet;
 	}
 
-	public boolean setNumberOfPage(int aNumberOfPage) {
-		boolean wasSet = false;
+	public void setNumberOfPage(int aNumberOfPage) {
 		numberOfPage = aNumberOfPage;
-		wasSet = true;
-		return wasSet;
 	}
 
-	public boolean setAuthor(String aAuthor) {
-		boolean wasSet = false;
+	public void setAuthor(String aAuthor) {
 		author = aAuthor;
-		wasSet = true;
-		return wasSet;
 	}
 
 	public String getTitle() {
@@ -47,8 +38,7 @@ public class BookInfo extends ReservableItemInfo {
 		return this.isbn;
 	}
 
-	public Boolean setIsbn(int isbn) {
+	public void setIsbn(int isbn) {
 		this.isbn = isbn;
-		return true;
 	}
 }

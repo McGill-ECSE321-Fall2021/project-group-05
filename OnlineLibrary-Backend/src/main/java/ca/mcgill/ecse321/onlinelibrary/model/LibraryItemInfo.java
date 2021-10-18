@@ -7,14 +7,7 @@ public abstract class LibraryItemInfo {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
-
-	public boolean setId(int aId) {
-		boolean wasSet = false;
-		id = aId;
-		wasSet = true;
-		return wasSet;
-	}
+	private Integer id;
 
 	public int getId() {
 		return id;
