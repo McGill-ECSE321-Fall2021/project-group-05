@@ -59,6 +59,8 @@ public class TestOnlineLibraryPersistence {
 	@Autowired
 	private ArchiveInfoRepository archiveInfoRepository;
 	@Autowired
+	private ReservableItemInfoRepository reservableItemInfoRepository;
+	@Autowired
 	private MemberRepository memberRepository;
 	@Autowired
 	private OnlineAccountRepository onlineAccountRepository;
@@ -91,6 +93,7 @@ public class TestOnlineLibraryPersistence {
 		libraryOpeningHoursRepository.deleteAll();
 		holidayRepository.deleteAll();
 		librarianRepository.deleteAll();
+		reservableItemInfoRepository.deleteAll();
 	}
 
 	@Test
@@ -240,6 +243,32 @@ public class TestOnlineLibraryPersistence {
 		assertEquals(expectedMemberList, actualMemberList);
 	}
 	
+	// @Test
+	// public void testReservationPersitence(){
+	// 	Member member = new Member("Lala Land", "Marcos Polo");
+	// 	Member member2 = new Member("Mimi Land", "Samourai");
+	// 	ReservableItemInfo reservableItemInfo = new MovieInfo();
+		
+	// 	reservableItemInfo.setMember(member);
+	// 	reservableItemInfo.setMember(member2);		
+
+	// 	int id = reservableItemInfo.getId();
+	// 	List expected = reservableItemInfo.getMembers();
+	// 	reservableItemInfoRepository.save(reservableItemInfo);
+
+	// 	member = null;
+	// 	member2 = null;
+	// 	reservableItemInfo = null;
+
+	// 	reservableItemInfo = reservableItemInfoRepository.findReservableItemInfoById(id);
+
+	// 	assertNotNull(reservableItemInfo);
+
+	// 	List actual = reservableItemInfo.getMembers();
+
+	// 	assertEquals(expected, actual);
+	// }
+
 	@Test
 	public void testPersistAndLoadLoan() {
 		Member member = new Member("123 McGill Street", "Luke Skywalker");
