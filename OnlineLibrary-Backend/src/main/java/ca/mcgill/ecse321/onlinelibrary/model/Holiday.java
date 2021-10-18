@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
 import java.sql.Date;
+import java.sql.Time;
 
 import javax.persistence.*;
 
@@ -12,28 +13,52 @@ public class Holiday {
 	private Date startDate;
 	private Date endDate;
 	
+	// Constructors
+	public Holiday() {}
+	
+	public Holiday(Date startDate, Date endDate) {
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
+
+
 	// Getters
+	/**
+	 * Returns the unique ID of the holiday
+	 * @return the id of the holiday
+	 */
     public Integer getId() {
         return this.id;
     }
+
+	/**
+	 * Returns start date of the holiday
+	 * @return the start date of the holiday
+	 */
 	public Date getStartDate() {
         return this.startDate;
     }
+	/**
+	 * Returns end date of the holiday
+	 * @return the end date of the holiday
+	 */
 	public Date getEndDate() {
         return this.endDate;
     }
 	
 	// Setters
-	public boolean setStartDate(Date startDate) {
-		boolean wasSet = false;
+	/**
+    * Sets the start date of the holiday
+    * @param status the start date of the holiday
+    */
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
-		wasSet = true;
-		return wasSet;
 	}
-	public boolean setEndDate(Date endDate) {
-		boolean wasSet = false;
+	/**
+    * Sets the end date of the holiday
+    * @param status the end date of the holiday
+    */
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
-		wasSet = true;
-		return wasSet;
 	}
 }
