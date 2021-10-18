@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.dao;
 
 import ca.mcgill.ecse321.onlinelibrary.model.*;
+import ca.mcgill.ecse321.onlinelibrary.model.Member.MemberStatus;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 import java.sql.Date;
 import java.sql.Time;
@@ -57,7 +58,7 @@ public class TestOnlineLibraryPersistence {
 	@AfterEach
 	public void clearDatabase() {
 		loanRepository.deleteAll();
-		roomBookingRepository.deleteAll(); 
+		roomBookingRepository.deleteAll();
 		memberRepository.deleteAll();
 		bookRepository.deleteAll();
 		movieRepository.deleteAll();
@@ -224,6 +225,8 @@ public class TestOnlineLibraryPersistence {
 	public void testPersistAndLoadMember() {
 		// Create and persist member with online account and 2 loans
 		Member originalMember = new Member("212 McGill Street", "Obi-Wan Kenobi");
+		originalMember.applyStatusPenalty();
+		originalMember.setTotalFee(212);
 		OnlineAccount originalAccount = new OnlineAccount("212", "obi1kenobi", "obi-wan.kenobi@mail.mcgill.ca",
 				originalMember);
 		originalMember.setOnlineAccount(originalAccount);
@@ -257,6 +260,8 @@ public class TestOnlineLibraryPersistence {
 		// Check attributes
 		assertEquals("212 McGill Street", retrievedMember.getAddress());
 		assertEquals("Obi-Wan Kenobi", retrievedMember.getFullName());
+		assertEquals(MemberStatus.YELLOW, retrievedMember.getStatus());
+		assertEquals(212, retrievedMember.getTotalFee());
 
 		// Check associations
 		OnlineAccount retrievedAccount = retrievedMember.getOnlineAccount();
@@ -360,7 +365,7 @@ public class TestOnlineLibraryPersistence {
 		assertNotNull(newLibrarian);
 		assertEquals(librarianId, newLibrarian.getId());
 	}
-	
+
 	@Test
 	public void testPersistAndLoadRoom() {
 		// Create Room
@@ -369,22 +374,22 @@ public class TestOnlineLibraryPersistence {
 		Room room = new Room();
 		room.setCapacity(capacity);
 		room.setName(name);
-		
+
 		// Persiste Room
 		roomRepository.save(room);
 		int id = room.getId();
-		
+
 		// Forget & Retrieve Room
 		room = null;
 		room = roomRepository.findRoomById(id);
-		
+
 		// Check attributes
 		assertNotNull(room);
 		assertEquals(id, room.getId());
 		assertEquals(capacity, room.getCapacity());
 		assertEquals(name, room.getName());
 	}
-	
+
 	@Test
 	public void testPersistAndLoadRoomBooking() {
 		// Create Member
@@ -424,21 +429,21 @@ public class TestOnlineLibraryPersistence {
 		roomBooking.setEndTime(endTime);
 		roomBooking.setRoom(room);
 		roomBooking.setMember(originalMember);
-		
+
 		// Persist RoomBooking
 		roomBookingRepository.save(roomBooking);
 		int id = roomBooking.getId();
-		
+
 		// Forget & Retrieve RoomBooking
 		roomBooking = null;
 		roomBooking = roomBookingRepository.findRoomBookingById(id);
-		
+
 		// Check attributes
 		assertNotNull(roomBooking);
 		assertEquals(id, roomBooking.getId());
 		assertEquals(startTime, roomBooking.getStartTime());
 		assertEquals(endTime, roomBooking.getEndTime());
-		
+
 		// Check associations (* -> 1)
 		assertEquals(room.getId(), roomBooking.getRoom().getId());
 		assertEquals(originalMember.getId(), roomBooking.getMember().getId());
