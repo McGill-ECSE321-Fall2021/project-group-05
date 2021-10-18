@@ -46,30 +46,58 @@ public class Loan {
 		this.member = member;
 	}
 
+	/**
+	 * Returns the unique integer ID for this loan.
+	 * @return the unique ID of the loan
+	 */
 	public Integer getId() {
 		return this.id;
 	}
 
+	/**
+	 * Sets the maximum return date for this loan.
+	 * @param date the new maximum return date
+	 */
 	public void setReturnDate(Date date) {
 		this.returnDate = date;
 	}
 
+	/**
+	 * Returns the current maximum return date for this loan.
+	 * @return the maximum return date for this loan
+	 */
 	public Date getReturnDate() {
 		return this.returnDate;
 	}
 
+	/**
+	 * Sets the maximum number of times this loan can still be renewed.
+	 * @param numberOfRenewals the new maximum number of times this loan can be renewed
+	 */
 	public void setNumberOfRenewals (int numberOfRenewals) {
 		this.numberOfRenewals = numberOfRenewals;
 	}
 
+	/**
+	 * Returns the remaining number of times this loan can be renewed.
+	 * @return the remaining number of times this loan can be renewed
+	 */
 	public int getNumberOfRenewals () {
 		return this.numberOfRenewals;
 	}
 
+	/**
+	 * Returns the reservable library item which has been loaned.
+	 * @return the reservable library item associated with this Loan instance
+	 */
 	public ReservableItem getReservableItem () {
 		return this.item;
 	}
 
+	/**
+	 * Sets the reservable library item associated with this loan.
+	 * @param item the new reservable library item associated with this loan
+	 */
 	public void setReservableItem (ReservableItem item) {
 		this.item = item;
 	}
