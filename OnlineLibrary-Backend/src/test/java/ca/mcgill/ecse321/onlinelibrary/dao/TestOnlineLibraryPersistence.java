@@ -33,6 +33,7 @@ import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.Newspaper;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
@@ -74,11 +75,16 @@ public class TestOnlineLibraryPersistence {
 	private LibrarianRepository librarianRepository;
 	@Autowired
 	private LibrarianShiftRepository librarianShiftRepository;
+	@Autowired
+	private RoomRepository roomRepository;
+	@Autowired
+	private RoomBookingRepository roomBookingRepository;
 
 	@AfterEach
 	public void clearDatabase() {
 		loanRepository.deleteAll();
 		onlineAccountRepository.deleteAll();
+		roomBookingRepository.deleteAll(); 
 		memberRepository.deleteAll();
 		bookRepository.deleteAll();
 		movieRepository.deleteAll();
@@ -94,6 +100,7 @@ public class TestOnlineLibraryPersistence {
 		holidayRepository.deleteAll();
 		librarianRepository.deleteAll();
 		reservableItemInfoRepository.deleteAll();
+		roomRepository.deleteAll();
 	}
 
 	@Test
@@ -307,6 +314,7 @@ public class TestOnlineLibraryPersistence {
 	}
 
 	public void testPersistAndLoadLibraryOpeningHours() {
+		// Create opening hours
 		Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
 		Time startTime = java.sql.Time.valueOf(LocalTime.of(11, 35));
 		Time endTime = java.sql.Time.valueOf(LocalTime.of(13, 25));
@@ -317,12 +325,15 @@ public class TestOnlineLibraryPersistence {
 		libraryOpeningHours.setStartTime(startTime);
 		libraryOpeningHours.setEndTime(endTime);
 
+		// Persist opening hours
 		libraryOpeningHoursRepository.save(libraryOpeningHours);
 		int id = libraryOpeningHours.getId();
 
+		// Forget & retrieve opening hours
 		libraryOpeningHours = null;
 		libraryOpeningHours = libraryOpeningHoursRepository.findLibraryOpeningHoursById(id);
 
+		// Check atributes
 		assertNotNull(libraryOpeningHours);
 		assertEquals(id, libraryOpeningHours.getId());
 		assertEquals(date, libraryOpeningHours.getDate());
@@ -332,6 +343,7 @@ public class TestOnlineLibraryPersistence {
 
 	@Test
 	public void testPersistAndLoadHoliday() {
+		// Create Holiday
 		Date startDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 30));
 		Date endDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
 
@@ -340,12 +352,15 @@ public class TestOnlineLibraryPersistence {
 		holiday.setStartDate(startDate);
 		holiday.setEndDate(endDate);
 
+		// Persist Holiday
 		holidayRepository.save(holiday);
 		int id = holiday.getId();
 
+		// Forget & retrieve Holiday
 		holiday = null;
 		holiday = holidayRepository.findHolidayById(id);
 
+		// Check attributes
 		assertNotNull(holiday);
 		assertEquals(id, holiday.getId());
 		assertEquals(startDate, holiday.getStartDate());
@@ -492,5 +507,88 @@ public class TestOnlineLibraryPersistence {
 		Librarian newLibrarian = newShift.getLibrarian();
 		assertNotNull(newLibrarian);
 		assertEquals(librarianId, newLibrarian.getId());
+	}
+	
+	@Test
+	public void testPersistAndLoadRoom() {
+		// Create Room
+		int capacity = 0;
+		String name = "room1";
+		Room room = new Room();
+		room.setCapacity(capacity);
+		room.setName(name);
+		
+		// Persiste Room
+		roomRepository.save(room);
+		int id = room.getId();
+		
+		// Forget & Retrieve Room
+		room = null;
+		room = roomRepository.findRoomById(id);
+		
+		// Check attributes
+		assertNotNull(room);
+		assertEquals(id, room.getId());
+		assertEquals(capacity, room.getCapacity());
+		assertEquals(name, room.getName());
+	}
+	
+	@Test
+	public void testPersistAndLoadRoomBooking() {
+		// Create Member
+		Member originalMember = new Member("212 McGill Street", "Obi-Wan Kenobi");
+		OnlineAccount originalAccount = new OnlineAccount("212", "obi1kenobi", "obi-wan.kenobi@mail.mcgill.ca",
+				originalMember);
+		originalMember.setOnlineAccount(originalAccount);
+		originalMember = memberRepository.save(originalMember);
+		Book book = new Book();
+		book.setStatus(ItemStatus.CheckedOut);
+		bookRepository.save(book);
+		Movie movie = new Movie();
+		movie.setStatus(ItemStatus.CheckedOut);
+		movieRepository.save(movie);
+		Loan originalBookLoan = new Loan(Date.valueOf("2022-10-20"), book, originalMember);
+		originalMember.addLoan(originalBookLoan);
+		loanRepository.save(originalBookLoan);
+		Loan originalMovieLoan = new Loan(Date.valueOf("2022-10-20"), movie, originalMember);
+		originalMember.addLoan(originalMovieLoan);
+		loanRepository.save(originalMovieLoan);
+
+		// Create room
+		int capacity = 0;
+		String name = "room1";
+		Room room = new Room();
+		room.setCapacity(capacity);
+		room.setName(name);
+		roomRepository.save(room);
+
+		// Create room booking
+		Date date = Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
+		Time startTime = Time.valueOf(LocalTime.of(11, 35));
+		Time endTime = Time.valueOf(LocalTime.of(13, 25));
+		RoomBooking roomBooking = new RoomBooking();
+		roomBooking.setDate(date);
+		roomBooking.setStartTime(startTime);
+		roomBooking.setEndTime(endTime);
+		roomBooking.setRoom(room);
+		roomBooking.setMember(originalMember);
+		
+		// Persist RoomBooking
+		roomBookingRepository.save(roomBooking);
+		int id = roomBooking.getId();
+		
+		// Forget & Retrieve RoomBooking
+		roomBooking = null;
+		roomBooking = roomBookingRepository.findRoomBookingById(id);
+		
+		// Check attributes
+		assertNotNull(roomBooking);
+		assertEquals(id, roomBooking.getId());
+		assertEquals(startTime, roomBooking.getStartTime());
+		assertEquals(endTime, roomBooking.getEndTime());
+		
+		// Check associations (* -> 1)
+		assertEquals(room.getId(), roomBooking.getRoom().getId());
+		assertEquals(originalMember.getId(), roomBooking.getMember().getId());
 	}
 }
