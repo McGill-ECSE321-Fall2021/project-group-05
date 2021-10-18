@@ -155,13 +155,22 @@ public class TestOnlineLibraryPersistence {
 
 	@Test
 	public void testPersistAndLoadArchive() {
-		Archive archive = new Archive();
+		ArchiveInfo archiveInfo = new ArchiveInfo();
+		archiveInfoRepository.save(archiveInfo);
+		int archiveInfoId = archiveInfo.getId();
+
+		Archive archive = new Archive(archiveInfo);
 		archiveRepository.save(archive);
 		int id = archive.getId();
+
 		archive = null;
 		archive = archiveRepository.findArchiveById(id);
+
 		assertNotNull(archive);
 		assertEquals(id, archive.getId());
+
+		int retrievedArchiveInfoId = archive.getArchiveInfo().getId();
+		assertEquals(archiveInfoId, retrievedArchiveInfoId);
 	}
 
 	@Test
