@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -27,6 +28,8 @@ public class Member {
 	private OnlineAccount onlineAccount;
 	@OneToMany(cascade = {CascadeType.PERSIST})
 	private List<Loan> loans;
+	@ManyToMany
+	private List<ReservableItemInfo> reservedItems; 
 
 	// Constructors
 	protected Member() {
@@ -78,5 +81,19 @@ public class Member {
 
 	public void removeLoan(Loan loanToRemove) {
 		this.loans.remove(loanToRemove);
+	}
+
+	public List<ReservableItemInfo> getReservedItems(){
+		return this.reservedItems;
+	}
+
+	public void setReservedList(ReservableItemInfo reservableItemInfo){
+		if(this.reservedItems == null)
+			this.reservedItems = new ArrayList<ReservableItemInfo>();
+		if(reservedItems.contains(reservableItemInfo))
+			return;
+		this.reservedItems.add(reservableItemInfo);
+
+		reservableItemInfo.setMember(this);
 	}
 }

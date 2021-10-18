@@ -21,6 +21,8 @@ public abstract class ReservableItemInfo extends LibraryItemInfo {
 		if (members.contains(aMember))
 			return;
 		members.add(aMember);
+
+		aMember.setReservedList(this);
 	}
 
 	public List<Member> getMembers() {

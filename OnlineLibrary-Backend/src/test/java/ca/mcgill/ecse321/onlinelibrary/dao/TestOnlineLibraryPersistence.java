@@ -9,6 +9,8 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
+import java.util.List;
+
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -217,6 +219,25 @@ public class TestOnlineLibraryPersistence {
 		assertNotNull(archiveInfo);
 		assertEquals(id, archiveInfo.getId());
 		assertEquals(title, archiveInfo.getTitle());
+	}
+
+	@Test
+	public void testReservationReferentialIntegrity(){
+		Member member = new Member("Lala Land", "Marcos Polo");
+		Member member2 = new Member("Mimi Land", "Samourai");
+		ReservableItemInfo reservableItemInfo = new MovieInfo();
+		
+		reservableItemInfo.setMember(member);
+		reservableItemInfo.setMember(member2);
+		List expectedReservedList = member.getReservedItems();
+		List expectedMemberList = reservableItemInfo.getMembers();
+		member.setReservedList(reservableItemInfo);	//Shouldn't do anything
+		member2.setReservedList(reservableItemInfo);
+		List actualReservedList = member.getReservedItems();
+		List actualMemberList = reservableItemInfo.getMembers();
+
+		assertEquals(expectedReservedList, actualReservedList);
+		assertEquals(expectedMemberList, actualMemberList);
 	}
 	
 	@Test
