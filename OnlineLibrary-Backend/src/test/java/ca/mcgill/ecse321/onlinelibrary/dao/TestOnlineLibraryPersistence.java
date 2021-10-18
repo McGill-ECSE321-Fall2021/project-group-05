@@ -134,14 +134,23 @@ public class TestOnlineLibraryPersistence {
 
 	@Test
 	public void testPersistAndLoadAlbum() {
-		Album album = new Album();
+		AlbumInfo albumInfo = new AlbumInfo();
+		albumInfoRepository.save(albumInfo);
+		int albumInfoId = albumInfo.getId();
+
+		Album album = new Album(albumInfo);
 		album.setStatus(ItemStatus.Reserved);
 		albumRepository.save(album);
 		int id = album.getId();
+
 		album = null;
 		album = albumRepository.findAlbumById(id);
+
 		assertEquals(id, album.getId());
 		assertEquals(ItemStatus.Reserved, album.getStatus());
+
+		int retrievedAlbumInfoId = album.getAlbumInfo().getId();
+		assertEquals(albumInfoId, retrievedAlbumInfoId);
 	}
 
 	@Test
