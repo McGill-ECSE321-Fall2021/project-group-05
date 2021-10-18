@@ -9,6 +9,12 @@ public abstract class LibraryItem {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    /**
+     * Returns the unique ID number of the library item.
+     *
+     * This id is unique for all items available in the library.
+     * @return the id of the LibraryItem
+     */
     public Integer getId() {
         return this.id;
     }

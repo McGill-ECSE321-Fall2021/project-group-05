@@ -3,6 +3,7 @@ package ca.mcgill.ecse321.onlinelibrary.dao;
 import ca.mcgill.ecse321.onlinelibrary.model.Book;
 import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
+import ca.mcgill.ecse321.onlinelibrary.model.Member.MemberStatus;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 import java.sql.Date;
 import java.sql.Time;
@@ -83,7 +84,6 @@ public class TestOnlineLibraryPersistence {
 	@AfterEach
 	public void clearDatabase() {
 		loanRepository.deleteAll();
-		onlineAccountRepository.deleteAll();
 		roomBookingRepository.deleteAll();
 		memberRepository.deleteAll();
 		bookRepository.deleteAll();
@@ -379,6 +379,8 @@ public class TestOnlineLibraryPersistence {
 	public void testPersistAndLoadMember() {
 		// Create and persist member with online account and 2 loans
 		Member originalMember = new Member("212 McGill Street", "Obi-Wan Kenobi");
+		originalMember.applyStatusPenalty();
+		originalMember.setTotalFee(212);
 		OnlineAccount originalAccount = new OnlineAccount("212", "obi1kenobi", "obi-wan.kenobi@mail.mcgill.ca",
 				originalMember);
 		originalMember.setOnlineAccount(originalAccount);
@@ -412,6 +414,8 @@ public class TestOnlineLibraryPersistence {
 		// Check attributes
 		assertEquals("212 McGill Street", retrievedMember.getAddress());
 		assertEquals("Obi-Wan Kenobi", retrievedMember.getFullName());
+		assertEquals(MemberStatus.YELLOW, retrievedMember.getStatus());
+		assertEquals(212, retrievedMember.getTotalFee());
 
 		// Check associations
 		OnlineAccount retrievedAccount = retrievedMember.getOnlineAccount();

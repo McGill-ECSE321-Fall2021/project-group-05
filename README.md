@@ -21,14 +21,14 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
 	  <li>Review requirements and domain model</li>
 	  <li>Document the rationale for key decisions for the domain model in the wiki</li>
 	  <li>Create use-case diagrams for all 15 most important requirements</li>
-	  <li>Develop and test the database ORM layer for classes LibraryItem, ReservableItem, Book, Movie, Album, Newspaper, and Archive</li>
+	  <li>Develop and test the database ORM layer for classes LibraryItem, ReservableItem, Book, Movie, Album, Newspaper, Archive, and Loan</li>
 	  <li>Review other teammates' code and PRs</li>
 	  <li>Help teammates set up their development environment</li>
 	  <li>Document code conventions for the project</li>
 	  <li>Write a detailed use-case specification for the online account registration use-case</li>
         </ul>
       </td>
-      <td></td>
+      <td>16 hours</td>
     </tr>
     <tr>
       <td>Guillaume Delmas-Frenette</td>
