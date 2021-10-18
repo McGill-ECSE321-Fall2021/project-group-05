@@ -319,7 +319,11 @@ public class TestOnlineLibraryPersistence {
 	public void testPersistAndLoadLoan() {
 		Member member = new Member("123 McGill Street", "Luke Skywalker");
 		memberRepository.save(member);
-		Book reservableItem = new Book();
+
+		BookInfo bookInfo = new BookInfo();
+		bookinfoRepository.save(bookInfo);
+
+		Book reservableItem = new Book(bookInfo);
 		bookRepository.save(reservableItem);
 		Date date = Date.valueOf(LocalDate.of(2021, 10, 16));
 		Loan loan = new Loan(date, reservableItem, member);
@@ -417,10 +421,18 @@ public class TestOnlineLibraryPersistence {
 				originalMember);
 		originalMember.setOnlineAccount(originalAccount);
 		originalMember = memberRepository.save(originalMember);
-		Book book = new Book();
+
+		BookInfo bookInfo = new BookInfo();
+		bookinfoRepository.save(bookInfo);
+
+		Book book = new Book(bookInfo);
 		book.setStatus(ItemStatus.CheckedOut);
 		bookRepository.save(book);
-		Movie movie = new Movie();
+
+		MovieInfo movieInfo = new MovieInfo();
+		movieInfoRepository.save(movieInfo);
+
+		Movie movie = new Movie(movieInfo);
 		movie.setStatus(ItemStatus.CheckedOut);
 		movieRepository.save(movie);
 		Loan originalBookLoan = new Loan(Date.valueOf("2022-10-20"), book, originalMember);
@@ -584,10 +596,18 @@ public class TestOnlineLibraryPersistence {
 				originalMember);
 		originalMember.setOnlineAccount(originalAccount);
 		originalMember = memberRepository.save(originalMember);
-		Book book = new Book();
+
+		BookInfo bookInfo = new BookInfo();
+		bookinfoRepository.save(bookInfo);
+
+		Book book = new Book(bookInfo);
 		book.setStatus(ItemStatus.CheckedOut);
 		bookRepository.save(book);
-		Movie movie = new Movie();
+
+		MovieInfo movieInfo = new MovieInfo();
+		movieInfoRepository.save(movieInfo);
+
+		Movie movie = new Movie(movieInfo);
 		movie.setStatus(ItemStatus.CheckedOut);
 		movieRepository.save(movie);
 		Loan originalBookLoan = new Loan(Date.valueOf("2022-10-20"), book, originalMember);
