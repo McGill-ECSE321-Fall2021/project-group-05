@@ -175,13 +175,22 @@ public class TestOnlineLibraryPersistence {
 
 	@Test
 	public void testPersistAndLoadNewsPaper() {
-		Newspaper newspaper = new Newspaper();
+		NewsPaperInfo newsPaperInfo = new NewsPaperInfo();
+		newsPaperInfoRepository.save(newsPaperInfo);
+		int newsPaperInfoId = newsPaperInfo.getId();
+
+		Newspaper newspaper = new Newspaper(newsPaperInfo);
 		newspaperRepository.save(newspaper);
 		int id = newspaper.getId();
+
 		newspaper = null;
 		newspaper = newspaperRepository.findNewspaperById(id);
+
 		assertNotNull(newspaper);
 		assertEquals(id, newspaper.getId());
+
+		int retrievedNewsPaperInfoId = newspaper.getNewsPaperInfo().getId();
+		assertEquals(newsPaperInfoId, retrievedNewsPaperInfoId);
 	}
 
 	@Test
