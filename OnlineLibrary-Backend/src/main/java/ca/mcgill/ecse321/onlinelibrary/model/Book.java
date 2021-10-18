@@ -12,15 +12,15 @@ public class Book extends ReservableItem {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private BookInfo bookInfo;
 
+    public Book(BookInfo bookInfo) {
+        this.bookInfo = bookInfo;
+    }
+
     protected Book() {
 
     }
 
     public BookInfo getBookInfo() {
         return bookInfo;
-    }
-
-    public Book(BookInfo bookInfo) {
-        this.bookInfo = bookInfo;
     }
 }
