@@ -1,18 +1,8 @@
 package ca.mcgill.ecse321.onlinelibrary.dao;
 
-import ca.mcgill.ecse321.onlinelibrary.model.Book;
-import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.model.Member.MemberStatus;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
-import java.sql.Date;
-import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Month;
-import java.util.List;
-
-import javax.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,19 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import ca.mcgill.ecse321.onlinelibrary.model.Album;
-import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Movie;
+import javax.transaction.Transactional;
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Month;
+import java.util.List;
 
-import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Archive;
-import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Newspaper;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(SpringExtension.class)
@@ -105,14 +92,23 @@ public class TestOnlineLibraryPersistence {
 
 	@Test
 	public void testPersistAndLoadBook() {
-		Book book = new Book();
+		BookInfo bookInfo = new BookInfo();
+		bookinfoRepository.save(bookInfo);
+		int bookInfoId = bookInfo.getId();
+
+		Book book = new Book(bookInfo);
 		book.setStatus(ItemStatus.CheckedOut);
 		bookRepository.save(book);
 		int id = book.getId();
+
 		book = null;
 		book = bookRepository.findBookById(id);
+
 		assertEquals(id, book.getId());
 		assertEquals(ItemStatus.CheckedOut, book.getStatus());
+
+		int retrievedBookInfoId = book.getBookInfo().getId();
+		assertEquals(bookInfoId, retrievedBookInfoId);
 	}
 
 	@Test
