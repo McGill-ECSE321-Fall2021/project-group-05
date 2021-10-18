@@ -57,7 +57,6 @@ public class TestOnlineLibraryPersistence {
 	@AfterEach
 	public void clearDatabase() {
 		loanRepository.deleteAll();
-		onlineAccountRepository.deleteAll();
 		roomBookingRepository.deleteAll(); 
 		memberRepository.deleteAll();
 		bookRepository.deleteAll();
