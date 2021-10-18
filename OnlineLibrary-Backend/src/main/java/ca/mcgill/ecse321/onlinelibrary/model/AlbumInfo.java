@@ -8,18 +8,12 @@ public class AlbumInfo extends ReservableItemInfo {
 	private String composerPerformer;
 	private String genre;
 
-	public boolean setTitle(String aTitle) {
-		boolean wasSet = false;
+	public void setTitle(String aTitle) {
 		title = aTitle;
-		wasSet = true;
-		return wasSet;
 	}
 
-	public boolean setComposerPerformer(String aComposerPerformer) {
-		boolean wasSet = false;
+	public void setComposerPerformer(String aComposerPerformer) {
 		composerPerformer = aComposerPerformer;
-		wasSet = true;
-		return wasSet;
 	}
 
 	public void setGenre(String aGenre) {
