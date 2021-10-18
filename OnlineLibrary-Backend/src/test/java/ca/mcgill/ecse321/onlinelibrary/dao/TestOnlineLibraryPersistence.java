@@ -1,5 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.dao;
 
+import ca.mcgill.ecse321.onlinelibrary.model.Book;
+import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.model.Member.MemberStatus;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
@@ -8,6 +10,8 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
+import java.util.List;
+
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +22,16 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import ca.mcgill.ecse321.onlinelibrary.model.Album;
+import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.Movie;
+
+import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.Archive;
+import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.Newspaper;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -36,6 +50,18 @@ public class TestOnlineLibraryPersistence {
 	private ArchiveRepository archiveRepository;
 	@Autowired
 	private NewspaperRepository newspaperRepository;
+	@Autowired
+	private BookInfoRepository bookinfoRepository;
+	@Autowired
+	private MovieInfoRepository movieInfoRepository;
+	@Autowired
+	private AlbumInfoRepository albumInfoRepository;
+	@Autowired
+	private NewsPaperInfoRepository newsPaperInfoRepository;
+	@Autowired
+	private ArchiveInfoRepository archiveInfoRepository;
+	@Autowired
+	private ReservableItemInfoRepository reservableItemInfoRepository;
 	@Autowired
 	private MemberRepository memberRepository;
 	@Autowired
@@ -65,9 +91,15 @@ public class TestOnlineLibraryPersistence {
 		albumRepository.deleteAll();
 		archiveRepository.deleteAll();
 		newspaperRepository.deleteAll();
+		bookinfoRepository.deleteAll();
+		movieInfoRepository.deleteAll();
+		albumInfoRepository.deleteAll();
+		newsPaperInfoRepository.deleteAll();
+		archiveInfoRepository.deleteAll();
 		libraryOpeningHoursRepository.deleteAll();
 		holidayRepository.deleteAll();
 		librarianRepository.deleteAll();
+		reservableItemInfoRepository.deleteAll();
 		roomRepository.deleteAll();
 	}
 
@@ -127,6 +159,128 @@ public class TestOnlineLibraryPersistence {
 		newspaper = newspaperRepository.findNewspaperById(id);
 		assertNotNull(newspaper);
 		assertEquals(id, newspaper.getId());
+	}
+
+	@Test
+	public void testPersistBookInfo(){
+		BookInfo bookinfo = new BookInfo();
+		String title = "How to code in Java";
+		bookinfo.setTitle(title);
+		bookinfoRepository.save(bookinfo);
+		int id = bookinfo.getId();
+		bookinfo = null;
+		bookinfo = bookinfoRepository.findBookInfoById(id);
+		assertNotNull(bookinfo);
+		assertEquals(id, bookinfo.getId());
+		assertEquals(title, bookinfo.getTitle());
+	}
+
+	@Test
+	public void testPersistMovieInfo(){
+		MovieInfo movieInfo = new MovieInfo();
+		String director = "Kiro";
+		movieInfo.setDirector(director);
+		movieInfoRepository.save(movieInfo);
+		int id = movieInfo.getId();
+		movieInfo = null;
+		movieInfo = movieInfoRepository.findMovieInfoById(id);
+		assertNotNull(movieInfo);
+		assertEquals(id, movieInfo.getId());
+		assertEquals(director, movieInfo.getDirector());
+	}
+
+	@Test
+	public void testPersistAlbumInfo(){
+		AlbumInfo albumInfo = new AlbumInfo();
+		String title = "Studying music";
+		albumInfo.setTitle(title);
+		albumInfoRepository.save(albumInfo);
+		int id = albumInfo.getId();
+		albumInfo = null;
+		albumInfo = albumInfoRepository.findAlbumInfoById(id);
+		assertNotNull(albumInfo);
+		assertEquals(id, albumInfo.getId());
+		assertEquals(title, albumInfo.getTitle());
+	}
+
+	@Test
+	public void testPersistNewsPaperInfo(){
+		NewsPaperInfo newsPaperInfo = new NewsPaperInfo();
+		int number = 5673;
+		newsPaperInfo.setNumber(number);
+		newsPaperInfoRepository.save(newsPaperInfo);
+		int id = newsPaperInfo.getId();
+		newsPaperInfo = null;
+		newsPaperInfo = newsPaperInfoRepository.findNewsPaperInfoById(id);
+		assertNotNull(newsPaperInfo);
+		assertEquals(id, newsPaperInfo.getId());
+		assertEquals(number, newsPaperInfo.getNumber());
+	}
+
+	@Test
+	public void testPersistArchiveInfo(){
+		ArchiveInfo archiveInfo = new ArchiveInfo();
+		String title = "History of Java";
+		archiveInfo.setTitle(title);
+		archiveInfoRepository.save(archiveInfo);
+		int id = archiveInfo.getId();
+		archiveInfo = null;
+		archiveInfo = archiveInfoRepository.findArchiveInfoById(id);
+		assertNotNull(archiveInfo);
+		assertEquals(id, archiveInfo.getId());
+		assertEquals(title, archiveInfo.getTitle());
+	}
+
+	@Test
+	public void testReservationReferentialIntegrity(){
+		Member member = new Member("Lala Land", "Marcos Polo");
+		Member member2 = new Member("Mimi Land", "Samourai");
+		ReservableItemInfo reservableItemInfo = new MovieInfo();
+
+		reservableItemInfo.addMember(member);
+		reservableItemInfo.addMember(member2);
+		List<ReservableItemInfo> expectedReservedList = member.getReservedItems();
+		List<Member> expectedMemberList = reservableItemInfo.getMembers();
+		member.addReservation(reservableItemInfo);	//Shouldn't do anything
+		member2.addReservation(reservableItemInfo);
+		List<ReservableItemInfo> actualReservedList = member.getReservedItems();
+		List<Member> actualMemberList = reservableItemInfo.getMembers();
+
+		assertEquals(expectedReservedList, actualReservedList);
+		assertEquals(expectedMemberList, actualMemberList);
+	}
+
+	@Test
+	@Transactional
+	public void testReservationPersitence(){
+		String memberAdress = "Lala Land";
+		String memberName = "Marcos Polo";
+		Member member = new Member(memberAdress, memberName);
+		String member2Adress = "Happy Land";
+		String member2Name = "Greg";
+		Member member2 = new Member(member2Adress, member2Name);
+		memberRepository.save(member);
+		memberRepository.save(member2);
+		MovieInfo movieInfo = new MovieInfo();
+		String director = "Seb";
+		movieInfo.setDirector(director);
+		movieInfo.addMember(member);
+		movieInfo.addMember(member2);
+		movieInfoRepository.save(movieInfo);
+
+		List<Member> reservations = movieInfo.getMembers();
+		int id = movieInfo.getId();
+
+		movieInfo = null;
+		member = null;
+		member2 = null;
+
+		MovieInfo mInfo = movieInfoRepository.findMovieInfoById(id);
+
+		assertNotNull(mInfo);
+		assertEquals(director, mInfo.getDirector());
+		assertEquals(reservations, mInfo.getMembers());
+
 	}
 
 	@Test

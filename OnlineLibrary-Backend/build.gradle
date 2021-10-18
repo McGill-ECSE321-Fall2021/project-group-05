@@ -39,3 +39,4 @@ test {
 		exceptionFormat "full"
 	}
 }
+
