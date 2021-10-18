@@ -80,7 +80,7 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
 	  <li>Write a detailed use-case specification for the opening hours setup use-case</li>
         </ul>
       </td>
-      <td></td>
+      <td>14 hours</td>
     </tr>
     <tr>
       <td>Sebastian Ionascu</td>
