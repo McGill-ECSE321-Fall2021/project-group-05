@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-// package ca.mcgill.ecse321.onlinelibrary.model;
-
-// import javax.persistence.Entity;
-
-// @Entity
-// public class Member {
-    
-// }
-=======
 package ca.mcgill.ecse321.onlinelibrary.model;
 
 import java.util.ArrayList;
@@ -90,4 +80,3 @@ public class Member {
 		this.loans.remove(loanToRemove);
 	}
 }
->>>>>>> main
