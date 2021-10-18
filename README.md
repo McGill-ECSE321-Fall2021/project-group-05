@@ -91,7 +91,7 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
           <li>Review requirements and domain model</li>
 	  <li>Creation of class BookInfo, MovieInfo, AlbumInfo, NewsPaperInfo, ArchiveInfo, ReservableItemInfo, LibraryItemInfo</li>
 	  <li>Creation of use-case specification page in wiki and assignation of each use-case specifications to teammates</li>
-	  <li>Help teammates test the code and make their use-case specification</li>
+	  <li>Help teammates test the code, make their success spectrum and make their use-case specification</li>
 	  <li>Write a detailed use-case specification for the checkout items use-case</li>
 	  <li>Review all the use-case specifications</li>
         </ul>
