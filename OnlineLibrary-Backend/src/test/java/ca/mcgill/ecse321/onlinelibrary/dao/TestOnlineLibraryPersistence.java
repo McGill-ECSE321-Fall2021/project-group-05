@@ -113,14 +113,23 @@ public class TestOnlineLibraryPersistence {
 
 	@Test
 	public void testPersistAndLoadMovie() {
-		Movie movie = new Movie();
+		MovieInfo movieInfo = new MovieInfo();
+		movieInfoRepository.save(movieInfo);
+		int movieInfoId = movieInfo.getId();
+
+		Movie movie = new Movie(movieInfo);
 		movie.setStatus(ItemStatus.Available);
 		movieRepository.save(movie);
 		int id = movie.getId();
+
 		movie = null;
 		movie = movieRepository.findMovieById(id);
+
 		assertEquals(id, movie.getId());
 		assertEquals(ItemStatus.Available, movie.getStatus());
+
+		int retrievedMovieInfoId = movie.getMovieInfo().getId();
+		assertEquals(movieInfoId, retrievedMovieInfoId);
 	}
 
 	@Test
