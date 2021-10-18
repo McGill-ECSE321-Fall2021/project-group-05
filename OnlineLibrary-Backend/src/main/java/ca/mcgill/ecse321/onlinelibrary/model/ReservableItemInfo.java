@@ -72,8 +72,4 @@ public abstract class ReservableItemInfo extends LibraryItemInfo {
 		return index;
 	}
 
-	public static int minimumNumberOfMembers() {
-		return 0;
-	}
-
 }
