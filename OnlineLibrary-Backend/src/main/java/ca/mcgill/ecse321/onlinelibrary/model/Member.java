@@ -21,6 +21,12 @@ public class Member {
 	private Integer id;
 	private String address;
 	private String fullName;
+	private MemberStatus status;
+	public enum MemberStatus {
+		GREEN, YELLOW, RED, BLACKLISTED
+	}
+	// Account fees (e.g. registration fee, late fees) in cents
+	private int totalFee;
 
 	// Associations
 	@OneToOne(optional = true, cascade = {CascadeType.PERSIST})
@@ -33,8 +39,14 @@ public class Member {
 	}
 
 	public Member(String address, String fullName) {
+		this(address, fullName, 0);
+	}
+
+	public Member(String address, String fullName, int registrationFee) {
 		this.address = address;
 		this.fullName = fullName;
+		this.status = MemberStatus.GREEN;
+		this.totalFee = registrationFee;
 
 		this.loans = new ArrayList<Loan>();
 	}
@@ -58,6 +70,45 @@ public class Member {
 
 	public void setFullName(String newFullName) {
 		this.fullName = newFullName;
+	}
+
+	public MemberStatus getStatus() {
+		return this.status;
+	}
+
+	public void applyStatusPenalty() {
+		switch (this.status) {
+			case GREEN :
+				this.status = MemberStatus.YELLOW;
+				break;
+			case YELLOW :
+				this.status = MemberStatus.RED;
+				break;
+			default :
+				this.status = MemberStatus.BLACKLISTED;
+		}
+	}
+
+	public void removeStatusPenalty() {
+		switch (this.status) {
+			case BLACKLISTED :
+				this.status = MemberStatus.RED;
+				break;
+			case RED :
+				this.status = MemberStatus.YELLOW;
+				break;
+			default :
+				this.status = MemberStatus.GREEN;
+				break;
+		}
+	}
+
+	public int getTotalFee() {
+		return this.totalFee;
+	}
+
+	public void setTotalFee(int newTotalFee) {
+		this.totalFee = newTotalFee;
 	}
 
 	public OnlineAccount getOnlineAccount() {
