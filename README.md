@@ -102,7 +102,7 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
           <li>Review all the use-case specifications</li>
         </ul>
       </td>
-      <td>13 hours</td>
+      <td>16 hours</td>
     </tr>
   </tbody>
 </table>
