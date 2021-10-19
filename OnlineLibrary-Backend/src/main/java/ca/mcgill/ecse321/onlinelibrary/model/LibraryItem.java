@@ -2,6 +2,11 @@ package ca.mcgill.ecse321.onlinelibrary.model;
 
 import javax.persistence.*;
 
+// WARNING: Changing the following `InheritanceType` to anything other than `JOINED` or `TABLE_PER_CLASS` will bring
+// down the wrath of all the dysfunctional Hibernate pantheon. All your tests will fail. Luckily for you, if you ever
+// want to try your luck, the solution is simple. Just put that line back to its original state. You have been warned.
+//
+// More details are available in the commit message for a07b3989.
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class LibraryItem {
