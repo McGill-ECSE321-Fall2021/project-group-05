@@ -10,7 +10,7 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
     <tr>
       <th>Team Member</th>
       <th>Responsibilities</th>
-      <th>Hours</th>
+      <th>Hours (incl. meetings)</th>
     </tr>
     <tr>
       <td>Gabriel Lacroix</td>
