@@ -62,7 +62,7 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
           <li>Write rough draft of requirements</li>
           <li>Write final draft of requirements</li>
           <li>Review requirements and domain model</li>
-          <li>Set up Spring project, GitHub project, and GitHub Actions CI</li>
+          <li>Set up Spring project</li>
           <li>Write detailed use case specification 5 (returning items)</li>
           <li>Create models, repositories, and tests for Member, OnlineAccount, Librarian, and LibrarianShift</li>
         </ul>
