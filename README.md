@@ -18,14 +18,14 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
         <ul>
           <li>Write rough draft of requirements</li>
           <li>Design domain model</li>
-	  <li>Review requirements and domain model</li>
-	  <li>Document the rationale for key decisions for the domain model in the wiki</li>
-	  <li>Create use-case diagrams for all 15 most important requirements</li>
-	  <li>Develop and test the database ORM layer for classes LibraryItem, ReservableItem, Book, Movie, Album, Newspaper, Archive, and Loan</li>
-	  <li>Review other teammates' code and PRs</li>
-	  <li>Help teammates set up their development environment</li>
-	  <li>Document code conventions for the project</li>
-	  <li>Write a detailed use-case specification for the online account registration use-case</li>
+          <li>Review requirements and domain model</li>
+          <li>Document the rationale for key decisions for the domain model in the wiki</li>
+          <li>Create use-case diagrams for all 15 most important requirements</li>
+          <li>Develop and test the database ORM layer for classes LibraryItem, ReservableItem, Book, Movie, Album, Newspaper, Archive, and Loan</li>
+          <li>Review other teammates' code and PRs</li>
+          <li>Help teammates set up their development environment</li>
+          <li>Document code conventions for the project</li>
+          <li>Write a detailed use-case specification for the online account registration use-case</li>
         </ul>
       </td>
       <td>18 hours</td>
@@ -37,9 +37,9 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
           <li>Write rough draft of requirements</li>
           <li>Design domain model</li>
           <li>Review requirements and domain model</li>
-	  <li>Creation of class Loan, LibraryItem, ReservableItem </li> 
-	  <li>Creation of class Book, Movie, Album, Newspaper, Archive </li>
-	  <li>Write a detailed use-case specification for reserving a library item</li>
+          <li>Creation of class Loan, LibraryItem, ReservableItem </li> 
+          <li>Creation of class Book, Movie, Album, Newspaper, Archive </li>
+          <li>Write a detailed use-case specification for reserving a library item</li>
         </ul>
       </td>
       <td> 13 hours </td>
@@ -62,10 +62,12 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
           <li>Write rough draft of requirements</li>
           <li>Write final draft of requirements</li>
           <li>Review requirements and domain model</li>
-		  <li>Set up Spring project, GitHub project, and GitHub Actions CI</li>
+          <li>Set up Spring project, GitHub project, and GitHub Actions CI</li>
+          <li>Write detailed use case specification 5 (returning items)</li>
+          <li>Create models, repositories, and tests for Member, OnlineAccount, Librarian, and LibrarianShift</li>
         </ul>
       </td>
-      <td></td>
+      <td>34.5 hours</td>
     </tr>
     <tr>
       <td>Mircea Gosman</td>
@@ -76,8 +78,8 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
           <li>Review requirements and domain model</li>
           <li>Creation of LibraryOpeningHours, Holiday, RoomBooking and Room class files, repositories and their corresponding persistence unit tests</li>	
           <li>Addition of issue-linking CI tool for better organization of dependent issues</li>
-	  <li>Review Pull Requests</li>
-	  <li>Write a detailed use-case specification for the opening hours setup use-case</li>
+          <li>Review Pull Requests</li>
+          <li>Write a detailed use-case specification for the opening hours setup use-case</li>
         </ul>
       </td>
       <td>14 hours</td>
@@ -89,11 +91,11 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
           <li>Write rough draft of requirements</li>
           <li>Write final draft of requirements</li>
           <li>Review requirements and domain model</li>
-	  <li>Creation of class BookInfo, MovieInfo, AlbumInfo, NewsPaperInfo, ArchiveInfo, ReservableItemInfo, LibraryItemInfo</li>
-	  <li>Creation of use-case specification page in wiki and assignation of each use-case specifications to teammates</li>
-	  <li>Help teammates test the code, make their success spectrum and make their use-case specification</li>
-	  <li>Write a detailed use-case specification for the checkout items use-case</li>
-	  <li>Review all the use-case specifications</li>
+          <li>Creation of class BookInfo, MovieInfo, AlbumInfo, NewsPaperInfo, ArchiveInfo, ReservableItemInfo, LibraryItemInfo</li>
+          <li>Creation of use-case specification page in wiki and assignation of each use-case specifications to teammates</li>
+          <li>Help teammates test the code, make their success spectrum and make their use-case specification</li>
+          <li>Write a detailed use-case specification for the checkout items use-case</li>
+          <li>Review all the use-case specifications</li>
         </ul>
       </td>
       <td>12.5 hours</td>
