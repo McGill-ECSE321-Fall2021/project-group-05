@@ -42,7 +42,7 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
 	  <li>Write a detailed use-case specification for reserving a library item</li>
         </ul>
       </td>
-      <td></td>
+      <td> 13 hours </td>
     </tr>
     <tr>
       <td>Kirollos Roufail</td>
