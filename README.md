@@ -28,7 +28,7 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
           <li>Write a detailed use-case specification for the online account registration use-case</li>
         </ul>
       </td>
-      <td>18 hours</td>
+      <td>20 hours</td>
     </tr>
     <tr>
       <td>Guillaume Delmas-Frenette</td>
