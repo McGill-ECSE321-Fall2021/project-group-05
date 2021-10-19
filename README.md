@@ -28,7 +28,7 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
           <li>Write a detailed use-case specification for the online account registration use-case</li>
         </ul>
       </td>
-      <td>20 hours</td>
+      <td>18 hours</td>
     </tr>
     <tr>
       <td>Guillaume Delmas-Frenette</td>
@@ -51,9 +51,13 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
           <li>Write rough draft of requirements</li>
           <li>Design domain model</li>
           <li>Review requirements and domain model</li>
+          <li>Debug and modify the "info" classes</li>
+          <li>Write the testers for the "info" classes</li>
+          <li>Write Use case success scenario #2</li>
+          <li>Adjust the code according to the reviews of my team mates</li>
         </ul>
       </td>
-      <td></td>
+      <td>23 hours</td>
     </tr>
     <tr>
       <td>Louis Hildebrand</td>
