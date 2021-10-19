@@ -1,18 +1,8 @@
 package ca.mcgill.ecse321.onlinelibrary.dao;
 
-import ca.mcgill.ecse321.onlinelibrary.model.Book;
-import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.model.Member.MemberStatus;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
-import java.sql.Date;
-import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Month;
-import java.util.List;
-
-import javax.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,19 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import ca.mcgill.ecse321.onlinelibrary.model.Album;
-import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Movie;
+import javax.transaction.Transactional;
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Month;
+import java.util.List;
 
-import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Archive;
-import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Newspaper;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(SpringExtension.class)
@@ -105,60 +92,105 @@ public class TestOnlineLibraryPersistence {
 
 	@Test
 	public void testPersistAndLoadBook() {
-		Book book = new Book();
+		BookInfo bookInfo = new BookInfo();
+		bookinfoRepository.save(bookInfo);
+		int bookInfoId = bookInfo.getId();
+
+		Book book = new Book(bookInfo);
 		book.setStatus(ItemStatus.CheckedOut);
 		bookRepository.save(book);
 		int id = book.getId();
+
 		book = null;
 		book = bookRepository.findBookById(id);
+
 		assertEquals(id, book.getId());
 		assertEquals(ItemStatus.CheckedOut, book.getStatus());
+
+		int retrievedBookInfoId = book.getBookInfo().getId();
+		assertEquals(bookInfoId, retrievedBookInfoId);
 	}
 
 	@Test
 	public void testPersistAndLoadMovie() {
-		Movie movie = new Movie();
+		MovieInfo movieInfo = new MovieInfo();
+		movieInfoRepository.save(movieInfo);
+		int movieInfoId = movieInfo.getId();
+
+		Movie movie = new Movie(movieInfo);
 		movie.setStatus(ItemStatus.Available);
 		movieRepository.save(movie);
 		int id = movie.getId();
+
 		movie = null;
 		movie = movieRepository.findMovieById(id);
+
 		assertEquals(id, movie.getId());
 		assertEquals(ItemStatus.Available, movie.getStatus());
+
+		int retrievedMovieInfoId = movie.getMovieInfo().getId();
+		assertEquals(movieInfoId, retrievedMovieInfoId);
 	}
 
 	@Test
 	public void testPersistAndLoadAlbum() {
-		Album album = new Album();
+		AlbumInfo albumInfo = new AlbumInfo();
+		albumInfoRepository.save(albumInfo);
+		int albumInfoId = albumInfo.getId();
+
+		Album album = new Album(albumInfo);
 		album.setStatus(ItemStatus.Reserved);
 		albumRepository.save(album);
 		int id = album.getId();
+
 		album = null;
 		album = albumRepository.findAlbumById(id);
+
 		assertEquals(id, album.getId());
 		assertEquals(ItemStatus.Reserved, album.getStatus());
+
+		int retrievedAlbumInfoId = album.getAlbumInfo().getId();
+		assertEquals(albumInfoId, retrievedAlbumInfoId);
 	}
 
 	@Test
 	public void testPersistAndLoadArchive() {
-		Archive archive = new Archive();
+		ArchiveInfo archiveInfo = new ArchiveInfo();
+		archiveInfoRepository.save(archiveInfo);
+		int archiveInfoId = archiveInfo.getId();
+
+		Archive archive = new Archive(archiveInfo);
 		archiveRepository.save(archive);
 		int id = archive.getId();
+
 		archive = null;
 		archive = archiveRepository.findArchiveById(id);
+
 		assertNotNull(archive);
 		assertEquals(id, archive.getId());
+
+		int retrievedArchiveInfoId = archive.getArchiveInfo().getId();
+		assertEquals(archiveInfoId, retrievedArchiveInfoId);
 	}
 
 	@Test
 	public void testPersistAndLoadNewsPaper() {
-		Newspaper newspaper = new Newspaper();
+		NewsPaperInfo newsPaperInfo = new NewsPaperInfo();
+		newsPaperInfoRepository.save(newsPaperInfo);
+		int newsPaperInfoId = newsPaperInfo.getId();
+
+		Newspaper newspaper = new Newspaper(newsPaperInfo);
 		newspaperRepository.save(newspaper);
 		int id = newspaper.getId();
+
 		newspaper = null;
 		newspaper = newspaperRepository.findNewspaperById(id);
+
 		assertNotNull(newspaper);
 		assertEquals(id, newspaper.getId());
+
+		int retrievedNewsPaperInfoId = newspaper.getNewsPaperInfo().getId();
+		assertEquals(newsPaperInfoId, retrievedNewsPaperInfoId);
 	}
 
 	@Test
@@ -287,7 +319,11 @@ public class TestOnlineLibraryPersistence {
 	public void testPersistAndLoadLoan() {
 		Member member = new Member("123 McGill Street", "Luke Skywalker");
 		memberRepository.save(member);
-		Book reservableItem = new Book();
+
+		BookInfo bookInfo = new BookInfo();
+		bookinfoRepository.save(bookInfo);
+
+		Book reservableItem = new Book(bookInfo);
 		bookRepository.save(reservableItem);
 		Date date = Date.valueOf(LocalDate.of(2021, 10, 16));
 		Loan loan = new Loan(date, reservableItem, member);
@@ -385,10 +421,18 @@ public class TestOnlineLibraryPersistence {
 				originalMember);
 		originalMember.setOnlineAccount(originalAccount);
 		originalMember = memberRepository.save(originalMember);
-		Book book = new Book();
+
+		BookInfo bookInfo = new BookInfo();
+		bookinfoRepository.save(bookInfo);
+
+		Book book = new Book(bookInfo);
 		book.setStatus(ItemStatus.CheckedOut);
 		bookRepository.save(book);
-		Movie movie = new Movie();
+
+		MovieInfo movieInfo = new MovieInfo();
+		movieInfoRepository.save(movieInfo);
+
+		Movie movie = new Movie(movieInfo);
 		movie.setStatus(ItemStatus.CheckedOut);
 		movieRepository.save(movie);
 		Loan originalBookLoan = new Loan(Date.valueOf("2022-10-20"), book, originalMember);
@@ -552,10 +596,18 @@ public class TestOnlineLibraryPersistence {
 				originalMember);
 		originalMember.setOnlineAccount(originalAccount);
 		originalMember = memberRepository.save(originalMember);
-		Book book = new Book();
+
+		BookInfo bookInfo = new BookInfo();
+		bookinfoRepository.save(bookInfo);
+
+		Book book = new Book(bookInfo);
 		book.setStatus(ItemStatus.CheckedOut);
 		bookRepository.save(book);
-		Movie movie = new Movie();
+
+		MovieInfo movieInfo = new MovieInfo();
+		movieInfoRepository.save(movieInfo);
+
+		Movie movie = new Movie(movieInfo);
 		movie.setStatus(ItemStatus.CheckedOut);
 		movieRepository.save(movie);
 		Loan originalBookLoan = new Loan(Date.valueOf("2022-10-20"), book, originalMember);
