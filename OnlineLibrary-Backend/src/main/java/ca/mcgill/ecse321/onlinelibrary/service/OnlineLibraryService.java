@@ -9,7 +9,6 @@ import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
 
 @Service
 public class OnlineLibraryService {
-	public int errorCount=0;
 	
 	@Autowired
 	BookInfoRepository bookInfoRepository;
@@ -17,6 +16,7 @@ public class OnlineLibraryService {
 	@Transactional
 	public BookInfo createBookInfo(String title, int numberOfPage, String author, Integer isbn) {
 		String errorMessage="";
+		int errorCount=0;
 		if (title == null || title.trim().length() == 0) {
 			errorMessage+="Title can't be empty!";
 			errorCount++;
