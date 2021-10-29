@@ -9,7 +9,6 @@ public class BookInfo extends ReservableItemInfo {
 	private String author;
 	@Column(unique = true)
 	private int isbn;
-
 	public void setTitle(String aTitle) {
 		title = aTitle;
 	}
