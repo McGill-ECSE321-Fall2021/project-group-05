@@ -17,7 +17,7 @@ public class Book extends ReservableItem {
     }
 
     protected Book() {
-
+        
     }
 
     public BookInfo getBookInfo() {

@@ -8,8 +8,7 @@ public class BookInfo extends ReservableItemInfo {
 	private int numberOfPage;
 	private String author;
 	@Column(unique = true)
-	private int isbn;
-
+	private long isbn;
 	public void setTitle(String aTitle) {
 		title = aTitle;
 	}
@@ -34,11 +33,11 @@ public class BookInfo extends ReservableItemInfo {
 		return author;
 	}
 
-	public int getIsbn() {
+	public long getIsbn() {
 		return this.isbn;
 	}
 
-	public void setIsbn(int isbn) {
+	public void setIsbn(long isbn) {
 		this.isbn = isbn;
 	}
 }
