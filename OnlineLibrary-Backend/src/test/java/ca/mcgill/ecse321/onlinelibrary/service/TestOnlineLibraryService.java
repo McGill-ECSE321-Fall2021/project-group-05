@@ -19,13 +19,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
+import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.model.*;
 
 
 @ExtendWith(MockitoExtension.class)
 public class TestOnlineLibraryService {
 	@Mock
 	private BookInfoRepository bookInfoDao;
+	
+	@Mock
+	private MovieInfoRepository movieInfoDao;
 	
 	@InjectMocks
 	private OnlineLibraryService service;
@@ -36,6 +40,7 @@ public class TestOnlineLibraryService {
 			return invocation.getArgument(0);
 		};
 		lenient().when(bookInfoDao.save(any(BookInfo.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(movieInfoDao.save(any(MovieInfo.class))).thenAnswer(returnParameterAsAnswer);
 	}
 	
 	@Test
@@ -76,7 +81,7 @@ public class TestOnlineLibraryService {
 	@Test
 	public void testCreateBookInfoTitleIsEmpty() {
 		String error="";
-		String title = "";
+		String title = "   ";
 		int numberOfPage = 10;
 		String author = "Author";
 		long isbn = 1;
@@ -159,6 +164,124 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Number of page can't be 0."));
 		assertTrue(error.contains("Author can't be empty."));
 	}
+	
+	@Test
+	public void testCreateMovieInfo() {
+		String genre = "Horror";
+		String director = "Author";
+		int length = 100;
+		MovieInfo movieInfo = null;
+		try {
+			movieInfo = service.createMovieInfo(genre, director, length);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(movieInfo);
+		assertEquals(movieInfo.getGenre(), genre);
+		assertEquals(movieInfo.getDirector(), director);
+		assertEquals(movieInfo.getLength(), length);
+	}
+	
+	@Test
+	public void testCreateMovieInfoGenreNull() {
+		String error="";
+		String genre = null;
+		String director = "Author";
+		int length = 100;
+		MovieInfo movieInfo = null;
+		try {
+			movieInfo = service.createMovieInfo(genre, director, length);
+		} catch (IllegalArgumentException e) {
+			error=e.getMessage();
+		}
+		assertNull(movieInfo);
+		assertTrue(error.contains("Genre can't be empty."));
+	}
+	
+	@Test
+	public void testCreateMovieInfoGenreEmpty() {
+		String error="";
+		String genre = "   ";
+		String director = "Author";
+		int length = 100;
+		MovieInfo movieInfo = null;
+		try {
+			movieInfo = service.createMovieInfo(genre, director, length);
+		} catch (IllegalArgumentException e) {
+			error=e.getMessage();
+		}
+		assertNull(movieInfo);
+		assertTrue(error.contains("Genre can't be empty."));
+	}
+	
+	@Test
+	public void testCreateMovieInfoDirectorNull() {
+		String error="";
+		String genre = "aGenre";
+		String director = null;
+		int length = 100;
+		MovieInfo movieInfo = null;
+		try {
+			movieInfo = service.createMovieInfo(genre, director, length);
+		} catch (IllegalArgumentException e) {
+			error=e.getMessage();
+		}
+		assertNull(movieInfo);
+		assertTrue(error.contains("Director can't be empty."));
+	}
+	
+	@Test
+	public void testCreateMovieInfoDirectorEmpty() {
+		String error="";
+		String genre = "aGenre";
+		String director = "  ";
+		int length = 100;
+		MovieInfo movieInfo = null;
+		try {
+			movieInfo = service.createMovieInfo(genre, director, length);
+		} catch (IllegalArgumentException e) {
+			error=e.getMessage();
+		}
+		assertNull(movieInfo);
+		assertTrue(error.contains("Director can't be empty."));
+	}
+	
+	@Test
+	public void testCreateMovieInfoLength0() {
+		String error="";
+		String genre = "aGenre";
+		String director = "Director";
+		int length = 0;
+		MovieInfo movieInfo = null;
+		try {
+			movieInfo = service.createMovieInfo(genre, director, length);
+		} catch (IllegalArgumentException e) {
+			error=e.getMessage();
+		}
+		assertNull(movieInfo);
+		assertTrue(error.contains("Length can't be 0."));
+	}
+	
+	@Test 
+	public void testCreateMovieAllEmpty() {
+		String error="";
+		String genre = "";
+		String director = "";
+		int length = 0;
+		MovieInfo movieInfo = null;
+		try {
+			movieInfo = service.createMovieInfo(genre, director, length);
+		} catch (IllegalArgumentException e) {
+			error=e.getMessage();
+		}
+		assertNull(movieInfo);
+		assertTrue(error.contains("Genre can't be empty."));
+		assertTrue(error.contains("Director can't be empty."));
+		assertTrue(error.contains("Length can't be 0."));
+	}
+	
+	
+	
 }
 
 
