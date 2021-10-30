@@ -4,6 +4,7 @@ package ca.mcgill.ecse321.onlinelibrary.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
@@ -42,7 +43,7 @@ public class TestOnlineLibraryService {
 		String title = "Title";
 		Integer numberOfPage = 10;
 		String author = "Author";
-		Integer isbn = 1;
+		long isbn = 1;
 		BookInfo bookInfo = null;
 		try {
 			bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
@@ -59,9 +60,9 @@ public class TestOnlineLibraryService {
 	public void testCreateBookInfoTitleNull() {
 		String error="";
 		String title = null;
-		Integer numberOfPage = 10;
+		int numberOfPage = 10;
 		String author = "Author";
-		Integer isbn = 1;
+		long isbn = 1;
 		BookInfo bookInfo = null;
 		try {
 			bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
@@ -69,15 +70,84 @@ public class TestOnlineLibraryService {
 			error = e.getMessage();
 		}
 		assertNull(bookInfo);
-		assertEquals("Title can't be empty!", error);
+		assertTrue(error.contains("Title can't be empty."));
 	}
+	
+	@Test
+	public void testCreateBookInfoTitleIsEmpty() {
+		String error="";
+		String title = "";
+		int numberOfPage = 10;
+		String author = "Author";
+		long isbn = 1;
+		BookInfo bookInfo = null;
+		try {
+			bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(bookInfo);
+		assertTrue(error.contains("Title can't be empty."));
+	}
+	
+	@Test
+	public void testCreateBookInfoNumberOfPageIs0() {
+		String error="";
+		String title = "title";
+		int numberOfPage = 0;
+		String author = "Author";
+		long isbn = 1;
+		BookInfo bookInfo = null;
+		try {
+			bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(bookInfo);
+		assertTrue(error.contains("Number of page can't be 0."));
+	}
+	
+	@Test
+	public void testCreateBookInfoAuthorIsNull() {
+		String error="";
+		String title = "title";
+		int numberOfPage = 10;
+		String author = null;
+		long isbn = 1;
+		BookInfo bookInfo = null;
+		try {
+			bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(bookInfo);
+		assertTrue(error.contains("Author can't be empty."));
+	}
+	
+	@Test
+	public void testCreateBookInfoAuthorIsEmpty() {
+		String error="";
+		String title = "title";
+		int numberOfPage = 10;
+		String author = "";
+		long isbn = 1;
+		BookInfo bookInfo = null;
+		try {
+			bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(bookInfo);
+		assertTrue(error.contains("Author can't be empty."));
+	}
+	
 	@Test
 	public void testCreateBookInfoAllNulls() {
 		String error="";
 		String title = null;
 		int numberOfPage = 0;
 		String author = null;
-		Integer isbn = null;
+		long isbn = 0;
 		BookInfo bookInfo = null;
 		try {
 			bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
@@ -85,7 +155,9 @@ public class TestOnlineLibraryService {
 			error = e.getMessage();
 		}
 		assertNull(bookInfo);
-		assertEquals("Title can't be empty!Number of page can't be empty!Author can't be empty!Isbn can't be empty!", error);
+		assertTrue(error.contains("Title can't be empty."));
+		assertTrue(error.contains("Number of page can't be 0."));
+		assertTrue(error.contains("Author can't be empty."));
 	}
 }
 

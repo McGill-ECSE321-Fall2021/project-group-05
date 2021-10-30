@@ -1,5 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,31 +16,26 @@ public class OnlineLibraryService {
 	BookInfoRepository bookInfoRepository;
 	
 	@Transactional
-	public BookInfo createBookInfo(String title, int numberOfPage, String author, Integer isbn) {
-		String errorMessage="";
+	public BookInfo createBookInfo(String title, int numberOfPage, String author, long isbn) {
+		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount=0;
 		if (title == null || title.trim().length() == 0) {
-			errorMessage+="Title can't be empty!";
+			errorMessage.add("Title can't be empty.");
 			errorCount++;
 		}
 		
 		if (numberOfPage == 0) {
-			errorMessage+="Number of page can't be empty!";
+			errorMessage.add("Number of page can't be 0.");
 			errorCount++;
 		}
 		
 		if (author == null || author.trim().length() == 0) {
-			errorMessage+="Author can't be empty!";
-			errorCount++;
-		}
-		
-		if (isbn == null) {
-			errorMessage+="Isbn can't be empty!";
+			errorMessage.add("Author can't be empty.");
 			errorCount++;
 		}
 		
 		if (errorCount > 0) {
-			throw new IllegalArgumentException(errorMessage.trim());
+			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
 		
 		BookInfo bookInfo = new BookInfo();

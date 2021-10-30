@@ -6,9 +6,9 @@ public class BookInfoDto extends ReservableItemInfoDto{
 	private String title;
 	private int numberOfPage;
 	private String author;
-	private int isbn;
+	private long isbn;
 	
-	public BookInfoDto(String title, Integer numberOfPage, String author, int isbn, int id) {
+	public BookInfoDto(String title, Integer numberOfPage, String author, long isbn, int id) {
 		super(id);
 		this.title=title;
 		this.numberOfPage=numberOfPage;
@@ -28,7 +28,7 @@ public class BookInfoDto extends ReservableItemInfoDto{
 		return this.numberOfPage;
 	}
 	
-	public int getIsbn () {
+	public long getIsbn () {
 		return this.isbn;
 	}
 	
