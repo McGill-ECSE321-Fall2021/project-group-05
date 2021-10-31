@@ -484,6 +484,24 @@ public class TestOnlineLibraryService {
 		assertNull(albumInfo);
 		assertTrue(error.contains("Genre can't be empty."));
 	}
+	
+	@Test 
+	public void testCreateeAlbumInfoAllEmpty() {
+		String error="";
+		String title = " ";
+		String composerPerformer = null;
+		String genre = " ";
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(albumInfo);
+		assertTrue(error.contains("Genre can't be empty."));
+		assertTrue(error.contains("composerPerformer can't be empty."));
+		assertTrue(error.contains("Title can't be empty."));
+	}
 }
 
 
