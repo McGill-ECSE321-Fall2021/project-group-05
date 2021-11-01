@@ -50,7 +50,7 @@ public class OnlineLibraryService {
 	
 	@Transactional
 	public void deleteBookInfo(int id) {
-		if (bookInfoRepository.findById(id) == null) {
+		if (bookInfoRepository.findBookInfoById(id) == null) {
 			throw new IllegalArgumentException("This bookInfo item doesn't exist.");
 		} else {
 			bookInfoRepository.deleteById(id);

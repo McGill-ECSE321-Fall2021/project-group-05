@@ -25,7 +25,7 @@ import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
 @ExtendWith(MockitoExtension.class)
 public class TestOnlineLibraryService {
 	@Mock
-	private BookInfoRepository bookInfoRepository;
+	private BookInfoRepository bookInfoDao;
 	
 	@InjectMocks
 	private OnlineLibraryService service;
@@ -35,7 +35,7 @@ public class TestOnlineLibraryService {
 	
 	@BeforeEach
 	public void setMockOuput() {
-		lenient().when(bookInfoRepository.findBookInfoById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+		lenient().when(bookInfoDao.findBookInfoById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
 			if (invocation.getArgument(0).equals(BOOK_INFO_KEY)) {
 				BookInfo bookInfo = new BookInfo();
 				bookInfo.setId(BOOK_INFO_KEY);
@@ -48,7 +48,7 @@ public class TestOnlineLibraryService {
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
 		};
-		lenient().when(bookInfoRepository.save(any(BookInfo.class))).thenAnswer( (InvocationOnMock invocation) -> {
+		lenient().when(bookInfoDao.save(any(BookInfo.class))).thenAnswer( (InvocationOnMock invocation) -> {
 				BookInfo bookInfo = invocation.getArgument(0);
 				bookInfo.setId(BOOK_INFO_KEY);
 				return bookInfo;
