@@ -25,17 +25,34 @@ import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
 @ExtendWith(MockitoExtension.class)
 public class TestOnlineLibraryService {
 	@Mock
-	private BookInfoRepository bookInfoDao;
+	private BookInfoRepository bookInfoRepository;
 	
 	@InjectMocks
 	private OnlineLibraryService service;
 	
+	private static final int BOOK_INFO_KEY = 1;
+	private static final int BOOK_INFO_NOT_A_KEY = 2;
+	
 	@BeforeEach
 	public void setMockOuput() {
+		lenient().when(bookInfoRepository.findBookInfoById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(BOOK_INFO_KEY)) {
+				BookInfo bookInfo = new BookInfo();
+				bookInfo.setId(BOOK_INFO_KEY);
+				return bookInfo;
+			} else {
+				return null;
+			}
+		});
+		
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
 		};
-		lenient().when(bookInfoDao.save(any(BookInfo.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(bookInfoRepository.save(any(BookInfo.class))).thenAnswer( (InvocationOnMock invocation) -> {
+				BookInfo bookInfo = invocation.getArgument(0);
+				bookInfo.setId(BOOK_INFO_KEY);
+				return bookInfo;
+		});
 	}
 	
 	@Test
@@ -158,6 +175,26 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Title can't be empty."));
 		assertTrue(error.contains("Number of page can't be 0."));
 		assertTrue(error.contains("Author can't be empty."));
+	}
+	
+	@Test
+	public void testDeleteBook() {
+		BookInfo bookInfo = service.createBookInfo("title", 10, "author", 10);
+		try {
+			service.deleteBookInfo(BOOK_INFO_KEY);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+	}
+	
+	public void testDeleteBookInexistant() {
+		String error="";
+		try {
+			service.deleteBookInfo(BOOK_INFO_NOT_A_KEY);
+		} catch (IllegalArgumentException e ) {
+			error+=e.getMessage();
+		}
+		assertTrue(error.contains("This bookInfo item doesn't exist."));
 	}
 }
 

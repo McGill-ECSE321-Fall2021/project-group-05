@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,15 @@ public class OnlineLibraryService {
 		bookInfo.setIsbn(isbn);
 		bookInfoRepository.save(bookInfo);
 		return bookInfo;
+	}
+	
+	@Transactional
+	public void deleteBookInfo(int id) {
+		if (bookInfoRepository.findById(id) == null) {
+			throw new IllegalArgumentException("This bookInfo item doesn't exist.");
+		} else {
+			bookInfoRepository.deleteById(id);
+		}
 	}
 	
 }
