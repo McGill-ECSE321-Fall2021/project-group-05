@@ -25,8 +25,22 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
       working-directory: OnlineLibrary-Backend
+  deploy:
+    needs: build
+    runs-on: ubuntu-18.04
+    steps:
     - uses: akhileshns/heroku-deploy@v3.12.12
       with:
         heroku_api_key: 64118b4c-0551-49a2-8fa2-45cee48f24b0
         heroku_app_name: "onlinelibrary-backend-05a"
         heroku_email: "louis.t.hildebrand@gmail.com"
+  integration-tests:
+    needs: deploy
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Grant execute permission for curl test script
+      run: chmod +x curl_tests.sh
+      working-directory: integration-tests
+    - name: Run the curl integration tests for the REST API
+      run: ./curl_tests.sh
+      working-directory: integration-tests
