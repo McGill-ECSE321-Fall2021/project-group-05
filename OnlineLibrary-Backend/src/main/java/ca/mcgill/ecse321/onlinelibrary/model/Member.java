@@ -24,11 +24,10 @@ public class Member {
 	private String fullName;
 	private MemberStatus status;
 	public enum MemberStatus {
-		GREEN, YELLOW, RED, BLACKLISTED
+		GREEN, YELLOW, RED, BLACKLISTED, INACTIVE
 	}
 	// Account fees (e.g. registration fee, late fees) in cents
 	private int totalFee;
-	private boolean isActive;
 
 	// Associations
 	@OneToOne(optional = true, cascade = {CascadeType.PERSIST})
@@ -49,9 +48,8 @@ public class Member {
 	public Member(String address, String fullName, int registrationFee) {
 		this.address = address;
 		this.fullName = fullName;
-		this.status = MemberStatus.GREEN;
+		this.status = MemberStatus.INACTIVE;
 		this.totalFee = registrationFee;
-		this.isActive = false;
 		
 		this.loans = new ArrayList<Loan>();
 		this.reservedItems = new ArrayList<ReservableItemInfo>();
@@ -80,6 +78,10 @@ public class Member {
 
 	public MemberStatus getStatus() {
 		return this.status;
+	}
+
+	public void setStatus(MemberStatus status) {
+		this.status = status;
 	}
 
 	public void applyStatusPenalty() {
@@ -151,11 +153,4 @@ public class Member {
 		reservableItemInfo.addMember(this);
 	}
 
-	public void setActive(boolean active) {
-		isActive = active;
-	}
-
-	public boolean isActive() {
-		return this.isActive;
-	}
 }
