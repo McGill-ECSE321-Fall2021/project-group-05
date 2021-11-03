@@ -150,4 +150,12 @@ public class Member {
 
 		reservableItemInfo.addMember(this);
 	}
+
+	public void setActive(boolean active) {
+		isActive = active;
+	}
+
+	public boolean isActive() {
+		return this.isActive;
+	}
 }
