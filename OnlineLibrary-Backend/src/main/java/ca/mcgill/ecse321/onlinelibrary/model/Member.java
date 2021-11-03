@@ -28,6 +28,7 @@ public class Member {
 	}
 	// Account fees (e.g. registration fee, late fees) in cents
 	private int totalFee;
+	private boolean isActive;
 
 	// Associations
 	@OneToOne(optional = true, cascade = {CascadeType.PERSIST})
@@ -50,7 +51,8 @@ public class Member {
 		this.fullName = fullName;
 		this.status = MemberStatus.GREEN;
 		this.totalFee = registrationFee;
-    
+		this.isActive = false;
+		
 		this.loans = new ArrayList<Loan>();
 		this.reservedItems = new ArrayList<ReservableItemInfo>();
 	}
