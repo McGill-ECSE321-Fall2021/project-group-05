@@ -132,8 +132,8 @@ public class OnlineLibraryService {
 			errorCount++;
 		}
 		
-		if (number <= 0) {
-			errorMessage.add("Number can't be 0.");
+		if (number < 0) {
+			errorMessage.add("Number can't be negative.");
 			errorCount++;
 		}
 		

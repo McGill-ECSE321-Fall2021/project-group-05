@@ -442,11 +442,11 @@ public class TestOnlineLibraryService {
 	}
 	
 	@Test
-	public void testCreateNewsPaperInfoNumberIs0() {
+	public void testCreateNewsPaperInfoNumberIsNegative() {
 		String error="";
 		Date publication = Date.valueOf("2021-10-31");
 		String frequency = "Everyday";
-		int number = 0;
+		int number = -1;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
 			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
@@ -454,7 +454,7 @@ public class TestOnlineLibraryService {
 			error = e.getMessage();
 		}
 		assertNull(newsPaperInfo);
-		assertTrue(error.contains("Number can't be 0."));
+		assertTrue(error.contains("Number can't be negative."));
 	}
 	
 	@Test
@@ -462,7 +462,7 @@ public class TestOnlineLibraryService {
 		String error="";
 		Date publication = null;
 		String frequency = " ";
-		int number = 0;
+		int number = -1;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
 			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
@@ -470,7 +470,7 @@ public class TestOnlineLibraryService {
 			error = e.getMessage();
 		}
 		assertNull(newsPaperInfo);
-		assertTrue(error.contains("Number can't be 0."));
+		assertTrue(error.contains("Number can't be negative."));
 		assertTrue(error.contains("Frequency can't be empty."));
 		assertTrue(error.contains("Date can't be empty."));
 	}
