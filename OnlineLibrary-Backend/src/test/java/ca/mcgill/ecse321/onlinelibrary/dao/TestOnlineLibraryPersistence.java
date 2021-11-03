@@ -415,6 +415,7 @@ public class TestOnlineLibraryPersistence {
 	public void testPersistAndLoadMember() {
 		// Create and persist member with online account and 2 loans
 		Member originalMember = new Member("212 McGill Street", "Obi-Wan Kenobi");
+		originalMember.activate();
 		originalMember.applyStatusPenalty();
 		originalMember.setTotalFee(212);
 		OnlineAccount originalAccount = new OnlineAccount("212", "obi1kenobi", "obi-wan.kenobi@mail.mcgill.ca",

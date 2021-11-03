@@ -24,7 +24,7 @@ public class Member {
 	private String fullName;
 	private MemberStatus status;
 	public enum MemberStatus {
-		GREEN, YELLOW, RED, BLACKLISTED
+		INACTIVE, GREEN, YELLOW, RED, BLACKLISTED
 	}
 	// Account fees (e.g. registration fee, late fees) in cents
 	private int totalFee;
@@ -48,9 +48,9 @@ public class Member {
 	public Member(String address, String fullName, int registrationFee) {
 		this.address = address;
 		this.fullName = fullName;
-		this.status = MemberStatus.GREEN;
+		this.status = MemberStatus.INACTIVE;
 		this.totalFee = registrationFee;
-    
+
 		this.loans = new ArrayList<Loan>();
 		this.reservedItems = new ArrayList<ReservableItemInfo>();
 	}
@@ -80,30 +80,64 @@ public class Member {
 		return this.status;
 	}
 
-	public void applyStatusPenalty() {
-		switch (this.status) {
-			case GREEN :
-				this.status = MemberStatus.YELLOW;
-				break;
-			case YELLOW :
-				this.status = MemberStatus.RED;
-				break;
-			default :
-				this.status = MemberStatus.BLACKLISTED;
+	/**
+	 * If the account is inactive, sets the status to "Green." If the account is
+	 * not currently inactive, this method has no effect.
+	 *
+	 * @return true if the activation was successful and false otherwise
+	 */
+	public boolean activate() {
+		if (this.status == MemberStatus.INACTIVE) {
+			this.status = MemberStatus.GREEN;
+			return true;
+		} else {
+			return false;
 		}
 	}
 
-	public void removeStatusPenalty() {
+	/**
+	 * Applies a penalty to this account. "Green" goes to "Yellow," "Yellow"
+	 * goes to "Red," and "Red" goes to "Blacklisted." In any other case, this
+	 * method has no effect.
+	 *
+	 * @return true if the penalty was applied successfully and false otherwise
+	 */
+	public boolean applyStatusPenalty() {
 		switch (this.status) {
+			case GREEN :
+				this.status = MemberStatus.YELLOW;
+				return true;
+			case YELLOW :
+				this.status = MemberStatus.RED;
+				return true;
+			case RED :
+				this.status = MemberStatus.BLACKLISTED;
+				return true;
+			default :
+				return false;
+		}
+	}
+
+	/**
+	 * Removes a penalty point from this account. "Blacklisted" goes to "Red,"
+	 * "Red" goes to "Yellow," and "Yellow" goes to "Green." In any other case,
+	 * the method has no effect.
+	 *
+	 * @return true if the penalty was successfully removed and false otherwise
+	 */
+	public boolean removeStatusPenalty() {
+		switch (this.status) {
+			case INACTIVE :
+				return false;
 			case BLACKLISTED :
 				this.status = MemberStatus.RED;
-				break;
+				return true;
 			case RED :
 				this.status = MemberStatus.YELLOW;
-				break;
+				return true;
 			default :
 				this.status = MemberStatus.GREEN;
-				break;
+				return true;
 		}
 	}
 
