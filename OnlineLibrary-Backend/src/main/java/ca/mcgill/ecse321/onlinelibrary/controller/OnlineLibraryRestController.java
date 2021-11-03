@@ -116,6 +116,13 @@ public class OnlineLibraryRestController {
 				archiveInfo.getPublicationDate());
 	}
 	
+	@PostMapping(value = {"/activate/{id}", "/activate/{id}/"})
+	public MemberDto activateMemberAccount(@PathVariable("id") int id) {
+		Member member = service.getMemberById(id);
+		member = service.activateAccount(member);
+		return convertToDto(member);
+	}
+
 	private MemberDto convertToDto(Member member) {
 		if (member == null) {
 			throw new IllegalArgumentException("There is no such Member");
