@@ -410,7 +410,7 @@ public class TestOnlineLibraryService {
 	}
 	
 	@Test
-	public void testCreateNewsPaperInfoComposerIsNull() {
+	public void testCreateNewsPaperInfoFrequencyIsNull() {
 		String error="";
 		Date publication = Date.valueOf("2021-10-31");
 		String frequency = null;
@@ -426,7 +426,7 @@ public class TestOnlineLibraryService {
 	}
 	
 	@Test
-	public void testCreateNewsPaperInfoComposerIsEmpty() {
+	public void testCreateNewsPaperInfoFrequencyIsEmpty() {
 		String error="";
 		Date publication = Date.valueOf("2021-10-31");
 		String frequency = " ";

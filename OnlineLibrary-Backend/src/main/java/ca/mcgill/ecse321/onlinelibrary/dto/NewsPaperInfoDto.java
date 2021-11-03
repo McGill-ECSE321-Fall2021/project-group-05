@@ -4,9 +4,9 @@ import java.sql.Date;
 
 public class NewsPaperInfoDto extends LibraryItemInfoDto {
 	
-	public Date publication;
-	public String frequency;
-	public int number;
+	private Date publication;
+	private String frequency;
+	private int number;
 	
 	public NewsPaperInfoDto(int id, Date publication, String frequency, int number) {
 		super(id);
