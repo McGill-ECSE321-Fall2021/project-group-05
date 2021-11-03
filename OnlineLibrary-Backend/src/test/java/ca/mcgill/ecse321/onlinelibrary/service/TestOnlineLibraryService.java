@@ -736,9 +736,9 @@ public class TestOnlineLibraryService {
 	@Test
 	public void testActivateMemberAccount() {
 		Member member = service.getMemberById(MEMBER_ID);
-		assertFalse(member.isActive());
+		assert(member.getStatus() == Member.MemberStatus.INACTIVE);
 		member = service.activateAccount(member);
 		assertNotNull(member);
-		assertTrue(member.isActive());
+		assert(member.getStatus() == Member.MemberStatus.GREEN);
 	}
 }
