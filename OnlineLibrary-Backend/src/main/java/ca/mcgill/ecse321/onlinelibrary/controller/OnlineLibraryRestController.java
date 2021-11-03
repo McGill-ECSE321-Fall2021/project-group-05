@@ -1,12 +1,13 @@
 package ca.mcgill.ecse321.onlinelibrary.controller;
 
+import java.sql.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import ca.mcgill.ecse321.onlinelibrary.dto.*;
 import ca.mcgill.ecse321.onlinelibrary.dto.ReservableItemDto.ItemStatusDto;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
@@ -29,6 +30,7 @@ public class OnlineLibraryRestController {
 	}
 	
 
+
 	@PostMapping(value = { "/movieInfo", "/movieInfo/" })
 	public MovieInfoDto createMovieInfo(@RequestParam String genre, @RequestParam String director, @RequestParam int length) 
 			throws IllegalArgumentException {
@@ -41,6 +43,12 @@ public class OnlineLibraryRestController {
 		BookInfo bookInfo = service.getBookInfo(bookInfoId);
 		Book book = service.createBook(bookInfo);
 		return convertToDto(book);
+	}
+	@PostMapping(value = { "/archiveInfo/{title}", "/archiveInfo/{title}/"})
+	public ArchiveInfoDto createArchiveInfo(@PathVariable("title") String title, @RequestParam String description, @RequestParam Date publicationDate)
+	throws IllegalArgumentException{
+		ArchiveInfo archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+		return convertToDto(archiveInfo);
 	}
 	
 	private BookInfoDto convertToDto (BookInfo bookInfo) {
@@ -73,5 +81,11 @@ public class OnlineLibraryRestController {
 		default:
 			return ItemStatusDto.Reserved;
 		}
+	}
+	private ArchiveInfoDto convertToDto (ArchiveInfo archiveInfo) {
+		if (archiveInfo == null) {
+			throw new IllegalArgumentException("There is no such archiveInfo.");
+		}
+		return new ArchiveInfoDto(archiveInfo.getId(),archiveInfo.getTitle(),archiveInfo.getDescription(),archiveInfo.getPublicationDate());
 	}
 }

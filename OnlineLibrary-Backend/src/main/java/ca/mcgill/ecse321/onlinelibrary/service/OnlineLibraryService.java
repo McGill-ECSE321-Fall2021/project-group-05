@@ -1,14 +1,17 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import ca.mcgill.ecse321.onlinelibrary.dao.*;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
+
 
 @Service
 public class OnlineLibraryService {
@@ -17,11 +20,15 @@ public class OnlineLibraryService {
 	BookInfoRepository bookInfoRepository;
 	
 	@Autowired
+
 	MovieInfoRepository movieInfoRepository;
 
 	@Autowired 
 	BookRepository bookRepository;
 	
+
+
+	ArchiveInfoRepository archiveInfoRepository;
 
 	@Transactional
 	public BookInfo createBookInfo(String title, int numberOfPage, String author, long isbn) {
@@ -103,7 +110,7 @@ public class OnlineLibraryService {
 		return book;
 		
 	}
-	
+
 	@Transactional
 	public BookInfo getBookInfo(int id) {
 		if (id == 0) {
@@ -114,5 +121,35 @@ public class OnlineLibraryService {
 			throw new IllegalArgumentException("The bookInfo with id " + id + " was not found in the database.");
 		}
 		return bookInfo;
+	}
+
+	public ArchiveInfo createArchiveInfo(String title, String description, Date publicationDate) {
+		ArrayList<String> errorMessage = new ArrayList<String>();
+		int errorCount=0;
+		if (title == null || title.trim().length() == 0) {
+			errorMessage.add("Title can't be empty.");
+			errorCount++;
+		}
+		
+		if (description == null || description.trim().length() == 0) {
+			errorMessage.add("Description can't be empty.");
+			errorCount++;
+		}
+		
+		if (publicationDate == null) {
+			errorMessage.add("Publication date can't be empty.");
+			errorCount++;
+		}
+		
+		if (errorCount > 0) {
+			throw new IllegalArgumentException(String.join(" ", errorMessage));
+		}
+		
+		ArchiveInfo archiveInfo = new ArchiveInfo();
+		archiveInfo.setTitle(title);
+		archiveInfo.setDescription(description);
+		archiveInfo.setPublicationDate(publicationDate);
+		archiveInfoRepository.save(archiveInfo);
+		return archiveInfo;
 	}
 }
