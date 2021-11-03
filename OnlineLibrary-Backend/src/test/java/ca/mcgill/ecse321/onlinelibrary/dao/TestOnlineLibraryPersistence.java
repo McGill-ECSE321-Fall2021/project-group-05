@@ -263,57 +263,38 @@ public class TestOnlineLibraryPersistence {
 		assertEquals(title, archiveInfo.getTitle());
 	}
 
-	@Test
-	public void testReservationReferentialIntegrity(){
-		Member member = new Member("Lala Land", "Marcos Polo");
-		Member member2 = new Member("Mimi Land", "Samourai");
-		ReservableItemInfo reservableItemInfo = new MovieInfo();
+	// @Test
+	// @Transactional
+	// public void testReservationPersitence(){
+	// 	String memberAdress = "Lala Land";
+	// 	String memberName = "Marcos Polo";
+	// 	Member member = new Member(memberAdress, memberName);
+	// 	String member2Adress = "Happy Land";
+	// 	String member2Name = "Greg";
+	// 	Member member2 = new Member(member2Adress, member2Name);
+	// 	memberRepository.save(member);
+	// 	memberRepository.save(member2);
+	// 	MovieInfo movieInfo = new MovieInfo();
+	// 	String director = "Seb";
+	// 	movieInfo.setDirector(director);
+	// 	movieInfo.addMember(member);
+	// 	movieInfo.addMember(member2);
+	// 	movieInfoRepository.save(movieInfo);
 
-		reservableItemInfo.addMember(member);
-		reservableItemInfo.addMember(member2);
-		List<ReservableItemInfo> expectedReservedList = member.getReservedItems();
-		List<Member> expectedMemberList = reservableItemInfo.getMembers();
-		member.addReservation(reservableItemInfo);	//Shouldn't do anything
-		member2.addReservation(reservableItemInfo);
-		List<ReservableItemInfo> actualReservedList = member.getReservedItems();
-		List<Member> actualMemberList = reservableItemInfo.getMembers();
+	// 	List<Member> reservations = movieInfo.getMembers();
+	// 	int id = movieInfo.getId();
 
-		assertEquals(expectedReservedList, actualReservedList);
-		assertEquals(expectedMemberList, actualMemberList);
-	}
+	// 	movieInfo = null;
+	// 	member = null;
+	// 	member2 = null;
 
-	@Test
-	@Transactional
-	public void testReservationPersitence(){
-		String memberAdress = "Lala Land";
-		String memberName = "Marcos Polo";
-		Member member = new Member(memberAdress, memberName);
-		String member2Adress = "Happy Land";
-		String member2Name = "Greg";
-		Member member2 = new Member(member2Adress, member2Name);
-		memberRepository.save(member);
-		memberRepository.save(member2);
-		MovieInfo movieInfo = new MovieInfo();
-		String director = "Seb";
-		movieInfo.setDirector(director);
-		movieInfo.addMember(member);
-		movieInfo.addMember(member2);
-		movieInfoRepository.save(movieInfo);
+	// 	MovieInfo mInfo = movieInfoRepository.findMovieInfoById(id);
 
-		List<Member> reservations = movieInfo.getMembers();
-		int id = movieInfo.getId();
+	// 	assertNotNull(mInfo);
+	// 	assertEquals(director, mInfo.getDirector());
+	// 	assertEquals(reservations, mInfo.getMembers());
 
-		movieInfo = null;
-		member = null;
-		member2 = null;
-
-		MovieInfo mInfo = movieInfoRepository.findMovieInfoById(id);
-
-		assertNotNull(mInfo);
-		assertEquals(director, mInfo.getDirector());
-		assertEquals(reservations, mInfo.getMembers());
-
-	}
+	// }
 
 	@Test
 	public void testPersistAndLoadLoan() {
