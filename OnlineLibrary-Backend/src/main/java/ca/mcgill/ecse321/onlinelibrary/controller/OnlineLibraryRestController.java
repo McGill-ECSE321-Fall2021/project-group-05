@@ -1,5 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.controller;
 
+import java.sql.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ca.mcgill.ecse321.onlinelibrary.dto.*;
 import ca.mcgill.ecse321.onlinelibrary.dto.ReservableItemDto.ItemStatusDto;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
-
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 import ca.mcgill.ecse321.onlinelibrary.service.OnlineLibraryService;
 
@@ -27,7 +28,6 @@ public class OnlineLibraryRestController {
 		BookInfo bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
 		return convertToDto(bookInfo);
 	}
-	
 
 	@PostMapping(value = { "/movieInfo", "/movieInfo/" })
 	public MovieInfoDto createMovieInfo(@RequestParam String genre, @RequestParam String director, @RequestParam int length) 
@@ -41,6 +41,20 @@ public class OnlineLibraryRestController {
 		BookInfo bookInfo = service.getBookInfo(bookInfoId);
 		Book book = service.createBook(bookInfo);
 		return convertToDto(book);
+	}
+	
+	@PostMapping (value = { "/newsPaperInfo", "/newsPaperInfo/"})
+	public NewsPaperInfoDto createNewsPaperInfo(@RequestParam Date publication, @RequestParam String frequency, @RequestParam int number) 
+	throws IllegalArgumentException {
+		NewsPaperInfo newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+		return convertToDto(newsPaperInfo);
+	}
+	
+	private NewsPaperInfoDto convertToDto(NewsPaperInfo newsPaperInfo) {
+		if (newsPaperInfo == null) {
+			throw new IllegalArgumentException("There is no such newsPaperInfo");
+		}
+		return new NewsPaperInfoDto(newsPaperInfo.getId(),newsPaperInfo.getPublication(),newsPaperInfo.getFrequency(),newsPaperInfo.getNumber());
 	}
 	
 	private BookInfoDto convertToDto (BookInfo bookInfo) {

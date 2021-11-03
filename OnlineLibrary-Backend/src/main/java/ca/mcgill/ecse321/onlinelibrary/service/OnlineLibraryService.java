@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,10 @@ public class OnlineLibraryService {
 
 	@Autowired 
 	BookRepository bookRepository;
-	
 
+	@Autowired 
+	NewsPaperInfoRepository newsPaperInfoRepository;
+	
 	@Transactional
 	public BookInfo createBookInfo(String title, int numberOfPage, String author, long isbn) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
@@ -101,7 +104,6 @@ public class OnlineLibraryService {
 		book.setStatus(ItemStatus.Available);
 		bookRepository.save(book);
 		return book;
-		
 	}
 	
 	@Transactional
@@ -114,5 +116,36 @@ public class OnlineLibraryService {
 			throw new IllegalArgumentException("The bookInfo with id " + id + " was not found in the database.");
 		}
 		return bookInfo;
+	}
+	
+	public NewsPaperInfo createNewsPaperInfo(Date publicationDate, String frequency, int number) {
+		ArrayList<String> errorMessage = new ArrayList<String>();
+		int errorCount=0;
+		
+		if (publicationDate == null) {
+			errorMessage.add("Date can't be empty.");
+			errorCount++;
+		}
+		
+		if (frequency == null || frequency.trim().length() == 0) {
+			errorMessage.add("Frequency can't be empty.");
+			errorCount++;
+		}
+		
+		if (number == 0) {
+			errorMessage.add("Number can't be 0.");
+			errorCount++;
+		}
+		
+		if (errorCount > 0) {
+			throw new IllegalArgumentException(String.join(" ", errorMessage));
+		}
+		
+		NewsPaperInfo newsPaperInfo = new NewsPaperInfo();
+		newsPaperInfo.setPublication(publicationDate);
+		newsPaperInfo.setFrequency(frequency);
+		newsPaperInfo.setNumber(number);
+		newsPaperInfoRepository.save(newsPaperInfo);
+		return newsPaperInfo;
 	}
 }

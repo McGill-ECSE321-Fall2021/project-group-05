@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 
+import java.sql.Date;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,10 +21,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.*;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
-import ca.mcgill.ecse321.onlinelibrary.dao.BookRepository;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +36,9 @@ public class TestOnlineLibraryService {
 	
 	@Mock
 	private MovieInfoRepository movieInfoDao;
+	
+	@Mock 
+	private NewsPaperInfoRepository newsPaperInfoDao;
 	
 	@InjectMocks
 	private OnlineLibraryService service;
@@ -59,6 +63,7 @@ public class TestOnlineLibraryService {
 		lenient().when(bookInfoDao.save(any(BookInfo.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(movieInfoDao.save(any(MovieInfo.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(bookDao.save(any(Book.class))).then(returnParameterAsAnswer);
+		lenient().when(newsPaperInfoDao.save(any(NewsPaperInfo.class))).then(returnParameterAsAnswer);
 	}
 	
 	@Test
@@ -297,7 +302,7 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Director can't be empty."));
 		assertTrue(error.contains("Length can't be 0."));
 	}
-	
+	@Test
 	public void testCreateBook() {
 		BookInfo bookInfo = null;
 		String title = "Title";
@@ -369,6 +374,105 @@ public class TestOnlineLibraryService {
 		}
 		assertNull(bookInfo);
 		assertTrue(error.contains("The bookInfo with id " + BOOK_INFO_NOT_A_KEY + " was not found in the database."));
+	}
+	
+	@Test
+	public void testCreateNewsPaperInfo() {
+		Date publication = Date.valueOf("2021-10-31");
+		String frequency = "Frequency";
+		int number = 123;
+		NewsPaperInfo newsPaperInfo = null;
+		try {
+			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(newsPaperInfo);
+		assertEquals(newsPaperInfo.getPublication().getTime(), publication.getTime());
+		assertEquals(newsPaperInfo.getFrequency(), frequency);
+		assertEquals(newsPaperInfo.getNumber(), number);
+	}
+	
+	@Test
+	public void testCreateNewsPaperInfoPublicationIsNull() {
+		String error="";
+		Date publication = null;
+		String frequency = "Frequency";
+		int number = 5;
+		NewsPaperInfo newsPaperInfo = null;
+		try {
+			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(newsPaperInfo);
+		assertTrue(error.contains("Date can't be empty."));
+	}
+	
+	@Test
+	public void testCreateNewsPaperInfoComposerIsNull() {
+		String error="";
+		Date publication = Date.valueOf("2021-10-31");
+		String frequency = null;
+		int number = 5;
+		NewsPaperInfo newsPaperInfo = null;
+		try {
+			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(newsPaperInfo);
+		assertTrue(error.contains("Frequency can't be empty."));
+	}
+	
+	@Test
+	public void testCreateNewsPaperInfoComposerIsEmpty() {
+		String error="";
+		Date publication = Date.valueOf("2021-10-31");
+		String frequency = " ";
+		int number = 5;
+		NewsPaperInfo newsPaperInfo = null;
+		try {
+			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(newsPaperInfo);
+		assertTrue(error.contains("Frequency can't be empty."));
+	}
+	
+	@Test
+	public void testCreateNewsPaperInfoNumberIs0() {
+		String error="";
+		Date publication = Date.valueOf("2021-10-31");
+		String frequency = "Everyday";
+		int number = 0;
+		NewsPaperInfo newsPaperInfo = null;
+		try {
+			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(newsPaperInfo);
+		assertTrue(error.contains("Number can't be 0."));
+	}
+	
+	@Test
+	public void testCreateNewsPaperInfoAllEmpty() {
+		String error="";
+		Date publication = null;
+		String frequency = " ";
+		int number = 0;
+		NewsPaperInfo newsPaperInfo = null;
+		try {
+			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(newsPaperInfo);
+		assertTrue(error.contains("Number can't be 0."));
+		assertTrue(error.contains("Frequency can't be empty."));
+		assertTrue(error.contains("Date can't be empty."));
 	}
 }
 
