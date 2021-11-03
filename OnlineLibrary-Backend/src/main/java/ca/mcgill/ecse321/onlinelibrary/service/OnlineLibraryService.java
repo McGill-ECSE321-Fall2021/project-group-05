@@ -230,4 +230,11 @@ public class OnlineLibraryService {
 		return member;
 	}
 
+	@Transactional
+	public Member activateAccount(Member member) {
+		member.setActive(true);
+		memberRepository.save(member);
+		return member;
+	}
+	
 }
