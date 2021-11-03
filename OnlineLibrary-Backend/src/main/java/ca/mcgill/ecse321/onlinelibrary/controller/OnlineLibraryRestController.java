@@ -127,7 +127,7 @@ public class OnlineLibraryRestController {
 		if (member == null) {
 			throw new IllegalArgumentException("There is no such Member");
 		}
-		return new MemberDto(member.getId(), member.getAddress(), member.getFullName(), convertToDto(member.getStatus()), member.getTotalFee(), member.isActive());
+		return new MemberDto(member.getId(), member.getAddress(), member.getFullName(), convertToDto(member.getStatus()), member.getTotalFee());
 	}
 
 	private MemberDto.MemberDtoStatus convertToDto(Member.MemberStatus memberStatus) {
@@ -136,6 +136,7 @@ public class OnlineLibraryRestController {
 			case RED -> MemberDto.MemberDtoStatus.RED;
 			case YELLOW -> MemberDto.MemberDtoStatus.YELLOW;
 			case GREEN -> MemberDto.MemberDtoStatus.GREEN;
+			case INACTIVE -> MemberDto.MemberDtoStatus.INACTIVE;
 		};
 	}
 }
