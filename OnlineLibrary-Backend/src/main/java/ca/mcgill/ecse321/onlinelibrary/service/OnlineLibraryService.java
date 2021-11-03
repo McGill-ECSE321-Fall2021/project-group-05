@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
+import ca.mcgill.ecse321.onlinelibrary.dao.*;
+import ca.mcgill.ecse321.onlinelibrary.model.*;
+import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 
 @Service
 public class OnlineLibraryService {
@@ -19,6 +18,11 @@ public class OnlineLibraryService {
 	
 	@Autowired
 	MovieInfoRepository movieInfoRepository;
+
+	@Autowired 
+	BookRepository bookRepository;
+	
+
 	@Transactional
 	public BookInfo createBookInfo(String title, int numberOfPage, String author, long isbn) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
@@ -50,7 +54,7 @@ public class OnlineLibraryService {
 		bookInfoRepository.save(bookInfo);
 		return bookInfo;
 	}
-	
+
 	@Transactional 
 	public MovieInfo createMovieInfo(String genre, String director, int length) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
@@ -69,7 +73,6 @@ public class OnlineLibraryService {
 			errorMessage.add("Length can't be 0.");
 			errorCount++;
 		}
-		
 		if (errorCount > 0) {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
@@ -81,5 +84,35 @@ public class OnlineLibraryService {
 		movieInfoRepository.save(movieInfo);
 		return movieInfo;
 	}
+
+	@Transactional
+	public Book createBook(BookInfo bookInfo) {
+		ArrayList<String> errorMessage = new ArrayList<String>();
+		int errorCount=0;
+		if (bookInfo == null) {
+			errorMessage.add("BookInfo can't be empty");
+			errorCount++;
+		}
+		if (errorCount > 0) {
+			throw new IllegalArgumentException(String.join(" ", errorMessage));
+		}
+		
+		Book book = new Book(bookInfo);
+		book.setStatus(ItemStatus.Available);
+		bookRepository.save(book);
+		return book;
+		
+	}
 	
+	@Transactional
+	public BookInfo getBookInfo(int id) {
+		if (id == 0) {
+			throw new IllegalArgumentException("BookInfo id can't be 0.");
+		}
+		BookInfo bookInfo = bookInfoRepository.findBookInfoById(id);
+		if (bookInfo == null) {
+			throw new IllegalArgumentException("The bookInfo with id " + id + " was not found in the database.");
+		}
+		return bookInfo;
+	}
 }

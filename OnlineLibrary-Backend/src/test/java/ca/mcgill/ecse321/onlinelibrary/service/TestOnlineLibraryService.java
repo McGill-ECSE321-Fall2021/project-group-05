@@ -21,12 +21,17 @@ import org.mockito.stubbing.Answer;
 import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
+import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
+import ca.mcgill.ecse321.onlinelibrary.dao.BookRepository;
 
 
 @ExtendWith(MockitoExtension.class)
 public class TestOnlineLibraryService {
 	@Mock
 	private BookInfoRepository bookInfoDao;
+
+	@Mock
+	private BookRepository bookDao;
 	
 	@Mock
 	private MovieInfoRepository movieInfoDao;
@@ -34,13 +39,26 @@ public class TestOnlineLibraryService {
 	@InjectMocks
 	private OnlineLibraryService service;
 	
+	private static final int BOOK_INFO_KEY = 1;
+	private static final int BOOK_INFO_NOT_A_KEY = 2;
+	
 	@BeforeEach
 	public void setMockOuput() {
+		lenient().when(bookInfoDao.findBookInfoById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(BOOK_INFO_KEY)) {
+				BookInfo bookInfo = new BookInfo();
+				bookInfo.setId(BOOK_INFO_KEY);
+				return bookInfo;
+			} else {
+				return null;
+			}
+		});
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
 		};
 		lenient().when(bookInfoDao.save(any(BookInfo.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(movieInfoDao.save(any(MovieInfo.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(bookDao.save(any(Book.class))).then(returnParameterAsAnswer);
 	}
 	
 	@Test
@@ -280,8 +298,78 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Length can't be 0."));
 	}
 	
+	public void testCreateBook() {
+		BookInfo bookInfo = null;
+		String title = "Title";
+		int numberOfPage = 10;
+		String author = "Author";
+		int isbn = 10;
+		bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
+		Book book = null;
+		try {
+			book = service.createBook(bookInfo);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(book);
+		assertEquals(book.getBookInfo().getTitle(), bookInfo.getTitle());
+		assertEquals(book.getBookInfo().getNumberOfPage(), bookInfo.getNumberOfPage());
+		assertEquals(book.getBookInfo().getAuthor(), bookInfo.getAuthor());
+		assertEquals(book.getBookInfo().getIsbn(), bookInfo.getIsbn());
+		assertEquals(book.getStatus(), ItemStatus.Available);
+	}
 	
+	@Test
+	public void testCreateBookNullBookInfo() {
+		String error="";
+		BookInfo bookInfo = null;
+		Book book = null;
+		try {
+			book = service.createBook(bookInfo);
+		}
+		catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(book);
+		assertTrue(error.contains("BookInfo can't be empty"));
+	}
+	@Test
+	public void testGetBookInfo() {
+		BookInfo bookInfo = null;
+		try {
+			bookInfo = service.getBookInfo(BOOK_INFO_KEY);
+		} catch (IllegalArgumentException e){
+			fail();
+		}
+		assertNotNull(bookInfo);
+		assertEquals(BOOK_INFO_KEY, bookInfo.getId());
+	}
 	
+	@Test 
+	public void testGetBookInfoIdIs0 () {
+		String error = "";
+		BookInfo bookInfo = null;
+		try {
+			bookInfo = service.getBookInfo(0);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(bookInfo);
+		assertTrue(error.contains("BookInfo id can't be 0."));
+	}
+	
+	@Test 
+	public void testGetBookBadId() {
+		String error = "";
+		BookInfo bookInfo = null;
+		try {
+			bookInfo = service.getBookInfo(BOOK_INFO_NOT_A_KEY);
+		} catch (IllegalArgumentException e) {
+				error+=e.getMessage();
+		}
+		assertNull(bookInfo);
+		assertTrue(error.contains("The bookInfo with id " + BOOK_INFO_NOT_A_KEY + " was not found in the database."));
+	}
 }
 
 
