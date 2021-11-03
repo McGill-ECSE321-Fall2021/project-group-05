@@ -232,7 +232,10 @@ public class OnlineLibraryService {
 
 	@Transactional
 	public Member activateAccount(Member member) {
-		member.setActive(true);
+		if (member.getStatus() != Member.MemberStatus.INACTIVE) {
+			throw new IllegalStateException("This member is already active.");
+		}
+		member.setStatus(Member.MemberStatus.GREEN);
 		memberRepository.save(member);
 		return member;
 	}
