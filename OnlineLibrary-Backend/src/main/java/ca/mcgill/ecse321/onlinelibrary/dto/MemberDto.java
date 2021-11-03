@@ -6,19 +6,17 @@ public class MemberDto {
     private String fullName;
     private MemberDtoStatus status;
     public enum MemberDtoStatus {
-        GREEN, YELLOW, RED, BLACKLISTED
+        GREEN, YELLOW, RED, BLACKLISTED, INACTIVE
     }
     // Account fees (e.g. registration fee, late fees) in cents
     private int totalFee;
-    private boolean isActive;
 
-    public MemberDto(Integer id, String address, String fullName, MemberDtoStatus status, int totalFee, boolean isActive) {
+    public MemberDto(Integer id, String address, String fullName, MemberDtoStatus status, int totalFee) {
         this.id = id;
         this.address = address;
         this.fullName = fullName;
         this.status = status;
         this.totalFee = totalFee;
-        this.isActive = isActive;
     }
 
     public Integer getId() {
@@ -39,9 +37,5 @@ public class MemberDto {
 
     public int getTotalFee() {
         return totalFee;
-    }
-
-    public boolean isActive() {
-        return isActive;
     }
 }
