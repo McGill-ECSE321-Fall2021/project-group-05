@@ -3,6 +3,8 @@ package ca.mcgill.ecse321.onlinelibrary.service;
 import java.sql.Date;
 import java.util.ArrayList;
 
+import ca.mcgill.ecse321.onlinelibrary.dao.MemberRepository;
+import ca.mcgill.ecse321.onlinelibrary.model.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,9 @@ public class OnlineLibraryService {
 	
 	@Autowired
 	BookInfoRepository bookInfoRepository;
+
+	@Autowired
+	MemberRepository memberRepository;
 	
 	@Autowired
 	MovieInfoRepository movieInfoRepository;
@@ -218,4 +223,11 @@ public class OnlineLibraryService {
 		archiveInfoRepository.save(archiveInfo);
 		return archiveInfo;
 	}
+	
+	@Transactional
+	public Member getMemberById(int id) {
+		Member member = memberRepository.findMemberById(id);
+		return member;
+	}
+
 }
