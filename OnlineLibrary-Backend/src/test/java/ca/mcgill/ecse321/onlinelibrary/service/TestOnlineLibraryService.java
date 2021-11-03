@@ -1,12 +1,9 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.lenient;
 import java.sql.Date;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,10 +36,16 @@ public class TestOnlineLibraryService {
 	private NewsPaperInfoRepository newsPaperInfoDao;
 
 	@Mock
+	private MemberRepository memberDao;
+	
+	@Mock
 	private ArchiveInfoRepository archiveInfoDao;
 	
 	@InjectMocks
 	private OnlineLibraryService service;
+
+	private static final int MEMBER_ID = 42;
+	private static final int INVALID_MEMBER_ID = 999999;
 	
 	private static final int BOOK_INFO_KEY = 1;
 	private static final int BOOK_INFO_NOT_A_KEY = 2;
@@ -67,6 +70,14 @@ public class TestOnlineLibraryService {
 		lenient().when(albumInfoDao.save(any(AlbumInfo.class))).then(returnParameterAsAnswer);
 		lenient().when(newsPaperInfoDao.save(any(NewsPaperInfo.class))).then(returnParameterAsAnswer);
 		lenient().when(archiveInfoDao.save(any(ArchiveInfo.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(memberDao.save(any(Member.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(memberDao.findMemberById(anyInt())).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(MEMBER_ID)) {
+				return new Member("123 Main Street", "John Doe");
+			} else {
+				return null;
+			}
+		});
 	}
 	
 	@Test
@@ -375,7 +386,7 @@ public class TestOnlineLibraryService {
 		try {
 			bookInfo = service.getBookInfo(BOOK_INFO_NOT_A_KEY);
 		} catch (IllegalArgumentException e) {
-				error+=e.getMessage();
+			error += e.getMessage();
 		}
 		assertNull(bookInfo);
 		assertTrue(error.contains("The bookInfo with id " + BOOK_INFO_NOT_A_KEY + " was not found in the database."));
@@ -708,5 +719,26 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Title can't be empty."));
 		assertTrue(error.contains("Description can't be empty."));
 		assertTrue(error.contains("Publication date can't be empty."));
+	}
+
+	@Test
+	public void testGetMemberByIdSuccessful() {
+		Member member = service.getMemberById(MEMBER_ID);
+		assertNotNull(member);
+	}
+
+	@Test
+	public void testGetMemberByIdInexistent() {
+		Member member = service.getMemberById(INVALID_MEMBER_ID);
+		assertNull(member);
+	}
+
+	@Test
+	public void testActivateMemberAccount() {
+		Member member = service.getMemberById(MEMBER_ID);
+		assertFalse(member.isActive());
+		member = service.activateAccount(member);
+		assertNotNull(member);
+		assertTrue(member.isActive());
 	}
 }
