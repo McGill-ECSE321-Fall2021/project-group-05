@@ -1,9 +1,9 @@
 package ca.mcgill.ecse321.onlinelibrary.dto;
 
 public class AlbumInfoDto extends ReservableItemInfoDto{
-	public String title;
-	public String composerPerformer;
-	public String genre;
+	private String title;
+	private String composerPerformer;
+	private String genre;
 	
 	public AlbumInfoDto(int id, String title, String composerPerformer, String genre) {
 		super(id);
