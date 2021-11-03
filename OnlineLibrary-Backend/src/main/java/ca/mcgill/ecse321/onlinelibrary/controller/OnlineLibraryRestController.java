@@ -29,8 +29,6 @@ public class OnlineLibraryRestController {
 		return convertToDto(bookInfo);
 	}
 	
-
-
 	@PostMapping(value = { "/movieInfo", "/movieInfo/" })
 	public MovieInfoDto createMovieInfo(@RequestParam String genre, @RequestParam String director, @RequestParam int length) 
 			throws IllegalArgumentException {

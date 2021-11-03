@@ -3,9 +3,9 @@ package ca.mcgill.ecse321.onlinelibrary.dto;
 import java.sql.Date;
 
 public class ArchiveInfoDto extends LibraryItemInfoDto{
-	public String title;
-	public String description;
-	public Date publicationDate;
+	private String title;
+	private String description;
+	private Date publicationDate;
 	
 	public ArchiveInfoDto(int id, String title, String description, Date publicationDate) {
 		super(id);

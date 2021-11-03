@@ -24,8 +24,6 @@ import ca.mcgill.ecse321.onlinelibrary.dao.*;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 
-
-
 @ExtendWith(MockitoExtension.class)
 public class TestOnlineLibraryService {
 	@Mock
@@ -303,6 +301,7 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Length can't be 0."));
 	}
 	
+	@Test
 	public void testCreateBook() {
 		BookInfo bookInfo = null;
 		String title = "Title";
@@ -376,6 +375,7 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("The bookInfo with id " + BOOK_INFO_NOT_A_KEY + " was not found in the database."));
 	}
 	
+	@Test
 	public void testCreateArchiveInfo() {
 		String title = "Title";
 		String description = "Description";
@@ -441,22 +441,6 @@ public class TestOnlineLibraryService {
 	}
 	
 	@Test
-	public void testCreateArchiveInfoDescriptionIsEmpty() {
-		String error="";
-		String title = "Title";
-		String description =" ";
-		Date publicationDate = Date.valueOf("2021-10-31");
-		ArchiveInfo archiveInfo = null;
-		try {
-			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
-		} catch (IllegalArgumentException e) {
-			error = e.getMessage();
-		}
-		assertNull(archiveInfo);
-		assertTrue(error.contains("Description can't be empty."));
-	}
-	
-	@Test
 	public void testCreateArchiveInfoPublicationDateIsNull() {
 		String error="";
 		String title = "Title";
@@ -472,6 +456,7 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Publication date can't be empty."));
 	}
 	
+	@Test
 	public void testCreateArchiveInfoAllEmpty() {
 		String error="";
 		String title = " ";
@@ -489,7 +474,3 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Publication date can't be empty."));
 	}
 }
-
-
-
-

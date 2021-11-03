@@ -7,11 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import ca.mcgill.ecse321.onlinelibrary.dao.*;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
-
 
 @Service
 public class OnlineLibraryService {
@@ -26,8 +24,7 @@ public class OnlineLibraryService {
 	@Autowired 
 	BookRepository bookRepository;
 	
-
-
+	@Autowired
 	ArchiveInfoRepository archiveInfoRepository;
 
 	@Transactional
@@ -131,7 +128,7 @@ public class OnlineLibraryService {
 			errorCount++;
 		}
 		
-		if (description == null || description.trim().length() == 0) {
+		if (description == null) {
 			errorMessage.add("Description can't be empty.");
 			errorCount++;
 		}
