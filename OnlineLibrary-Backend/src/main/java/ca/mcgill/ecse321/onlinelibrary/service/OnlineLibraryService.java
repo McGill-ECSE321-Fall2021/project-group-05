@@ -26,7 +26,7 @@ public class OnlineLibraryService {
 	@Autowired
 	AlbumInfoRepository albumInfoRepository;
   
-  @Autowired
+	@Autowired
 	ArchiveInfoRepository archiveInfoRepository;
 
 	@Autowired 
@@ -158,28 +158,35 @@ public class OnlineLibraryService {
 		
   @Transactional
 	public AlbumInfo createAlbumInfo(String title, String composerPerformer, String genre) {
-    if (title == null || title.trim().length() == 0) {
-			errorMessage.add("Title can't be empty.");
+	  ArrayList<String> errorMessage = new ArrayList<String>();
+	  int errorCount=0;
+	  
+	  if (title == null || title.trim().length() == 0) {
+		  errorMessage.add("Title can't be empty.");
 			errorCount++;
-		}
+	  }
     
-		if (composerPerformer == null || composerPerformer.trim().length() == 0) {
+	  if (composerPerformer == null || composerPerformer.trim().length() == 0) {
 			errorMessage.add("composerPerformer can't be empty.");
 			errorCount++;
-		}
+	  }
 		
-		if (genre == null || genre.trim().length() == 0) {
-			errorMessage.add("Genre can't be empty.");
-    }
-    if (errorCount > 0) {
-			throw new IllegalArgumentException(String.join(" ", errorMessage));
-		}
-		AlbumInfo albumInfo = new AlbumInfo();
-		albumInfo.setTitle(title);
-		albumInfo.setComposerPerformer(composerPerformer);
-		albumInfo.setGenre(genre);
-		albumInfoRepository.save(albumInfo);
-		return albumInfo;
+	  if (genre == null || genre.trim().length() == 0) {
+		  errorMessage.add("Genre can't be empty.");
+		  errorCount++;
+	  }
+	  
+	  if (errorCount > 0) {
+		  throw new IllegalArgumentException(String.join(" ", errorMessage));
+	  }
+	
+	  AlbumInfo albumInfo = new AlbumInfo();
+	  albumInfo.setTitle(title);
+	  albumInfo.setComposerPerformer(composerPerformer);
+	  albumInfo.setGenre(genre);
+	  albumInfoRepository.save(albumInfo);
+	  return albumInfo;
+  }
     
 	@Transactional
 	public ArchiveInfo createArchiveInfo(String title, String description, Date publicationDate) {
@@ -198,8 +205,9 @@ public class OnlineLibraryService {
 		if (publicationDate == null) {
 			errorMessage.add("Publication date can't be empty.");
 			errorCount++;
-    }
-    if (errorCount > 0) {
+		}
+		
+		if (errorCount > 0) {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
     

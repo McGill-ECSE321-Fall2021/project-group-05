@@ -306,7 +306,7 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Length can't be 0."));
 	}
 
-  s@Test
+	@Test
 	public void testCreateBook() {
 		BookInfo bookInfo = null;
 		String title = "Title";
@@ -510,8 +510,9 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Genre can't be empty."));
 		assertTrue(error.contains("composerPerformer can't be empty."));
 		assertTrue(error.contains("Title can't be empty."));
-    
-  @Test
+	}
+	
+	@Test
 	public void testCreateNewsPaperInfo() {
 		Date publication = Date.valueOf("2021-10-31");
 		String frequency = "Frequency";
