@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import ca.mcgill.ecse321.onlinelibrary.dao.*;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
+
 
 @Service
 public class OnlineLibraryService {
@@ -22,7 +22,9 @@ public class OnlineLibraryService {
 	@Autowired 
 	BookRepository bookRepository;
 	
-
+	@Autowired
+	AlbumInfoRepository albumInfoRepository;
+	
 	@Transactional
 	public BookInfo createBookInfo(String title, int numberOfPage, String author, long isbn) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
@@ -114,5 +116,36 @@ public class OnlineLibraryService {
 			throw new IllegalArgumentException("The bookInfo with id " + id + " was not found in the database.");
 		}
 		return bookInfo;
+	}
+	
+	@Transactional
+	public AlbumInfo createAlbumInfo(String title, String composerPerformer, String genre) {
+		ArrayList<String> errorMessage = new ArrayList<String>();
+		int errorCount=0;
+		if (title == null || title.trim().length() == 0) {
+			errorMessage.add("Title can't be empty.");
+			errorCount++;
+		}
+		
+		if (composerPerformer == null || composerPerformer.trim().length() == 0) {
+			errorMessage.add("composerPerformer can't be empty.");
+			errorCount++;
+		}
+		
+		if (genre == null || genre.trim().length() == 0) {
+			errorMessage.add("Genre can't be empty.");
+			errorCount++;
+		}
+		
+		if (errorCount > 0) {
+			throw new IllegalArgumentException(String.join(" ", errorMessage));
+		}
+		
+		AlbumInfo albumInfo = new AlbumInfo();
+		albumInfo.setTitle(title);
+		albumInfo.setComposerPerformer(composerPerformer);
+		albumInfo.setGenre(genre);
+		albumInfoRepository.save(albumInfo);
+		return albumInfo;
 	}
 }

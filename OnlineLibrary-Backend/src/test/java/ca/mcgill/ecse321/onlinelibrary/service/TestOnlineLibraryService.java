@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,12 +16,9 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-
-import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.*;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
-import ca.mcgill.ecse321.onlinelibrary.dao.BookRepository;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +31,9 @@ public class TestOnlineLibraryService {
 	
 	@Mock
 	private MovieInfoRepository movieInfoDao;
+	
+	@Mock
+	private AlbumInfoRepository albumInfoDao;
 	
 	@InjectMocks
 	private OnlineLibraryService service;
@@ -59,6 +58,7 @@ public class TestOnlineLibraryService {
 		lenient().when(bookInfoDao.save(any(BookInfo.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(movieInfoDao.save(any(MovieInfo.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(bookDao.save(any(Book.class))).then(returnParameterAsAnswer);
+		lenient().when(albumInfoDao.save(any(AlbumInfo.class))).then(returnParameterAsAnswer);
 	}
 	
 	@Test
@@ -298,6 +298,7 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Length can't be 0."));
 	}
 	
+	@Test
 	public void testCreateBook() {
 		BookInfo bookInfo = null;
 		String title = "Title";
@@ -369,6 +370,119 @@ public class TestOnlineLibraryService {
 		}
 		assertNull(bookInfo);
 		assertTrue(error.contains("The bookInfo with id " + BOOK_INFO_NOT_A_KEY + " was not found in the database."));
+	}
+	
+	@Test
+	public void testCreateAlbumInfo() {
+		String title = "Title";
+		String composerPerformer = "Author";
+		String genre = "Genre";
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(albumInfo);
+		assertEquals(albumInfo.getTitle(), title);
+		assertEquals(albumInfo.getComposerPerformer(), composerPerformer);
+		assertEquals(albumInfo.getGenre(), genre);
+	}
+	
+	@Test
+	public void testCreateAlbumInfoTitleNull() {
+		String error="";
+		String title = null;
+		String composerPerformer = "Composer/Performer";
+		String genre = "Genre";
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(albumInfo);
+		assertTrue(error.contains("Title can't be empty."));
+	}
+	
+	@Test
+	public void testCreateAlbumInfoTitleEmpty() {
+		String error="";
+		String title = " ";
+		String composerPerformer = "Composer/Performer";
+		String genre = "Genre";
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(albumInfo);
+		assertTrue(error.contains("Title can't be empty."));
+	}
+	
+	@Test
+	public void testCreateAlbumInfoComposerNull() {
+		String error="";
+		String title = "Title";
+		String composerPerformer = null;
+		String genre = "Genre";
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(albumInfo);
+		assertTrue(error.contains("composerPerformer can't be empty."));
+	}
+	
+	@Test
+	public void testCreateAlbumInfoComposerEmpty() {
+		String error="";
+		String title = "Title";
+		String composerPerformer = " ";
+		String genre = "Genre";
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(albumInfo);
+		assertTrue(error.contains("composerPerformer can't be empty."));
+	}
+	
+	@Test
+	public void testCreateAlbumInfoGenreNull() {
+		String error="";
+		String title = "Title";
+		String composerPerformer = "Composer / Performer";
+		String genre = null;
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(albumInfo);
+		assertTrue(error.contains("Genre can't be empty."));
+	}
+	
+	@Test
+	public void testCreateAlbumInfoGenreEmpty() {
+		String error="";
+		String title = "Title";
+		String composerPerformer = "Composer / Performer";
+		String genre = " ";
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(albumInfo);
+		assertTrue(error.contains("Genre can't be empty."));
 	}
 }
 

@@ -6,11 +6,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import ca.mcgill.ecse321.onlinelibrary.dto.*;
 import ca.mcgill.ecse321.onlinelibrary.dto.ReservableItemDto.ItemStatusDto;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
-
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 import ca.mcgill.ecse321.onlinelibrary.service.OnlineLibraryService;
 
@@ -28,7 +26,6 @@ public class OnlineLibraryRestController {
 		return convertToDto(bookInfo);
 	}
 	
-
 	@PostMapping(value = { "/movieInfo", "/movieInfo/" })
 	public MovieInfoDto createMovieInfo(@RequestParam String genre, @RequestParam String director, @RequestParam int length) 
 			throws IllegalArgumentException {
@@ -41,6 +38,13 @@ public class OnlineLibraryRestController {
 		BookInfo bookInfo = service.getBookInfo(bookInfoId);
 		Book book = service.createBook(bookInfo);
 		return convertToDto(book);
+	}
+	
+	@PostMapping(value = {"/albumInfo/{title}", "/albumInfo/{title}/"})
+	public AlbumInfoDto createAlbumInfo(@PathVariable("title") String title, @RequestParam String composerPerformer, String genre)
+	throws IllegalArgumentException {
+		AlbumInfo albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		return convertToDto(albumInfo);
 	}
 	
 	private BookInfoDto convertToDto (BookInfo bookInfo) {
@@ -62,6 +66,13 @@ public class OnlineLibraryRestController {
 			throw new IllegalArgumentException("There is no such book");
 		}
 		return new BookDto(book.getId(), convertToDto(book.getStatus()), convertToDto(book.getBookInfo()));
+	}
+	
+	private AlbumInfoDto convertToDto(AlbumInfo albumInfo) {
+		if (albumInfo == null) {
+			throw new IllegalArgumentException("There is no such albumInfo.");
+		}
+		return new AlbumInfoDto(albumInfo.getId(),albumInfo.getTitle(),albumInfo.getComposerPerformer(),albumInfo.getGenre());
 	}
 	
 	private ItemStatusDto convertToDto (ItemStatus itemStatus) {
