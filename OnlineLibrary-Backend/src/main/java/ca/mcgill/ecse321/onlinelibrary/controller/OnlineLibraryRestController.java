@@ -40,6 +40,12 @@ public class OnlineLibraryRestController {
 		Book book = service.createBook(bookInfo);
 		return convertToDto(book);
 	}
+	@PostMapping(value = { "/archiveInfo/{title}", "/archiveInfo/{title}/"})
+	public ArchiveInfoDto createArchiveInfo(@PathVariable("title") String title, @RequestParam String description, @RequestParam Date publicationDate)
+	throws IllegalArgumentException{
+		ArchiveInfo archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+		return convertToDto(archiveInfo);
+	}
 	
 	@PostMapping (value = { "/newsPaperInfo", "/newsPaperInfo/"})
 	public NewsPaperInfoDto createNewsPaperInfo(@RequestParam Date publication, @RequestParam String frequency, @RequestParam int number) 
@@ -85,5 +91,11 @@ public class OnlineLibraryRestController {
 		default:
 			return ItemStatusDto.Reserved;
 		}
+	}
+	private ArchiveInfoDto convertToDto (ArchiveInfo archiveInfo) {
+		if (archiveInfo == null) {
+			throw new IllegalArgumentException("There is no such archiveInfo.");
+		}
+		return new ArchiveInfoDto(archiveInfo.getId(),archiveInfo.getTitle(),archiveInfo.getDescription(),archiveInfo.getPublicationDate());
 	}
 }

@@ -22,6 +22,9 @@ public class OnlineLibraryService {
 
 	@Autowired 
 	BookRepository bookRepository;
+	
+	@Autowired
+	ArchiveInfoRepository archiveInfoRepository;
 
 	@Autowired 
 	NewsPaperInfoRepository newsPaperInfoRepository;
@@ -105,7 +108,7 @@ public class OnlineLibraryService {
 		bookRepository.save(book);
 		return book;
 	}
-	
+
 	@Transactional
 	public BookInfo getBookInfo(int id) {
 		if (id == 0) {
@@ -117,7 +120,7 @@ public class OnlineLibraryService {
 		}
 		return bookInfo;
 	}
-	
+
 	public NewsPaperInfo createNewsPaperInfo(Date publicationDate, String frequency, int number) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount=0;
@@ -134,18 +137,41 @@ public class OnlineLibraryService {
 		
 		if (number < 0) {
 			errorMessage.add("Number can't be negative.");
+      
+    NewsPaperInfo newsPaperInfo = new NewsPaperInfo();
+		newsPaperInfo.setPublication(publicationDate);
+		newsPaperInfo.setFrequency(frequency);
+		newsPaperInfo.setNumber(number);
+		newsPaperInfoRepository.save(newsPaperInfo);
+		return newsPaperInfo;
+
+	public ArchiveInfo createArchiveInfo(String title, String description, Date publicationDate) {
+		ArrayList<String> errorMessage = new ArrayList<String>();
+		int errorCount=0;
+		if (title == null || title.trim().length() == 0) {
+			errorMessage.add("Title can't be empty.");
+			errorCount++;
+		}
+		
+		if (description == null) {
+			errorMessage.add("Description can't be empty.");
+			errorCount++;
+		}
+		
+		if (publicationDate == null) {
+			errorMessage.add("Publication date can't be empty.");
 			errorCount++;
 		}
 		
 		if (errorCount > 0) {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
-		
-		NewsPaperInfo newsPaperInfo = new NewsPaperInfo();
-		newsPaperInfo.setPublication(publicationDate);
-		newsPaperInfo.setFrequency(frequency);
-		newsPaperInfo.setNumber(number);
-		newsPaperInfoRepository.save(newsPaperInfo);
-		return newsPaperInfo;
+    
+		ArchiveInfo archiveInfo = new ArchiveInfo();
+		archiveInfo.setTitle(title);
+		archiveInfo.setDescription(description);
+		archiveInfo.setPublicationDate(publicationDate);
+		archiveInfoRepository.save(archiveInfo);
+		return archiveInfo;
 	}
 }

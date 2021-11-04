@@ -25,7 +25,6 @@ import ca.mcgill.ecse321.onlinelibrary.dao.*;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 
-
 @ExtendWith(MockitoExtension.class)
 public class TestOnlineLibraryService {
 	@Mock
@@ -39,6 +38,9 @@ public class TestOnlineLibraryService {
 	
 	@Mock 
 	private NewsPaperInfoRepository newsPaperInfoDao;
+
+	@Mock
+	private ArchiveInfoRepository archiveInfoDao;
 	
 	@InjectMocks
 	private OnlineLibraryService service;
@@ -64,6 +66,7 @@ public class TestOnlineLibraryService {
 		lenient().when(movieInfoDao.save(any(MovieInfo.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(bookDao.save(any(Book.class))).then(returnParameterAsAnswer);
 		lenient().when(newsPaperInfoDao.save(any(NewsPaperInfo.class))).then(returnParameterAsAnswer);
+		lenient().when(archiveInfoDao.save(any(ArchiveInfo.class))).thenAnswer(returnParameterAsAnswer);
 	}
 	
 	@Test
@@ -302,6 +305,7 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Director can't be empty."));
 		assertTrue(error.contains("Length can't be 0."));
 	}
+
 	@Test
 	public void testCreateBook() {
 		BookInfo bookInfo = null;
@@ -338,6 +342,7 @@ public class TestOnlineLibraryService {
 		assertNull(book);
 		assertTrue(error.contains("BookInfo can't be empty"));
 	}
+  
 	@Test
 	public void testGetBookInfo() {
 		BookInfo bookInfo = null;
@@ -474,8 +479,102 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Frequency can't be empty."));
 		assertTrue(error.contains("Date can't be empty."));
 	}
+  
+	public void testCreateArchiveInfo() {
+		String title = "Title";
+		String description = "Description";
+		Date publicationDate = Date.valueOf("2021-10-31");
+		ArchiveInfo archiveInfo = null;
+		try {
+			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(archiveInfo);
+		assertEquals(archiveInfo.getTitle(), title);
+		assertEquals(archiveInfo.getDescription(), description);
+		assertEquals(archiveInfo.getPublicationDate(), publicationDate);
+	}
+	
+	@Test
+	public void testCreateArchiveInfoTitleIsNull() {
+		String error="";
+		String title = null;
+		String description = "Description";
+		Date publicationDate = Date.valueOf("2021-10-31");
+		ArchiveInfo archiveInfo = null;
+		try {
+			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(archiveInfo);
+		assertTrue(error.contains("Title can't be empty."));
+	}
+	
+	@Test
+	public void testCreateArchiveInfoTitleIsEmpty() {
+		String error="";
+		String title = " ";
+		String description = "Description";
+		Date publicationDate = Date.valueOf("2021-10-31");
+		ArchiveInfo archiveInfo = null;
+		try {
+			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(archiveInfo);
+		assertTrue(error.contains("Title can't be empty."));
+	}
+	
+	@Test
+	public void testCreateArchiveInfoDescriptionIsNull() {
+		String error="";
+		String title = "Title";
+		String description = null;
+		Date publicationDate = Date.valueOf("2021-10-31");
+		ArchiveInfo archiveInfo = null;
+		try {
+			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(archiveInfo);
+		assertTrue(error.contains("Description can't be empty."));
+	}
+	
+	@Test
+	public void testCreateArchiveInfoPublicationDateIsNull() {
+		String error="";
+		String title = "Title";
+		String description = "Description";
+		Date publicationDate = null;
+		ArchiveInfo archiveInfo = null;
+		try {
+			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(archiveInfo);
+		assertTrue(error.contains("Publication date can't be empty."));
+	}
+	
+	@Test
+	public void testCreateArchiveInfoAllEmpty() {
+		String error="";
+		String title = " ";
+		String description = null;
+		Date publicationDate = null;
+		ArchiveInfo archiveInfo = null;
+		try {
+			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(archiveInfo);
+		assertTrue(error.contains("Title can't be empty."));
+		assertTrue(error.contains("Description can't be empty."));
+		assertTrue(error.contains("Publication date can't be empty."));
+	}
 }
-
-
-
-
