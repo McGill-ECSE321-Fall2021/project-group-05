@@ -1,7 +1,6 @@
 package ca.mcgill.ecse321.onlinelibrary.controller;
 
 import java.sql.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,13 +20,13 @@ public class OnlineLibraryRestController {
 	@Autowired
 	private OnlineLibraryService service;
 	
-	@PostMapping(value = { "/bookInfo/{title}"})
+	@PostMapping(value = { "/bookInfo/{title}", "/bookInfo/{title}/"})
 	public BookInfoDto createBookInfo(@PathVariable("title") String title, @RequestParam int numberOfPage,  
 			@RequestParam String author, @RequestParam long isbn) throws IllegalArgumentException {
 		BookInfo bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
 		return convertToDto(bookInfo);
 	}
-	
+
 	@PostMapping(value = { "/movieInfo", "/movieInfo/" })
 	public MovieInfoDto createMovieInfo(@RequestParam String genre, @RequestParam String director, @RequestParam int length) 
 			throws IllegalArgumentException {
@@ -46,6 +45,20 @@ public class OnlineLibraryRestController {
 	throws IllegalArgumentException{
 		ArchiveInfo archiveInfo = service.createArchiveInfo(title, description, publicationDate);
 		return convertToDto(archiveInfo);
+	}
+	
+	@PostMapping (value = { "/newsPaperInfo", "/newsPaperInfo/"})
+	public NewsPaperInfoDto createNewsPaperInfo(@RequestParam Date publication, @RequestParam String frequency, @RequestParam int number) 
+	throws IllegalArgumentException {
+		NewsPaperInfo newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+		return convertToDto(newsPaperInfo);
+	}
+	
+	private NewsPaperInfoDto convertToDto(NewsPaperInfo newsPaperInfo) {
+		if (newsPaperInfo == null) {
+			throw new IllegalArgumentException("There is no such newsPaperInfo");
+		}
+		return new NewsPaperInfoDto(newsPaperInfo.getId(),newsPaperInfo.getPublication(),newsPaperInfo.getFrequency(),newsPaperInfo.getNumber());
 	}
 	
 	private BookInfoDto convertToDto (BookInfo bookInfo) {
