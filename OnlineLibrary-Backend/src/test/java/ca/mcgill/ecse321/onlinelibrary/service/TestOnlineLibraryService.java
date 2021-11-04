@@ -479,7 +479,8 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Frequency can't be empty."));
 		assertTrue(error.contains("Date can't be empty."));
 	}
-  
+	
+	@Test
 	public void testCreateArchiveInfo() {
 		String title = "Title";
 		String description = "Description";

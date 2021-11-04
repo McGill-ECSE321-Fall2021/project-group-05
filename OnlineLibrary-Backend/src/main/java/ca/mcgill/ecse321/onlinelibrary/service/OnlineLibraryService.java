@@ -120,7 +120,8 @@ public class OnlineLibraryService {
 		}
 		return bookInfo;
 	}
-
+	
+	@Transactional
 	public NewsPaperInfo createNewsPaperInfo(Date publicationDate, String frequency, int number) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount=0;
@@ -137,14 +138,22 @@ public class OnlineLibraryService {
 		
 		if (number < 0) {
 			errorMessage.add("Number can't be negative.");
+			errorCount++;
+		}
+		
+		if (errorCount > 0) {
+			throw new IllegalArgumentException(String.join(" ", errorMessage));
+		}
       
-    NewsPaperInfo newsPaperInfo = new NewsPaperInfo();
+		NewsPaperInfo newsPaperInfo = new NewsPaperInfo();
 		newsPaperInfo.setPublication(publicationDate);
 		newsPaperInfo.setFrequency(frequency);
 		newsPaperInfo.setNumber(number);
 		newsPaperInfoRepository.save(newsPaperInfo);
 		return newsPaperInfo;
-
+		}
+	
+	@Transactional
 	public ArchiveInfo createArchiveInfo(String title, String description, Date publicationDate) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount=0;
