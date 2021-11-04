@@ -3,22 +3,18 @@ package ca.mcgill.ecse321.onlinelibrary.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import ca.mcgill.ecse321.onlinelibrary.dao.LibrarianRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
 
-@ExtendWith(MockitoExtension.class)
-public class TestLibrarianService {
+public class TestLibrarianService extends TestService {
 
 	@Mock
 	private LibrarianRepository librarianRepository;
@@ -150,14 +146,5 @@ public class TestLibrarianService {
 		Exception error = assertThrows(IllegalArgumentException.class,
 				() -> librarianService.createLibrarian(VALID_FULL_NAME, VALID_USERNAME, SHORT_PASSWORD));
 		assertContains("Password must be at least 8 characters in length.", error.getMessage());
-	}
-
-	// TODO Make this publicly available
-	private void assertContains(String expected, String actual) {
-		if (!actual.contains(expected)) {
-			String msg = String.format("Expected message containing \"%s\" but received message \"%s\"", expected,
-					actual);
-			fail(msg);
-		}
 	}
 }
