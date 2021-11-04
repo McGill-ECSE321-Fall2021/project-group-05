@@ -69,13 +69,6 @@ public class OnlineLibraryRestController {
 		return convertToDto(albumInfo);
 	}
 
-	@PostMapping(value = {"/librarian/create", "/librarian/create/"})
-	public LibrarianDto createLibarian(@RequestParam String fullName, @RequestParam String username,
-			@RequestParam String password) throws IllegalArgumentException {
-		Librarian librarian = service.createLibrarian(fullName, username, password);
-		return convertToDto(librarian);
-	}
-
 	private BookInfoDto convertToDto (BookInfo bookInfo) {
 		if (bookInfo == null) {
 			throw new IllegalArgumentException("There is no such bookInfo");
@@ -120,13 +113,5 @@ public class OnlineLibraryRestController {
 			throw new IllegalArgumentException("There is no such archiveInfo.");
 		}
 		return new ArchiveInfoDto(archiveInfo.getId(),archiveInfo.getTitle(),archiveInfo.getDescription(),archiveInfo.getPublicationDate());
-	}
-
-	private LibrarianDto convertToDto(Librarian librarian) {
-		if (librarian == null) {
-			throw new IllegalArgumentException("Librarian cannot be null.");
-		}
-		return new LibrarianDto(librarian.getId(), librarian.getFullName(), librarian.getUsername(),
-				librarian.isHead());
 	}
 }

@@ -35,8 +35,6 @@ public class TestOnlineLibraryService {
 	private NewsPaperInfoRepository newsPaperInfoDao;
 	@Mock
 	private ArchiveInfoRepository archiveInfoDao;
-	@Mock
-	private LibrarianRepository librarianRepository;
 
 	@InjectMocks
 	private OnlineLibraryService service;
@@ -64,7 +62,6 @@ public class TestOnlineLibraryService {
 		lenient().when(albumInfoDao.save(any(AlbumInfo.class))).then(returnParameterAsAnswer);
 		lenient().when(newsPaperInfoDao.save(any(NewsPaperInfo.class))).then(returnParameterAsAnswer);
 		lenient().when(archiveInfoDao.save(any(ArchiveInfo.class))).thenAnswer(returnParameterAsAnswer);
-		lenient().when(librarianRepository.save(any(Librarian.class))).thenAnswer(returnParameterAsAnswer);
 	}
 
 	@Test
@@ -707,21 +704,5 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Title can't be empty."));
 		assertTrue(error.contains("Description can't be empty."));
 		assertTrue(error.contains("Publication date can't be empty."));
-	}
-
-	@Test
-	public void testCreateLibrarian() {
-		String fullName = "Jocasta Nu";
-		String username = "jocasta.nu";
-		String password = "validpass123";
-
-		Librarian librarian = service.createLibrarian(fullName, username, password);
-
-		assertNotNull(librarian);
-		assertEquals(fullName, librarian.getFullName());
-		assertEquals(username, librarian.getUsername());
-		// TODO Update this check if/when password hashing is implemented
-		assertEquals(password, librarian.getPasswordHash());
-		assertEquals(false, librarian.isHead());
 	}
 }

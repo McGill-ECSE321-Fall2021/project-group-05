@@ -1,5 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.dto;
 
+import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
+
 public class LibrarianDto {
 
 	private Integer id;
@@ -12,6 +14,14 @@ public class LibrarianDto {
 		this.fullName = fullName;
 		this.username = username;
 		this.isHead = isHead;
+	}
+
+	public static LibrarianDto fromLibrarian(Librarian librarian) {
+		if (librarian == null) {
+			throw new IllegalArgumentException("Librarian cannot be null.");
+		}
+		return new LibrarianDto(librarian.getId(), librarian.getFullName(), librarian.getUsername(),
+				librarian.isHead());
 	}
 
 	public int getId() {
