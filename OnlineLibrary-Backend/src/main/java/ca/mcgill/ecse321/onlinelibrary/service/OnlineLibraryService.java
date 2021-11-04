@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import ca.mcgill.ecse321.onlinelibrary.dao.*;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
+
 
 @Service
 public class OnlineLibraryService {
@@ -24,11 +24,14 @@ public class OnlineLibraryService {
 	BookRepository bookRepository;
 	
 	@Autowired
+	AlbumInfoRepository albumInfoRepository;
+  
+	@Autowired
 	ArchiveInfoRepository archiveInfoRepository;
 
 	@Autowired 
 	NewsPaperInfoRepository newsPaperInfoRepository;
-	
+
 	@Transactional
 	public BookInfo createBookInfo(String title, int numberOfPage, String author, long isbn) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
@@ -120,8 +123,8 @@ public class OnlineLibraryService {
 		}
 		return bookInfo;
 	}
-	
-	@Transactional
+
+  @Transactional
 	public NewsPaperInfo createNewsPaperInfo(Date publicationDate, String frequency, int number) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount=0;
@@ -152,7 +155,39 @@ public class OnlineLibraryService {
 		newsPaperInfoRepository.save(newsPaperInfo);
 		return newsPaperInfo;
 		}
+		
+  @Transactional
+	public AlbumInfo createAlbumInfo(String title, String composerPerformer, String genre) {
+	  ArrayList<String> errorMessage = new ArrayList<String>();
+	  int errorCount=0;
+	  
+	  if (title == null || title.trim().length() == 0) {
+		  errorMessage.add("Title can't be empty.");
+			errorCount++;
+	  }
+    
+	  if (composerPerformer == null || composerPerformer.trim().length() == 0) {
+			errorMessage.add("composerPerformer can't be empty.");
+			errorCount++;
+	  }
+		
+	  if (genre == null || genre.trim().length() == 0) {
+		  errorMessage.add("Genre can't be empty.");
+		  errorCount++;
+	  }
+	  
+	  if (errorCount > 0) {
+		  throw new IllegalArgumentException(String.join(" ", errorMessage));
+	  }
 	
+	  AlbumInfo albumInfo = new AlbumInfo();
+	  albumInfo.setTitle(title);
+	  albumInfo.setComposerPerformer(composerPerformer);
+	  albumInfo.setGenre(genre);
+	  albumInfoRepository.save(albumInfo);
+	  return albumInfo;
+  }
+    
 	@Transactional
 	public ArchiveInfo createArchiveInfo(String title, String description, Date publicationDate) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
@@ -161,12 +196,12 @@ public class OnlineLibraryService {
 			errorMessage.add("Title can't be empty.");
 			errorCount++;
 		}
-		
+    
 		if (description == null) {
 			errorMessage.add("Description can't be empty.");
 			errorCount++;
 		}
-		
+    
 		if (publicationDate == null) {
 			errorMessage.add("Publication date can't be empty.");
 			errorCount++;

@@ -26,7 +26,7 @@ public class OnlineLibraryRestController {
 		BookInfo bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
 		return convertToDto(bookInfo);
 	}
-
+  
 	@PostMapping(value = { "/movieInfo", "/movieInfo/" })
 	public MovieInfoDto createMovieInfo(@RequestParam String genre, @RequestParam String director, @RequestParam int length) 
 			throws IllegalArgumentException {
@@ -61,6 +61,13 @@ public class OnlineLibraryRestController {
 		return new NewsPaperInfoDto(newsPaperInfo.getId(),newsPaperInfo.getPublication(),newsPaperInfo.getFrequency(),newsPaperInfo.getNumber());
 	}
 	
+	@PostMapping(value = {"/albumInfo/{title}", "/albumInfo/{title}/"})
+	public AlbumInfoDto createAlbumInfo(@PathVariable("title") String title, @RequestParam String composerPerformer, String genre)
+	throws IllegalArgumentException {
+		AlbumInfo albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		return convertToDto(albumInfo);
+	}
+	
 	private BookInfoDto convertToDto (BookInfo bookInfo) {
 		if (bookInfo == null) {
 			throw new IllegalArgumentException("There is no such bookInfo");
@@ -80,6 +87,13 @@ public class OnlineLibraryRestController {
 			throw new IllegalArgumentException("There is no such book");
 		}
 		return new BookDto(book.getId(), convertToDto(book.getStatus()), convertToDto(book.getBookInfo()));
+	}
+	
+	private AlbumInfoDto convertToDto(AlbumInfo albumInfo) {
+		if (albumInfo == null) {
+			throw new IllegalArgumentException("There is no such albumInfo.");
+		}
+		return new AlbumInfoDto(albumInfo.getId(),albumInfo.getTitle(),albumInfo.getComposerPerformer(),albumInfo.getGenre());
 	}
 	
 	private ItemStatusDto convertToDto (ItemStatus itemStatus) {
