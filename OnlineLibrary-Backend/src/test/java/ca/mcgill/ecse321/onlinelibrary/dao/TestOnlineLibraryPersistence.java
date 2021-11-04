@@ -267,6 +267,7 @@ public class TestOnlineLibraryPersistence {
 		assertEquals(title, archiveInfo.getTitle());
 	}
 
+	//Added after deliverable 1
 	@Test
 	@Transactional
 	public void testReservationPersitence(){
@@ -345,11 +346,7 @@ public class TestOnlineLibraryPersistence {
 		String memberAddress = "Lala Land";
 		String memberName = "Marcos Polo";
 		Member member = new Member(memberAddress, memberName);
-		// String member2Address = "Happy Land";
-		// String member2Name = "Greg";
-		// Member member2 = new Member(member2Address, member2Name);
 		memberRepository.save(member);
-		// memberRepository.save(member2);
 		MovieInfo movieInfo = new MovieInfo();
 		String director = "Seb";
 		movieInfo.setDirector(director);
@@ -374,7 +371,8 @@ public class TestOnlineLibraryPersistence {
 		assertNotNull(actualList);
 		assertEquals(expectedList, actualList);
 	}
-
+	//End of added tests after deliverable 1
+	
 	@Test
 	public void testPersistAndLoadLoan() {
 		Member member = new Member("123 McGill Street", "Luke Skywalker");
