@@ -9,6 +9,8 @@ public class LibrarianDto {
 	private String username;
 	private boolean isHead;
 
+	// TODO Add schedule
+
 	public LibrarianDto(int id, String fullName, String username, boolean isHead) {
 		this.id = id;
 		this.fullName = fullName;
