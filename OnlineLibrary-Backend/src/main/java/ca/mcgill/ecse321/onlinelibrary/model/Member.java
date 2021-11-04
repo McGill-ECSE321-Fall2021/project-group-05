@@ -52,7 +52,6 @@ public class Member {
         this.totalFee = registrationFee;
 
         this.loans = new ArrayList<Loan>();
-        this.reservedItems = new ArrayList<ReservableItemInfo>();
     }
 
     // Interface
