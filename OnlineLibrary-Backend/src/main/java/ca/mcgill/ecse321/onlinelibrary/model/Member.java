@@ -17,119 +17,130 @@ import javax.persistence.OneToOne;
 public class Member {
 
 	// Attributes
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
-	private String address;
-	private String fullName;
-	private MemberStatus status;
-	public enum MemberStatus {
-		GREEN, YELLOW, RED, BLACKLISTED
-	}
-	// Account fees (e.g. registration fee, late fees) in cents
-	private int totalFee;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+    private String address;
+    private String fullName;
+    private MemberStatus status;
 
-	// Associations
-	@OneToOne(optional = true, cascade = {CascadeType.PERSIST})
-	private OnlineAccount onlineAccount;
-	@OneToMany(cascade = {CascadeType.PERSIST})
-	private List<Loan> loans;
+    public enum MemberStatus {
+        GREEN, YELLOW, RED, BLACKLISTED, INACTIVE
+    }
 
-	// Constructors
-	protected Member() {
-	}
+    // Account fees (e.g. registration fee, late fees) in cents
+    private int totalFee;
 
-	public Member(String address, String fullName) {
-		this(address, fullName, 0);
-	}
+    // Associations
+    @OneToOne(optional = true, cascade = {CascadeType.PERSIST})
+    private OnlineAccount onlineAccount;
+    @OneToMany(cascade = {CascadeType.PERSIST})
+    private List<Loan> loans;
+	
+    // Constructors
+    protected Member() {
+    }
 
-	public Member(String address, String fullName, int registrationFee) {
-		this.address = address;
-		this.fullName = fullName;
-		this.status = MemberStatus.GREEN;
-		this.totalFee = registrationFee;
-    
-		this.loans = new ArrayList<Loan>();
-	}
+    public Member(String address, String fullName) {
+        this(address, fullName, 0);
+    }
 
-	// Interface
-	public Integer getId() {
-		return this.id;
-	}
+    public Member(String address, String fullName, int registrationFee) {
+        this.address = address;
+        this.fullName = fullName;
+        this.status = MemberStatus.INACTIVE;
+        this.totalFee = registrationFee;
 
-	public String getAddress() {
-		return this.address;
-	}
+        this.loans = new ArrayList<Loan>();
+        this.reservedItems = new ArrayList<ReservableItemInfo>();
+    }
 
-	public void setAddress(String newAddress) {
-		this.address = newAddress;
-	}
+    // Interface
+    public Integer getId() {
+        return this.id;
+    }
 
-	public String getFullName() {
-		return this.fullName;
-	}
+    public String getAddress() {
+        return this.address;
+    }
 
-	public void setFullName(String newFullName) {
-		this.fullName = newFullName;
-	}
+    public void setAddress(String newAddress) {
+        this.address = newAddress;
+    }
 
-	public MemberStatus getStatus() {
-		return this.status;
-	}
+    public String getFullName() {
+        return this.fullName;
+    }
 
-	public void applyStatusPenalty() {
-		switch (this.status) {
-			case GREEN :
-				this.status = MemberStatus.YELLOW;
-				break;
-			case YELLOW :
-				this.status = MemberStatus.RED;
-				break;
-			default :
-				this.status = MemberStatus.BLACKLISTED;
-		}
-	}
+    public void setFullName(String newFullName) {
+        this.fullName = newFullName;
+    }
 
-	public void removeStatusPenalty() {
-		switch (this.status) {
-			case BLACKLISTED :
-				this.status = MemberStatus.RED;
-				break;
-			case RED :
-				this.status = MemberStatus.YELLOW;
-				break;
-			default :
-				this.status = MemberStatus.GREEN;
-				break;
-		}
-	}
+    public MemberStatus getStatus() {
+        return this.status;
+    }
 
-	public int getTotalFee() {
-		return this.totalFee;
-	}
+    public void setStatus(MemberStatus status) {
+        this.status = status;
+    }
 
-	public void setTotalFee(int newTotalFee) {
-		this.totalFee = newTotalFee;
-	}
+    public void applyStatusPenalty() {
+        this.status = switch (this.status) {
+            case GREEN -> MemberStatus.YELLOW;
+            case YELLOW -> MemberStatus.RED;
+            case RED, BLACKLISTED -> MemberStatus.BLACKLISTED;
+            case INACTIVE -> throw new IllegalStateException("Cannot apply a status penalty to an inactive member account.");
+        };
+    }
 
-	public OnlineAccount getOnlineAccount() {
-		return this.onlineAccount;
-	}
+    public void removeStatusPenalty() {
+        this.status = switch (this.status) {
+            case BLACKLISTED -> MemberStatus.RED;
+            case RED -> MemberStatus.YELLOW;
+            case YELLOW, GREEN -> MemberStatus.GREEN;
+			case INACTIVE -> throw new IllegalStateException("Cannot remove a status penalty from an inactive member account.");
+        };
+    }
 
-	public void setOnlineAccount(OnlineAccount newOnlineAccount) {
-		this.onlineAccount = newOnlineAccount;
-	}
+    public int getTotalFee() {
+        return this.totalFee;
+    }
 
-	public List<Loan> getLoans() {
-		return Collections.unmodifiableList(this.loans);
-	}
+    public void setTotalFee(int newTotalFee) {
+        this.totalFee = newTotalFee;
+    }
 
-	public void addLoan(Loan newLoan) {
-		this.loans.add(newLoan);
-	}
+    public OnlineAccount getOnlineAccount() {
+        return this.onlineAccount;
+    }
 
-	public void removeLoan(Loan loanToRemove) {
-		this.loans.remove(loanToRemove);
-	}
+    public void setOnlineAccount(OnlineAccount newOnlineAccount) {
+        this.onlineAccount = newOnlineAccount;
+    }
 
+    public List<Loan> getLoans() {
+        return Collections.unmodifiableList(this.loans);
+    }
+
+    public void addLoan(Loan newLoan) {
+        this.loans.add(newLoan);
+    }
+
+    public void removeLoan(Loan loanToRemove) {
+        this.loans.remove(loanToRemove);
+    }
+
+    public List<ReservableItemInfo> getReservedItems() {
+        return this.reservedItems;
+    }
+
+    public void addReservation(ReservableItemInfo reservableItemInfo) {
+        if (this.reservedItems == null)
+            this.reservedItems = new ArrayList<ReservableItemInfo>();
+        if (reservedItems.contains(reservableItemInfo))
+            return;
+        this.reservedItems.add(reservableItemInfo);
+
+        reservableItemInfo.addMember(this);
+    }
 }
