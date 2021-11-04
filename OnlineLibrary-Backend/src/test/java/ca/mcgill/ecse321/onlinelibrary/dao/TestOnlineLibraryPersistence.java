@@ -17,6 +17,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -67,9 +68,12 @@ public class TestOnlineLibraryPersistence {
 	private RoomRepository roomRepository;
 	@Autowired
 	private RoomBookingRepository roomBookingRepository;
+	@Autowired
+	private ReservationRepository reservationRepository;
 
 	@AfterEach
 	public void clearDatabase() {
+		reservationRepository.deleteAll();
 		loanRepository.deleteAll();
 		roomBookingRepository.deleteAll();
 		memberRepository.deleteAll();
@@ -263,38 +267,113 @@ public class TestOnlineLibraryPersistence {
 		assertEquals(title, archiveInfo.getTitle());
 	}
 
-	// @Test
-	// @Transactional
-	// public void testReservationPersitence(){
-	// 	String memberAdress = "Lala Land";
-	// 	String memberName = "Marcos Polo";
-	// 	Member member = new Member(memberAdress, memberName);
-	// 	String member2Adress = "Happy Land";
-	// 	String member2Name = "Greg";
-	// 	Member member2 = new Member(member2Adress, member2Name);
-	// 	memberRepository.save(member);
-	// 	memberRepository.save(member2);
-	// 	MovieInfo movieInfo = new MovieInfo();
-	// 	String director = "Seb";
-	// 	movieInfo.setDirector(director);
-	// 	movieInfo.addMember(member);
-	// 	movieInfo.addMember(member2);
-	// 	movieInfoRepository.save(movieInfo);
+	@Test
+	@Transactional
+	public void testReservationPersitence(){
+		String memberAddress = "Lala Land";
+		String memberName = "Marcos Polo";
+		Member member = new Member(memberAddress, memberName);
+		String member2Address = "Happy Land";
+		String member2Name = "Greg";
+		Member member2 = new Member(member2Address, member2Name);
+		memberRepository.save(member);
+		memberRepository.save(member2);
+		MovieInfo movieInfo = new MovieInfo();
+		String director = "Seb";
+		movieInfo.setDirector(director);
+		
+		Reservation reserve = new Reservation(member, movieInfo);
+		Reservation reserve2 = new Reservation(member2, movieInfo);
+		reservationRepository.save(reserve);
+		reservationRepository.save(reserve2);
 
-	// 	List<Member> reservations = movieInfo.getMembers();
-	// 	int id = movieInfo.getId();
+		List<Reservation> expectedList = new ArrayList<Reservation>();
+		expectedList.add(reserve);
 
-	// 	movieInfo = null;
-	// 	member = null;
-	// 	member2 = null;
+		List<Reservation> expectedList2 = new ArrayList<Reservation>();
+		expectedList2.add(reserve2);
 
-	// 	MovieInfo mInfo = movieInfoRepository.findMovieInfoById(id);
+		reserve = null;
+		reserve2 = null;
 
-	// 	assertNotNull(mInfo);
-	// 	assertEquals(director, mInfo.getDirector());
-	// 	assertEquals(reservations, mInfo.getMembers());
+		List<Reservation> actualList = reservationRepository.findReservationByMember(member);
+		List<Reservation> actualList2 = reservationRepository.findReservationByMember(member2);
 
-	// }
+		assertNotNull(actualList);
+		assertNotNull(actualList2);
+
+		assertEquals(expectedList, actualList);
+		assertEquals(expectedList2, actualList2);
+	}
+
+	@Test
+	@Transactional
+	public void testReservationMembersPersitence(){
+		String memberAddress = "Lala Land";
+		String memberName = "Marcos Polo";
+		Member member = new Member(memberAddress, memberName);
+		String member2Address = "Happy Land";
+		String member2Name = "Greg";
+		Member member2 = new Member(member2Address, member2Name);
+		memberRepository.save(member);
+		memberRepository.save(member2);
+		MovieInfo movieInfo = new MovieInfo();
+		String director = "Seb";
+		movieInfo.setDirector(director);
+		
+		Reservation reserve = new Reservation(member, movieInfo);
+		Reservation reserve2 = new Reservation(member2, movieInfo);
+		reservationRepository.save(reserve);
+		reservationRepository.save(reserve2);
+
+		List<Reservation> reservationList = new ArrayList<Reservation>();
+		reservationList.add(reserve);
+		reservationList.add(reserve2);
+
+		reserve = null;
+		reserve2 = null;
+
+		List<Reservation> actualList = reservationRepository.findReservationByReservedItem(movieInfo);
+
+		assertNotNull(actualList);
+		assertEquals(reservationList, actualList);
+	}
+
+	@Test
+	@Transactional
+	public void testReservationReservableItemInfoPersitence(){
+		String memberAddress = "Lala Land";
+		String memberName = "Marcos Polo";
+		Member member = new Member(memberAddress, memberName);
+		// String member2Address = "Happy Land";
+		// String member2Name = "Greg";
+		// Member member2 = new Member(member2Address, member2Name);
+		memberRepository.save(member);
+		// memberRepository.save(member2);
+		MovieInfo movieInfo = new MovieInfo();
+		String director = "Seb";
+		movieInfo.setDirector(director);
+		BookInfo bookInfo = new BookInfo();
+		bookInfo.setAuthor("Kiro");
+		bookInfo.setIsbn(1234);
+		
+		Reservation reserve = new Reservation(member, movieInfo);
+		Reservation reserve2 = new Reservation(member, bookInfo);
+		reservationRepository.save(reserve);
+		reservationRepository.save(reserve2);
+
+		List<Reservation> expectedList = new ArrayList<Reservation>();
+		expectedList.add(reserve);
+		expectedList.add(reserve2);
+
+		reserve = null;
+		reserve2 = null;
+
+		List<Reservation> actualList = reservationRepository.findReservationByMember(member);
+
+		assertNotNull(actualList);
+		assertEquals(expectedList, actualList);
+	}
 
 	@Test
 	public void testPersistAndLoadLoan() {

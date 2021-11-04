@@ -7,17 +7,27 @@ public class Reservation {
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private Integer reservationId;
     
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.ALL)
     private Member member;
     
-    @ManyToMany
-    private List<ReservableItemInfo> reservedItems;
+    @ManyToOne (cascade = CascadeType.ALL)
+    private ReservableItemInfo reservedItem;
 
     public Reservation(Member member, ReservableItemInfo reservableItem){
         this.member = member;
-        this.reservedItems = new ArrayList<ReservableItemInfo>();
-        reservedItems.add(reservableItem);
+        this.reservedItem = reservableItem;
     }
 
+    public Integer getId(){
+        return this.reservationId;
+    }
+
+    public Member getMember(){
+        return this.member;
+    }
+
+    public void setMember(Member member){
+        this.member = member;
+    }
     
 }
