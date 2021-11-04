@@ -42,7 +42,7 @@ public class TestOnlineLibraryService {
 	private ArchiveInfoRepository archiveInfoDao;
 	
 	@InjectMocks
-	private OnlineLibraryService service;
+	private LibraryItemInfoService service;
 
 	private static final int MEMBER_ID = 42;
 	private static final int INVALID_MEMBER_ID = 999999;
