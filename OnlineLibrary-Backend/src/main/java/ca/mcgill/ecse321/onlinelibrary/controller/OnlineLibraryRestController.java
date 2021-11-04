@@ -20,7 +20,7 @@ public class OnlineLibraryRestController {
 	@Autowired
 	private OnlineLibraryService service;
 	
-	@PostMapping(value = { "/bookInfo/{title}"})
+	@PostMapping(value = { "/bookInfo/{title}", "/bookInfo/{title}/"})
 	public BookInfoDto createBookInfo(@PathVariable("title") String title, @RequestParam int numberOfPage,  
 			@RequestParam String author, @RequestParam long isbn) throws IllegalArgumentException {
 		BookInfo bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
