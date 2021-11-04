@@ -10,6 +10,9 @@ import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
 @Service
 public class LibrarianService {
 
+	// TODO Get this from application.properties
+	private Integer MIN_PASSWD_LENGTH = 8;
+
 	@Autowired
 	LibrarianRepository librarianRepository;
 
@@ -32,15 +35,13 @@ public class LibrarianService {
 				errorMessage.add("Username already taken.");
 			}
 		}
-		// Password at least 8 characters
-		// TODO Move this to configuration file
-		int MIN_PASS_LENGTH = 8;
+		// Password long enough
 		if (password == null) {
-			errorMessage.add("Password must be at least " + MIN_PASS_LENGTH + " characters in length.");
+			errorMessage.add("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.");
 		} else {
 			password = password.trim();
-			if (password.length() < MIN_PASS_LENGTH) {
-				errorMessage.add("Password must be at least " + MIN_PASS_LENGTH + " characters in length.");
+			if (password.length() < MIN_PASSWD_LENGTH) {
+				errorMessage.add("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.");
 			}
 		}
 		// Throw exception

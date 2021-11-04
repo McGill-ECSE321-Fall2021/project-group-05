@@ -3,18 +3,22 @@ package ca.mcgill.ecse321.onlinelibrary.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import ca.mcgill.ecse321.onlinelibrary.dao.LibrarianRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
 
-public class TestLibrarianService extends TestService {
+@ExtendWith(MockitoExtension.class)
+public class TestLibrarianService {
 
 	@Mock
 	private LibrarianRepository librarianRepository;
@@ -22,11 +26,14 @@ public class TestLibrarianService extends TestService {
 	@InjectMocks
 	private LibrarianService librarianService;
 
-	private static final String VALID_FULL_NAME = "Jocasta Nu";
-	private static final String VALID_USERNAME = "jocasta.nu";
-	private static final String TAKEN_USERNAME = "head.librarian";
-	private static final String VALID_PASSWORD = "totallysecurepassword12345";
-	private static final String SHORT_PASSWORD = "pass123";
+	// TODO Get this from application.properties
+	private int MIN_PASSWD_LENGTH = 8;
+
+	private final String VALID_FULL_NAME = "Jocasta Nu";
+	private final String VALID_USERNAME = "jocasta.nu";
+	private final String TAKEN_USERNAME = "head.librarian";
+	private final String VALID_PASSWORD = "p".repeat(MIN_PASSWD_LENGTH);
+	private final String SHORT_PASSWORD = "p".repeat(MIN_PASSWD_LENGTH - 1);
 
 	@BeforeEach
 	public void setMockOuput() {
@@ -146,5 +153,13 @@ public class TestLibrarianService extends TestService {
 		Exception error = assertThrows(IllegalArgumentException.class,
 				() -> librarianService.createLibrarian(VALID_FULL_NAME, VALID_USERNAME, SHORT_PASSWORD));
 		assertContains("Password must be at least 8 characters in length.", error.getMessage());
+	}
+
+	public void assertContains(String expected, String actual) {
+		if (!actual.contains(expected)) {
+			String msg = String.format("Expected message containing \"%s\" but received message \"%s\"", expected,
+					actual);
+			fail(msg);
+		}
 	}
 }
