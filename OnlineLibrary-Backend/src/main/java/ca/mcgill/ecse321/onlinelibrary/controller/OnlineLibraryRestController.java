@@ -11,6 +11,7 @@ import ca.mcgill.ecse321.onlinelibrary.dto.*;
 import ca.mcgill.ecse321.onlinelibrary.dto.ReservableItemDto.ItemStatusDto;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
+
 import ca.mcgill.ecse321.onlinelibrary.service.OnlineLibraryService;
 
 @CrossOrigin(origins = "*")
@@ -106,10 +107,36 @@ public class OnlineLibraryRestController {
 			return ItemStatusDto.Reserved;
 		}
 	}
-	private ArchiveInfoDto convertToDto (ArchiveInfo archiveInfo) {
+
+	private ArchiveInfoDto convertToDto(ArchiveInfo archiveInfo) {
 		if (archiveInfo == null) {
 			throw new IllegalArgumentException("There is no such archiveInfo.");
 		}
-		return new ArchiveInfoDto(archiveInfo.getId(),archiveInfo.getTitle(),archiveInfo.getDescription(),archiveInfo.getPublicationDate());
+		return new ArchiveInfoDto(archiveInfo.getId(), archiveInfo.getTitle(), archiveInfo.getDescription(),
+				archiveInfo.getPublicationDate());
+	}
+	
+	@PostMapping(value = {"/activate/{id}", "/activate/{id}/"})
+	public MemberDto activateMemberAccount(@PathVariable("id") int id) {
+		Member member = service.getMemberById(id);
+		member = service.activateAccount(member);
+		return convertToDto(member);
+	}
+
+	private MemberDto convertToDto(Member member) {
+		if (member == null) {
+			throw new IllegalArgumentException("There is no such Member");
+		}
+		return new MemberDto(member.getId(), member.getAddress(), member.getFullName(), convertToDto(member.getStatus()), member.getTotalFee());
+	}
+
+	private MemberDto.MemberDtoStatus convertToDto(Member.MemberStatus memberStatus) {
+		return switch (memberStatus) {
+			case BLACKLISTED -> MemberDto.MemberDtoStatus.BLACKLISTED;
+			case RED -> MemberDto.MemberDtoStatus.RED;
+			case YELLOW -> MemberDto.MemberDtoStatus.YELLOW;
+			case GREEN -> MemberDto.MemberDtoStatus.GREEN;
+			case INACTIVE -> MemberDto.MemberDtoStatus.INACTIVE;
+		};
 	}
 }
