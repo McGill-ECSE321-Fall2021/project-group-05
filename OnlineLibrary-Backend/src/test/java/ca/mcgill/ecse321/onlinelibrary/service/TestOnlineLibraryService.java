@@ -1,14 +1,11 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.lenient;
-
+import java.sql.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,13 +14,9 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-
-import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.*;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
-import ca.mcgill.ecse321.onlinelibrary.dao.BookRepository;
-
 
 @ExtendWith(MockitoExtension.class)
 public class TestOnlineLibraryService {
@@ -35,9 +28,24 @@ public class TestOnlineLibraryService {
 	
 	@Mock
 	private MovieInfoRepository movieInfoDao;
+
+	@Mock
+	private AlbumInfoRepository albumInfoDao;
+
+	@Mock 
+	private NewsPaperInfoRepository newsPaperInfoDao;
+
+	@Mock
+	private MemberRepository memberDao;
+	
+	@Mock
+	private ArchiveInfoRepository archiveInfoDao;
 	
 	@InjectMocks
 	private OnlineLibraryService service;
+
+	private static final int MEMBER_ID = 42;
+	private static final int INVALID_MEMBER_ID = 999999;
 	
 	private static final int BOOK_INFO_KEY = 1;
 	private static final int BOOK_INFO_NOT_A_KEY = 2;
@@ -59,6 +67,17 @@ public class TestOnlineLibraryService {
 		lenient().when(bookInfoDao.save(any(BookInfo.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(movieInfoDao.save(any(MovieInfo.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(bookDao.save(any(Book.class))).then(returnParameterAsAnswer);
+		lenient().when(albumInfoDao.save(any(AlbumInfo.class))).then(returnParameterAsAnswer);
+		lenient().when(newsPaperInfoDao.save(any(NewsPaperInfo.class))).then(returnParameterAsAnswer);
+		lenient().when(archiveInfoDao.save(any(ArchiveInfo.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(memberDao.save(any(Member.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(memberDao.findMemberById(anyInt())).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(MEMBER_ID)) {
+				return new Member("123 Main Street", "John Doe");
+			} else {
+				return null;
+			}
+		});
 	}
 	
 	@Test
@@ -297,7 +316,8 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Director can't be empty."));
 		assertTrue(error.contains("Length can't be 0."));
 	}
-	
+
+	@Test
 	public void testCreateBook() {
 		BookInfo bookInfo = null;
 		String title = "Title";
@@ -333,6 +353,7 @@ public class TestOnlineLibraryService {
 		assertNull(book);
 		assertTrue(error.contains("BookInfo can't be empty"));
 	}
+  
 	@Test
 	public void testGetBookInfo() {
 		BookInfo bookInfo = null;
@@ -365,13 +386,359 @@ public class TestOnlineLibraryService {
 		try {
 			bookInfo = service.getBookInfo(BOOK_INFO_NOT_A_KEY);
 		} catch (IllegalArgumentException e) {
-				error+=e.getMessage();
+			error += e.getMessage();
 		}
 		assertNull(bookInfo);
 		assertTrue(error.contains("The bookInfo with id " + BOOK_INFO_NOT_A_KEY + " was not found in the database."));
 	}
+	
+	@Test
+	public void testCreateAlbumInfo() {
+		String title = "Title";
+		String composerPerformer = "Author";
+		String genre = "Genre";
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(albumInfo);
+		assertEquals(albumInfo.getTitle(), title);
+		assertEquals(albumInfo.getComposerPerformer(), composerPerformer);
+		assertEquals(albumInfo.getGenre(), genre);
+	}
+	
+	@Test
+	public void testCreateAlbumInfoTitleNull() {
+		String error="";
+		String title = null;
+		String composerPerformer = "Composer/Performer";
+		String genre = "Genre";
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(albumInfo);
+		assertTrue(error.contains("Title can't be empty."));
+	}
+	
+	@Test
+	public void testCreateAlbumInfoTitleEmpty() {
+		String error="";
+		String title = " ";
+		String composerPerformer = "Composer/Performer";
+		String genre = "Genre";
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(albumInfo);
+		assertTrue(error.contains("Title can't be empty."));
+	}
+	
+	@Test
+	public void testCreateAlbumInfoComposerNull() {
+		String error="";
+		String title = "Title";
+		String composerPerformer = null;
+		String genre = "Genre";
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(albumInfo);
+		assertTrue(error.contains("composerPerformer can't be empty."));
+	}
+	
+	@Test
+	public void testCreateAlbumInfoComposerEmpty() {
+		String error="";
+		String title = "Title";
+		String composerPerformer = " ";
+		String genre = "Genre";
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(albumInfo);
+		assertTrue(error.contains("composerPerformer can't be empty."));
+	}
+	
+	@Test
+	public void testCreateAlbumInfoGenreNull() {
+		String error="";
+		String title = "Title";
+		String composerPerformer = "Composer / Performer";
+		String genre = null;
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(albumInfo);
+		assertTrue(error.contains("Genre can't be empty."));
+	}
+	
+	@Test
+	public void testCreateAlbumInfoGenreEmpty() {
+		String error="";
+		String title = "Title";
+		String composerPerformer = "Composer / Performer";
+		String genre = " ";
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(albumInfo);
+		assertTrue(error.contains("Genre can't be empty."));
+	}
+	
+	@Test 
+	public void testCreateeAlbumInfoAllEmpty() {
+		String error="";
+		String title = " ";
+		String composerPerformer = null;
+		String genre = " ";
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(albumInfo);
+		assertTrue(error.contains("Genre can't be empty."));
+		assertTrue(error.contains("composerPerformer can't be empty."));
+		assertTrue(error.contains("Title can't be empty."));
+	}
+	
+	@Test
+	public void testCreateNewsPaperInfo() {
+		Date publication = Date.valueOf("2021-10-31");
+		String frequency = "Frequency";
+		int number = 123;
+		NewsPaperInfo newsPaperInfo = null;
+		try {
+			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(newsPaperInfo);
+		assertEquals(newsPaperInfo.getPublication().getTime(), publication.getTime());
+		assertEquals(newsPaperInfo.getFrequency(), frequency);
+		assertEquals(newsPaperInfo.getNumber(), number);
+	}
+	
+	@Test
+	public void testCreateNewsPaperInfoPublicationIsNull() {
+		String error="";
+		Date publication = null;
+		String frequency = "Frequency";
+		int number = 5;
+		NewsPaperInfo newsPaperInfo = null;
+		try {
+			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(newsPaperInfo);
+		assertTrue(error.contains("Date can't be empty."));
+	}
+	
+	@Test
+	public void testCreateNewsPaperInfoFrequencyIsNull() {
+		String error="";
+		Date publication = Date.valueOf("2021-10-31");
+		String frequency = null;
+		int number = 5;
+		NewsPaperInfo newsPaperInfo = null;
+		try {
+			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(newsPaperInfo);
+		assertTrue(error.contains("Frequency can't be empty."));
+	}
+	
+	@Test
+	public void testCreateNewsPaperInfoFrequencyIsEmpty() {
+		String error="";
+		Date publication = Date.valueOf("2021-10-31");
+		String frequency = " ";
+		int number = 5;
+		NewsPaperInfo newsPaperInfo = null;
+		try {
+			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(newsPaperInfo);
+		assertTrue(error.contains("Frequency can't be empty."));
+	}
+	
+	@Test
+	public void testCreateNewsPaperInfoNumberIsNegative() {
+		String error="";
+		Date publication = Date.valueOf("2021-10-31");
+		String frequency = "Everyday";
+		int number = -1;
+		NewsPaperInfo newsPaperInfo = null;
+		try {
+			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(newsPaperInfo);
+		assertTrue(error.contains("Number can't be negative."));
+	}
+	
+	@Test
+	public void testCreateNewsPaperInfoAllEmpty() {
+		String error="";
+		Date publication = null;
+		String frequency = " ";
+		int number = -1;
+		NewsPaperInfo newsPaperInfo = null;
+		try {
+			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(newsPaperInfo);
+		assertTrue(error.contains("Number can't be negative."));
+		assertTrue(error.contains("Frequency can't be empty."));
+		assertTrue(error.contains("Date can't be empty."));
+	}
+	
+	@Test
+	public void testCreateArchiveInfo() {
+		String title = "Title";
+		String description = "Description";
+		Date publicationDate = Date.valueOf("2021-10-31");
+		ArchiveInfo archiveInfo = null;
+		try {
+			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(archiveInfo);
+		assertEquals(archiveInfo.getTitle(), title);
+		assertEquals(archiveInfo.getDescription(), description);
+		assertEquals(archiveInfo.getPublicationDate(), publicationDate);
+	}
+	
+	@Test
+	public void testCreateArchiveInfoTitleIsNull() {
+		String error="";
+		String title = null;
+		String description = "Description";
+		Date publicationDate = Date.valueOf("2021-10-31");
+		ArchiveInfo archiveInfo = null;
+		try {
+			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(archiveInfo);
+		assertTrue(error.contains("Title can't be empty."));
+	}
+	
+	@Test
+	public void testCreateArchiveInfoTitleIsEmpty() {
+		String error="";
+		String title = " ";
+		String description = "Description";
+		Date publicationDate = Date.valueOf("2021-10-31");
+		ArchiveInfo archiveInfo = null;
+		try {
+			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(archiveInfo);
+		assertTrue(error.contains("Title can't be empty."));
+	}
+	
+	@Test
+	public void testCreateArchiveInfoDescriptionIsNull() {
+		String error="";
+		String title = "Title";
+		String description = null;
+		Date publicationDate = Date.valueOf("2021-10-31");
+		ArchiveInfo archiveInfo = null;
+		try {
+			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(archiveInfo);
+		assertTrue(error.contains("Description can't be empty."));
+	}
+	
+	@Test
+	public void testCreateArchiveInfoPublicationDateIsNull() {
+		String error="";
+		String title = "Title";
+		String description = "Description";
+		Date publicationDate = null;
+		ArchiveInfo archiveInfo = null;
+		try {
+			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(archiveInfo);
+		assertTrue(error.contains("Publication date can't be empty."));
+	}
+	
+	@Test
+	public void testCreateArchiveInfoAllEmpty() {
+		String error="";
+		String title = " ";
+		String description = null;
+		Date publicationDate = null;
+		ArchiveInfo archiveInfo = null;
+		try {
+			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(archiveInfo);
+		assertTrue(error.contains("Title can't be empty."));
+		assertTrue(error.contains("Description can't be empty."));
+		assertTrue(error.contains("Publication date can't be empty."));
+	}
+
+	@Test
+	public void testGetMemberByIdSuccessful() {
+		Member member = service.getMemberById(MEMBER_ID);
+		assertNotNull(member);
+	}
+
+	@Test
+	public void testGetMemberByIdInexistent() {
+		Member member = service.getMemberById(INVALID_MEMBER_ID);
+		assertNull(member);
+	}
+
+	@Test
+	public void testActivateMemberAccount() {
+		Member member = service.getMemberById(MEMBER_ID);
+		assert(member.getStatus() == Member.MemberStatus.INACTIVE);
+		member = service.activateAccount(member);
+		assertNotNull(member);
+		assert(member.getStatus() == Member.MemberStatus.GREEN);
+	}
 }
-
-
-
-
