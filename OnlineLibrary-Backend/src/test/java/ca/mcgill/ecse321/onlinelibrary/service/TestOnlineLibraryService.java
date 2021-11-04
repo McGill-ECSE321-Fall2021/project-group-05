@@ -1,6 +1,5 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -23,6 +22,7 @@ import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 
 @ExtendWith(MockitoExtension.class)
 public class TestOnlineLibraryService {
+
 	@Mock
 	private BookInfoRepository bookInfoDao;
 	@Mock

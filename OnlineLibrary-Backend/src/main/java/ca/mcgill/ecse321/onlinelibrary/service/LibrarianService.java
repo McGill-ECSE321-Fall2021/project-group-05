@@ -22,11 +22,11 @@ public class LibrarianService {
 		}
 		// Username not empty and unique
 		if (username == null) {
-			errorMessage.add("Username cannot be empty");
+			errorMessage.add("Username cannot be empty.");
 		} else {
 			username = username.trim();
 			if (username.length() == 0) {
-				errorMessage.add("Username cannot be empty");
+				errorMessage.add("Username cannot be empty.");
 			}
 			if (librarianRepository.existsLibrarianByUsername(username)) {
 				errorMessage.add("Username already taken.");
