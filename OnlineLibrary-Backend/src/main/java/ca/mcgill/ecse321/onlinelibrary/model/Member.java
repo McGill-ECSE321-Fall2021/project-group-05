@@ -129,18 +129,4 @@ public class Member {
     public void removeLoan(Loan loanToRemove) {
         this.loans.remove(loanToRemove);
     }
-
-    public List<ReservableItemInfo> getReservedItems() {
-        return this.reservedItems;
-    }
-
-    public void addReservation(ReservableItemInfo reservableItemInfo) {
-        if (this.reservedItems == null)
-            this.reservedItems = new ArrayList<ReservableItemInfo>();
-        if (reservedItems.contains(reservableItemInfo))
-            return;
-        this.reservedItems.add(reservableItemInfo);
-
-        reservableItemInfo.addMember(this);
-    }
 }
