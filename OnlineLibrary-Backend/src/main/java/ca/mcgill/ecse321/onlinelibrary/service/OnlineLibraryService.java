@@ -232,7 +232,7 @@ public class OnlineLibraryService {
 			if (username.length() == 0) {
 				errorMessage.add("Username cannot be empty");
 			}
-			if (librarianRepository.hasWithUsername(username)) {
+			if (librarianRepository.existsLibrarianByUsername(username)) {
 				errorMessage.add("Username already taken.");
 			}
 		}

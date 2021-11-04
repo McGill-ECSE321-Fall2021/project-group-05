@@ -25,28 +25,25 @@ import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 public class TestOnlineLibraryService {
 	@Mock
 	private BookInfoRepository bookInfoDao;
-
 	@Mock
 	private BookRepository bookDao;
-	
 	@Mock
 	private MovieInfoRepository movieInfoDao;
-
 	@Mock
 	private AlbumInfoRepository albumInfoDao;
-
-	@Mock 
+	@Mock
 	private NewsPaperInfoRepository newsPaperInfoDao;
-
 	@Mock
 	private ArchiveInfoRepository archiveInfoDao;
-	
+	@Mock
+	private LibrarianRepository librarianRepository;
+
 	@InjectMocks
 	private OnlineLibraryService service;
-	
+
 	private static final int BOOK_INFO_KEY = 1;
 	private static final int BOOK_INFO_NOT_A_KEY = 2;
-	
+
 	@BeforeEach
 	public void setMockOuput() {
 		lenient().when(bookInfoDao.findBookInfoById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
@@ -67,8 +64,9 @@ public class TestOnlineLibraryService {
 		lenient().when(albumInfoDao.save(any(AlbumInfo.class))).then(returnParameterAsAnswer);
 		lenient().when(newsPaperInfoDao.save(any(NewsPaperInfo.class))).then(returnParameterAsAnswer);
 		lenient().when(archiveInfoDao.save(any(ArchiveInfo.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(librarianRepository.save(any(Librarian.class))).thenAnswer(returnParameterAsAnswer);
 	}
-	
+
 	@Test
 	public void testCreateBookInfo() {
 		String title = "Title";
@@ -87,6 +85,7 @@ public class TestOnlineLibraryService {
 		assertEquals(bookInfo.getAuthor(), author);
 		assertEquals(bookInfo.getIsbn(), isbn);
 	}
+
 	@Test
 	public void testCreateBookInfoTitleNull() {
 		String error="";
@@ -103,7 +102,7 @@ public class TestOnlineLibraryService {
 		assertNull(bookInfo);
 		assertTrue(error.contains("Title can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateBookInfoTitleIsEmpty() {
 		String error="";
@@ -120,7 +119,7 @@ public class TestOnlineLibraryService {
 		assertNull(bookInfo);
 		assertTrue(error.contains("Title can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateBookInfoNumberOfPageIs0() {
 		String error="";
@@ -137,7 +136,7 @@ public class TestOnlineLibraryService {
 		assertNull(bookInfo);
 		assertTrue(error.contains("Number of page can't be 0."));
 	}
-	
+
 	@Test
 	public void testCreateBookInfoAuthorIsNull() {
 		String error="";
@@ -154,7 +153,7 @@ public class TestOnlineLibraryService {
 		assertNull(bookInfo);
 		assertTrue(error.contains("Author can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateBookInfoAuthorIsEmpty() {
 		String error="";
@@ -171,7 +170,7 @@ public class TestOnlineLibraryService {
 		assertNull(bookInfo);
 		assertTrue(error.contains("Author can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateBookInfoAllNulls() {
 		String error="";
@@ -190,7 +189,7 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Number of page can't be 0."));
 		assertTrue(error.contains("Author can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateMovieInfo() {
 		String genre = "Horror";
@@ -207,7 +206,7 @@ public class TestOnlineLibraryService {
 		assertEquals(movieInfo.getDirector(), director);
 		assertEquals(movieInfo.getLength(), length);
 	}
-	
+
 	@Test
 	public void testCreateMovieInfoGenreNull() {
 		String error="";
@@ -223,7 +222,7 @@ public class TestOnlineLibraryService {
 		assertNull(movieInfo);
 		assertTrue(error.contains("Genre can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateMovieInfoGenreEmpty() {
 		String error="";
@@ -239,7 +238,7 @@ public class TestOnlineLibraryService {
 		assertNull(movieInfo);
 		assertTrue(error.contains("Genre can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateMovieInfoDirectorNull() {
 		String error="";
@@ -255,7 +254,7 @@ public class TestOnlineLibraryService {
 		assertNull(movieInfo);
 		assertTrue(error.contains("Director can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateMovieInfoDirectorEmpty() {
 		String error="";
@@ -271,7 +270,7 @@ public class TestOnlineLibraryService {
 		assertNull(movieInfo);
 		assertTrue(error.contains("Director can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateMovieInfoLength0() {
 		String error="";
@@ -287,8 +286,8 @@ public class TestOnlineLibraryService {
 		assertNull(movieInfo);
 		assertTrue(error.contains("Length can't be 0."));
 	}
-	
-	@Test 
+
+	@Test
 	public void testCreateMovieAllEmpty() {
 		String error="";
 		String genre = "";
@@ -327,7 +326,7 @@ public class TestOnlineLibraryService {
 		assertEquals(book.getBookInfo().getIsbn(), bookInfo.getIsbn());
 		assertEquals(book.getStatus(), ItemStatus.Available);
 	}
-	
+
 	@Test
 	public void testCreateBookNullBookInfo() {
 		String error="";
@@ -342,7 +341,7 @@ public class TestOnlineLibraryService {
 		assertNull(book);
 		assertTrue(error.contains("BookInfo can't be empty"));
 	}
-  
+
 	@Test
 	public void testGetBookInfo() {
 		BookInfo bookInfo = null;
@@ -354,8 +353,8 @@ public class TestOnlineLibraryService {
 		assertNotNull(bookInfo);
 		assertEquals(BOOK_INFO_KEY, bookInfo.getId());
 	}
-	
-	@Test 
+
+	@Test
 	public void testGetBookInfoIdIs0 () {
 		String error = "";
 		BookInfo bookInfo = null;
@@ -367,20 +366,20 @@ public class TestOnlineLibraryService {
 		assertNull(bookInfo);
 		assertTrue(error.contains("BookInfo id can't be 0."));
 	}
-	
-	@Test 
+
+	@Test
 	public void testGetBookBadId() {
 		String error = "";
 		BookInfo bookInfo = null;
 		try {
 			bookInfo = service.getBookInfo(BOOK_INFO_NOT_A_KEY);
 		} catch (IllegalArgumentException e) {
-				error+=e.getMessage();
+			error+=e.getMessage();
 		}
 		assertNull(bookInfo);
 		assertTrue(error.contains("The bookInfo with id " + BOOK_INFO_NOT_A_KEY + " was not found in the database."));
 	}
-	
+
 	@Test
 	public void testCreateAlbumInfo() {
 		String title = "Title";
@@ -397,7 +396,7 @@ public class TestOnlineLibraryService {
 		assertEquals(albumInfo.getComposerPerformer(), composerPerformer);
 		assertEquals(albumInfo.getGenre(), genre);
 	}
-	
+
 	@Test
 	public void testCreateAlbumInfoTitleNull() {
 		String error="";
@@ -413,7 +412,7 @@ public class TestOnlineLibraryService {
 		assertNull(albumInfo);
 		assertTrue(error.contains("Title can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateAlbumInfoTitleEmpty() {
 		String error="";
@@ -429,7 +428,7 @@ public class TestOnlineLibraryService {
 		assertNull(albumInfo);
 		assertTrue(error.contains("Title can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateAlbumInfoComposerNull() {
 		String error="";
@@ -445,7 +444,7 @@ public class TestOnlineLibraryService {
 		assertNull(albumInfo);
 		assertTrue(error.contains("composerPerformer can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateAlbumInfoComposerEmpty() {
 		String error="";
@@ -461,7 +460,7 @@ public class TestOnlineLibraryService {
 		assertNull(albumInfo);
 		assertTrue(error.contains("composerPerformer can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateAlbumInfoGenreNull() {
 		String error="";
@@ -477,7 +476,7 @@ public class TestOnlineLibraryService {
 		assertNull(albumInfo);
 		assertTrue(error.contains("Genre can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateAlbumInfoGenreEmpty() {
 		String error="";
@@ -493,8 +492,8 @@ public class TestOnlineLibraryService {
 		assertNull(albumInfo);
 		assertTrue(error.contains("Genre can't be empty."));
 	}
-	
-	@Test 
+
+	@Test
 	public void testCreateeAlbumInfoAllEmpty() {
 		String error="";
 		String title = " ";
@@ -511,7 +510,7 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("composerPerformer can't be empty."));
 		assertTrue(error.contains("Title can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateNewsPaperInfo() {
 		Date publication = Date.valueOf("2021-10-31");
@@ -528,7 +527,7 @@ public class TestOnlineLibraryService {
 		assertEquals(newsPaperInfo.getFrequency(), frequency);
 		assertEquals(newsPaperInfo.getNumber(), number);
 	}
-	
+
 	@Test
 	public void testCreateNewsPaperInfoPublicationIsNull() {
 		String error="";
@@ -544,7 +543,7 @@ public class TestOnlineLibraryService {
 		assertNull(newsPaperInfo);
 		assertTrue(error.contains("Date can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateNewsPaperInfoFrequencyIsNull() {
 		String error="";
@@ -560,7 +559,7 @@ public class TestOnlineLibraryService {
 		assertNull(newsPaperInfo);
 		assertTrue(error.contains("Frequency can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateNewsPaperInfoFrequencyIsEmpty() {
 		String error="";
@@ -576,7 +575,7 @@ public class TestOnlineLibraryService {
 		assertNull(newsPaperInfo);
 		assertTrue(error.contains("Frequency can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateNewsPaperInfoNumberIsNegative() {
 		String error="";
@@ -592,7 +591,7 @@ public class TestOnlineLibraryService {
 		assertNull(newsPaperInfo);
 		assertTrue(error.contains("Number can't be negative."));
 	}
-	
+
 	@Test
 	public void testCreateNewsPaperInfoAllEmpty() {
 		String error="";
@@ -610,7 +609,7 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Frequency can't be empty."));
 		assertTrue(error.contains("Date can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateArchiveInfo() {
 		String title = "Title";
@@ -627,7 +626,7 @@ public class TestOnlineLibraryService {
 		assertEquals(archiveInfo.getDescription(), description);
 		assertEquals(archiveInfo.getPublicationDate(), publicationDate);
 	}
-	
+
 	@Test
 	public void testCreateArchiveInfoTitleIsNull() {
 		String error="";
@@ -643,7 +642,7 @@ public class TestOnlineLibraryService {
 		assertNull(archiveInfo);
 		assertTrue(error.contains("Title can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateArchiveInfoTitleIsEmpty() {
 		String error="";
@@ -659,7 +658,7 @@ public class TestOnlineLibraryService {
 		assertNull(archiveInfo);
 		assertTrue(error.contains("Title can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateArchiveInfoDescriptionIsNull() {
 		String error="";
@@ -675,7 +674,7 @@ public class TestOnlineLibraryService {
 		assertNull(archiveInfo);
 		assertTrue(error.contains("Description can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateArchiveInfoPublicationDateIsNull() {
 		String error="";
@@ -691,7 +690,7 @@ public class TestOnlineLibraryService {
 		assertNull(archiveInfo);
 		assertTrue(error.contains("Publication date can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateArchiveInfoAllEmpty() {
 		String error="";
@@ -708,5 +707,21 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Title can't be empty."));
 		assertTrue(error.contains("Description can't be empty."));
 		assertTrue(error.contains("Publication date can't be empty."));
+	}
+
+	@Test
+	public void testCreateLibrarian() {
+		String fullName = "Jocasta Nu";
+		String username = "jocasta.nu";
+		String password = "validpass123";
+
+		Librarian librarian = service.createLibrarian(fullName, username, password);
+
+		assertNotNull(librarian);
+		assertEquals(fullName, librarian.getFullName());
+		assertEquals(username, librarian.getUsername());
+		// TODO Update this check if/when password hashing is implemented
+		assertEquals(password, librarian.getPasswordHash());
+		assertEquals(false, librarian.isHead());
 	}
 }
