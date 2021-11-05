@@ -1,17 +1,9 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Member {
@@ -23,9 +15,11 @@ public class Member {
 	private String address;
 	private String fullName;
 	private MemberStatus status;
+
 	public enum MemberStatus {
-		INACTIVE, GREEN, YELLOW, RED, BLACKLISTED
+		GREEN, YELLOW, RED, BLACKLISTED, INACTIVE
 	}
+
 	// Account fees (e.g. registration fee, late fees) in cents
 	private int totalFee;
 
@@ -86,59 +80,29 @@ public class Member {
 	 *
 	 * @return true if the activation was successful and false otherwise
 	 */
-	public boolean activate() {
-		if (this.status == MemberStatus.INACTIVE) {
-			this.status = MemberStatus.GREEN;
-			return true;
-		} else {
-			return false;
-		}
+	public void activate() {
+		this.status = switch (this.status) {
+			case INACTIVE -> MemberStatus.GREEN;
+			default -> throw new IllegalStateException("Cannot activate an account that is already active.");
+		};
 	}
 
-	/**
-	 * Applies a penalty to this account. "Green" goes to "Yellow," "Yellow"
-	 * goes to "Red," and "Red" goes to "Blacklisted." In any other case, this
-	 * method has no effect.
-	 *
-	 * @return true if the penalty was applied successfully and false otherwise
-	 */
-	public boolean applyStatusPenalty() {
-		switch (this.status) {
-			case GREEN :
-				this.status = MemberStatus.YELLOW;
-				return true;
-			case YELLOW :
-				this.status = MemberStatus.RED;
-				return true;
-			case RED :
-				this.status = MemberStatus.BLACKLISTED;
-				return true;
-			default :
-				return false;
-		}
+	public void applyStatusPenalty() {
+		this.status = switch (this.status) {
+			case GREEN -> MemberStatus.YELLOW;
+			case YELLOW -> MemberStatus.RED;
+			case RED, BLACKLISTED -> MemberStatus.BLACKLISTED;
+			case INACTIVE -> throw new IllegalStateException("Cannot apply a status penalty to an inactive member account.");
+		};
 	}
 
-	/**
-	 * Removes a penalty point from this account. "Blacklisted" goes to "Red,"
-	 * "Red" goes to "Yellow," and "Yellow" goes to "Green." In any other case,
-	 * the method has no effect.
-	 *
-	 * @return true if the penalty was successfully removed and false otherwise
-	 */
-	public boolean removeStatusPenalty() {
-		switch (this.status) {
-			case INACTIVE :
-				return false;
-			case BLACKLISTED :
-				this.status = MemberStatus.RED;
-				return true;
-			case RED :
-				this.status = MemberStatus.YELLOW;
-				return true;
-			default :
-				this.status = MemberStatus.GREEN;
-				return true;
-		}
+	public void removeStatusPenalty() {
+		this.status = switch (this.status) {
+			case BLACKLISTED -> MemberStatus.RED;
+			case RED -> MemberStatus.YELLOW;
+			case YELLOW, GREEN -> MemberStatus.GREEN;
+			case INACTIVE -> throw new IllegalStateException("Cannot remove a status penalty from an inactive member account.");
+		};
 	}
 
 	public int getTotalFee() {
@@ -169,14 +133,14 @@ public class Member {
 		this.loans.remove(loanToRemove);
 	}
 
-	public List<ReservableItemInfo> getReservedItems(){
+	public List<ReservableItemInfo> getReservedItems() {
 		return this.reservedItems;
 	}
 
-	public void addReservation(ReservableItemInfo reservableItemInfo){
-		if(this.reservedItems == null)
+	public void addReservation(ReservableItemInfo reservableItemInfo) {
+		if (this.reservedItems == null)
 			this.reservedItems = new ArrayList<ReservableItemInfo>();
-		if(reservedItems.contains(reservableItemInfo))
+		if (reservedItems.contains(reservableItemInfo))
 			return;
 		this.reservedItems.add(reservableItemInfo);
 
