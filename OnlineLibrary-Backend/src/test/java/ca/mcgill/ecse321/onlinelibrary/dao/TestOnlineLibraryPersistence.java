@@ -282,6 +282,7 @@ public class TestOnlineLibraryPersistence {
 		MovieInfo movieInfo = new MovieInfo();
 		String director = "Seb";
 		movieInfo.setDirector(director);
+		movieInfoRepository.save(movieInfo);
 		
 		Reservation reserve = new Reservation(member, movieInfo);
 		Reservation reserve2 = new Reservation(member2, movieInfo);
@@ -321,6 +322,7 @@ public class TestOnlineLibraryPersistence {
 		MovieInfo movieInfo = new MovieInfo();
 		String director = "Seb";
 		movieInfo.setDirector(director);
+		movieInfoRepository.save(movieInfo);
 		
 		Reservation reserve = new Reservation(member, movieInfo);
 		Reservation reserve2 = new Reservation(member2, movieInfo);
@@ -350,9 +352,11 @@ public class TestOnlineLibraryPersistence {
 		MovieInfo movieInfo = new MovieInfo();
 		String director = "Seb";
 		movieInfo.setDirector(director);
+		movieInfoRepository.save(movieInfo);
 		BookInfo bookInfo = new BookInfo();
 		bookInfo.setAuthor("Kiro");
 		bookInfo.setIsbn(1234);
+		bookinfoRepository.save(bookInfo);
 		
 		Reservation reserve = new Reservation(member, movieInfo);
 		Reservation reserve2 = new Reservation(member, bookInfo);
