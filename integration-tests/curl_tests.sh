@@ -9,3 +9,18 @@ echo "Fails to create a book with 0 pages"
 curl --request POST "$base_url/bookInfo/anotherTitle?numberOfPage=0&author=John&isbn=987654321"
 echo
 # Add the tests to delete the book right after creating it
+
+# Create librarian
+echo "Creates librarian successfully"
+curl --request POST "$base_url/librarian/create?fullName=Jocasta%20Nu,username=jocasta.nu,password=securepassword12345"
+echo
+echo "Fails to create a librarian with empty full name, username, and password"
+curl --request POST "$base_url/librarian/create"
+echo
+
+# Delete librarian
+echo "Successfully deletes librarian by username"
+curl --request DELETE "$base_url/librarian/delete?username=jocasta.nu"
+echo
+echo "Fails to delete librarian with non-existent username"
+curl --request DELETE "$base_url/librarian/delete?username=invalid.username"
