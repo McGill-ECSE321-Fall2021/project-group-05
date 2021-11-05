@@ -25,7 +25,7 @@ public class MemberService {
 		if (member.getStatus() != Member.MemberStatus.INACTIVE) {
 			throw new IllegalStateException("This member is already active.");
 		}
-		member.setStatus(Member.MemberStatus.GREEN);
+		member.activate();
 		memberRepository.save(member);
 		return member;
 	}

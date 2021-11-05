@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +19,7 @@ public class Librarian {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	private String fullName;
+	@Column(unique = true)
 	private String username;
 	private String passwordHash;
 	private boolean isHead;
