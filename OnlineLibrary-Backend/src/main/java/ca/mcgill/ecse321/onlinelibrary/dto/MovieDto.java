@@ -4,7 +4,6 @@ import ca.mcgill.ecse321.onlinelibrary.model.Movie;
 
 public class MovieDto extends ReservableItemDto{
 	private MovieInfoDto movieInfo;
-	private ItemStatusDto itemStatus;
 	public MovieDto (int id, ItemStatusDto itemStatus ,MovieInfoDto movieInfoDto) {
 		super(id, itemStatus);
 		this.movieInfo=movieInfoDto;

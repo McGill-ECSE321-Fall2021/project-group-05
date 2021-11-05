@@ -149,7 +149,7 @@ public class LibraryItemInfoService {
 	}
 	
 	@Transactional
-	public NewsPaperInfo getNewsPaperInfo(int id) {
+	public NewsPaperInfo getNewspaperInfo(int id) {
 		NewsPaperInfo newsPaperInfo = newsPaperInfoRepository.findNewsPaperInfoById(id);
 		if (newsPaperInfo == null) {
 			throw new IllegalArgumentException("The newsPaperInfo with id " + id + " was not found in the database.");

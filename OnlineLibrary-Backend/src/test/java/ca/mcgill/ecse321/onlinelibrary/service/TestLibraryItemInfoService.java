@@ -664,7 +664,7 @@ public class TestLibraryItemInfoService {
 	public void testGetNewsPaperInfo() {
 		NewsPaperInfo newspaperInfo = null;
 		try {
-			newspaperInfo = libraryItemInfoService.getNewsPaperInfo(NEWSPAPER_INFO_KEY);
+			newspaperInfo = libraryItemInfoService.getNewspaperInfo(NEWSPAPER_INFO_KEY);
 		} catch (IllegalArgumentException e){
 			fail();
 		}
@@ -677,7 +677,7 @@ public class TestLibraryItemInfoService {
 		String error = "";
 		NewsPaperInfo newspaperInfo = null;
 		try {
-			newspaperInfo = libraryItemInfoService.getNewsPaperInfo(NEWSPAPER_INFO_BAD_KEY);
+			newspaperInfo = libraryItemInfoService.getNewspaperInfo(NEWSPAPER_INFO_BAD_KEY);
 		} catch (IllegalArgumentException e) {
 			error += e.getMessage();
 		}
@@ -797,7 +797,7 @@ public class TestLibraryItemInfoService {
 	}
 
 	@Test
-	public void testGetArchiveInfoInfoBadId() {
+	public void testGetArchiveInfoBadId() {
 		String error = "";
 		ArchiveInfo archiveInfo = null;
 		try {

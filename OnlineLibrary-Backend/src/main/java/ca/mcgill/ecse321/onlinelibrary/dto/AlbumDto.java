@@ -4,7 +4,6 @@ import ca.mcgill.ecse321.onlinelibrary.model.Album;
 
 public class AlbumDto extends ReservableItemDto{
 	private AlbumInfoDto albumInfo;
-	private ItemStatusDto itemStatus;
 	public AlbumDto (int id, ItemStatusDto status, AlbumInfoDto albumInfoDto) {
 		super(id, status);
 		this.albumInfo=albumInfoDto;

@@ -56,7 +56,7 @@ public class LibraryItemController {
 	
 	@PostMapping(value = {"/newspaper/{newspaperInfoId}", "newspaper/{newspaperInfoId}/"})
 	public NewsPaperDto createNewspaperDto(@PathVariable("newspaperInfoId") int newspaperInfoId) throws IllegalArgumentException {
-		NewsPaperInfo newspaperInfo = libraryItemInfoService.getNewsPaperInfo(newspaperInfoId);
+		NewsPaperInfo newspaperInfo = libraryItemInfoService.getNewspaperInfo(newspaperInfoId);
 		Newspaper newspaper = libraryItemService.createNewspaper(newspaperInfo);
 		return NewsPaperDto.fromNewsPaper(newspaper);
 	}

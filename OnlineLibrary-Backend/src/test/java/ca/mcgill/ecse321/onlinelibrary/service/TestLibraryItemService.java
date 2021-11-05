@@ -193,7 +193,7 @@ public class TestLibraryItemService {
 	}
 	
 	@Test
-	public void testCreateNewsPaper() {
+	public void testCreateNewspaper() {
 		NewsPaperInfo newspaperInfo = null;
 		Date publicationDate = Date.valueOf("2020-12-12");
 		String frequency = "aFrequency";
@@ -212,7 +212,7 @@ public class TestLibraryItemService {
 	}
 	
 	@Test
-	public void testCreateNewsPaperNullNewsPaperInfo() {
+	public void testCreateNewspaperNullNewsPaperInfo() {
 		String error = "";
 		NewsPaperInfo newspaperInfo = null;
 		Newspaper newspaper = null;
