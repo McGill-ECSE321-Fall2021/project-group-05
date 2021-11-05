@@ -23,4 +23,36 @@ public interface HolidayRepository extends CrudRepository<Holiday, Integer> {
 	 * @return ArrayList of holidays that fully contain the range.
 	 */
 	ArrayList<Holiday> findHolidayByStartDateLessThanEqualAndEndDateGreaterThanEqual(Date startDate, Date endDate);
+	
+	/*
+	 * Finds holidays at specific date
+	 * @param startDate of Holiday
+	 * @param endDate of Holiday
+	 * @return Arraylist of holidays at date
+	 */
+	ArrayList<Holiday> findHolidayByStartDateOrEndDate(Date startDate, Date endDate);
+	
+	/**
+	 * Finds specific holiday by dates
+	 * @param startDate of Holiday
+	 * @param endDate of Holiday
+	 * @return Arraylist of holidays at date
+	 */
+	ArrayList<Holiday> findHolidayByStartDateAndEndDate(Date startDate, Date endDate);
+	
+	/**
+	 * Finds holidays contained in a given date range
+	 * @param start date of the range 
+	 * @param end date of the range
+	 * @param start date of the range 
+	 * @param end date of the range
+	 * @return ArrayList of holidays contained in the range.
+	 */
+	ArrayList<Holiday> findHolidayByStartDateBetweenOrEndDateBetween(Date startDate1, Date startDate2, Date endDate1, Date endDate2);
+
+	/**
+	 * Deletes Holiday with unique id
+	 * @param unique integer id
+	 */
+	void deleteById(int id);
 }
