@@ -79,8 +79,18 @@ public class Member {
         return this.status;
     }
 
-    public void setStatus(MemberStatus status) {
-        this.status = status;
+/**
+	 * If the account is inactive, sets the status to "Green." If the account is
+	 * not currently inactive, this method has no effect.
+	 *
+	 * @return true if the activation was successful and false otherwise
+	 */
+	public void activate() {
+		this.status = switch (this.status) {
+			case INACTIVE -> MemberStatus.GREEN;
+			default -> throw new IllegalStateException("Cannot activate an account that is already active.");
+		};
+
     }
 
     public void applyStatusPenalty() {
