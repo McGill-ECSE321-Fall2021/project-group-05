@@ -5,10 +5,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
 @Entity
 public class Member {
 
-    // Attributes
+	// Attributes
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -28,9 +36,7 @@ public class Member {
     private OnlineAccount onlineAccount;
     @OneToMany(cascade = {CascadeType.PERSIST})
     private List<Loan> loans;
-    @ManyToMany
-    private List<ReservableItemInfo> reservedItems;
-
+	
     // Constructors
     protected Member() {
     }
@@ -46,7 +52,6 @@ public class Member {
         this.totalFee = registrationFee;
 
         this.loans = new ArrayList<Loan>();
-        this.reservedItems = new ArrayList<ReservableItemInfo>();
     }
 
     // Interface
@@ -74,8 +79,18 @@ public class Member {
         return this.status;
     }
 
-    public void setStatus(MemberStatus status) {
-        this.status = status;
+/**
+	 * If the account is inactive, sets the status to "Green." If the account is
+	 * not currently inactive, this method has no effect.
+	 *
+	 * @return true if the activation was successful and false otherwise
+	 */
+	public void activate() {
+		this.status = switch (this.status) {
+			case INACTIVE -> MemberStatus.GREEN;
+			default -> throw new IllegalStateException("Cannot activate an account that is already active.");
+		};
+
     }
 
     public void applyStatusPenalty() {
@@ -123,19 +138,4 @@ public class Member {
     public void removeLoan(Loan loanToRemove) {
         this.loans.remove(loanToRemove);
     }
-
-    public List<ReservableItemInfo> getReservedItems() {
-        return this.reservedItems;
-    }
-
-    public void addReservation(ReservableItemInfo reservableItemInfo) {
-        if (this.reservedItems == null)
-            this.reservedItems = new ArrayList<ReservableItemInfo>();
-        if (reservedItems.contains(reservableItemInfo))
-            return;
-        this.reservedItems.add(reservableItemInfo);
-
-        reservableItemInfo.addMember(this);
-    }
-
 }

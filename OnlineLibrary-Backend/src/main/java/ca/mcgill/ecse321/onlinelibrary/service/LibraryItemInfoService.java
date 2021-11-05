@@ -2,34 +2,29 @@ package ca.mcgill.ecse321.onlinelibrary.service;
 
 import java.sql.Date;
 import java.util.ArrayList;
-
-import ca.mcgill.ecse321.onlinelibrary.dao.MemberRepository;
-import ca.mcgill.ecse321.onlinelibrary.model.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ca.mcgill.ecse321.onlinelibrary.dao.*;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
-import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
-
 
 @Service
-public class OnlineLibraryService {
+public class LibraryItemInfoService {
 
 	@Autowired
-	BookInfoRepository bookInfoRepository;
+	private BookInfoRepository bookInfoRepository;
+
 	@Autowired
-	MemberRepository memberRepository;
+	private MovieInfoRepository movieInfoRepository;
+
 	@Autowired
-	MovieInfoRepository movieInfoRepository;
+	private AlbumInfoRepository albumInfoRepository;
+
 	@Autowired
-	BookRepository bookRepository;
+	private ArchiveInfoRepository archiveInfoRepository;
+
 	@Autowired
-	AlbumInfoRepository albumInfoRepository;
-	@Autowired
-	ArchiveInfoRepository archiveInfoRepository;
-	@Autowired
-	NewsPaperInfoRepository newsPaperInfoRepository;
+	private NewsPaperInfoRepository newsPaperInfoRepository;
 
 	@Transactional
 	public BookInfo createBookInfo(String title, int numberOfPage, String author, long isbn) {
@@ -91,24 +86,6 @@ public class OnlineLibraryService {
 		movieInfo.setLength(length);
 		movieInfoRepository.save(movieInfo);
 		return movieInfo;
-	}
-
-	@Transactional
-	public Book createBook(BookInfo bookInfo) {
-		ArrayList<String> errorMessage = new ArrayList<String>();
-		int errorCount=0;
-		if (bookInfo == null) {
-			errorMessage.add("BookInfo can't be empty");
-			errorCount++;
-		}
-		if (errorCount > 0) {
-			throw new IllegalArgumentException(String.join(" ", errorMessage));
-		}
-
-		Book book = new Book(bookInfo);
-		book.setStatus(ItemStatus.Available);
-		bookRepository.save(book);
-		return book;
 	}
 
 	@Transactional
@@ -217,21 +194,4 @@ public class OnlineLibraryService {
 		archiveInfoRepository.save(archiveInfo);
 		return archiveInfo;
 	}
-	
-	@Transactional
-	public Member getMemberById(int id) {
-		Member member = memberRepository.findMemberById(id);
-		return member;
-	}
-
-	@Transactional
-	public Member activateAccount(Member member) {
-		if (member.getStatus() != Member.MemberStatus.INACTIVE) {
-			throw new IllegalStateException("This member is already active.");
-		}
-		member.setStatus(Member.MemberStatus.GREEN);
-		memberRepository.save(member);
-		return member;
-	}
-	
 }

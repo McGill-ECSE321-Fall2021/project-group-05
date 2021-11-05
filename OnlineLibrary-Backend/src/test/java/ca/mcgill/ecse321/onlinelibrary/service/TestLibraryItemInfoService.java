@@ -2,7 +2,6 @@ package ca.mcgill.ecse321.onlinelibrary.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.lenient;
 import java.sql.Date;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,15 +14,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import ca.mcgill.ecse321.onlinelibrary.dao.*;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
-import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 
 @ExtendWith(MockitoExtension.class)
-public class TestOnlineLibraryService {
-
+public class TestLibraryItemInfoService {
 	@Mock
 	private BookInfoRepository bookInfoDao;
-	@Mock
-	private BookRepository bookDao;
 	@Mock
 	private MovieInfoRepository movieInfoDao;
 	@Mock
@@ -31,16 +26,13 @@ public class TestOnlineLibraryService {
 	@Mock
 	private NewsPaperInfoRepository newsPaperInfoDao;
 	@Mock
-	private MemberRepository memberDao;
-	
-	@Mock
 	private ArchiveInfoRepository archiveInfoDao;
 
 	@InjectMocks
-	private OnlineLibraryService service;
+	private LibraryItemInfoService libraryItemInfoService;
+	@InjectMocks
+	private LibraryItemService libraryItemService;
 
-	private static final int MEMBER_ID = 42;
-	private static final int INVALID_MEMBER_ID = 999999;
 	private static final int BOOK_INFO_KEY = 1;
 	private static final int BOOK_INFO_NOT_A_KEY = 2;
 
@@ -60,18 +52,9 @@ public class TestOnlineLibraryService {
 		};
 		lenient().when(bookInfoDao.save(any(BookInfo.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(movieInfoDao.save(any(MovieInfo.class))).thenAnswer(returnParameterAsAnswer);
-		lenient().when(bookDao.save(any(Book.class))).then(returnParameterAsAnswer);
 		lenient().when(albumInfoDao.save(any(AlbumInfo.class))).then(returnParameterAsAnswer);
 		lenient().when(newsPaperInfoDao.save(any(NewsPaperInfo.class))).then(returnParameterAsAnswer);
 		lenient().when(archiveInfoDao.save(any(ArchiveInfo.class))).thenAnswer(returnParameterAsAnswer);
-		lenient().when(memberDao.save(any(Member.class))).thenAnswer(returnParameterAsAnswer);
-		lenient().when(memberDao.findMemberById(anyInt())).thenAnswer( (InvocationOnMock invocation) -> {
-			if (invocation.getArgument(0).equals(MEMBER_ID)) {
-				return new Member("123 Main Street", "John Doe");
-			} else {
-				return null;
-			}
-		});
 	}
 
 	@Test
@@ -82,7 +65,7 @@ public class TestOnlineLibraryService {
 		long isbn = 1;
 		BookInfo bookInfo = null;
 		try {
-			bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
+			bookInfo = libraryItemInfoService.createBookInfo(title, numberOfPage, author, isbn);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
@@ -102,7 +85,7 @@ public class TestOnlineLibraryService {
 		long isbn = 1;
 		BookInfo bookInfo = null;
 		try {
-			bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
+			bookInfo = libraryItemInfoService.createBookInfo(title, numberOfPage, author, isbn);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -119,7 +102,7 @@ public class TestOnlineLibraryService {
 		long isbn = 1;
 		BookInfo bookInfo = null;
 		try {
-			bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
+			bookInfo = libraryItemInfoService.createBookInfo(title, numberOfPage, author, isbn);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -136,7 +119,7 @@ public class TestOnlineLibraryService {
 		long isbn = 1;
 		BookInfo bookInfo = null;
 		try {
-			bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
+			bookInfo = libraryItemInfoService.createBookInfo(title, numberOfPage, author, isbn);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -153,7 +136,7 @@ public class TestOnlineLibraryService {
 		long isbn = 1;
 		BookInfo bookInfo = null;
 		try {
-			bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
+			bookInfo = libraryItemInfoService.createBookInfo(title, numberOfPage, author, isbn);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -170,7 +153,7 @@ public class TestOnlineLibraryService {
 		long isbn = 1;
 		BookInfo bookInfo = null;
 		try {
-			bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
+			bookInfo = libraryItemInfoService.createBookInfo(title, numberOfPage, author, isbn);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -187,7 +170,7 @@ public class TestOnlineLibraryService {
 		long isbn = 0;
 		BookInfo bookInfo = null;
 		try {
-			bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
+			bookInfo = libraryItemInfoService.createBookInfo(title, numberOfPage, author, isbn);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -204,7 +187,7 @@ public class TestOnlineLibraryService {
 		int length = 100;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = service.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
@@ -222,7 +205,7 @@ public class TestOnlineLibraryService {
 		int length = 100;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = service.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -238,7 +221,7 @@ public class TestOnlineLibraryService {
 		int length = 100;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = service.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -254,7 +237,7 @@ public class TestOnlineLibraryService {
 		int length = 100;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = service.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -270,7 +253,7 @@ public class TestOnlineLibraryService {
 		int length = 100;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = service.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -286,7 +269,7 @@ public class TestOnlineLibraryService {
 		int length = 0;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = service.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -302,7 +285,7 @@ public class TestOnlineLibraryService {
 		int length = 0;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = service.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -313,47 +296,10 @@ public class TestOnlineLibraryService {
 	}
 
 	@Test
-	public void testCreateBook() {
-		BookInfo bookInfo = null;
-		String title = "Title";
-		int numberOfPage = 10;
-		String author = "Author";
-		int isbn = 10;
-		bookInfo = service.createBookInfo(title, numberOfPage, author, isbn);
-		Book book = null;
-		try {
-			book = service.createBook(bookInfo);
-		} catch (IllegalArgumentException e) {
-			fail();
-		}
-		assertNotNull(book);
-		assertEquals(book.getBookInfo().getTitle(), bookInfo.getTitle());
-		assertEquals(book.getBookInfo().getNumberOfPage(), bookInfo.getNumberOfPage());
-		assertEquals(book.getBookInfo().getAuthor(), bookInfo.getAuthor());
-		assertEquals(book.getBookInfo().getIsbn(), bookInfo.getIsbn());
-		assertEquals(book.getStatus(), ItemStatus.Available);
-	}
-
-	@Test
-	public void testCreateBookNullBookInfo() {
-		String error="";
-		BookInfo bookInfo = null;
-		Book book = null;
-		try {
-			book = service.createBook(bookInfo);
-		}
-		catch (IllegalArgumentException e) {
-			error = e.getMessage();
-		}
-		assertNull(book);
-		assertTrue(error.contains("BookInfo can't be empty"));
-	}
-
-	@Test
 	public void testGetBookInfo() {
 		BookInfo bookInfo = null;
 		try {
-			bookInfo = service.getBookInfo(BOOK_INFO_KEY);
+			bookInfo = libraryItemInfoService.getBookInfo(BOOK_INFO_KEY);
 		} catch (IllegalArgumentException e){
 			fail();
 		}
@@ -366,7 +312,7 @@ public class TestOnlineLibraryService {
 		String error = "";
 		BookInfo bookInfo = null;
 		try {
-			bookInfo = service.getBookInfo(0);
+			bookInfo = libraryItemInfoService.getBookInfo(0);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -379,7 +325,7 @@ public class TestOnlineLibraryService {
 		String error = "";
 		BookInfo bookInfo = null;
 		try {
-			bookInfo = service.getBookInfo(BOOK_INFO_NOT_A_KEY);
+			bookInfo = libraryItemInfoService.getBookInfo(BOOK_INFO_NOT_A_KEY);
 		} catch (IllegalArgumentException e) {
 			error += e.getMessage();
 		}
@@ -394,7 +340,7 @@ public class TestOnlineLibraryService {
 		String genre = "Genre";
 		AlbumInfo albumInfo = null;
 		try {
-			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+			albumInfo = libraryItemInfoService.createAlbumInfo(title, composerPerformer, genre);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
@@ -412,7 +358,7 @@ public class TestOnlineLibraryService {
 		String genre = "Genre";
 		AlbumInfo albumInfo = null;
 		try {
-			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+			albumInfo = libraryItemInfoService.createAlbumInfo(title, composerPerformer, genre);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -428,7 +374,7 @@ public class TestOnlineLibraryService {
 		String genre = "Genre";
 		AlbumInfo albumInfo = null;
 		try {
-			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+			albumInfo = libraryItemInfoService.createAlbumInfo(title, composerPerformer, genre);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -444,7 +390,7 @@ public class TestOnlineLibraryService {
 		String genre = "Genre";
 		AlbumInfo albumInfo = null;
 		try {
-			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+			albumInfo = libraryItemInfoService.createAlbumInfo(title, composerPerformer, genre);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -460,7 +406,7 @@ public class TestOnlineLibraryService {
 		String genre = "Genre";
 		AlbumInfo albumInfo = null;
 		try {
-			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+			albumInfo = libraryItemInfoService.createAlbumInfo(title, composerPerformer, genre);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -476,7 +422,7 @@ public class TestOnlineLibraryService {
 		String genre = null;
 		AlbumInfo albumInfo = null;
 		try {
-			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+			albumInfo = libraryItemInfoService.createAlbumInfo(title, composerPerformer, genre);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -492,7 +438,7 @@ public class TestOnlineLibraryService {
 		String genre = " ";
 		AlbumInfo albumInfo = null;
 		try {
-			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+			albumInfo = libraryItemInfoService.createAlbumInfo(title, composerPerformer, genre);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -508,7 +454,7 @@ public class TestOnlineLibraryService {
 		String genre = " ";
 		AlbumInfo albumInfo = null;
 		try {
-			albumInfo = service.createAlbumInfo(title, composerPerformer, genre);
+			albumInfo = libraryItemInfoService.createAlbumInfo(title, composerPerformer, genre);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -525,7 +471,7 @@ public class TestOnlineLibraryService {
 		int number = 123;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
@@ -543,7 +489,7 @@ public class TestOnlineLibraryService {
 		int number = 5;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -559,7 +505,7 @@ public class TestOnlineLibraryService {
 		int number = 5;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -575,7 +521,7 @@ public class TestOnlineLibraryService {
 		int number = 5;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -591,7 +537,7 @@ public class TestOnlineLibraryService {
 		int number = -1;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -607,7 +553,7 @@ public class TestOnlineLibraryService {
 		int number = -1;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = service.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -624,7 +570,7 @@ public class TestOnlineLibraryService {
 		Date publicationDate = Date.valueOf("2021-10-31");
 		ArchiveInfo archiveInfo = null;
 		try {
-			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+			archiveInfo = libraryItemInfoService.createArchiveInfo(title, description, publicationDate);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
@@ -642,7 +588,7 @@ public class TestOnlineLibraryService {
 		Date publicationDate = Date.valueOf("2021-10-31");
 		ArchiveInfo archiveInfo = null;
 		try {
-			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+			archiveInfo = libraryItemInfoService.createArchiveInfo(title, description, publicationDate);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -658,7 +604,7 @@ public class TestOnlineLibraryService {
 		Date publicationDate = Date.valueOf("2021-10-31");
 		ArchiveInfo archiveInfo = null;
 		try {
-			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+			archiveInfo = libraryItemInfoService.createArchiveInfo(title, description, publicationDate);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -674,7 +620,7 @@ public class TestOnlineLibraryService {
 		Date publicationDate = Date.valueOf("2021-10-31");
 		ArchiveInfo archiveInfo = null;
 		try {
-			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+			archiveInfo = libraryItemInfoService.createArchiveInfo(title, description, publicationDate);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -690,7 +636,7 @@ public class TestOnlineLibraryService {
 		Date publicationDate = null;
 		ArchiveInfo archiveInfo = null;
 		try {
-			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+			archiveInfo = libraryItemInfoService.createArchiveInfo(title, description, publicationDate);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -706,7 +652,7 @@ public class TestOnlineLibraryService {
 		Date publicationDate = null;
 		ArchiveInfo archiveInfo = null;
 		try {
-			archiveInfo = service.createArchiveInfo(title, description, publicationDate);
+			archiveInfo = libraryItemInfoService.createArchiveInfo(title, description, publicationDate);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -714,26 +660,5 @@ public class TestOnlineLibraryService {
 		assertTrue(error.contains("Title can't be empty."));
 		assertTrue(error.contains("Description can't be empty."));
 		assertTrue(error.contains("Publication date can't be empty."));
-	}
-
-	@Test
-	public void testGetMemberByIdSuccessful() {
-		Member member = service.getMemberById(MEMBER_ID);
-		assertNotNull(member);
-	}
-
-	@Test
-	public void testGetMemberByIdInexistent() {
-		Member member = service.getMemberById(INVALID_MEMBER_ID);
-		assertNull(member);
-	}
-
-	@Test
-	public void testActivateMemberAccount() {
-		Member member = service.getMemberById(MEMBER_ID);
-		assert(member.getStatus() == Member.MemberStatus.INACTIVE);
-		member = service.activateAccount(member);
-		assertNotNull(member);
-		assert(member.getStatus() == Member.MemberStatus.GREEN);
 	}
 }

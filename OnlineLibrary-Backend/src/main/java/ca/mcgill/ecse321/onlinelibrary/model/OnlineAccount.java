@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,6 +18,7 @@ public class OnlineAccount {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	private String passwordHash;
+	@Column(unique = true)
 	private String username;
 	private String emailAddress;
 
