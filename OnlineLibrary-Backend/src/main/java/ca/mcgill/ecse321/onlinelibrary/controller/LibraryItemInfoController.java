@@ -42,7 +42,7 @@ public class LibraryItemInfoController {
 	@PostMapping (value = { "/newsPaperInfo", "/newsPaperInfo/"})
 	public NewsPaperInfoDto createNewsPaperInfo(@RequestParam Date publication, @RequestParam String frequency, @RequestParam int number)
 			throws IllegalArgumentException {
-		NewsPaperInfo newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
+		NewsPaperInfo newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		return NewsPaperInfoDto.fromNewsPaperInfo(newsPaperInfo);
 	}
 

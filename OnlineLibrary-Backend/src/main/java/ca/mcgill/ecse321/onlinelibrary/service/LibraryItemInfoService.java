@@ -2,11 +2,21 @@ package ca.mcgill.ecse321.onlinelibrary.service;
 
 import java.sql.Date;
 import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ca.mcgill.ecse321.onlinelibrary.dao.*;
-import ca.mcgill.ecse321.onlinelibrary.model.*;
+
+import ca.mcgill.ecse321.onlinelibrary.dao.AlbumInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.ArchiveInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.NewsPaperInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
 
 @Service
 public class LibraryItemInfoService {
@@ -57,6 +67,18 @@ public class LibraryItemInfoService {
 		bookInfoRepository.save(bookInfo);
 		return bookInfo;
 	}
+	
+	@Transactional
+	public BookInfo getBookInfo(int id) {
+		if (id == 0) {
+			throw new IllegalArgumentException("BookInfo id can't be 0.");
+		}
+		BookInfo bookInfo = bookInfoRepository.findBookInfoById(id);
+		if (bookInfo == null) {
+			throw new IllegalArgumentException("The bookInfo with id " + id + " was not found in the database.");
+		}
+		return bookInfo;
+	}
 
 	@Transactional
 	public MovieInfo createMovieInfo(String genre, String director, int length) {
@@ -87,21 +109,21 @@ public class LibraryItemInfoService {
 		movieInfoRepository.save(movieInfo);
 		return movieInfo;
 	}
-
+	
 	@Transactional
-	public BookInfo getBookInfo(int id) {
+	public MovieInfo getMovieInfo(int id) {
 		if (id == 0) {
-			throw new IllegalArgumentException("BookInfo id can't be 0.");
+			throw new IllegalArgumentException("MovieInfo id can't be 0.");
 		}
-		BookInfo bookInfo = bookInfoRepository.findBookInfoById(id);
-		if (bookInfo == null) {
-			throw new IllegalArgumentException("The bookInfo with id " + id + " was not found in the database.");
+		MovieInfo movieInfo = movieInfoRepository.findMovieInfoById(id);
+		if (movieInfo == null) {
+			throw new IllegalArgumentException("The movieInfo with id " + id + " was not found in the database.");
 		}
-		return bookInfo;
+		return movieInfo;
 	}
 
 	@Transactional
-	public NewsPaperInfo createNewsPaperInfo(Date publicationDate, String frequency, int number) {
+	public NewsPaperInfo createNewspaperInfo(Date publicationDate, String frequency, int number) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount=0;
 
@@ -129,6 +151,18 @@ public class LibraryItemInfoService {
 		newsPaperInfo.setFrequency(frequency);
 		newsPaperInfo.setNumber(number);
 		newsPaperInfoRepository.save(newsPaperInfo);
+		return newsPaperInfo;
+	}
+	
+	@Transactional
+	public NewsPaperInfo getNewsPaperInfo(int id) {
+		if (id == 0) {
+			throw new IllegalArgumentException("NewsPaperInfo id can't be 0.");
+		}
+		NewsPaperInfo newsPaperInfo = newsPaperInfoRepository.findNewsPaperInfoById(id);
+		if (newsPaperInfo == null) {
+			throw new IllegalArgumentException("The newsPaperInfo with id " + id + " was not found in the database.");
+		}
 		return newsPaperInfo;
 	}
 
@@ -163,6 +197,18 @@ public class LibraryItemInfoService {
 		albumInfoRepository.save(albumInfo);
 		return albumInfo;
 	}
+	
+	@Transactional
+	public AlbumInfo getAlbumInfo(int id) {
+		if (id == 0) {
+			throw new IllegalArgumentException("AlbumInfo id can't be 0.");
+		}
+		AlbumInfo albumInfo = albumInfoRepository.findAlbumInfoById(id);
+		if (albumInfo == null) {
+			throw new IllegalArgumentException("The albumInfo with id " + id + " was not found in the database.");
+		}
+		return albumInfo;
+	}
 
 	@Transactional
 	public ArchiveInfo createArchiveInfo(String title, String description, Date publicationDate) {
@@ -192,6 +238,18 @@ public class LibraryItemInfoService {
 		archiveInfo.setDescription(description);
 		archiveInfo.setPublicationDate(publicationDate);
 		archiveInfoRepository.save(archiveInfo);
+		return archiveInfo;
+	}
+	
+	@Transactional
+	public ArchiveInfo getArchiveInfo(int id) {
+		if (id == 0) {
+			throw new IllegalArgumentException("ArchiveInfo id can't be 0.");
+		}
+		ArchiveInfo archiveInfo = archiveInfoRepository.findArchiveInfoById(id);
+		if (archiveInfo == null) {
+			throw new IllegalArgumentException("The archiveInfo with id " + id + " was not found in the database.");
+		}
 		return archiveInfo;
 	}
 }

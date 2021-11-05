@@ -24,7 +24,7 @@ public class TestLibraryItemInfoService {
 	@Mock
 	private AlbumInfoRepository albumInfoDao;
 	@Mock
-	private NewsPaperInfoRepository newsPaperInfoDao;
+	private NewsPaperInfoRepository newspaperInfoDao;
 	@Mock
 	private ArchiveInfoRepository archiveInfoDao;
 
@@ -34,7 +34,16 @@ public class TestLibraryItemInfoService {
 	private LibraryItemService libraryItemService;
 
 	private static final int BOOK_INFO_KEY = 1;
-	private static final int BOOK_INFO_NOT_A_KEY = 2;
+	private static final int BOOK_INFO_BAD_A_KEY = 2;
+	private static final int MOVIE_INFO_KEY = 3;
+	private static final int MOVIE_INFO_BAD_A_KEY = 4;
+	private static final int ALBUM_INFO_KEY = 5;
+	private static final int ALBUM_INFO_BAD_A_KEY = 6;
+	private static final int NEWSPAPER_INFO_KEY = 7;
+	private static final int NEWSPAPER_INFO_BAD_A_KEY = 8;
+	private static final int ARCHIVE_INFO_KEY = 9;
+	private static final int ARCHIVE_INFO_BAD_A_KEY = 10;
+	
 
 	@BeforeEach
 	public void setMockOuput() {
@@ -47,13 +56,50 @@ public class TestLibraryItemInfoService {
 				return null;
 			}
 		});
+		lenient().when(movieInfoDao.findMovieInfoById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(MOVIE_INFO_KEY)) {
+				MovieInfo movieInfo = new MovieInfo();
+				movieInfo.setId(MOVIE_INFO_KEY);
+				return movieInfo;
+			} else {
+				return null;
+			}
+		});
+		lenient().when(albumInfoDao.findAlbumInfoById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(ALBUM_INFO_KEY)) {
+				AlbumInfo albumInfo = new AlbumInfo();
+				albumInfo.setId(ALBUM_INFO_KEY);
+				return albumInfo;
+			} else {
+				return null;
+			}
+		});
+		lenient().when(newspaperInfoDao.findNewsPaperInfoById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(NEWSPAPER_INFO_KEY)) {
+				NewsPaperInfo newspaperInfo = new NewsPaperInfo();
+				newspaperInfo.setId(NEWSPAPER_INFO_KEY);
+				return newspaperInfo;
+			} else {
+				return null;
+			}
+		});
+		lenient().when(archiveInfoDao.findArchiveInfoById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(ARCHIVE_INFO_KEY)) {
+				ArchiveInfo archiveInfo = new ArchiveInfo();
+				archiveInfo.setId(ARCHIVE_INFO_KEY);
+				return archiveInfo;
+			} else {
+				return null;
+			}
+		});
+		
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
 		};
 		lenient().when(bookInfoDao.save(any(BookInfo.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(movieInfoDao.save(any(MovieInfo.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(albumInfoDao.save(any(AlbumInfo.class))).then(returnParameterAsAnswer);
-		lenient().when(newsPaperInfoDao.save(any(NewsPaperInfo.class))).then(returnParameterAsAnswer);
+		lenient().when(newspaperInfoDao.save(any(NewsPaperInfo.class))).then(returnParameterAsAnswer);
 		lenient().when(archiveInfoDao.save(any(ArchiveInfo.class))).thenAnswer(returnParameterAsAnswer);
 	}
 
@@ -325,12 +371,12 @@ public class TestLibraryItemInfoService {
 		String error = "";
 		BookInfo bookInfo = null;
 		try {
-			bookInfo = libraryItemInfoService.getBookInfo(BOOK_INFO_NOT_A_KEY);
+			bookInfo = libraryItemInfoService.getBookInfo(BOOK_INFO_BAD_A_KEY);
 		} catch (IllegalArgumentException e) {
 			error += e.getMessage();
 		}
 		assertNull(bookInfo);
-		assertTrue(error.contains("The bookInfo with id " + BOOK_INFO_NOT_A_KEY + " was not found in the database."));
+		assertTrue(error.contains("The bookInfo with id " + BOOK_INFO_BAD_A_KEY + " was not found in the database."));
 	}
 
 	@Test
@@ -471,7 +517,7 @@ public class TestLibraryItemInfoService {
 		int number = 123;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
@@ -489,7 +535,7 @@ public class TestLibraryItemInfoService {
 		int number = 5;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -505,7 +551,7 @@ public class TestLibraryItemInfoService {
 		int number = 5;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -521,7 +567,7 @@ public class TestLibraryItemInfoService {
 		int number = 5;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -537,7 +583,7 @@ public class TestLibraryItemInfoService {
 		int number = -1;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -553,7 +599,7 @@ public class TestLibraryItemInfoService {
 		int number = -1;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
