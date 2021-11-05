@@ -29,17 +29,25 @@ public class TestLibrarianService {
 	// TODO Get this from application.properties
 	private int MIN_PASSWD_LENGTH = 8;
 
-	private final String VALID_FULL_NAME = "Jocasta Nu";
-	private final String VALID_USERNAME = "jocasta.nu";
-	private final String TAKEN_USERNAME = "head.librarian";
-	private final String VALID_PASSWORD = "p".repeat(MIN_PASSWD_LENGTH);
-	private final String SHORT_PASSWORD = "p".repeat(MIN_PASSWD_LENGTH - 1);
+	private final String NEW_REG_FULL_NAME = "Alfred Pennyworth";
+	private final String HEAD_USERNAME = "jocasta.nu";
+	private final String NEW_REG_USERNAME = "alfred.pennyworth";
+	private final String NEW_REG_PASSWD = "a".repeat(MIN_PASSWD_LENGTH);
+	private final String SHORT_PASSWD = "b".repeat(MIN_PASSWD_LENGTH - 1);
 
+	/**
+	 * Assume the database already contains
+	 *
+	 * <ul>
+	 * <li>one head librarian with ID HEAD_ID, full name HEAD_FULL_NAME,
+	 * username HEAD_USERNAME, and password HEAD_PASSWD
+	 * </ul>
+	 */
 	@BeforeEach
 	public void setMockOuput() {
 		lenient().when(librarianRepository.existsLibrarianByUsername(any(String.class)))
 		.thenAnswer((InvocationOnMock invocation) -> {
-			if (TAKEN_USERNAME.equals(invocation.getArgument(0))) {
+			if (HEAD_USERNAME.equals(invocation.getArgument(0))) {
 				return true;
 			} else {
 				return false;
@@ -56,13 +64,13 @@ public class TestLibrarianService {
 	 */
 	@Test
 	public void testCreateLibrarian() {
-		Librarian librarian = librarianService.createLibrarian(VALID_FULL_NAME, VALID_USERNAME, VALID_PASSWORD);
+		Librarian librarian = librarianService.createLibrarian(NEW_REG_FULL_NAME, NEW_REG_USERNAME, NEW_REG_PASSWD);
 
 		assertNotNull(librarian);
-		assertEquals(VALID_FULL_NAME, librarian.getFullName());
-		assertEquals(VALID_USERNAME, librarian.getUsername());
+		assertEquals(NEW_REG_FULL_NAME, librarian.getFullName());
+		assertEquals(NEW_REG_USERNAME, librarian.getUsername());
 		// TODO Update this check if/when password hashing is implemented
-		assertEquals(VALID_PASSWORD, librarian.getPasswordHash());
+		assertEquals(NEW_REG_PASSWD, librarian.getPasswordHash());
 		assertEquals(false, librarian.isHead());
 	}
 
@@ -73,7 +81,7 @@ public class TestLibrarianService {
 	@Test
 	public void testCreateLibrarianNullFullName() {
 		Exception error = assertThrows(IllegalArgumentException.class,
-				() -> librarianService.createLibrarian(null, VALID_USERNAME, VALID_PASSWORD));
+				() -> librarianService.createLibrarian(null, NEW_REG_USERNAME, NEW_REG_PASSWD));
 		assertContains("Full name cannot be empty.", error.getMessage());
 	}
 
@@ -84,7 +92,7 @@ public class TestLibrarianService {
 	@Test
 	public void testCreateLibrarianEmptyFullName() {
 		Exception error = assertThrows(IllegalArgumentException.class,
-				() -> librarianService.createLibrarian("", VALID_USERNAME, VALID_PASSWORD));
+				() -> librarianService.createLibrarian("", NEW_REG_USERNAME, NEW_REG_PASSWD));
 		assertContains("Full name cannot be empty.", error.getMessage());
 	}
 
@@ -95,7 +103,7 @@ public class TestLibrarianService {
 	@Test
 	public void testCreateLibrarianNullUsername() {
 		Exception error = assertThrows(IllegalArgumentException.class,
-				() -> librarianService.createLibrarian(VALID_FULL_NAME, null, VALID_PASSWORD));
+				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, null, NEW_REG_PASSWD));
 		assertContains("Username cannot be empty.", error.getMessage());
 	}
 
@@ -106,7 +114,7 @@ public class TestLibrarianService {
 	@Test
 	public void testCreateLibrarianEmptyUsername() {
 		Exception error = assertThrows(IllegalArgumentException.class,
-				() -> librarianService.createLibrarian(VALID_FULL_NAME, "", VALID_PASSWORD));
+				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, "", NEW_REG_PASSWD));
 		assertContains("Username cannot be empty.", error.getMessage());
 	}
 
@@ -117,7 +125,7 @@ public class TestLibrarianService {
 	@Test
 	public void testCreateLibrarianDuplicateUsername() {
 		Exception error = assertThrows(IllegalArgumentException.class,
-				() -> librarianService.createLibrarian(VALID_FULL_NAME, TAKEN_USERNAME, VALID_PASSWORD));
+				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, HEAD_USERNAME, NEW_REG_PASSWD));
 		assertContains("Username already taken.", error.getMessage());
 	}
 
@@ -128,7 +136,7 @@ public class TestLibrarianService {
 	@Test
 	public void testCreateLibrarianNullPassword() {
 		Exception error = assertThrows(IllegalArgumentException.class,
-				() -> librarianService.createLibrarian(VALID_FULL_NAME, VALID_USERNAME, null));
+				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, NEW_REG_USERNAME, null));
 		assertContains("Password must be at least 8 characters in length.", error.getMessage());
 	}
 
@@ -139,7 +147,7 @@ public class TestLibrarianService {
 	@Test
 	public void testCreateLibrarianEmptyPassword() {
 		Exception error = assertThrows(IllegalArgumentException.class,
-				() -> librarianService.createLibrarian(VALID_FULL_NAME, VALID_USERNAME, ""));
+				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, NEW_REG_USERNAME, ""));
 		assertContains("Password must be at least 8 characters in length.", error.getMessage());
 	}
 
@@ -151,7 +159,7 @@ public class TestLibrarianService {
 	@Test
 	public void testCreateLibrarianShortPassword() {
 		Exception error = assertThrows(IllegalArgumentException.class,
-				() -> librarianService.createLibrarian(VALID_FULL_NAME, VALID_USERNAME, SHORT_PASSWORD));
+				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, NEW_REG_USERNAME, SHORT_PASSWD));
 		assertContains("Password must be at least 8 characters in length.", error.getMessage());
 	}
 
