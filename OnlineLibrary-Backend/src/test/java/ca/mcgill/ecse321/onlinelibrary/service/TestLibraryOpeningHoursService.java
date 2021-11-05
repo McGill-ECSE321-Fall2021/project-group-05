@@ -81,7 +81,7 @@ public class TestLibraryOpeningHoursService {
 		.thenAnswer((InvocationOnMock invocation) -> {
 			if (invocation.getArgument(0).equals(HOLIDAY_DATE) && invocation.getArgument(1).equals(HOLIDAY_DATE)) {
 				ArrayList<Holiday> openingHours = new ArrayList<Holiday>();
-				openingHours.add(new Holiday(HOLIDAY_DATE, HOLIDAY_DATE));
+				openingHours.add(new Holiday("Easter", HOLIDAY_DATE, HOLIDAY_DATE));
 				return openingHours;
 			} else {
 				return new ArrayList<Holiday>();
