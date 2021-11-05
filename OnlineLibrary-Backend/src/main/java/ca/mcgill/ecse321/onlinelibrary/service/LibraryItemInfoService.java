@@ -70,9 +70,6 @@ public class LibraryItemInfoService {
 	
 	@Transactional
 	public BookInfo getBookInfo(int id) {
-		if (id == 0) {
-			throw new IllegalArgumentException("BookInfo id can't be 0.");
-		}
 		BookInfo bookInfo = bookInfoRepository.findBookInfoById(id);
 		if (bookInfo == null) {
 			throw new IllegalArgumentException("The bookInfo with id " + id + " was not found in the database.");
@@ -112,9 +109,6 @@ public class LibraryItemInfoService {
 	
 	@Transactional
 	public MovieInfo getMovieInfo(int id) {
-		if (id == 0) {
-			throw new IllegalArgumentException("MovieInfo id can't be 0.");
-		}
 		MovieInfo movieInfo = movieInfoRepository.findMovieInfoById(id);
 		if (movieInfo == null) {
 			throw new IllegalArgumentException("The movieInfo with id " + id + " was not found in the database.");
@@ -156,9 +150,6 @@ public class LibraryItemInfoService {
 	
 	@Transactional
 	public NewsPaperInfo getNewsPaperInfo(int id) {
-		if (id == 0) {
-			throw new IllegalArgumentException("NewsPaperInfo id can't be 0.");
-		}
 		NewsPaperInfo newsPaperInfo = newsPaperInfoRepository.findNewsPaperInfoById(id);
 		if (newsPaperInfo == null) {
 			throw new IllegalArgumentException("The newsPaperInfo with id " + id + " was not found in the database.");
@@ -200,9 +191,6 @@ public class LibraryItemInfoService {
 	
 	@Transactional
 	public AlbumInfo getAlbumInfo(int id) {
-		if (id == 0) {
-			throw new IllegalArgumentException("AlbumInfo id can't be 0.");
-		}
 		AlbumInfo albumInfo = albumInfoRepository.findAlbumInfoById(id);
 		if (albumInfo == null) {
 			throw new IllegalArgumentException("The albumInfo with id " + id + " was not found in the database.");
@@ -243,9 +231,6 @@ public class LibraryItemInfoService {
 	
 	@Transactional
 	public ArchiveInfo getArchiveInfo(int id) {
-		if (id == 0) {
-			throw new IllegalArgumentException("ArchiveInfo id can't be 0.");
-		}
 		ArchiveInfo archiveInfo = archiveInfoRepository.findArchiveInfoById(id);
 		if (archiveInfo == null) {
 			throw new IllegalArgumentException("The archiveInfo with id " + id + " was not found in the database.");

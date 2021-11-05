@@ -121,7 +121,7 @@ public class TestLibraryItemService {
 			error = e.getMessage();
 		}
 		assertNull(book);
-		assertTrue(error.contains("BookInfo can't be empty"));
+		assertTrue(error.contains("BookInfo can't be empty."));
 	}
 	
 	@Test
@@ -155,7 +155,7 @@ public class TestLibraryItemService {
 			error = e.getMessage();
 		}
 		assertNull(movie);
-		assertTrue(error.contains("MovieInfo can't be empty"));
+		assertTrue(error.contains("MovieInfo can't be empty."));
 	}
 	
 	@Test
@@ -189,7 +189,7 @@ public class TestLibraryItemService {
 			error = e.getMessage();
 		}
 		assertNull(album);
-		assertTrue(error.contains("AlbumInfo can't be empty"));
+		assertTrue(error.contains("AlbumInfo can't be empty."));
 	}
 	
 	@Test
@@ -222,7 +222,7 @@ public class TestLibraryItemService {
 			error = e.getMessage();
 		}
 		assertNull(newspaper);
-		assertTrue(error.contains("NewspaperInfo can't be empty"));
+		assertTrue(error.contains("NewspaperInfo can't be empty."));
 	}
 	
 	@Test
@@ -239,7 +239,7 @@ public class TestLibraryItemService {
 			fail();
 		}
 		assertNotNull(archive);
-		assertEquals(archive.getArchiveInfo().getTitle(),title);
+		assertEquals(archive.getArchiveInfo().getTitle(), title);
 		assertEquals(archive.getArchiveInfo().getDescription(), description);
 		assertEquals(archive.getArchiveInfo().getPublicationDate(), publicationDate);
 	}
@@ -255,6 +255,6 @@ public class TestLibraryItemService {
 			error = e.getMessage();
 		}
 		assertNull(archive);
-		assertTrue(error.contains("archiveInfo can't be empty"));
+		assertTrue(error.contains("archiveInfo can't be empty."));
 	}
 }

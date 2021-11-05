@@ -47,7 +47,7 @@ public class LibraryItemService {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount = 0;
 		if (bookInfo == null) {
-			errorMessage.add("BookInfo can't be empty");
+			errorMessage.add("BookInfo can't be empty.");
 			errorCount++;
 		}
 		if (errorCount > 0) {
@@ -65,7 +65,7 @@ public class LibraryItemService {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount = 0;
 		if (movieInfo == null) {
-			errorMessage.add("MovieInfo can't be empty");
+			errorMessage.add("MovieInfo can't be empty.");
 			errorCount++;
 		}
 		
@@ -83,7 +83,7 @@ public class LibraryItemService {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount = 0;
 		if (albumInfo == null) {
-			errorMessage.add("AlbumInfo can't be empty");
+			errorMessage.add("AlbumInfo can't be empty.");
 			errorCount++;
 		}
 		
@@ -101,7 +101,7 @@ public class LibraryItemService {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount = 0;
 		if (newspaperInfo == null) {
-			errorMessage.add("NewspaperInfo can't be empty");
+			errorMessage.add("NewspaperInfo can't be empty.");
 			errorCount++;
 		}
 		
@@ -118,7 +118,7 @@ public class LibraryItemService {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount = 0;
 		if (archiveInfo == null) {
-			errorMessage.add("archiveInfo can't be empty");
+			errorMessage.add("archiveInfo can't be empty.");
 			errorCount++;
 		}
 		

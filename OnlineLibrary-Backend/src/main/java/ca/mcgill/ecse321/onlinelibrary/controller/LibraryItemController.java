@@ -62,8 +62,8 @@ public class LibraryItemController {
 	}
 	
 	@PostMapping(value = {"/archive/{archiveInfoId}", "archive/{archiveInfoId}/"})
-	public ArchiveDto createArchiveDto(@PathVariable("archiveInfoId") int archiveInfoid) throws IllegalArgumentException {
-		ArchiveInfo archiveInfo = libraryItemInfoService.getArchiveInfo(archiveInfoid);
+	public ArchiveDto createArchiveDto(@PathVariable("archiveInfoId") int archiveInfoId) throws IllegalArgumentException {
+		ArchiveInfo archiveInfo = libraryItemInfoService.getArchiveInfo(archiveInfoId);
 		Archive archive = libraryItemService.createArchive(archiveInfo);
 		return ArchiveDto.fromArchive(archive);
 	}
