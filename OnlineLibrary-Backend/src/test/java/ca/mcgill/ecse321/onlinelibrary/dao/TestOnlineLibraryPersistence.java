@@ -510,7 +510,7 @@ public class TestOnlineLibraryPersistence {
 
 	@Test
 	@Transactional
-	public void testPersistAndLoadLibrarian() {
+	public void testPersistAndLoadLibrarianById() {
 		// Create and persist librarian with shift
 		Librarian originalLibrarian = new Librarian("Jocasta Nu", "jocasta-nu", "12345", true);
 		LibrarianShift originalShift = new LibrarianShift(Date.valueOf("2022-10-16"), Time.valueOf("9:00:00"),
@@ -523,6 +523,36 @@ public class TestOnlineLibraryPersistence {
 		originalShift = null;
 
 		Librarian newLibrarian = librarianRepository.findLibrarianById(librarianId);
+
+		// Check attributes
+		assertNotNull(newLibrarian);
+		assertEquals("Jocasta Nu", newLibrarian.getFullName());
+		assertEquals("jocasta-nu", newLibrarian.getUsername());
+		assertEquals("12345", newLibrarian.getPasswordHash());
+		assertTrue(newLibrarian.isHead());
+
+		// Check association
+		assertEquals(1, newLibrarian.getShifts().size());
+		LibrarianShift newShift = newLibrarian.getShifts().get(0);
+		assertNotNull(newShift);
+		assertEquals(shiftId, newShift.getId());
+	}
+
+	@Test
+	@Transactional
+	public void testPersistAndLoadLibrarianByUsername() {
+		// Create and persist librarian with shift
+		Librarian originalLibrarian = new Librarian("Jocasta Nu", "jocasta-nu", "12345", true);
+		LibrarianShift originalShift = new LibrarianShift(Date.valueOf("2022-10-16"), Time.valueOf("9:00:00"),
+				Time.valueOf("17:00:00"), originalLibrarian);
+		originalLibrarian = librarianRepository.save(originalLibrarian);
+
+		// Get username and drop reference
+		String librarianUsername = originalLibrarian.getUsername();
+		int shiftId = originalShift.getId();
+		originalShift = null;
+
+		Librarian newLibrarian = librarianRepository.findLibrarianByUsername(librarianUsername);
 
 		// Check attributes
 		assertNotNull(newLibrarian);
