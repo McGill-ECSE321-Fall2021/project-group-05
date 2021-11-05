@@ -8,7 +8,7 @@ import java.util.*;
 @Entity
 public class Reservation {
     @Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
     private Integer reservationId;
 
     private Date reservationDate;
