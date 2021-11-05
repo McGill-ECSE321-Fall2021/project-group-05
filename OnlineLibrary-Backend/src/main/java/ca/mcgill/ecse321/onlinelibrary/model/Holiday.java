@@ -10,19 +10,28 @@ public class Holiday {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+	private String name;
 	private Date startDate;
 	private Date endDate;
 	
 	// Constructors
 	public Holiday() {}
 	
-	public Holiday(Date startDate, Date endDate) {
+	public Holiday(String name, Date startDate, Date endDate) {
+		this.name = name;
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
 
 
 	// Getters
+	/**
+	 * Returns name of the holiday
+	 * @return the name of the holiday
+	 */
+	public String getName() {
+        return this.name;
+    }
 	/**
 	 * Returns the unique ID of the holiday
 	 * @return the id of the holiday
@@ -47,6 +56,13 @@ public class Holiday {
     }
 	
 	// Setters
+	/**
+    * Sets the name of the holiday
+    * @param status the name of the holiday
+    */
+	public void setName(String name) {
+		this.name = name;
+	}
 	/**
     * Sets the start date of the holiday
     * @param status the start date of the holiday
