@@ -10,6 +10,8 @@ public class Reservation {
     @Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer reservationId;
+
+    private Date reservationDate;
     
     @OnDelete (action = OnDeleteAction.CASCADE)
     @ManyToOne (optional = false)
@@ -19,9 +21,10 @@ public class Reservation {
     @ManyToOne (optional = false)
     private ReservableItemInfo reservedItem;
 
-    public Reservation(Member member, ReservableItemInfo reservableItem){
+    public Reservation(Member member, ReservableItemInfo reservableItem, Date date){
         this.member = member;
         this.reservedItem = reservableItem;
+        this.reservationDate = date;
     }
 
     public Integer getId(){

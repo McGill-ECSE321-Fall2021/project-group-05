@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -284,8 +285,8 @@ public class TestOnlineLibraryPersistence {
 		movieInfo.setDirector(director);
 		movieInfoRepository.save(movieInfo);
 		
-		Reservation reserve = new Reservation(member, movieInfo);
-		Reservation reserve2 = new Reservation(member2, movieInfo);
+		Reservation reserve = new Reservation(member, movieInfo, Calendar.getInstance().getTime());
+		Reservation reserve2 = new Reservation(member2, movieInfo, Calendar.getInstance().getTime());
 		reservationRepository.save(reserve);
 		reservationRepository.save(reserve2);
 
@@ -324,8 +325,8 @@ public class TestOnlineLibraryPersistence {
 		movieInfo.setDirector(director);
 		movieInfoRepository.save(movieInfo);
 		
-		Reservation reserve = new Reservation(member, movieInfo);
-		Reservation reserve2 = new Reservation(member2, movieInfo);
+		Reservation reserve = new Reservation(member, movieInfo, Calendar.getInstance().getTime());
+		Reservation reserve2 = new Reservation(member2, movieInfo, Calendar.getInstance().getTime());
 		reservationRepository.save(reserve);
 		reservationRepository.save(reserve2);
 
@@ -358,8 +359,8 @@ public class TestOnlineLibraryPersistence {
 		bookInfo.setIsbn(1234);
 		bookinfoRepository.save(bookInfo);
 		
-		Reservation reserve = new Reservation(member, movieInfo);
-		Reservation reserve2 = new Reservation(member, bookInfo);
+		Reservation reserve = new Reservation(member, movieInfo, Calendar.getInstance().getTime());
+		Reservation reserve2 = new Reservation(member, bookInfo, Calendar.getInstance().getTime());
 		reservationRepository.save(reserve);
 		reservationRepository.save(reserve2);
 
