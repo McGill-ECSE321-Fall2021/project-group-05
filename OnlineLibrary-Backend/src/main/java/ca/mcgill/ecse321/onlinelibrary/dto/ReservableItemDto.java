@@ -16,7 +16,7 @@ public abstract class ReservableItemDto extends LibraryItemDto{
 
 	public enum ItemStatusDto {Available, CheckedOut, Reserved}
 
-	static ItemStatusDto convertToDto(ItemStatus itemStatus) {
+	static ItemStatusDto fromItemStatus(ItemStatus itemStatus) {
 		return switch (itemStatus) {
 			case Available -> ItemStatusDto.Available;
 			case CheckedOut -> ItemStatusDto.CheckedOut;

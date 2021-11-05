@@ -26,10 +26,10 @@ public class MemberDto {
 			throw new IllegalArgumentException("There is no such Member");
 		}
 		return new MemberDto(member.getId(), member.getAddress(), member.getFullName(),
-				convertToDto(member.getStatus()), member.getTotalFee());
+				fromMemberStatus(member.getStatus()), member.getTotalFee());
 	}
 
-	private static MemberDto.MemberDtoStatus convertToDto(Member.MemberStatus memberStatus) {
+	private static MemberDto.MemberDtoStatus fromMemberStatus(Member.MemberStatus memberStatus) {
 		return switch (memberStatus) {
 			case BLACKLISTED -> MemberDto.MemberDtoStatus.BLACKLISTED;
 			case RED -> MemberDto.MemberDtoStatus.RED;

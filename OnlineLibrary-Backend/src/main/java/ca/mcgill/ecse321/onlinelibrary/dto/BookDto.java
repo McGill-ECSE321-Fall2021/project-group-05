@@ -14,7 +14,7 @@ public class BookDto extends ReservableItemDto {
 		if (book == null) {
 			throw new IllegalArgumentException("There is no such book.");
 		}
-		return new BookDto(book.getId(), convertToDto(book.getStatus()), BookInfoDto.fromBookInfo(book.getBookInfo()));
+		return new BookDto(book.getId(), fromItemStatus(book.getStatus()), BookInfoDto.fromBookInfo(book.getBookInfo()));
 	}
 
 	public BookInfoDto getBookInfo() {
