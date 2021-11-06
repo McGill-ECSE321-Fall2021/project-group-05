@@ -65,6 +65,17 @@ public class TestLibraryItemService {
 	@Mock 
 	private ArchiveInfoRepository archiveInfoDao;
 
+	private static final int BOOK_KEY = 1;
+	private static final int BOOK_BAD_KEY = 2;
+	private static final int MOVIE_KEY = 3;
+	private static final int MOVIE_BAD_KEY = 4;
+	private static final int ALBUM_KEY = 5;
+	private static final int ALBUM_BAD_KEY = 6;
+	private static final int NEWSPAPER_KEY = 7;
+	private static final int NEWSPAPER_BAD_KEY = 8;
+	private static final int ARCHIVE_KEY = 9;
+	private static final int ARCHIVE_BAD_KEY = 10;
+	
 	@InjectMocks
 	private LibraryItemInfoService libraryItemInfoService;
 	@InjectMocks
@@ -75,15 +86,80 @@ public class TestLibraryItemService {
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
 		};
-		lenient().when(bookDao.save(any(Book.class))).then(returnParameterAsAnswer);
+		lenient().when(bookDao.save(any(Book.class))).thenAnswer((InvocationOnMock invocation) -> {
+			Book book = invocation.getArgument(0);
+			book.setId(BOOK_KEY);
+			return book;
+		});
+		lenient().when(bookDao.findBookById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(BOOK_KEY)) {
+				Book book = new Book(new BookInfo());
+				book.setId(BOOK_KEY);
+				return book;
+			} else {
+				return null;
+			}
+		});
 		lenient().when(bookInfoDao.save(any(BookInfo.class))).then(returnParameterAsAnswer);
-		lenient().when(movieDao.save(any(Movie.class))).then(returnParameterAsAnswer);
+		lenient().when(movieDao.save(any(Movie.class))).then((InvocationOnMock invocation) -> {
+			Movie movie = invocation.getArgument(0);
+			movie.setId(MOVIE_KEY);
+			return movie;
+		});
+		lenient().when(movieDao.findMovieById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(MOVIE_KEY)) {
+				Movie movie = new Movie(new MovieInfo());
+				movie.setId(MOVIE_KEY);
+				return movie;
+			} else {
+				return null;
+			}
+		});
 		lenient().when(movieInfoDao.save(any(MovieInfo.class))).then(returnParameterAsAnswer);
-		lenient().when(albumDao.save(any(Album.class))).then(returnParameterAsAnswer);
+		lenient().when(albumDao.save(any(Album.class))).then((InvocationOnMock invocation) -> {
+			Album album = invocation.getArgument(0);
+			album.setId(ALBUM_KEY);
+			return album;
+		});
+		lenient().when(albumDao.findAlbumById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(ALBUM_KEY)) {
+				Album album = new Album(new AlbumInfo());
+				album.setId(ALBUM_KEY);
+				return album;
+			} else {
+				return null;
+			}
+		});
 		lenient().when(albumInfoDao.save(any(AlbumInfo.class))).then(returnParameterAsAnswer);
-		lenient().when(newspaperDao.save(any(Newspaper.class))).then(returnParameterAsAnswer);
+		lenient().when(newspaperDao.save(any(Newspaper.class))).then((InvocationOnMock invocation) -> {
+			Newspaper newspaper = invocation.getArgument(0);
+			newspaper.setId(NEWSPAPER_KEY);
+			return newspaper;
+		});
+		lenient().when(newspaperDao.findNewspaperById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(NEWSPAPER_KEY)) {
+				Newspaper newspaper = new Newspaper(new NewsPaperInfo());
+				newspaper.setId(NEWSPAPER_KEY);
+				return newspaper;
+			} else {
+				return null;
+			}
+		});
 		lenient().when(newspaperInfoDao.save(any(NewsPaperInfo.class))).then(returnParameterAsAnswer);
-		lenient().when(archiveDao.save(any(Archive.class))).then(returnParameterAsAnswer);
+		lenient().when(archiveDao.save(any(Archive.class))).then((InvocationOnMock invocation) -> {
+			Archive archive = invocation.getArgument(0);
+			archive.setId(ARCHIVE_KEY);
+			return archive;
+		});
+		lenient().when(archiveDao.findArchiveById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(ARCHIVE_KEY)) {
+				Archive archive = new Archive(new ArchiveInfo());
+				archive.setId(ARCHIVE_KEY);
+				return archive;
+			} else {
+				return null;
+			}
+		});
 		lenient().when(archiveInfoDao.save(any(ArchiveInfo.class))).then(returnParameterAsAnswer);
 		
 	}
@@ -125,6 +201,28 @@ public class TestLibraryItemService {
 	}
 	
 	@Test
+	public void testDeleteBook() {
+		BookInfo bookInfo = libraryItemInfoService.createBookInfo("Title", 167, "Author", 123818);
+		Book book = libraryItemService.createBook(bookInfo);
+		try {
+			libraryItemService.deleteBook(BOOK_KEY);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+	}
+	
+	@Test 
+	public void testDeleteBookInexistant () {
+		String error="";
+		try {
+			libraryItemService.deleteBook(BOOK_BAD_KEY);
+		} catch (IllegalArgumentException e) {
+			error+=e.getMessage();
+		}
+		assertTrue(error.contains("The book with id " +  BOOK_BAD_KEY + " doesn't exist."));
+	}
+	
+	@Test
 	public void testCreateMovie() {
 		MovieInfo movieInfo = null;
 		String genre = "aGenre";
@@ -156,6 +254,28 @@ public class TestLibraryItemService {
 		}
 		assertNull(movie);
 		assertTrue(error.contains("MovieInfo can't be empty."));
+	}
+	
+	@Test
+	public void testDeleteMovie() {
+		MovieInfo movieInfo = libraryItemInfoService.createMovieInfo("Genre", "Director", 125);
+		Movie movie = libraryItemService.createMovie(movieInfo);
+		try {
+			libraryItemService.deleteMovie(MOVIE_KEY);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+	}
+	
+	@Test 
+	public void testDeleteMovieInexistant () {
+		String error="";
+		try {
+			libraryItemService.deleteMovie(MOVIE_BAD_KEY);
+		} catch (IllegalArgumentException e) {
+			error+=e.getMessage();
+		}
+		assertTrue(error.contains("The movie with id " +  MOVIE_BAD_KEY + " doesn't exist."));
 	}
 	
 	@Test
@@ -193,6 +313,28 @@ public class TestLibraryItemService {
 	}
 	
 	@Test
+	public void testDeleteAlbum() {
+		AlbumInfo albumInfo = libraryItemInfoService.createAlbumInfo("title", "composerPerformer", "genre");
+		Album album = libraryItemService.createAlbum(albumInfo);
+		try {
+			libraryItemService.deleteAlbum(ALBUM_KEY);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+	}
+	
+	@Test 
+	public void testDeleteAlbumInexistant () {
+		String error="";
+		try {
+			libraryItemService.deleteAlbum(ALBUM_BAD_KEY);
+		} catch (IllegalArgumentException e) {
+			error+=e.getMessage();
+		}
+		assertTrue(error.contains("The album with id " +  ALBUM_BAD_KEY + " doesn't exist."));
+	}
+	
+	@Test
 	public void testCreateNewspaper() {
 		NewsPaperInfo newspaperInfo = null;
 		Date publicationDate = Date.valueOf("2020-12-12");
@@ -226,6 +368,28 @@ public class TestLibraryItemService {
 	}
 	
 	@Test
+	public void testDeleteNewsPaper() {
+		NewsPaperInfo newspaperInfo = libraryItemInfoService.createNewspaperInfo(Date.valueOf("2021-12-12"), "aFrequency", 56);
+		Newspaper newspaper = libraryItemService.createNewspaper(newspaperInfo);
+		try {
+			libraryItemService.deleteNewspaper(NEWSPAPER_KEY);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+	}
+	
+	@Test 
+	public void testDeleteNewspaperInexistant () {
+		String error="";
+		try {
+			libraryItemService.deleteNewspaper(NEWSPAPER_BAD_KEY);
+		} catch (IllegalArgumentException e) {
+			error+=e.getMessage();
+		}
+		assertTrue(error.contains("The newspaper with id " +  NEWSPAPER_BAD_KEY + " doesn't exist."));
+	}
+	
+	@Test
 	public void testCreateArchive() {
 		ArchiveInfo archiveInfo = null;
 		String title = "aTitle";
@@ -256,5 +420,27 @@ public class TestLibraryItemService {
 		}
 		assertNull(archive);
 		assertTrue(error.contains("archiveInfo can't be empty."));
+	}
+	
+	@Test
+	public void testDeleteArchive() {
+		ArchiveInfo archiveInfo = libraryItemInfoService.createArchiveInfo("title", "description", Date.valueOf("2021-12-12"));
+		Archive archive = libraryItemService.createArchive(archiveInfo);
+		try {
+			libraryItemService.deleteArchive(ARCHIVE_KEY);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+	}
+	
+	@Test 
+	public void testDeleteArchiveInexistant () {
+		String error="";
+		try {
+			libraryItemService.deleteArchive(ARCHIVE_BAD_KEY);
+		} catch (IllegalArgumentException e) {
+			error+=e.getMessage();
+		}
+		assertTrue(error.contains("The archive with id " +  ARCHIVE_BAD_KEY + " doesn't exist."));
 	}
 }
