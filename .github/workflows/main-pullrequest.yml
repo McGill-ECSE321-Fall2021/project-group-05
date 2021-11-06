@@ -25,3 +25,6 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
       working-directory: OnlineLibrary-Backend
+    - name: Check test coverage ratio
+      run: ./gradlew jacocoTestCoverageVerification
+      working-directory: OnlineLibrary-Backend
