@@ -12,15 +12,31 @@ echo
 
 # Create librarian
 echo "Creates librarian successfully"
-curl --request POST "$base_url/librarian/create?fullName=Jocasta%20Nu,username=jocasta.nu,password=securepassword12345"
+curl --request POST "$base_url/librarian?fullName=Jocasta%20Nu,username=jocasta.nu,password=securepassword12345"
+# TODO: expect 200 response
 echo
-echo "Fails to create a librarian with empty full name, username, and password"
-curl --request POST "$base_url/librarian/create"
+echo "Fails to create a librarian with missing password"
+curl --request POST "$base_url/librarian?fullName=Bilbo%20Baggins,username=bilbo.baggins"
+# TODO: expect 400 response
+echo
+
+# Get librarian
+echo "Gets librarian successfully"
+curl --request GET "$base_url/librarian?username=jocasta.nu"
+# TODO: expect 200 response
+echo
+echo "Fails to get librarian that does not exist"
+curl --request GET "$base_url/librarian?username=nonexistent.librarian"
+# TODO: expect 404 response
+echo
+echo "Gets all librarians successfully"
+curl --request GET "$base_url/librarian/all"
+# TODO: expect 200 response
 echo
 
 # Delete librarian
 echo "Successfully deletes librarian by username"
-curl --request DELETE "$base_url/librarian/delete?username=jocasta.nu"
+curl --request DELETE "$base_url/librarian?username=jocasta.nu"
 echo
-echo "Fails to delete librarian with non-existent username"
-curl --request DELETE "$base_url/librarian/delete?username=invalid.username"
+echo "Fails to delete librarian that does not exist"
+curl --request DELETE "$base_url/librarian?username=invalid.username"
