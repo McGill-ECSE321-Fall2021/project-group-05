@@ -17,3 +17,10 @@ echo
 echo "Fails to create a librarian with empty full name, username, and password"
 curl --request POST "$base_url/librarian/create"
 echo
+
+# Delete librarian
+echo "Successfully deletes librarian by username"
+curl --request DELETE "$base_url/librarian/delete?username=jocasta.nu"
+echo
+echo "Fails to delete librarian with non-existent username"
+curl --request DELETE "$base_url/librarian/delete?username=invalid.username"
