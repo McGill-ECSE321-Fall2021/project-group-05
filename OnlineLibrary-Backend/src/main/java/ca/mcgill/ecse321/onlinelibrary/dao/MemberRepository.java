@@ -6,6 +6,4 @@ import ca.mcgill.ecse321.onlinelibrary.model.Member;
 public interface MemberRepository extends CrudRepository<Member, Integer> {
 
 	public Member findMemberById(int id);
-
-	public boolean existsMemberByUsername(String username);
 }

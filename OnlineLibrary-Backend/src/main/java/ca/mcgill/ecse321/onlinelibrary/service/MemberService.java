@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ca.mcgill.ecse321.onlinelibrary.dao.MemberRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.OnlineAccountRepository;
 import ca.mcgill.ecse321.onlinelibrary.dto.CreateMemberRequestDto;
 import ca.mcgill.ecse321.onlinelibrary.dto.CreateOnlineAccountRequestDto;
 import ca.mcgill.ecse321.onlinelibrary.model.Member;
@@ -22,6 +23,8 @@ public class MemberService {
 
 	@Autowired
 	private MemberRepository memberRepository;
+	@Autowired
+	private OnlineAccountRepository onlineAccountRepository;
 
 	@Transactional
 	public Member registerMember(CreateMemberRequestDto newMember) {
@@ -78,7 +81,7 @@ public class MemberService {
 			if (trimmedUsername.length() == 0) {
 				errors.add("Username cannot be empty.");
 			}
-			if (memberRepository.existsMemberByUsername(trimmedUsername)) {
+			if (onlineAccountRepository.existsOnlineAccountByUsername(trimmedUsername)) {
 				errors.add("Username already taken.");
 			}
 		}
