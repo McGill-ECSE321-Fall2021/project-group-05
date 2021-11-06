@@ -21,7 +21,7 @@ public class LibrarianController {
 	@Autowired
 	private LibrarianService librarianService;
 
-	@PostMapping(value = {"/librarian/create", "/librarian/create/"})
+	@PostMapping(value = {"/librarian", "/librarian/"})
 	public LibrarianDto createLibarian(@RequestParam String fullName, @RequestParam String username,
 			@RequestParam String password) throws IllegalArgumentException {
 		Librarian librarian = librarianService.createLibrarian(fullName, username, password);
