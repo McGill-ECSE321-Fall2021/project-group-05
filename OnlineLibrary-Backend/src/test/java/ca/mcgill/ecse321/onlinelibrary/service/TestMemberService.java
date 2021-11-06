@@ -141,8 +141,9 @@ public class TestMemberService {
 
 	@Test
 	public void testRegisterCitizenOnline() {
-		CreateOnlineAccountRequestDto onlineAccountDto = new CreateOnlineAccountRequestDto("  " + NEW_MEMBER_USERNAME + "  ",
-				"  " + NEW_MEMBER_EMAIL_ADDRESS + "  ", "  " + NEW_MEMBER_PASSWD + "  ");
+		CreateOnlineAccountRequestDto onlineAccountDto = new CreateOnlineAccountRequestDto(
+				"  " + NEW_MEMBER_USERNAME + "  ", "  " + NEW_MEMBER_EMAIL_ADDRESS + "  ",
+				"  " + NEW_MEMBER_PASSWD + "  ");
 		CreateMemberRequestDto memberDto = new CreateMemberRequestDto("  " + NEW_MEMBER_FULL_NAME + "  ",
 				"  " + NEW_MEMBER_ADDRESS + "  ", true, onlineAccountDto);
 		Member member = memberService.registerMember(memberDto);
@@ -177,8 +178,9 @@ public class TestMemberService {
 
 	@Test
 	public void testRegisterNonCitizenOnline() {
-		CreateOnlineAccountRequestDto onlineAccountDto = new CreateOnlineAccountRequestDto("  " + NEW_MEMBER_USERNAME + "  ",
-				"  " + NEW_MEMBER_EMAIL_ADDRESS + "  ", "  " + NEW_MEMBER_PASSWD + "  ");
+		CreateOnlineAccountRequestDto onlineAccountDto = new CreateOnlineAccountRequestDto(
+				"  " + NEW_MEMBER_USERNAME + "  ", "  " + NEW_MEMBER_EMAIL_ADDRESS + "  ",
+				"  " + NEW_MEMBER_PASSWD + "  ");
 		CreateMemberRequestDto memberDto = new CreateMemberRequestDto("  " + NEW_MEMBER_FULL_NAME + "  ",
 				"  " + NEW_MEMBER_ADDRESS + "  ", false, onlineAccountDto);
 		Member member = memberService.registerMember(memberDto);
@@ -195,5 +197,37 @@ public class TestMemberService {
 		assertEquals(NEW_MEMBER_EMAIL_ADDRESS, onlineAccount.getEmailAddress());
 		// TODO Update this if/when we implement pasword hashing
 		assertEquals(NEW_MEMBER_PASSWD, onlineAccount.getPasswordHash());
+	}
+
+	@Test
+	public void testRegisterCitizenNullFullName() {
+		CreateMemberRequestDto memberDto = new CreateMemberRequestDto(null, NEW_MEMBER_ADDRESS, true, null);
+
+		Exception error = assertThrows(IllegalArgumentException.class, () -> memberService.registerMember(memberDto));
+		assertContains("Full name cannot be empty.", error.getMessage());
+	}
+
+	@Test
+	public void testRegisterCitizenEmptyFullName() {
+		CreateMemberRequestDto memberDto = new CreateMemberRequestDto("  ", NEW_MEMBER_ADDRESS, true, null);
+
+		Exception error = assertThrows(IllegalArgumentException.class, () -> memberService.registerMember(memberDto));
+		assertContains("Full name cannot be empty.", error.getMessage());
+	}
+
+	@Test
+	public void testRegisterCitizenNullAddress() {
+		CreateMemberRequestDto memberDto = new CreateMemberRequestDto(NEW_MEMBER_FULL_NAME, null, true, null);
+
+		Exception error = assertThrows(IllegalArgumentException.class, () -> memberService.registerMember(memberDto));
+		assertContains("Address cannot be empty.", error.getMessage());
+	}
+
+	@Test
+	public void testRegisterCitizenEmptyAddress() {
+		CreateMemberRequestDto memberDto = new CreateMemberRequestDto(NEW_MEMBER_FULL_NAME, "  ", true, null);
+
+		Exception error = assertThrows(IllegalArgumentException.class, () -> memberService.registerMember(memberDto));
+		assertContains("Address cannot be empty.", error.getMessage());
 	}
 }
