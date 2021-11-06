@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 import org.mockito.invocation.InvocationOnMock;
 import ca.mcgill.ecse321.onlinelibrary.dao.MemberRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.OnlineAccountRepository;
@@ -47,7 +48,6 @@ public class TestMemberService {
 	private final String OLD_MEMBER_PASSWD = "m".repeat(MIN_PASSWD_LENGTH);
 
 	// New member
-	private static final int NEW_MEMBER_ID = 43;
 	private static final String NEW_MEMBER_FULL_NAME = "Obi-Wan Kenobi";
 	private static final String NEW_MEMBER_ADDRESS = "212 McGill Street";
 	private static final String NEW_MEMBER_USERNAME = "obi-wan.kenobi";
@@ -79,12 +79,17 @@ public class TestMemberService {
 
 		lenient().when(onlineAccountDao.existsOnlineAccountByUsername(any(String.class)))
 		.thenAnswer((InvocationOnMock invocation) -> {
-			if (OLD_MEMBER_ID == (int) invocation.getArgument(0)) {
+			if (OLD_MEMBER_USERNAME.equals(invocation.getArgument(0))) {
 				return true;
 			} else {
 				return false;
 			}
 		});
+
+		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
+			return invocation.getArgument(0);
+		};
+		lenient().when(memberDao.save(any(Member.class))).thenAnswer(returnParameterAsAnswer);
 	}
 
 	@Test
@@ -120,7 +125,8 @@ public class TestMemberService {
 		assert (member.getStatus() == Member.MemberStatus.GREEN);
 	}
 
-	public void testRegisterCitizenInPersonOnly() {
+	@Test
+	public void testRegisterCitizenInPerson() {
 		CreateMemberRequestDto memberDto = new CreateMemberRequestDto("  " + NEW_MEMBER_FULL_NAME + "  ",
 				"  " + NEW_MEMBER_ADDRESS + "  ", true, null);
 		Member member = memberService.registerMember(memberDto);
@@ -133,6 +139,7 @@ public class TestMemberService {
 		assertNull(member.getOnlineAccount());
 	}
 
+	@Test
 	public void testRegisterCitizenOnline() {
 		CreateOnlineAccountRequestDto onlineAccountDto = new CreateOnlineAccountRequestDto("  " + NEW_MEMBER_USERNAME + "  ",
 				"  " + NEW_MEMBER_EMAIL_ADDRESS + "  ", "  " + NEW_MEMBER_PASSWD + "  ");
@@ -145,6 +152,42 @@ public class TestMemberService {
 		assertEquals(NEW_MEMBER_ADDRESS, member.getAddress());
 		assertEquals(Member.MemberStatus.INACTIVE, member.getStatus());
 		assertEquals(0, member.getTotalFee());
+
+		OnlineAccount onlineAccount = member.getOnlineAccount();
+		assertNotNull(onlineAccount);
+		assertEquals(NEW_MEMBER_USERNAME, onlineAccount.getUsername());
+		assertEquals(NEW_MEMBER_EMAIL_ADDRESS, onlineAccount.getEmailAddress());
+		// TODO Update this if/when we implement pasword hashing
+		assertEquals(NEW_MEMBER_PASSWD, onlineAccount.getPasswordHash());
+	}
+
+	@Test
+	public void testRegisterNonCitizenInPerson() {
+		CreateMemberRequestDto memberDto = new CreateMemberRequestDto("  " + NEW_MEMBER_FULL_NAME + "  ",
+				"  " + NEW_MEMBER_ADDRESS + "  ", false, null);
+		Member member = memberService.registerMember(memberDto);
+
+		assertNotNull(member);
+		assertEquals(NEW_MEMBER_FULL_NAME, member.getFullName());
+		assertEquals(NEW_MEMBER_ADDRESS, member.getAddress());
+		assertEquals(Member.MemberStatus.INACTIVE, member.getStatus());
+		assertEquals(REGISTRATION_FEE, member.getTotalFee());
+		assertNull(member.getOnlineAccount());
+	}
+
+	@Test
+	public void testRegisterNonCitizenOnline() {
+		CreateOnlineAccountRequestDto onlineAccountDto = new CreateOnlineAccountRequestDto("  " + NEW_MEMBER_USERNAME + "  ",
+				"  " + NEW_MEMBER_EMAIL_ADDRESS + "  ", "  " + NEW_MEMBER_PASSWD + "  ");
+		CreateMemberRequestDto memberDto = new CreateMemberRequestDto("  " + NEW_MEMBER_FULL_NAME + "  ",
+				"  " + NEW_MEMBER_ADDRESS + "  ", false, onlineAccountDto);
+		Member member = memberService.registerMember(memberDto);
+
+		assertNotNull(member);
+		assertEquals(NEW_MEMBER_FULL_NAME, member.getFullName());
+		assertEquals(NEW_MEMBER_ADDRESS, member.getAddress());
+		assertEquals(Member.MemberStatus.INACTIVE, member.getStatus());
+		assertEquals(REGISTRATION_FEE, member.getTotalFee());
 
 		OnlineAccount onlineAccount = member.getOnlineAccount();
 		assertNotNull(onlineAccount);
