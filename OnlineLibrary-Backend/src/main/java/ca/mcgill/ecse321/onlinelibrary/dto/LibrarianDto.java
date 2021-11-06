@@ -1,5 +1,9 @@
 package ca.mcgill.ecse321.onlinelibrary.dto;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
 
 public class LibrarianDto {
@@ -9,8 +13,8 @@ public class LibrarianDto {
 	private String username;
 	private boolean isHead;
 
-	// TODO Add schedule
-
+	private List<LibrarianShiftDto> shifts;
+	
 	public LibrarianDto(int id, String fullName, String username, boolean isHead) {
 		this.id = id;
 		this.fullName = fullName;
@@ -22,8 +26,12 @@ public class LibrarianDto {
 		if (librarian == null) {
 			throw new IllegalArgumentException("Librarian cannot be null.");
 		}
-		return new LibrarianDto(librarian.getId(), librarian.getFullName(), librarian.getUsername(),
+		LibrarianDto librarianDto = new LibrarianDto(librarian.getId(), librarian.getFullName(), librarian.getUsername(),
 				librarian.isHead());
+
+		librarianDto.shifts = new ArrayList<LibrarianShiftDto>();
+		
+		return librarianDto;
 	}
 
 	public int getId() {
@@ -40,5 +48,31 @@ public class LibrarianDto {
 
 	public boolean isHead() {
 		return this.isHead;
+	}
+	
+
+	public List<LibrarianShiftDto> getShifts() {
+		return Collections.unmodifiableList(this.shifts);
+	}
+
+	public boolean addShift(LibrarianShiftDto newShift) {
+		if (newShift == null || this.shifts.contains(newShift))
+			return false;
+
+		boolean isNewLibrarian = !this.equals(newShift.getLibrarian());
+		if (isNewLibrarian)
+			newShift.setLibrarian(this);
+		else
+			this.shifts.add(newShift);
+
+		return true;
+	}
+
+	public boolean removeShift(LibrarianShiftDto shiftToRemove) {
+		if (this.equals(shiftToRemove.getLibrarian()))
+			return false;
+
+		this.shifts.remove(shiftToRemove);
+		return true;
 	}
 }
