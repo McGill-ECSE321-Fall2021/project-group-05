@@ -247,6 +247,10 @@ public class TestLibrarianService {
 		assertFalse(librarian.isHead());
 	}
 
+	/**
+	 * We expect the error message "Librarian with username {username} not
+	 * found." when there is no librarian with the given username.
+	 */
 	@Test
 	public void testGetLibrarianByUsernameNotFound() {
 		Exception error = assertThrows(IllegalArgumentException.class,
