@@ -111,7 +111,7 @@ public class MemberService {
 				errors.add("Invalid email address.");
 			}
 		}
-		if (onlineAccount.getPassword() == null || onlineAccount.getPassword().trim().length() <= MIN_PASSWD_LENGTH) {
+		if (onlineAccount.getPassword() == null || onlineAccount.getPassword().trim().length() < MIN_PASSWD_LENGTH) {
 			errors.add("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.");
 		}
 
