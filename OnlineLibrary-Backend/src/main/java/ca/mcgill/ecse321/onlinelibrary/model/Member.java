@@ -81,8 +81,6 @@ public class Member {
 	/**
 	 * If the account is inactive, sets the status to "Green." If the account is
 	 * not currently inactive, this method has no effect.
-	 *
-	 * @return true if the activation was successful and false otherwise
 	 */
 	public void activate() {
 		this.status = switch (this.status) {
