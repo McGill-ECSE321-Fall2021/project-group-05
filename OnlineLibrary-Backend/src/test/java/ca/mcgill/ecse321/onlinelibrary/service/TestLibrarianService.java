@@ -42,7 +42,6 @@ public class TestLibrarianService {
 	private final String OLD_REG_PASSWD = "a".repeat(MIN_PASSWD_LENGTH);
 
 	// New regular librarian
-	private final int NEW_REG_ID = 3;
 	private final String NEW_REG_FULL_NAME = "Bilbo Baggins";
 	private final String NEW_REG_USERNAME = "bilbo.baggins";
 	private final String NEW_REG_PASSWD = "b".repeat(MIN_PASSWD_LENGTH);
@@ -50,7 +49,7 @@ public class TestLibrarianService {
 	// Invalid credentials
 	private final int INVALID_ID = 999;
 	private final String INVALID_USERNAME = "nonexistent member";
-	private final String SHORT_PASSWD = "c".repeat(MIN_PASSWD_LENGTH);
+	private final String SHORT_PASSWD = "c".repeat(MIN_PASSWD_LENGTH - 1);
 
 	/**
 	 * Assume the database contains
@@ -64,6 +63,15 @@ public class TestLibrarianService {
 	 */
 	@BeforeEach
 	public void setMockOuput() {
+		lenient().when(librarianRepository.existsLibrarianByUsername(any(String.class)))
+		.thenAnswer((InvocationOnMock invocation) -> {
+			String username = invocation.getArgument(0);
+			return switch (username) {
+				case HEAD_USERNAME, OLD_REG_USERNAME -> true;
+				default -> false;
+			};
+		});
+
 		lenient().when(librarianRepository.findLibrarianByUsername(any(String.class)))
 		.thenAnswer((InvocationOnMock invocation) -> {
 			String username = invocation.getArgument(0);
@@ -271,6 +279,14 @@ public class TestLibrarianService {
 		verify(librarianRepository, times(0)).delete(any(Librarian.class));
 	}
 
+	/**
+	 * Helper method to assert one string contains another. If
+	 * !actual.contains(expected), fails with a helpful error message. Does not
+	 * check for null inputs.
+	 *
+	 * @param expected
+	 * @param actual
+	 */
 	public void assertContains(String expected, String actual) {
 		if (!actual.contains(expected)) {
 			String msg = String.format("Expected message containing \"%s\" but received message \"%s\"", expected,
