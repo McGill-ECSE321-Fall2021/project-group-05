@@ -17,6 +17,34 @@ public class LibrarianService {
 	LibrarianRepository librarianRepository;
 
 	@Transactional
+	public void deleteLibrarianById(int id) {
+		Librarian librarianToDelete = librarianRepository.findLibrarianById(id);
+
+		if (librarianToDelete == null) {
+			throw new IllegalArgumentException("Librarian with ID \"" + id + "\" not found.");
+		}
+		if (librarianToDelete.isHead()) {
+			throw new IllegalArgumentException("Cannot delete head librarian.");
+		}
+
+		librarianRepository.delete(librarianToDelete);
+	}
+
+	@Transactional
+	public void deleteLibrarianByUsername(String username) {
+		Librarian librarianToDelete = librarianRepository.findLibrarianByUsername(username);
+
+		if (librarianToDelete == null) {
+			throw new IllegalArgumentException("Librarian with username \"" + username + "\" not found.");
+		}
+		if (librarianToDelete.isHead()) {
+			throw new IllegalArgumentException("Cannot delete head librarian.");
+		}
+
+		librarianRepository.delete(librarianToDelete);
+	}
+
+	@Transactional
 	public Librarian createLibrarian(String fullName, String username, String password) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		// Full name not empty

@@ -7,7 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +22,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import ca.mcgill.ecse321.onlinelibrary.dao.LibrarianRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
 
@@ -27,7 +31,6 @@ public class TestLibrarianService {
 
 	@Mock
 	private LibrarianRepository librarianRepository;
-
 	@InjectMocks
 	private LibrarianService librarianService;
 
@@ -63,7 +66,7 @@ public class TestLibrarianService {
 	 * <li>one head librarian with ID HEAD_ID, full name HEAD_FULL_NAME,
 	 * username HEAD_USERNAME, and password HEAD_PASSWD
 	 * <li>one regular librarian with ID OLD_REG_ID, full name
-	 * OLD_REG_FULL_NAME, username OLD_REG_USERNAME, password OLD_REG_PASSWD
+	 * OLD_REG_FULL_NAME, username OLD_REG_USERNAME, and password OLD_REG_PASSWD
 	 * </ul>
 	 */
 	@BeforeEach
@@ -285,6 +288,95 @@ public class TestLibrarianService {
 		assertTrue(regFound);
 	}
 
+	@Test
+	public void testDeleteLibrarianByUsername() {
+		librarianService.deleteLibrarianByUsername(OLD_REG_USERNAME);
+
+		verify(librarianRepository, times(1))
+		.delete(argThat((Librarian l) -> OLD_REG_USERNAME.equals(l.getUsername())));
+		verify(librarianRepository, times(0))
+		.delete(argThat((Librarian l) -> !OLD_REG_USERNAME.equals(l.getUsername())));
+	}
+
+	/**
+	 * We expect the error message "Librarian with username {username} not
+	 * found." when there is no librarian with the given username.
+	 */
+	@Test
+	public void testDeleteLibrarianByUsernameNotFound() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> librarianService.deleteLibrarianByUsername(INVALID_USERNAME));
+		assertContains("Librarian with username \"" + INVALID_USERNAME + "\" not found.", error.getMessage());
+		verify(librarianRepository, times(0)).delete(any(Librarian.class));
+	}
+
+	/**
+	 * We expect the error message "Librarian with username null not found."
+	 * when the given username is null.
+	 */
+	@Test
+	public void testDeleteLibrarianByUsernameNull() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> librarianService.deleteLibrarianByUsername(null));
+		assertContains("Librarian with username \"" + null + "\" not found.", error.getMessage());
+		verify(librarianRepository, times(0)).delete(any(Librarian.class));
+	}
+
+	/**
+	 * We expect the error message "Cannot delete head librarian." when the
+	 * librarian being deleted is the head librarian.
+	 */
+	@Test
+	public void testDeleteLibrarianByUsernameHead() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> librarianService.deleteLibrarianByUsername(HEAD_USERNAME));
+		assertContains("Cannot delete head librarian.", error.getMessage());
+		verify(librarianRepository, times(0)).delete(any(Librarian.class));
+	}
+
+	@Test
+	public void testDeleteLibrarianById() {
+		librarianService.deleteLibrarianById(OLD_REG_ID);
+
+		// Verify the username because the findLibrarianById() stub does not set
+		// the ID
+		verify(librarianRepository, times(1))
+		.delete(argThat((Librarian l) -> OLD_REG_USERNAME.equals(l.getUsername())));
+		verify(librarianRepository, times(0))
+		.delete(argThat((Librarian l) -> !OLD_REG_USERNAME.equals(l.getUsername())));
+	}
+
+	/**
+	 * We expect the error message "Librarian with ID {id} not found." when
+	 * there is no librarian with the given ID.
+	 */
+	@Test
+	public void testDeleteLibrarianByIdNotFound() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> librarianService.deleteLibrarianById(INVALID_ID));
+		assertContains("Librarian with ID \"" + INVALID_ID + "\" not found.", error.getMessage());
+	}
+
+	/**
+	 * We expect the error message "Cannot delete head librarian." when the
+	 * librarian being deleted is the head librarian.
+	 */
+	@Test
+	public void testDeleteLibrarianByIdHead() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> librarianService.deleteLibrarianById(HEAD_ID));
+		assertContains("Cannot delete head librarian.", error.getMessage());
+		verify(librarianRepository, times(0)).delete(any(Librarian.class));
+	}
+
+	/**
+	 * Helper method to assert one string contains another. If
+	 * !actual.contains(expected), fails with a helpful error message. Does not
+	 * check for null inputs.
+	 *
+	 * @param expected
+	 * @param actual
+	 */
 	public void assertContains(String expected, String actual) {
 		if (!actual.contains(expected)) {
 			String msg = String.format("Expected message containing \"%s\" but received message \"%s\"", expected,

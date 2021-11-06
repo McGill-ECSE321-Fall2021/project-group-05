@@ -4,12 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ca.mcgill.ecse321.onlinelibrary.dto.LibrarianDto;
 import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
 import ca.mcgill.ecse321.onlinelibrary.service.LibrarianService;
@@ -48,5 +43,15 @@ public class LibrarianController {
 			librarianDtos.add(LibrarianDto.fromLibrarian(l));
 		}
 		return librarianDtos;
+	}
+
+	@DeleteMapping(value = {"/librarian/delete", "/librarian/delete"})
+	public void deleteLibrarianByUsername(@RequestParam String username) {
+		librarianService.deleteLibrarianByUsername(username);
+	}
+
+	@DeleteMapping(value = {"/librarian/{id}", "/librarian/{id}/"})
+	public void deleteLibrarianById(@PathVariable("id") int id) {
+		librarianService.deleteLibrarianById(id);
 	}
 }
