@@ -83,4 +83,31 @@ public class LibrarianService {
 		librarianRepository.save(librarian);
 		return librarian;
 	}
+
+	@Transactional
+	public Librarian getLibrarianByUsername(String username) {
+		Librarian librarian = librarianRepository.findLibrarianByUsername(username);
+
+		if (librarian == null) {
+			throw new IllegalArgumentException("Librarian with username \"" + username + "\" not found.");
+		}
+
+		return librarian;
+	}
+
+	@Transactional
+	public Librarian getLibrarianById(int id) {
+		Librarian librarian = librarianRepository.findLibrarianById(id);
+
+		if (librarian == null) {
+			throw new IllegalArgumentException("Librarian with ID \"" + id + "\" not found.");
+		}
+
+		return librarian;
+	}
+
+	@Transactional
+	public Iterable<Librarian> getAllLibrarians() {
+		return librarianRepository.findAll();
+	}
 }

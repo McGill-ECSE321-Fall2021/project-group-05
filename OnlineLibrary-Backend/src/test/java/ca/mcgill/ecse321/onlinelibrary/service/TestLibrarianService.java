@@ -1,13 +1,20 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +22,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import ca.mcgill.ecse321.onlinelibrary.dao.LibrarianRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
 
@@ -52,7 +60,7 @@ public class TestLibrarianService {
 	private final String SHORT_PASSWD = "c".repeat(MIN_PASSWD_LENGTH - 1);
 
 	/**
-	 * Assume the database contains
+	 * Assume the database already contains
 	 *
 	 * <ul>
 	 * <li>one head librarian with ID HEAD_ID, full name HEAD_FULL_NAME,
@@ -91,6 +99,13 @@ public class TestLibrarianService {
 				case OLD_REG_ID -> new Librarian(OLD_REG_FULL_NAME, OLD_REG_USERNAME, OLD_REG_PASSWD, false);
 				default -> null;
 			};
+		});
+
+		lenient().when(librarianRepository.findAll()).thenAnswer((InvocationOnMock invocation) -> {
+			List<Librarian> librarians = new ArrayList<Librarian>();
+			librarians.add(new Librarian(HEAD_FULL_NAME, HEAD_USERNAME, HEAD_PASSWD, true));
+			librarians.add(new Librarian(OLD_REG_FULL_NAME, OLD_REG_USERNAME, OLD_REG_PASSWD, false));
+			return librarians;
 		});
 	}
 
@@ -160,7 +175,7 @@ public class TestLibrarianService {
 	@Test
 	public void testCreateLibrarianDuplicateUsername() {
 		Exception error = assertThrows(IllegalArgumentException.class,
-				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, OLD_REG_USERNAME, NEW_REG_PASSWD));
+				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, HEAD_USERNAME, NEW_REG_PASSWD));
 		assertContains("Username already taken.", error.getMessage());
 	}
 
@@ -196,6 +211,81 @@ public class TestLibrarianService {
 		Exception error = assertThrows(IllegalArgumentException.class,
 				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, NEW_REG_USERNAME, SHORT_PASSWD));
 		assertContains("Password must be at least 8 characters in length.", error.getMessage());
+	}
+
+	/**
+	 * Successfully get librarian by ID.
+	 */
+	@Test
+	public void testGetLibrarianById() {
+		Librarian librarian = librarianService.getLibrarianById(HEAD_ID);
+
+		assertNotNull(librarian);
+		assertEquals(HEAD_FULL_NAME, librarian.getFullName());
+		assertEquals(HEAD_USERNAME, librarian.getUsername());
+		assertTrue(librarian.isHead());
+	}
+
+	/**
+	 * We expect the error message "Librarian with ID {id} not found." when
+	 * there is no librarian with the given ID.
+	 */
+	@Test
+	public void testGetLibrarianByIdNotFound() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> librarianService.getLibrarianById(INVALID_ID));
+		assertContains("Librarian with ID \"" + INVALID_ID + "\" not found.", error.getMessage());
+	}
+
+	/**
+	 * Successfully get librarian by username.
+	 */
+	@Test
+	public void testGetLibrarianByUsername() {
+		Librarian librarian = librarianService.getLibrarianById(OLD_REG_ID);
+
+		assertNotNull(librarian);
+		assertEquals(OLD_REG_FULL_NAME, librarian.getFullName());
+		assertEquals(OLD_REG_USERNAME, librarian.getUsername());
+		assertFalse(librarian.isHead());
+	}
+
+	/**
+	 * We expect the error message "Librarian with username {username} not
+	 * found." when there is no librarian with the given username.
+	 */
+	@Test
+	public void testGetLibrarianByUsernameNotFound() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> librarianService.getLibrarianByUsername(INVALID_USERNAME));
+		assertContains("Librarian with username \"" + INVALID_USERNAME + "\" not found.", error.getMessage());
+	}
+
+	/**
+	 * Successfully get all librarians.
+	 */
+	@Test
+	public void testGetAllLibrarians() {
+		Iterable<Librarian> librarians = librarianService.getAllLibrarians();
+
+		assertNotNull(librarians);
+
+		// Check that list contains all and only the correct librarians
+		int count = 0;
+		boolean headFound = false;
+		boolean regFound = false;
+		for (Librarian l : librarians) {
+			count++;
+			if (HEAD_FULL_NAME.equals(l.getFullName()) && HEAD_USERNAME.equals(l.getUsername()) && l.isHead()) {
+				headFound = true;
+			}
+			if (OLD_REG_FULL_NAME.equals(l.getFullName()) && OLD_REG_USERNAME.equals(l.getUsername()) && !l.isHead()) {
+				regFound = true;
+			}
+		}
+		assertEquals(2, count);
+		assertTrue(headFound);
+		assertTrue(regFound);
 	}
 
 	@Test

@@ -1,5 +1,8 @@
 package ca.mcgill.ecse321.onlinelibrary.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ca.mcgill.ecse321.onlinelibrary.dto.LibrarianDto;
@@ -18,6 +21,28 @@ public class LibrarianController {
 			@RequestParam String password) throws IllegalArgumentException {
 		Librarian librarian = librarianService.createLibrarian(fullName, username, password);
 		return LibrarianDto.fromLibrarian(librarian);
+	}
+
+	@GetMapping(value = {"/librarian", "/librarian/"})
+	public LibrarianDto getLibrarianByUsername(@RequestParam String username) {
+		Librarian librarian = librarianService.getLibrarianByUsername(username);
+		return LibrarianDto.fromLibrarian(librarian);
+	}
+
+	@GetMapping(value = {"/librarian/{id}", "/librarian/{id}/"})
+	public LibrarianDto getLibrarianById(@PathVariable int id) {
+		Librarian librarian = librarianService.getLibrarianById(id);
+		return LibrarianDto.fromLibrarian(librarian);
+	}
+
+	@GetMapping(value = {"/librarian/all", "/librarian/all/"})
+	public List<LibrarianDto> getAllLibrarians() {
+		Iterable<Librarian> librarians = librarianService.getAllLibrarians();
+		List<LibrarianDto> librarianDtos = new ArrayList<LibrarianDto>();
+		for (Librarian l : librarians) {
+			librarianDtos.add(LibrarianDto.fromLibrarian(l));
+		}
+		return librarianDtos;
 	}
 
 	@DeleteMapping(value = {"/librarian/delete", "/librarian/delete"})
