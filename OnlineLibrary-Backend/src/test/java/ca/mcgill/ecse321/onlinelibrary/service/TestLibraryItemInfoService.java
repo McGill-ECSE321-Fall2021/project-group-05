@@ -1,9 +1,15 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
+
 import java.sql.Date;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,8 +18,17 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-import ca.mcgill.ecse321.onlinelibrary.dao.*;
-import ca.mcgill.ecse321.onlinelibrary.model.*;
+
+import ca.mcgill.ecse321.onlinelibrary.dao.AlbumInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.ArchiveInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.NewsPaperInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
 
 @ExtendWith(MockitoExtension.class)
 public class TestLibraryItemInfoService {
@@ -24,7 +39,7 @@ public class TestLibraryItemInfoService {
 	@Mock
 	private AlbumInfoRepository albumInfoDao;
 	@Mock
-	private NewsPaperInfoRepository newsPaperInfoDao;
+	private NewsPaperInfoRepository newspaperInfoDao;
 	@Mock
 	private ArchiveInfoRepository archiveInfoDao;
 
@@ -34,7 +49,16 @@ public class TestLibraryItemInfoService {
 	private LibraryItemService libraryItemService;
 
 	private static final int BOOK_INFO_KEY = 1;
-	private static final int BOOK_INFO_NOT_A_KEY = 2;
+	private static final int BOOK_INFO_BAD_KEY = 2;
+	private static final int MOVIE_INFO_KEY = 3;
+	private static final int MOVIE_INFO_BAD_KEY = 4;
+	private static final int ALBUM_INFO_KEY = 5;
+	private static final int ALBUM_INFO_BAD_KEY = 6;
+	private static final int NEWSPAPER_INFO_KEY = 7;
+	private static final int NEWSPAPER_INFO_BAD_KEY = 8;
+	private static final int ARCHIVE_INFO_KEY = 9;
+	private static final int ARCHIVE_INFO_BAD_KEY = 10;
+	
 
 	@BeforeEach
 	public void setMockOuput() {
@@ -47,13 +71,50 @@ public class TestLibraryItemInfoService {
 				return null;
 			}
 		});
+		lenient().when(movieInfoDao.findMovieInfoById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(MOVIE_INFO_KEY)) {
+				MovieInfo movieInfo = new MovieInfo();
+				movieInfo.setId(MOVIE_INFO_KEY);
+				return movieInfo;
+			} else {
+				return null;
+			}
+		});
+		lenient().when(albumInfoDao.findAlbumInfoById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(ALBUM_INFO_KEY)) {
+				AlbumInfo albumInfo = new AlbumInfo();
+				albumInfo.setId(ALBUM_INFO_KEY);
+				return albumInfo;
+			} else {
+				return null;
+			}
+		});
+		lenient().when(newspaperInfoDao.findNewsPaperInfoById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(NEWSPAPER_INFO_KEY)) {
+				NewsPaperInfo newspaperInfo = new NewsPaperInfo();
+				newspaperInfo.setId(NEWSPAPER_INFO_KEY);
+				return newspaperInfo;
+			} else {
+				return null;
+			}
+		});
+		lenient().when(archiveInfoDao.findArchiveInfoById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(ARCHIVE_INFO_KEY)) {
+				ArchiveInfo archiveInfo = new ArchiveInfo();
+				archiveInfo.setId(ARCHIVE_INFO_KEY);
+				return archiveInfo;
+			} else {
+				return null;
+			}
+		});
+	
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
 		};
 		lenient().when(bookInfoDao.save(any(BookInfo.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(movieInfoDao.save(any(MovieInfo.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(albumInfoDao.save(any(AlbumInfo.class))).then(returnParameterAsAnswer);
-		lenient().when(newsPaperInfoDao.save(any(NewsPaperInfo.class))).then(returnParameterAsAnswer);
+		lenient().when(newspaperInfoDao.save(any(NewsPaperInfo.class))).then(returnParameterAsAnswer);
 		lenient().when(archiveInfoDao.save(any(ArchiveInfo.class))).thenAnswer(returnParameterAsAnswer);
 	}
 
@@ -179,6 +240,31 @@ public class TestLibraryItemInfoService {
 		assertTrue(error.contains("Number of page can't be 0."));
 		assertTrue(error.contains("Author can't be empty."));
 	}
+	
+	@Test
+	public void testGetBookInfo() {
+		BookInfo bookInfo = null;
+		try {
+			bookInfo = libraryItemInfoService.getBookInfo(BOOK_INFO_KEY);
+		} catch (IllegalArgumentException e){
+			fail();
+		}
+		assertNotNull(bookInfo);
+		assertEquals(BOOK_INFO_KEY, bookInfo.getId());
+	}
+
+	@Test
+	public void testGetBookInfoBadId() {
+		String error = "";
+		BookInfo bookInfo = null;
+		try {
+			bookInfo = libraryItemInfoService.getBookInfo(BOOK_INFO_BAD_KEY);
+		} catch (IllegalArgumentException e) {
+			error += e.getMessage();
+		}
+		assertNull(bookInfo);
+		assertTrue(error.contains("The bookInfo with id " + BOOK_INFO_BAD_KEY + " was not found in the database."));
+	}
 
 	@Test
 	public void testCreateMovieInfo() {
@@ -294,45 +380,31 @@ public class TestLibraryItemInfoService {
 		assertTrue(error.contains("Director can't be empty."));
 		assertTrue(error.contains("Length can't be 0."));
 	}
-
 	@Test
-	public void testGetBookInfo() {
-		BookInfo bookInfo = null;
+	public void testGetMovieInfo() {
+		MovieInfo movieInfo = null;
 		try {
-			bookInfo = libraryItemInfoService.getBookInfo(BOOK_INFO_KEY);
+			movieInfo = libraryItemInfoService.getMovieInfo(MOVIE_INFO_KEY);
 		} catch (IllegalArgumentException e){
 			fail();
 		}
-		assertNotNull(bookInfo);
-		assertEquals(BOOK_INFO_KEY, bookInfo.getId());
+		assertNotNull(movieInfo);
+		assertEquals(MOVIE_INFO_KEY, movieInfo.getId());
 	}
 
 	@Test
-	public void testGetBookInfoIdIs0 () {
+	public void testGetMovieInfoBadId() {
 		String error = "";
-		BookInfo bookInfo = null;
+		MovieInfo movieInfo = null;
 		try {
-			bookInfo = libraryItemInfoService.getBookInfo(0);
-		} catch (IllegalArgumentException e) {
-			error = e.getMessage();
-		}
-		assertNull(bookInfo);
-		assertTrue(error.contains("BookInfo id can't be 0."));
-	}
-
-	@Test
-	public void testGetBookBadId() {
-		String error = "";
-		BookInfo bookInfo = null;
-		try {
-			bookInfo = libraryItemInfoService.getBookInfo(BOOK_INFO_NOT_A_KEY);
+			movieInfo = libraryItemInfoService.getMovieInfo(MOVIE_INFO_BAD_KEY);
 		} catch (IllegalArgumentException e) {
 			error += e.getMessage();
 		}
-		assertNull(bookInfo);
-		assertTrue(error.contains("The bookInfo with id " + BOOK_INFO_NOT_A_KEY + " was not found in the database."));
+		assertNull(movieInfo);
+		assertTrue(error.contains("The movieInfo with id " + MOVIE_INFO_BAD_KEY + " was not found in the database."));
 	}
-
+	
 	@Test
 	public void testCreateAlbumInfo() {
 		String title = "Title";
@@ -463,6 +535,31 @@ public class TestLibraryItemInfoService {
 		assertTrue(error.contains("composerPerformer can't be empty."));
 		assertTrue(error.contains("Title can't be empty."));
 	}
+	
+	@Test
+	public void testGetAlbumInfo() {
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = libraryItemInfoService.getAlbumInfo(ALBUM_INFO_KEY);
+		} catch (IllegalArgumentException e){
+			fail();
+		}
+		assertNotNull(albumInfo);
+		assertEquals(ALBUM_INFO_KEY, albumInfo.getId());
+	}
+
+	@Test
+	public void testGetAlbumInfoInfoBadId() {
+		String error = "";
+		AlbumInfo albumInfo = null;
+		try {
+			albumInfo = libraryItemInfoService.getAlbumInfo(ALBUM_INFO_BAD_KEY);
+		} catch (IllegalArgumentException e) {
+			error += e.getMessage();
+		}
+		assertNull(albumInfo);
+		assertTrue(error.contains("The albumInfo with id " + ALBUM_INFO_BAD_KEY + " was not found in the database."));
+	}
 
 	@Test
 	public void testCreateNewsPaperInfo() {
@@ -471,7 +568,7 @@ public class TestLibraryItemInfoService {
 		int number = 123;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
@@ -489,7 +586,7 @@ public class TestLibraryItemInfoService {
 		int number = 5;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -505,7 +602,7 @@ public class TestLibraryItemInfoService {
 		int number = 5;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -521,7 +618,7 @@ public class TestLibraryItemInfoService {
 		int number = 5;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -537,7 +634,7 @@ public class TestLibraryItemInfoService {
 		int number = -1;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -553,7 +650,7 @@ public class TestLibraryItemInfoService {
 		int number = -1;
 		NewsPaperInfo newsPaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
+			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -561,6 +658,31 @@ public class TestLibraryItemInfoService {
 		assertTrue(error.contains("Number can't be negative."));
 		assertTrue(error.contains("Frequency can't be empty."));
 		assertTrue(error.contains("Date can't be empty."));
+	}
+	
+	@Test
+	public void testGetNewsPaperInfo() {
+		NewsPaperInfo newspaperInfo = null;
+		try {
+			newspaperInfo = libraryItemInfoService.getNewspaperInfo(NEWSPAPER_INFO_KEY);
+		} catch (IllegalArgumentException e){
+			fail();
+		}
+		assertNotNull(newspaperInfo);
+		assertEquals(NEWSPAPER_INFO_KEY, newspaperInfo.getId());
+	}
+
+	@Test
+	public void testGetNewspaperInfoBadId() {
+		String error = "";
+		NewsPaperInfo newspaperInfo = null;
+		try {
+			newspaperInfo = libraryItemInfoService.getNewspaperInfo(NEWSPAPER_INFO_BAD_KEY);
+		} catch (IllegalArgumentException e) {
+			error += e.getMessage();
+		}
+		assertNull(newspaperInfo);
+		assertTrue(error.contains("The newsPaperInfo with id " + NEWSPAPER_INFO_BAD_KEY + " was not found in the database."));
 	}
 
 	@Test
@@ -660,5 +782,30 @@ public class TestLibraryItemInfoService {
 		assertTrue(error.contains("Title can't be empty."));
 		assertTrue(error.contains("Description can't be empty."));
 		assertTrue(error.contains("Publication date can't be empty."));
+	}
+	
+	@Test
+	public void testGetArchiveInfo() {
+		ArchiveInfo archiveInfo = null;
+		try {
+			archiveInfo = libraryItemInfoService.getArchiveInfo(ARCHIVE_INFO_KEY);
+		} catch (IllegalArgumentException e){
+			fail();
+		}
+		assertNotNull(archiveInfo);
+		assertEquals(ARCHIVE_INFO_KEY, archiveInfo.getId());
+	}
+
+	@Test
+	public void testGetArchiveInfoBadId() {
+		String error = "";
+		ArchiveInfo archiveInfo = null;
+		try {
+			archiveInfo = libraryItemInfoService.getArchiveInfo(ARCHIVE_INFO_BAD_KEY);
+		} catch (IllegalArgumentException e) {
+			error += e.getMessage();
+		}
+		assertNull(archiveInfo);
+		assertTrue(error.contains("The archiveInfo with id " + ARCHIVE_INFO_BAD_KEY + " was not found in the database."));
 	}
 }

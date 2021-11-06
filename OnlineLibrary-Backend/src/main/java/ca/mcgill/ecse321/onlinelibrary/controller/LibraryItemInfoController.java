@@ -1,14 +1,24 @@
 package ca.mcgill.ecse321.onlinelibrary.controller;
 
 import java.sql.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ca.mcgill.ecse321.onlinelibrary.dto.*;
-import ca.mcgill.ecse321.onlinelibrary.model.*;
+
+import ca.mcgill.ecse321.onlinelibrary.dto.AlbumInfoDto;
+import ca.mcgill.ecse321.onlinelibrary.dto.ArchiveInfoDto;
+import ca.mcgill.ecse321.onlinelibrary.dto.BookInfoDto;
+import ca.mcgill.ecse321.onlinelibrary.dto.MovieInfoDto;
+import ca.mcgill.ecse321.onlinelibrary.dto.NewsPaperInfoDto;
+import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
 import ca.mcgill.ecse321.onlinelibrary.service.LibraryItemInfoService;
 
 @CrossOrigin(origins = "*")
@@ -42,7 +52,7 @@ public class LibraryItemInfoController {
 	@PostMapping (value = { "/newsPaperInfo", "/newsPaperInfo/"})
 	public NewsPaperInfoDto createNewsPaperInfo(@RequestParam Date publication, @RequestParam String frequency, @RequestParam int number)
 			throws IllegalArgumentException {
-		NewsPaperInfo newsPaperInfo = libraryItemInfoService.createNewsPaperInfo(publication, frequency, number);
+		NewsPaperInfo newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		return NewsPaperInfoDto.fromNewsPaperInfo(newsPaperInfo);
 	}
 
