@@ -3,6 +3,7 @@ package ca.mcgill.ecse321.onlinelibrary.service;
 import static ca.mcgill.ecse321.onlinelibrary.service.TestHelper.assertContains;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -15,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.invocation.InvocationOnMock;
 import ca.mcgill.ecse321.onlinelibrary.dao.MemberRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.OnlineAccountRepository;
+import ca.mcgill.ecse321.onlinelibrary.dto.CreateMemberRequestDto;
+import ca.mcgill.ecse321.onlinelibrary.dto.CreateOnlineAccountRequestDto;
 import ca.mcgill.ecse321.onlinelibrary.model.Member;
 import ca.mcgill.ecse321.onlinelibrary.model.OnlineAccount;
 
@@ -32,15 +35,24 @@ public class TestMemberService {
 	private MemberService memberService;
 
 	// TODO Get this from application.properties
+	private final int REGISTRATION_FEE = 1000;
 	private final int MIN_PASSWD_LENGTH = 8;
 
 	// Existing member
-	private static final int MEMBER_ID = 42;
-	private static final String MEMBER_FULL_NAME = "John Doe";
-	private static final String MEMBER_ADDRESS = "123 Main Street";
-	private static final String MEMBER_USERNAME = "john.doe";
-	private static final String MEMBER_EMAIL_ADDRESS = "john.doe@gmail.com";
-	private final String MEMBER_PASSWD = "m".repeat(MIN_PASSWD_LENGTH);
+	private static final int OLD_MEMBER_ID = 42;
+	private static final String OLD_MEMBER_FULL_NAME = "John Doe";
+	private static final String OLD_MEMBER_ADDRESS = "123 Main Street";
+	private static final String OLD_MEMBER_USERNAME = "john.doe";
+	private static final String OLD_MEMBER_EMAIL_ADDRESS = "john.doe@gmail.com";
+	private final String OLD_MEMBER_PASSWD = "m".repeat(MIN_PASSWD_LENGTH);
+
+	// New member
+	private static final int NEW_MEMBER_ID = 43;
+	private static final String NEW_MEMBER_FULL_NAME = "Obi-Wan Kenobi";
+	private static final String NEW_MEMBER_ADDRESS = "212 McGill Street";
+	private static final String NEW_MEMBER_USERNAME = "obi-wan.kenobi";
+	private static final String NEW_MEMBER_EMAIL_ADDRESS = "obi-wan.kenobi@mail.mcgill.ca";
+	private final String NEW_MEMBER_PASSWD = "o".repeat(MIN_PASSWD_LENGTH);
 
 	// Invalid credentials
 	private static final int INVALID_MEMBER_ID = 999999;
@@ -54,10 +66,10 @@ public class TestMemberService {
 	@BeforeEach
 	public void setMockOuput() {
 		lenient().when(memberDao.findMemberById(anyInt())).thenAnswer((InvocationOnMock invocation) -> {
-			if (MEMBER_ID == (int) invocation.getArgument(0)) {
-				Member member = new Member(MEMBER_ADDRESS, MEMBER_FULL_NAME);
-				OnlineAccount onlineAccount = new OnlineAccount(MEMBER_PASSWD, MEMBER_USERNAME, MEMBER_EMAIL_ADDRESS,
-						member);
+			if (OLD_MEMBER_ID == (int) invocation.getArgument(0)) {
+				Member member = new Member(OLD_MEMBER_ADDRESS, OLD_MEMBER_FULL_NAME);
+				OnlineAccount onlineAccount = new OnlineAccount(OLD_MEMBER_PASSWD, OLD_MEMBER_USERNAME,
+						OLD_MEMBER_EMAIL_ADDRESS, member);
 				member.setOnlineAccount(onlineAccount);
 				return member;
 			} else {
@@ -67,7 +79,7 @@ public class TestMemberService {
 
 		lenient().when(onlineAccountDao.existsOnlineAccountByUsername(any(String.class)))
 		.thenAnswer((InvocationOnMock invocation) -> {
-			if (MEMBER_ID == (int) invocation.getArgument(0)) {
+			if (OLD_MEMBER_ID == (int) invocation.getArgument(0)) {
 				return true;
 			} else {
 				return false;
@@ -77,19 +89,19 @@ public class TestMemberService {
 
 	@Test
 	public void testGetMemberByIdSuccessful() {
-		Member member = memberService.getMemberById(MEMBER_ID);
+		Member member = memberService.getMemberById(OLD_MEMBER_ID);
 
 		assertNotNull(member);
-		assertEquals(MEMBER_FULL_NAME, member.getFullName());
-		assertEquals(MEMBER_ADDRESS, member.getAddress());
+		assertEquals(OLD_MEMBER_FULL_NAME, member.getFullName());
+		assertEquals(OLD_MEMBER_ADDRESS, member.getAddress());
 		assertEquals(Member.MemberStatus.INACTIVE, member.getStatus());
 
 		OnlineAccount onlineAccount = member.getOnlineAccount();
 		assertNotNull(onlineAccount);
-		assertEquals(MEMBER_USERNAME, onlineAccount.getUsername());
-		assertEquals(MEMBER_EMAIL_ADDRESS, onlineAccount.getEmailAddress());
+		assertEquals(OLD_MEMBER_USERNAME, onlineAccount.getUsername());
+		assertEquals(OLD_MEMBER_EMAIL_ADDRESS, onlineAccount.getEmailAddress());
 		// TODO Update this if/when password hashing is implemented
-		assertEquals(MEMBER_PASSWD, onlineAccount.getPasswordHash());
+		assertEquals(OLD_MEMBER_PASSWD, onlineAccount.getPasswordHash());
 	}
 
 	@Test
@@ -101,10 +113,44 @@ public class TestMemberService {
 
 	@Test
 	public void testActivateMemberAccount() {
-		Member member = memberService.getMemberById(MEMBER_ID);
+		Member member = memberService.getMemberById(OLD_MEMBER_ID);
 		assert (member.getStatus() == Member.MemberStatus.INACTIVE);
 		member = memberService.activateAccount(member);
 		assertNotNull(member);
 		assert (member.getStatus() == Member.MemberStatus.GREEN);
+	}
+
+	public void testRegisterCitizenInPersonOnly() {
+		CreateMemberRequestDto memberDto = new CreateMemberRequestDto("  " + NEW_MEMBER_FULL_NAME + "  ",
+				"  " + NEW_MEMBER_ADDRESS + "  ", true, null);
+		Member member = memberService.registerMember(memberDto);
+
+		assertNotNull(member);
+		assertEquals(NEW_MEMBER_FULL_NAME, member.getFullName());
+		assertEquals(NEW_MEMBER_ADDRESS, member.getAddress());
+		assertEquals(Member.MemberStatus.INACTIVE, member.getStatus());
+		assertEquals(0, member.getTotalFee());
+		assertNull(member.getOnlineAccount());
+	}
+
+	public void testRegisterCitizenOnline() {
+		CreateOnlineAccountRequestDto onlineAccountDto = new CreateOnlineAccountRequestDto("  " + NEW_MEMBER_USERNAME + "  ",
+				"  " + NEW_MEMBER_EMAIL_ADDRESS + "  ", "  " + NEW_MEMBER_PASSWD + "  ");
+		CreateMemberRequestDto memberDto = new CreateMemberRequestDto("  " + NEW_MEMBER_FULL_NAME + "  ",
+				"  " + NEW_MEMBER_ADDRESS + "  ", true, onlineAccountDto);
+		Member member = memberService.registerMember(memberDto);
+
+		assertNotNull(member);
+		assertEquals(NEW_MEMBER_FULL_NAME, member.getFullName());
+		assertEquals(NEW_MEMBER_ADDRESS, member.getAddress());
+		assertEquals(Member.MemberStatus.INACTIVE, member.getStatus());
+		assertEquals(0, member.getTotalFee());
+
+		OnlineAccount onlineAccount = member.getOnlineAccount();
+		assertNotNull(onlineAccount);
+		assertEquals(NEW_MEMBER_USERNAME, onlineAccount.getUsername());
+		assertEquals(NEW_MEMBER_EMAIL_ADDRESS, onlineAccount.getEmailAddress());
+		// TODO Update this if/when we implement pasword hashing
+		assertEquals(NEW_MEMBER_PASSWD, onlineAccount.getPasswordHash());
 	}
 }
