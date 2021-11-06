@@ -43,6 +43,14 @@ test {
 }
 
 jacocoTestReport {
+	afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude:  [
+                    'ca/mcgill/ecse321/onlinelibrary/controller/*',
+                    'ca/mcgill/ecse321/onlinelibrary/dto/*'
+            ])
+        }))
+    }
 	dependsOn test // tests are required to run before generating the report
 }
 
