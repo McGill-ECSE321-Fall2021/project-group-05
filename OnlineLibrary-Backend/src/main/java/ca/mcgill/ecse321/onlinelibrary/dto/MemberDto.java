@@ -12,21 +12,27 @@ public class MemberDto {
 	}
 	// Account fees (e.g. registration fee, late fees) in cents
 	private int totalFee;
+	private OnlineAccountDto onlineAccount;
 
-	public MemberDto(Integer id, String address, String fullName, MemberDtoStatus status, int totalFee) {
+	public MemberDto(Integer id, String address, String fullName, MemberDtoStatus status, int totalFee,
+			OnlineAccountDto onlineAccount) {
 		this.id = id;
 		this.address = address;
 		this.fullName = fullName;
 		this.status = status;
 		this.totalFee = totalFee;
+		this.onlineAccount = onlineAccount;
 	}
 
 	public static MemberDto fromMember(Member member) {
 		if (member == null) {
 			throw new IllegalArgumentException("There is no such Member");
 		}
+		OnlineAccountDto onlineAccount = member.getOnlineAccount() == null
+				? null
+						: OnlineAccountDto.fromOnlineAccount(member.getOnlineAccount());
 		return new MemberDto(member.getId(), member.getAddress(), member.getFullName(),
-				fromMemberStatus(member.getStatus()), member.getTotalFee());
+				fromMemberStatus(member.getStatus()), member.getTotalFee(), onlineAccount);
 	}
 
 	private static MemberDto.MemberDtoStatus fromMemberStatus(Member.MemberStatus memberStatus) {
@@ -59,4 +65,7 @@ public class MemberDto {
 		return totalFee;
 	}
 
+	public OnlineAccountDto getOnlineAccount() {
+		return this.onlineAccount;
+	}
 }
