@@ -1,11 +1,11 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
+import static ca.mcgill.ecse321.onlinelibrary.service.TestHelper.assertContains;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.lenient;
@@ -368,21 +368,5 @@ public class TestLibrarianService {
 				() -> librarianService.deleteLibrarianById(HEAD_ID));
 		assertContains("Cannot delete head librarian.", error.getMessage());
 		verify(librarianRepository, times(0)).delete(any(Librarian.class));
-	}
-
-	/**
-	 * Helper method to assert one string contains another. If
-	 * !actual.contains(expected), fails with a helpful error message. Does not
-	 * check for null inputs.
-	 *
-	 * @param expected
-	 * @param actual
-	 */
-	public void assertContains(String expected, String actual) {
-		if (!actual.contains(expected)) {
-			String msg = String.format("Expected message containing \"%s\" but received message \"%s\"", expected,
-					actual);
-			fail(msg);
-		}
 	}
 }

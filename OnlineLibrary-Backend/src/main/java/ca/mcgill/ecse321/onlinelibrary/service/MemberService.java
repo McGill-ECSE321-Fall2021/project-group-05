@@ -53,6 +53,21 @@ public class MemberService {
 		return savedMember;
 	}
 
+	@Transactional
+	public Member getMemberById(int id) {
+		Member member = memberRepository.findMemberById(id);
+
+		if (member == null) {
+			throw new IllegalArgumentException("Member with ID \"" + id + "\" not found.");
+		}
+
+		return member;
+	}
+
+	// ========================================================================
+	// Helpers
+	// ========================================================================
+
 	private ArrayList<String> validateNewMember(CreateMemberRequestDto newMember) {
 		ArrayList<String> errors = new ArrayList<String>();
 
@@ -110,12 +125,6 @@ public class MemberService {
 			return false;
 		}
 		return true;
-	}
-
-	@Transactional
-	public Member getMemberById(int id) {
-		Member member = memberRepository.findMemberById(id);
-		return member;
 	}
 
 	@Transactional
