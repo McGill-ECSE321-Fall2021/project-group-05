@@ -43,8 +43,20 @@ public class Reservation {
         return this.member;
     }
 
+    public Date getDate(){
+        return this.date;
+    }
+
+    public ReservableItemInfo getReservableItemInfo(){
+        return this.reservedItem;
+    }
+
     public void setMember(Member member){
         this.member = member;
+    }
+
+    public void setReservableItemInfo(ReservableItemInfo reservableItem){
+        this.reservedItem = reservableItem;
     }
     
 }
