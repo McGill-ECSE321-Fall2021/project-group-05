@@ -14,12 +14,16 @@ import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.LibraryItemInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.NewsPaperInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.ReservationRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.LibraryItemInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.Reservation;
+import ca.mcgill.ecse321.onlinelibrary.model.Member;
+import ca.mcgill.ecse321.onlinelibrary.model.ReservableItemInfo;
 
 @Service
 public class LibraryItemInfoService {
@@ -42,6 +46,37 @@ public class LibraryItemInfoService {
 	@Autowired
     private LibraryItemInfoRepository libraryItemInfoRespository;
 
+
+	@Autowired
+	private ReservationRepository reservationRepository;
+
+	@Transactional
+	public Reservation reserveItem(Member member, ReservableItemInfo reservableItem, Date date){
+		ArrayList<String> errorMessage = new ArrayList<String>();
+		int errorCount = 0;
+
+		if (member.getStatus() == Member.MemberStatus.BLACKLISTED){
+			errorMessage.add("Member is blacklisted.");
+			errorCount++;
+		}
+
+		//check if null!!!!!
+
+		//Max reserved is 5?
+		//add code
+
+		// if (member.getReservedItems().size() > 5){
+		// 	throw new IllegalArgumentException("This member is not allowed to reserve more than 5 items");
+		// }
+		// member.addReservation(bookInfo);
+
+		if (errorCount > 0) {
+			throw new IllegalArgumentException(String.join(" ", errorMessage));
+		}
+		Reservation reservation = new Reservation(member, reservableItem, date);
+		reservationRepository.save(reservation);
+		return reservation;
+	}
 
 	@Transactional
 	public BookInfo createBookInfo(String title, int numberOfPage, String author, long isbn) {
