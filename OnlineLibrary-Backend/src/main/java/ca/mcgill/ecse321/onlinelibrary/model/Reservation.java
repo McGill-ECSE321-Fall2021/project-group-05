@@ -4,14 +4,14 @@ import javax.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.*;
+import java.sql.Date;
 @Entity
 public class Reservation {
     @Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private Integer reservationId;
 
-    private Date reservationDate;
+    private Date date;
     
     @OnDelete (action = OnDeleteAction.CASCADE)
     @ManyToOne (optional = false)
@@ -24,15 +24,15 @@ public class Reservation {
     public Reservation(Member member, ReservableItemInfo reservableItem, Date date){
         this.member = member;
         this.reservedItem = reservableItem;
-        this.setReservationDate(date);
+        this.date = date;
     }
 
-    public Date getReservationDate() {
-        return reservationDate;
+    public Date getDate() {
+        return date;
     }
 
-    public void setReservationDate(Date reservationDate) {
-        this.reservationDate = reservationDate;
+    public void setDate(Date date) {
+        this.date = date;
     }
     
     public Integer getId(){
