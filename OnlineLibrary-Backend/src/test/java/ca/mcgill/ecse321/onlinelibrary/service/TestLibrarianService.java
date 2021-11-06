@@ -8,7 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.ArgumentMatchers.anyInt;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 import ca.mcgill.ecse321.onlinelibrary.dao.LibrarianRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
 
@@ -32,20 +34,26 @@ public class TestLibrarianService {
 	// TODO Get this from application.properties
 	private int MIN_PASSWD_LENGTH = 8;
 
+	// Existing head librarian
 	private final int HEAD_ID = 1;
-	private final int OLD_REG_ID = 2;
-	private final int NEW_REG_ID = 3;
-	private final int INVALID_ID = 999;
 	private final String HEAD_FULL_NAME = "Jocasta Nu";
-	private final String OLD_REG_FULL_NAME = "Bilbo Baggins";
-	private final String NEW_REG_FULL_NAME = "Alfred Pennyworth";
 	private final String HEAD_USERNAME = "jocasta.nu";
-	private final String OLD_REG_USERNAME = "bilbo.baggins";
-	private final String NEW_REG_USERNAME = "alfred.pennyworth";
-	private final String INVALID_USERNAME = "nonexistent member";
 	private final String HEAD_PASSWD = "j".repeat(MIN_PASSWD_LENGTH);
-	private final String OLD_REG_PASSWD = "b".repeat(MIN_PASSWD_LENGTH);
-	private final String NEW_REG_PASSWD = "a".repeat(MIN_PASSWD_LENGTH);
+
+	// Existing regular librarian
+	private final int OLD_REG_ID = 2;
+	private final String OLD_REG_FULL_NAME = "Alfred Pennyworth";
+	private final String OLD_REG_USERNAME = "alfred.pennyworth";
+	private final String OLD_REG_PASSWD = "a".repeat(MIN_PASSWD_LENGTH);
+
+	// New regular librarian
+	private final String NEW_REG_FULL_NAME = "Bilbo Baggins";
+	private final String NEW_REG_USERNAME = "bilbo.baggins";
+	private final String NEW_REG_PASSWD = "b".repeat(MIN_PASSWD_LENGTH);
+
+	// Invalid credentials
+	private final int INVALID_ID = 999;
+	private final String INVALID_USERNAME = "nonexistent member";
 	private final String SHORT_PASSWD = "c".repeat(MIN_PASSWD_LENGTH - 1);
 
 	/**
@@ -62,40 +70,40 @@ public class TestLibrarianService {
 	public void setMockOuput() {
 		lenient().when(librarianRepository.existsLibrarianByUsername(any(String.class)))
 		.thenAnswer((InvocationOnMock invocation) -> {
-			if (HEAD_USERNAME.equals(invocation.getArgument(0))
-					|| OLD_REG_USERNAME.equals(invocation.getArgument(0))) {
-				return true;
-			} else {
-				return false;
-			}
-		});
-		lenient().when(librarianRepository.findLibrarianById(anyInt()))
-		.thenAnswer((InvocationOnMock invocation) -> {
-			Librarian librarian = null;
-			if (HEAD_ID == (int)invocation.getArgument(0)) {
-				librarian = new Librarian(HEAD_FULL_NAME, HEAD_USERNAME, HEAD_PASSWD, true);
-			}
-			else if (OLD_REG_ID == (int)invocation.getArgument(0)) {
-				librarian = new Librarian(OLD_REG_FULL_NAME, OLD_REG_USERNAME, OLD_REG_PASSWD, false);
-			}
-			return librarian;
-		});
-		lenient().when(librarianRepository.findLibrarianByUsername(any(String.class)))
-		.thenAnswer((InvocationOnMock invocation) -> {
-			Librarian librarian = null;
-			if (HEAD_USERNAME.equals(invocation.getArgument(0))) {
-				librarian = new Librarian(HEAD_FULL_NAME, HEAD_USERNAME, HEAD_PASSWD, true);
-			}
-			else if (OLD_REG_USERNAME.equals(invocation.getArgument(0))) {
-				librarian = new Librarian(OLD_REG_FULL_NAME, OLD_REG_USERNAME, OLD_REG_PASSWD, false);
-			}
-			return librarian;
+			String username = invocation.getArgument(0);
+			return switch (username) {
+				case HEAD_USERNAME, OLD_REG_USERNAME -> true;
+				default -> false;
+			};
 		});
 
-		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
-			return invocation.getArgument(0);
-		};
-		lenient().when(librarianRepository.save(any(Librarian.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(librarianRepository.findLibrarianByUsername(any(String.class)))
+		.thenAnswer((InvocationOnMock invocation) -> {
+			String username = invocation.getArgument(0);
+			return switch (username) {
+				case HEAD_USERNAME -> new Librarian(HEAD_FULL_NAME, HEAD_USERNAME, HEAD_PASSWD, true);
+				case OLD_REG_USERNAME -> new Librarian(OLD_REG_FULL_NAME, OLD_REG_USERNAME, OLD_REG_PASSWD,
+						false);
+				default -> null;
+			};
+		});
+
+		lenient().when(librarianRepository.findLibrarianById(any(int.class)))
+		.thenAnswer((InvocationOnMock invocation) -> {
+			int id = (int) invocation.getArgument(0);
+			return switch (id) {
+				case HEAD_ID -> new Librarian(HEAD_FULL_NAME, HEAD_USERNAME, HEAD_PASSWD, true);
+				case OLD_REG_ID -> new Librarian(OLD_REG_FULL_NAME, OLD_REG_USERNAME, OLD_REG_PASSWD, false);
+				default -> null;
+			};
+		});
+
+		lenient().when(librarianRepository.findAll()).thenAnswer((InvocationOnMock invocation) -> {
+			List<Librarian> librarians = new ArrayList<Librarian>();
+			librarians.add(new Librarian(HEAD_FULL_NAME, HEAD_USERNAME, HEAD_PASSWD, true));
+			librarians.add(new Librarian(OLD_REG_FULL_NAME, OLD_REG_USERNAME, OLD_REG_PASSWD, false));
+			return librarians;
+		});
 	}
 
 	/**
@@ -202,6 +210,9 @@ public class TestLibrarianService {
 		assertContains("Password must be at least 8 characters in length.", error.getMessage());
 	}
 
+	/**
+	 * Successfully get librarian by ID.
+	 */
 	@Test
 	public void testGetLibrarianById() {
 		Librarian librarian = librarianService.getLibrarianById(HEAD_ID);
@@ -212,6 +223,20 @@ public class TestLibrarianService {
 		assertTrue(librarian.isHead());
 	}
 
+	/**
+	 * We expect the error message "Librarian with ID {id} not found." when
+	 * there is no librarian with the given ID.
+	 */
+	@Test
+	public void testGetLibrarianByIdNotFound() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> librarianService.getLibrarianById(INVALID_ID));
+		assertContains("Librarian with ID \"" + INVALID_ID + "\" not found.", error.getMessage());
+	}
+
+	/**
+	 * Successfully get librarian by username.
+	 */
 	@Test
 	public void testGetLibrarianByUsername() {
 		Librarian librarian = librarianService.getLibrarianById(OLD_REG_ID);
@@ -222,9 +247,38 @@ public class TestLibrarianService {
 		assertFalse(librarian.isHead());
 	}
 
-	// TODO
-	public void testGetAllLibrarians() {
+	@Test
+	public void testGetLibrarianByUsernameNotFound() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> librarianService.getLibrarianByUsername(INVALID_USERNAME));
+		assertContains("Librarian with username \"" + INVALID_USERNAME + "\" not found.", error.getMessage());
+	}
 
+	/**
+	 * Successfully get all librarians.
+	 */
+	@Test
+	public void testGetAllLibrarians() {
+		Iterable<Librarian> librarians = librarianService.getAllLibrarians();
+
+		assertNotNull(librarians);
+
+		// Check that list contains all and only the correct librarians
+		int count = 0;
+		boolean headFound = false;
+		boolean regFound = false;
+		for (Librarian l : librarians) {
+			count++;
+			if (HEAD_FULL_NAME.equals(l.getFullName()) && HEAD_USERNAME.equals(l.getUsername()) && l.isHead()) {
+				headFound = true;
+			}
+			if (OLD_REG_FULL_NAME.equals(l.getFullName()) && OLD_REG_USERNAME.equals(l.getUsername()) && !l.isHead()) {
+				regFound = true;
+			}
+		}
+		assertEquals(2, count);
+		assertTrue(headFound);
+		assertTrue(regFound);
 	}
 
 	public void assertContains(String expected, String actual) {
