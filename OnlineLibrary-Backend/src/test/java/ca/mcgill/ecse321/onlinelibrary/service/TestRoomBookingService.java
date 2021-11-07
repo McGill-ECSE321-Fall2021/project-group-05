@@ -272,4 +272,20 @@ public class TestRoomBookingService {
                 () -> roomBookingService.getRoomBookingById(INVALID_BOOKING_ID));
         assertEquals("No room booking with id " + INVALID_BOOKING_ID + " exists.", e.getMessage());
     }
+
+    @Test
+    public void testDeleteRoomSuccessful() {
+        roomBookingService.deleteRoom(roomBookingService.getRoomById(ROOM_ID));
+
+        verify(roomDao, times(1)).delete(argThat((Room r) -> ROOM_ID == r.getId()));
+        verify(roomDao, times(0)).delete(argThat((Room r) -> ROOM_ID != r.getId()));
+    }
+
+    @Test
+    public void testDeleteRoomNull() {
+        Exception error = assertThrows(IllegalArgumentException.class,
+                () -> roomBookingService.deleteRoom(null));
+        assertEquals("Room cannot be null.", error.getMessage());
+        verify(roomDao, times(0)).delete(any(Room.class));
+    }
 }
