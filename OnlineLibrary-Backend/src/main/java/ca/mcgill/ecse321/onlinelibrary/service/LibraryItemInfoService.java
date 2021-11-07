@@ -55,20 +55,25 @@ public class LibraryItemInfoService {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount = 0;
 
-		if (member.getStatus() == Member.MemberStatus.BLACKLISTED){
+		if (member == null){
+			errorMessage.add("A member needs to be assigned to a reservation.");
+			errorCount++;
+		} else {
+			if (member.getStatus() == Member.MemberStatus.BLACKLISTED) {
 			errorMessage.add("Member is blacklisted.");
+			errorCount++;
+			}
+		}
+
+		if (reservableItem == null){
+			errorMessage.add("An item needs to be assigned to a reservation");
 			errorCount++;
 		}
 
-		//check if null!!!!!
-
-		//Max reserved is 5?
-		//add code
-
-		// if (member.getReservedItems().size() > 5){
-		// 	throw new IllegalArgumentException("This member is not allowed to reserve more than 5 items");
-		// }
-		// member.addReservation(bookInfo);
+		if (date == null){
+			errorMessage.add("Date cannot be null");
+			errorCount++;
+		}
 
 		if (errorCount > 0) {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
