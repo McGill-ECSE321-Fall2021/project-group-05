@@ -688,6 +688,20 @@ public class TestOnlineLibraryPersistence {
 	}
 	
 	@Test
+	public void testPersistAndLoadLibrarianShiftByLibrarianIdNegative() {
+		// Create and persist librarian with shift
+		Librarian originalLibrarian = new Librarian("Jocasta Nu", "jocasta-nu", "12345", true);
+		new LibrarianShift(Date.valueOf("2022-10-16"), Time.valueOf("9:00:00"),
+				Time.valueOf("17:00:00"), originalLibrarian);
+		originalLibrarian = librarianRepository.save(originalLibrarian);
+		
+		ArrayList<LibrarianShift> shifts = librarianShiftRepository.findLibrarianShiftByLibrarianId(2255);
+
+		assertNotNull(shifts);
+		assertEquals(shifts.size(), 0);
+	}
+	
+	@Test
 	public void testPersistAndLoadLibrarianShiftByDateAndLibrarianId() {
 		// Create and persist librarian with shift
 		Librarian originalLibrarian = new Librarian("Jocasta Nu", "jocasta-nu", "12345", true);
