@@ -259,4 +259,17 @@ public class TestRoomBookingService {
                 () -> roomBookingService.getRoomById(INVALID_ROOM_ID));
         assertEquals("No room with id " + INVALID_ROOM_ID + " exists.", e.getMessage());
     }
+
+    @Test
+    public void testGetRoomBookingByIdSuccessful() {
+        RoomBooking roomBooking = roomBookingService.getRoomBookingById(BOOKING_ID);
+        assertNotNull(roomBooking);
+    }
+
+    @Test
+    public void testGetRoomBookingByIdNonexistent() {
+        Exception e = assertThrows(NoSuchElementException.class,
+                () -> roomBookingService.getRoomBookingById(INVALID_BOOKING_ID));
+        assertEquals("No room booking with id " + INVALID_BOOKING_ID + " exists.", e.getMessage());
+    }
 }
