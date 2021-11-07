@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.onlinelibrary.service;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,11 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import ca.mcgill.ecse321.onlinelibrary.dao.AlbumInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.ArchiveInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.LibraryItemInfoRespository;
 import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.NewsPaperInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.LibraryItemInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
 
@@ -35,6 +38,10 @@ public class LibraryItemInfoService {
 
 	@Autowired
 	private NewsPaperInfoRepository newsPaperInfoRepository;
+	
+	@Autowired
+    private LibraryItemInfoRespository libraryItemInfoRespository;
+
 
 	@Transactional
 	public BookInfo createBookInfo(String title, int numberOfPage, String author, long isbn) {
@@ -106,6 +113,18 @@ public class LibraryItemInfoService {
 		movieInfoRepository.save(movieInfo);
 		return movieInfo;
 	}
+	
+	@Transactional
+    public List<LibraryItemInfo> browse(){
+
+        List<LibraryItemInfo> lii = new ArrayList<LibraryItemInfo>();
+        Iterable<LibraryItemInfo> iterativeItems = libraryItemInfoRespository.findAll();
+        for (LibraryItemInfo item : iterativeItems){
+            lii.add(item);
+        }
+        
+        return lii;
+    }
 	
 	@Transactional
 	public MovieInfo getMovieInfo(int id) {
