@@ -67,4 +67,37 @@ public class TestRoomBookingService {
         });
     }
 
+    @Test
+    public void testCreateRoomSuccessful() {
+        int capacity = 10;
+        String name = "Room" + ROOM_ID;
+        Room room = null;
+
+        try {
+            room = roomBookingService.createRoom(capacity, name);
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+
+        assertNotNull(room);
+        assertEquals(capacity, room.getCapacity());
+        assertEquals(name, room.getName());
+    }
+
+    @Test
+    public void testCreateRoomEmptyName() {
+        int capacity = 10;
+        String name = "";
+        Room room = null;
+        String errorMessage = "";
+
+        try {
+            room = roomBookingService.createRoom(capacity, name);
+        } catch (IllegalArgumentException e) {
+            errorMessage += e.getMessage();
+        }
+
+        assertNull(room);
+        assertTrue(errorMessage.contains("Name cannot be empty"));
+    }
 }
