@@ -288,4 +288,20 @@ public class TestRoomBookingService {
         assertEquals("Room cannot be null.", error.getMessage());
         verify(roomDao, times(0)).delete(any(Room.class));
     }
+
+    @Test
+    public void testDeleteRoomBookingSuccessful() {
+        roomBookingService.deleteRoomBooking(roomBookingService.getRoomBookingById(BOOKING_ID));
+
+        verify(roomBookingDao, times(1)).delete(argThat((RoomBooking rb) -> BOOKING_ID == rb.getId()));
+        verify(roomBookingDao, times(0)).delete(argThat((RoomBooking rb) -> BOOKING_ID != rb.getId()));
+    }
+
+    @Test
+    public void testDeleteRoomBookingNull() {
+        Exception error = assertThrows(IllegalArgumentException.class,
+                () -> roomBookingService.deleteRoomBooking(null));
+        assertEquals("Room booking cannot be null.", error.getMessage());
+        verify(roomBookingDao, times(0)).delete(any(RoomBooking.class));
+    }
 }
