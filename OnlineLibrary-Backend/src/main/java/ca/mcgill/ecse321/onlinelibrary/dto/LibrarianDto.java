@@ -1,6 +1,11 @@
 package ca.mcgill.ecse321.onlinelibrary.dto;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
+import ca.mcgill.ecse321.onlinelibrary.model.LibrarianShift;
 
 public class LibrarianDto {
 
@@ -9,21 +14,28 @@ public class LibrarianDto {
 	private String username;
 	private boolean isHead;
 
-	// TODO Add schedule
-
+	private List<LibrarianShiftDto> shifts;
+	
 	public LibrarianDto(int id, String fullName, String username, boolean isHead) {
 		this.id = id;
 		this.fullName = fullName;
 		this.username = username;
 		this.isHead = isHead;
+		this.shifts = new ArrayList<LibrarianShiftDto>();
 	}
 
 	public static LibrarianDto fromLibrarian(Librarian librarian) {
 		if (librarian == null) {
 			throw new IllegalArgumentException("Librarian cannot be null.");
 		}
-		return new LibrarianDto(librarian.getId(), librarian.getFullName(), librarian.getUsername(),
+		LibrarianDto librarianDto = new LibrarianDto(librarian.getId(), librarian.getFullName(), librarian.getUsername(),
 				librarian.isHead());
+
+		for(LibrarianShift shift : librarian.getShifts()) {
+			librarianDto.shifts.add(LibrarianShiftDto.fromLibrarianShift(shift));
+		}
+		
+		return librarianDto;
 	}
 
 	public int getId() {
@@ -40,5 +52,10 @@ public class LibrarianDto {
 
 	public boolean isHead() {
 		return this.isHead;
+	}
+	
+
+	public List<LibrarianShiftDto> getShifts() {
+		return Collections.unmodifiableList(this.shifts);
 	}
 }

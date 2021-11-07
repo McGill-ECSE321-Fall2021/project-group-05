@@ -648,6 +648,108 @@ public class TestOnlineLibraryPersistence {
 		assertNotNull(newShift);
 
 		// Check attributes
+		assertEquals(shiftId, newShift.getId());
+		assertEquals(Date.valueOf("2022-10-16"), newShift.getDate());
+		assertEquals(Time.valueOf("9:00:00"), newShift.getStartTime());
+		assertEquals(Time.valueOf("17:00:00"), newShift.getEndTime());
+
+		// Check association
+		Librarian newLibrarian = newShift.getLibrarian();
+		assertNotNull(newLibrarian);
+		assertEquals(librarianId, newLibrarian.getId());
+	}
+	
+	@Test
+	public void testPersistAndLoadLibrarianShiftByDate() {
+		// Create and persist librarian with shift
+		Librarian originalLibrarian = new Librarian("Jocasta Nu", "jocasta-nu", "12345", true);
+		LibrarianShift originalShift = new LibrarianShift(Date.valueOf("2022-10-16"), Time.valueOf("9:00:00"),
+				Time.valueOf("17:00:00"), originalLibrarian);
+		originalLibrarian = librarianRepository.save(originalLibrarian);
+
+		// Get ID and drop reference
+		int librarianId = originalLibrarian.getId();
+		int shiftId = originalShift.getId();
+		originalShift = null;
+
+		ArrayList<LibrarianShift> shifts = librarianShiftRepository.findLibrarianShiftByDate(Date.valueOf("2022-10-16"));
+		LibrarianShift newShift = shifts.get(0);
+		assertNotNull(newShift);
+
+		// Check attributes
+		assertEquals(shiftId, newShift.getId());
+		assertEquals(Date.valueOf("2022-10-16"), newShift.getDate());
+		assertEquals(Time.valueOf("9:00:00"), newShift.getStartTime());
+		assertEquals(Time.valueOf("17:00:00"), newShift.getEndTime());
+
+		// Check association
+		Librarian newLibrarian = newShift.getLibrarian();
+		assertNotNull(newLibrarian);
+		assertEquals(librarianId, newLibrarian.getId());
+	}
+	
+	@Test
+	public void testPersistAndLoadLibrarianShiftByLibrarianId() {
+		// Create and persist librarian with shift
+		Librarian originalLibrarian = new Librarian("Jocasta Nu", "jocasta-nu", "12345", true);
+		LibrarianShift originalShift = new LibrarianShift(Date.valueOf("2022-10-16"), Time.valueOf("9:00:00"),
+				Time.valueOf("17:00:00"), originalLibrarian);
+		originalLibrarian = librarianRepository.save(originalLibrarian);
+
+		// Get ID and drop reference
+		int librarianId = originalLibrarian.getId();
+		int shiftId = originalShift.getId();
+		originalShift = null;
+
+		ArrayList<LibrarianShift> shifts = librarianShiftRepository.findLibrarianShiftByLibrarianId(librarianId);
+		LibrarianShift newShift = shifts.get(0);
+		assertNotNull(newShift);
+
+		// Check attributes
+		assertEquals(shiftId, newShift.getId());
+		assertEquals(Date.valueOf("2022-10-16"), newShift.getDate());
+		assertEquals(Time.valueOf("9:00:00"), newShift.getStartTime());
+		assertEquals(Time.valueOf("17:00:00"), newShift.getEndTime());
+
+		// Check association
+		Librarian newLibrarian = newShift.getLibrarian();
+		assertNotNull(newLibrarian);
+		assertEquals(librarianId, newLibrarian.getId());
+	}
+	
+	@Test
+	public void testPersistAndLoadLibrarianShiftByLibrarianIdNegative() {
+		// Create and persist librarian with shift
+		Librarian originalLibrarian = new Librarian("Jocasta Nu", "jocasta-nu", "12345", true);
+		new LibrarianShift(Date.valueOf("2022-10-16"), Time.valueOf("9:00:00"),
+				Time.valueOf("17:00:00"), originalLibrarian);
+		originalLibrarian = librarianRepository.save(originalLibrarian);
+		
+		ArrayList<LibrarianShift> shifts = librarianShiftRepository.findLibrarianShiftByLibrarianId(2255);
+
+		assertNotNull(shifts);
+		assertEquals(shifts.size(), 0);
+	}
+	
+	@Test
+	public void testPersistAndLoadLibrarianShiftByDateAndLibrarianId() {
+		// Create and persist librarian with shift
+		Librarian originalLibrarian = new Librarian("Jocasta Nu", "jocasta-nu", "12345", true);
+		LibrarianShift originalShift = new LibrarianShift(Date.valueOf("2022-10-16"), Time.valueOf("9:00:00"),
+				Time.valueOf("17:00:00"), originalLibrarian);
+		originalLibrarian = librarianRepository.save(originalLibrarian);
+
+		// Get ID and drop reference
+		int librarianId = originalLibrarian.getId();
+		int shiftId = originalShift.getId();
+		originalShift = null;
+
+		ArrayList<LibrarianShift> shifts = librarianShiftRepository.findLibrarianShiftByDateAndLibrarianId(Date.valueOf("2022-10-16"), librarianId);
+		LibrarianShift newShift = shifts.get(0);
+		assertNotNull(newShift);
+
+		// Check attributes
+		assertEquals(shiftId, newShift.getId());
 		assertEquals(Date.valueOf("2022-10-16"), newShift.getDate());
 		assertEquals(Time.valueOf("9:00:00"), newShift.getStartTime());
 		assertEquals(Time.valueOf("17:00:00"), newShift.getEndTime());
