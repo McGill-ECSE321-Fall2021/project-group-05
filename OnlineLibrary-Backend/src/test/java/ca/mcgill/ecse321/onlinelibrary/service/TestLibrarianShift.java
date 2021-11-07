@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mockitoSession;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -25,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
@@ -47,14 +49,14 @@ public class TestLibrarianShift {
 	private static final Date INVALID_DATE = Date.valueOf(LocalDate.of(2020, Month.JANUARY, 2));
 	private static final Time START_TIME = Time.valueOf(LocalTime.of(11, 35));
 	private static final Time END_TIME = Time.valueOf(LocalTime.of(12, 38));
-	private static final Librarian LIBRARIAN = new Librarian("Bob", "Ross", "Angry", false);
+	private static final Librarian LIBRARIAN = Mockito.spy(new Librarian("Bob", "Ross", "Angry", false));
 	private static final int VALID_LIBRARIAN_ID = 1;
 	private static final int INVALID_LIBRARIAN_ID = -1;
 	private static final int VALID_ID = 1;
 	
 	@BeforeEach
 	public void setMockOuput() {
-		LIBRARIAN.setTestId(VALID_LIBRARIAN_ID);
+		Mockito.when(LIBRARIAN.getId()).thenReturn(VALID_LIBRARIAN_ID);
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
 		};

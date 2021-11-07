@@ -69,10 +69,6 @@ public class Librarian {
 	public void setPasswordHash(String newPasswordHash) {
 		this.passwordHash = newPasswordHash;
 	}
-	
-	public void setTestId(int id) {
-		this.id = id;
-	}
 
 	public boolean isHead() {
 		return this.isHead;
