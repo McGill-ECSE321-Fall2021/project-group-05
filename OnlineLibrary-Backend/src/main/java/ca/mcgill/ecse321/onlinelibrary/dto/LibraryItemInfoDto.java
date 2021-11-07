@@ -1,6 +1,8 @@
 package ca.mcgill.ecse321.onlinelibrary.dto;
 
-public class LibraryItemInfoDto {
+import ca.mcgill.ecse321.onlinelibrary.model.LibraryItemInfo;
+
+public abstract class LibraryItemInfoDto {
 	private Integer id;
 	
 	public LibraryItemInfoDto(Integer id) {
