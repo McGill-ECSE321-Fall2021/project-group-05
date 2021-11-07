@@ -7,6 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -194,7 +197,7 @@ public class TestLibraryOpeningHoursService {
 	}
 	
 	@Test
-	public void createLibraryOpeningHours() { 
+	public void testCreateLibraryOpeningHours() { 
 		LibraryOpeningHours openingHoursOfDate = null;
 		
 		try {
@@ -202,7 +205,8 @@ public class TestLibraryOpeningHoursService {
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
-		
+
+		verify(libraryOpeningHoursRepository, times(1)).save(any(LibraryOpeningHours.class));
 		assertNotNull(openingHoursOfDate);
 		assertEquals(ENDING_DATE, openingHoursOfDate.getDate());
 		assertEquals(START_TIME, openingHoursOfDate.getStartTime());
@@ -210,7 +214,7 @@ public class TestLibraryOpeningHoursService {
 	}
 	
 	@Test
-	public void createLibraryOpeningHoursEmptyDate() { 
+	public void testCreateLibraryOpeningHoursEmptyDate() { 
 		LibraryOpeningHours openingHoursOfDate = null;
 		String error = null;
 		
@@ -219,14 +223,15 @@ public class TestLibraryOpeningHoursService {
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-		
+
+		verify(libraryOpeningHoursRepository, never()).save(any(LibraryOpeningHours.class));
 		assertNull(openingHoursOfDate);
 		assertNotNull(error);
 		assertTrue(error.contains("Date can't be empty."));
 	}
 	
 	@Test
-	public void createLibraryOpeningHoursEmptyStartTime() { 
+	public void testCreateLibraryOpeningHoursEmptyStartTime() { 
 		LibraryOpeningHours openingHoursOfDate = null;
 		String error = null;
 		
@@ -235,14 +240,15 @@ public class TestLibraryOpeningHoursService {
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-		
+
+		verify(libraryOpeningHoursRepository, never()).save(any(LibraryOpeningHours.class));
 		assertNull(openingHoursOfDate);
 		assertNotNull(error);
 		assertTrue(error.contains("Start Time can't be empty."));
 	}
 	
 	@Test
-	public void createLibraryOpeningHoursEmptyEndTime() { 
+	public void testCreateLibraryOpeningHoursEmptyEndTime() { 
 		LibraryOpeningHours openingHoursOfDate = null;
 		String error = null;
 		
@@ -251,14 +257,15 @@ public class TestLibraryOpeningHoursService {
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-		
+
+		verify(libraryOpeningHoursRepository, never()).save(any(LibraryOpeningHours.class));
 		assertNull(openingHoursOfDate);
 		assertNotNull(error);
 		assertTrue(error.contains("End Time can't be empty."));
 	}
 	
 	@Test
-	public void createLibraryOpeningHoursEmptyInvertedTimes() { 
+	public void testCreateLibraryOpeningHoursEmptyInvertedTimes() { 
 		LibraryOpeningHours openingHoursOfDate = null;
 		String error = null;
 		
@@ -267,14 +274,15 @@ public class TestLibraryOpeningHoursService {
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-		
+
+		verify(libraryOpeningHoursRepository, never()).save(any(LibraryOpeningHours.class));
 		assertNull(openingHoursOfDate);
 		assertNotNull(error);
 		assertTrue(error.contains("Start Time must be before End Time."));
 	}
 	
 	@Test
-	public void createLibraryOpeningHoursOverlapHoliday() { 
+	public void testCreateLibraryOpeningHoursOverlapHoliday() { 
 		LibraryOpeningHours openingHoursOfDate = null;
 		String error = null;
 		
@@ -283,14 +291,15 @@ public class TestLibraryOpeningHoursService {
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-		
+
+		verify(libraryOpeningHoursRepository, never()).save(any(LibraryOpeningHours.class));
 		assertNull(openingHoursOfDate);
 		assertNotNull(error);
 		assertTrue(error.contains("Date coincides with a federal holiday."));
 	}
 	
 	@Test
-	public void createLibraryOpeningHoursOverlapExisting() { 
+	public void testCreateLibraryOpeningHoursOverlapExisting() { 
 		LibraryOpeningHours openingHoursOfDate = null;
 		String error = null;
 		
@@ -299,18 +308,21 @@ public class TestLibraryOpeningHoursService {
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-		
+
+		verify(libraryOpeningHoursRepository, never()).save(any(LibraryOpeningHours.class));
 		assertNull(openingHoursOfDate);
 		assertNotNull(error);
 		assertTrue(error.contains("Opening hours have already been set for this date and time."));
 	}
 	
 	@Test
-	public void deleteLibraryOpeningHoursExisting() {
+	public void testDeleteLibraryOpeningHoursExisting() {
 		try {
 			service.deleteLibraryOpeningHours(VALID_ID);
 		} catch(Exception e) {
 			fail();
 		}
+
+		verify(libraryOpeningHoursRepository, times(1)).deleteById(VALID_ID);
 	}
 }
