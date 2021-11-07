@@ -43,8 +43,8 @@ public class LibrarianShiftController {
 	}
 	
 	@PostMapping(value = { "/librarianShift", "/librarianShift/"})
-	public LibrarianShiftDto createLibrarianShift(@RequestParam Date date, @RequestParam Time startTime, @RequestParam Time endTime, @RequestParam Librarian librarian) throws IllegalArgumentException{
-		LibrarianShift librarianShift = service.createLibrarianShift(date, startTime, endTime, librarian);
+	public LibrarianShiftDto createLibrarianShift(@RequestParam Date date, @RequestParam Time startTime, @RequestParam Time endTime, @RequestParam int librarianId) throws IllegalArgumentException{
+		LibrarianShift librarianShift = service.createLibrarianShift(date, startTime, endTime, librarianId);
 		return LibrarianShiftDto.fromLibrarianShift(librarianShift);
 	}
 	

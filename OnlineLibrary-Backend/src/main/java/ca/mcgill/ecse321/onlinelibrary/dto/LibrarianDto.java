@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
+import ca.mcgill.ecse321.onlinelibrary.model.LibrarianShift;
 
 public class LibrarianDto {
 
@@ -20,6 +21,7 @@ public class LibrarianDto {
 		this.fullName = fullName;
 		this.username = username;
 		this.isHead = isHead;
+		this.shifts = new ArrayList<LibrarianShiftDto>();
 	}
 
 	public static LibrarianDto fromLibrarian(Librarian librarian) {
@@ -29,7 +31,9 @@ public class LibrarianDto {
 		LibrarianDto librarianDto = new LibrarianDto(librarian.getId(), librarian.getFullName(), librarian.getUsername(),
 				librarian.isHead());
 
-		librarianDto.shifts = new ArrayList<LibrarianShiftDto>();
+		for(LibrarianShift shift : librarian.getShifts()) {
+			librarianDto.shifts.add(LibrarianShiftDto.fromLibrarianShift(shift));
+		}
 		
 		return librarianDto;
 	}
@@ -53,26 +57,5 @@ public class LibrarianDto {
 
 	public List<LibrarianShiftDto> getShifts() {
 		return Collections.unmodifiableList(this.shifts);
-	}
-
-	public boolean addShift(LibrarianShiftDto newShift) {
-		if (newShift == null || this.shifts.contains(newShift))
-			return false;
-
-		boolean isNewLibrarian = !this.equals(newShift.getLibrarian());
-		if (isNewLibrarian)
-			newShift.setLibrarian(this);
-		else
-			this.shifts.add(newShift);
-
-		return true;
-	}
-
-	public boolean removeShift(LibrarianShiftDto shiftToRemove) {
-		if (this.equals(shiftToRemove.getLibrarian()))
-			return false;
-
-		this.shifts.remove(shiftToRemove);
-		return true;
 	}
 }

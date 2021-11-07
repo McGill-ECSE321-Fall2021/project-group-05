@@ -3,7 +3,6 @@ package ca.mcgill.ecse321.onlinelibrary.service;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +49,7 @@ public class LibrarianShiftService {
 	}
 	
 	@Transactional
-	public LibrarianShift createLibrarianShift(Date date, Time startTime, Time endTime, Librarian librarian) {
+	public LibrarianShift createLibrarianShift(Date date, Time startTime, Time endTime, int librarianId) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount=0;
 
@@ -69,13 +68,14 @@ public class LibrarianShiftService {
 			errorCount++;
 		}
 
-		if(errorCount == 0 && startTime.compareTo(endTime) == 1) {
+		if(startTime != null && endTime != null && startTime.compareTo(endTime) == 1) {
 			errorMessage.add("Start Time can't be after End Time.");
 			errorCount++;
 		}
-		
+
+		Librarian librarian = librarianRepository.findLibrarianById(librarianId);
 		if (librarian == null) {
-			errorMessage.add("Librarian can't be empty.");
+			errorMessage.add("Librarian does not exist.");
 			errorCount++;
 		}
 
@@ -98,7 +98,9 @@ public class LibrarianShiftService {
 		}
 
 		LibrarianShift librarianShift = new LibrarianShift(date, startTime, endTime, librarian);
+		librarian.addShift(librarianShift);
 		librarianShiftRepository.save(librarianShift);
+		librarianRepository.save(librarian);
 
 		return librarianShift;
 	}
