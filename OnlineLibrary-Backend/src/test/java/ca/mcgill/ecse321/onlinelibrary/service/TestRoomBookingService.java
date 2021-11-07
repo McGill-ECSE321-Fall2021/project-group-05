@@ -100,4 +100,150 @@ public class TestRoomBookingService {
         assertNull(room);
         assertTrue(errorMessage.contains("Name cannot be empty"));
     }
+
+    @Test
+    public void testCreateRoomBookingSuccessful() {
+        Date date = Date.valueOf("2021-12-25");
+        Time startTime = Time.valueOf("12:00:00");
+        Time endTime = Time.valueOf("23:59:59");
+        Member member = new Member("123 Main Street", "John Doe");
+        Room room = new Room(10, "Room" + ROOM_ID);
+        RoomBooking roomBooking = null;
+
+        try {
+            roomBooking = roomBookingService.createRoomBooking(date, startTime, endTime, member, room);
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+
+        assertNotNull(roomBooking);
+        assertEquals(date, roomBooking.getDate());
+        assertEquals(startTime, roomBooking.getStartTime());
+        assertEquals(endTime, roomBooking.getEndTime());
+        assertEquals(member, roomBooking.getMember());
+        assertEquals(room, roomBooking.getRoom());
+    }
+
+    @Test
+    public void testCreateRoomBookingNullDate() {
+        Date date = null;
+        Time startTime = Time.valueOf("12:00:00");
+        Time endTime = Time.valueOf("23:59:59");
+        Member member = new Member("123 Main Street", "John Doe");
+        Room room = new Room(10, "Room" + ROOM_ID);
+        RoomBooking roomBooking = null;
+        String errorMessage = "";
+
+        try {
+            roomBooking = roomBookingService.createRoomBooking(date, startTime, endTime, member, room);
+        } catch (IllegalArgumentException e) {
+            errorMessage += e.getMessage();
+        }
+
+        assertNull(roomBooking);
+        assert(errorMessage.contains("Date cannot be empty."));
+    }
+
+    @Test
+    public void testCreateRoomBookingNullStartTime() {
+        Date date = Date.valueOf("2021-12-25");
+        Time startTime = null;
+        Time endTime = Time.valueOf("23:59:59");
+        Member member = new Member("123 Main Street", "John Doe");
+        Room room = new Room(10, "Room" + ROOM_ID);
+        RoomBooking roomBooking = null;
+        String errorMessage = "";
+
+        try {
+            roomBooking = roomBookingService.createRoomBooking(date, startTime, endTime, member, room);
+        } catch (IllegalArgumentException e) {
+            errorMessage += e.getMessage();
+        }
+
+        assertNull(roomBooking);
+        assert(errorMessage.contains("Start and end times cannot be empty."));
+    }
+
+    @Test
+    public void testCreateRoomBookingNullEndTime() {
+        Date date = Date.valueOf("2021-12-25");
+        Time startTime = Time.valueOf("12:00:00");
+        Time endTime = null;
+        Member member = new Member("123 Main Street", "John Doe");
+        Room room = new Room(10, "Room" + ROOM_ID);
+        RoomBooking roomBooking = null;
+        String errorMessage = "";
+
+        try {
+            roomBooking = roomBookingService.createRoomBooking(date, startTime, endTime, member, room);
+        } catch (IllegalArgumentException e) {
+            errorMessage += e.getMessage();
+        }
+
+        assertNull(roomBooking);
+        assert(errorMessage.contains("Start and end times cannot be empty."));
+    }
+
+    @Test
+    public void testCreateRoomBookingNullMember() {
+        Date date = Date.valueOf("2021-12-25");
+        Time startTime = Time.valueOf("12:00:00");
+        Time endTime = Time.valueOf("23:59:59");
+        Member member = null;
+        Room room = new Room(10, "Room" + ROOM_ID);
+        RoomBooking roomBooking = null;
+        String errorMessage = "";
+
+        try {
+            roomBooking = roomBookingService.createRoomBooking(date, startTime, endTime, member, room);
+        } catch (IllegalArgumentException e) {
+            errorMessage += e.getMessage();
+        }
+
+        assertNull(roomBooking);
+        assert(errorMessage.contains("Member cannot be empty."));
+    }
+
+    @Test
+    public void testCreateRoomBookingNullRoom() {
+        Date date = Date.valueOf("2021-12-25");
+        Time startTime = Time.valueOf("12:00:00");
+        Time endTime = Time.valueOf("23:59:59");
+        Member member = new Member("123 Main Street", "John Doe");
+        Room room = null;
+        RoomBooking roomBooking = null;
+        String errorMessage = "";
+
+        try {
+            roomBooking = roomBookingService.createRoomBooking(date, startTime, endTime, member, room);
+        } catch (IllegalArgumentException e) {
+            errorMessage += e.getMessage();
+        }
+
+        assertNull(roomBooking);
+        assert(errorMessage.contains("Room cannot be empty."));
+    }
+
+    @Test
+    public void testCreateRoomBookingAllNull() {
+        Date date = null;
+        Time startTime = null;
+        Time endTime = null;
+        Member member = null;
+        Room room = null;
+        RoomBooking roomBooking = null;
+        String errorMessage = "";
+
+        try {
+            roomBooking = roomBookingService.createRoomBooking(date, startTime, endTime, member, room);
+        } catch (IllegalArgumentException e) {
+            errorMessage += e.getMessage();
+        }
+
+        assertNull(roomBooking);
+        assert(errorMessage.contains("Date cannot be empty."));
+        assert(errorMessage.contains("Start and end times cannot be empty."));
+        assert(errorMessage.contains("Member cannot be empty."));
+        assert(errorMessage.contains("Room cannot be empty."));
+    }
 }
