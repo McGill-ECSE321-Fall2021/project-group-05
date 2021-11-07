@@ -1,12 +1,16 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -85,7 +89,7 @@ public class TestLibrarianShift {
 				return new ArrayList<LibrarianShift>();
 			}
 		});
-		lenient().when(librarianRepository.findById(any(Integer.class)))
+		lenient().when(librarianRepository.findLibrarianById(any(Integer.class)))
 		.thenAnswer((InvocationOnMock invocation) -> {
 			if (invocation.getArgument(0).equals(VALID_LIBRARIAN_ID)) {
 				return LIBRARIAN;
@@ -96,13 +100,13 @@ public class TestLibrarianShift {
 	}
 	
 	@Test
-	public void getLibrarianShiftDateExisting() {
+	public void testGetLibrarianShiftDateExisting() {
 		ArrayList<LibrarianShift> shifts = null;
 
 		try {
 			shifts = service.getLibrarianShift(VALID_DATE);
 		} catch (IllegalArgumentException e) {
-			fail();
+			fail(e.getMessage());
 		}
 
 		assertNotNull(shifts);
@@ -111,13 +115,13 @@ public class TestLibrarianShift {
 	}
 	
 	@Test
-	public void getLibrarianShiftDateNonExisting() {
+	public void testGetLibrarianShiftDateNonExisting() {
 		ArrayList<LibrarianShift> shifts = null;
 
 		try {
 			shifts = service.getLibrarianShift(INVALID_DATE);
 		} catch (IllegalArgumentException e) {
-			fail();
+			fail(e.getMessage());
 		}
 
 		assertNotNull(shifts);
@@ -125,29 +129,20 @@ public class TestLibrarianShift {
 	}
 	
 	@Test
-	public void getLibrarianShiftDateEmpty() {
-		ArrayList<LibrarianShift> shifts = null;
-		String error = null;
-
-		try {
-			shifts = service.getLibrarianShift(null);
-		} catch (IllegalArgumentException e) {
-			error = e.getMessage();
-		}
-
-		assertNull(shifts);
-		assertNotNull(error);
-		assertTrue(error.contains("A date parameter is required."));
+	public void testGetLibrarianShiftDateEmpty() {
+		Exception ex = assertThrows(IllegalArgumentException.class, 
+				() -> {service.getLibrarianShift(null);});
+		assertTrue(ex.getMessage().contains("A date parameter is required."));
 	}
 	
 	@Test
-	public void getLibrarianShiftLibrarianExisting() {
+	public void testGetLibrarianShiftLibrarianExisting() {
 		ArrayList<LibrarianShift> shifts = null;
 
 		try {
 			shifts = service.getLibrarianShift(VALID_LIBRARIAN_ID);
 		} catch (IllegalArgumentException e) {
-			fail();
+			fail(e.getMessage());
 		}
 
 		assertNotNull(shifts);
@@ -157,13 +152,13 @@ public class TestLibrarianShift {
 	}
 	
 	@Test
-	public void getLibrarianShiftLibrarianNonExisting() {
+	public void testGetLibrarianShiftLibrarianNonExisting() {
 		ArrayList<LibrarianShift> shifts = null;
 
 		try {
 			shifts = service.getLibrarianShift(INVALID_LIBRARIAN_ID);
 		} catch (IllegalArgumentException e) {
-			fail();
+			fail(e.getMessage());
 		}
 
 		assertNotNull(shifts);
@@ -171,13 +166,13 @@ public class TestLibrarianShift {
 	}
 	
 	@Test
-	public void getLibrarianShiftAndDateExisting() {
+	public void testGetLibrarianShiftAndDateExisting() {
 		ArrayList<LibrarianShift> shifts = null;
 
 		try {
 			shifts = service.getLibrarianShift(VALID_LIBRARIAN_ID, VALID_DATE);
 		} catch (IllegalArgumentException e) {
-			fail();
+			fail(e.getMessage());
 		}
 
 		assertNotNull(shifts);
@@ -187,13 +182,13 @@ public class TestLibrarianShift {
 	}
 	
 	@Test
-	public void getLibrarianShiftAndDateNonExistingDate() {
+	public void testGetLibrarianShiftAndDateNonExistingDate() {
 		ArrayList<LibrarianShift> shifts = null;
 
 		try {
 			shifts = service.getLibrarianShift(VALID_LIBRARIAN_ID, INVALID_DATE);
 		} catch (IllegalArgumentException e) {
-			fail();
+			fail(e.getMessage());
 		}
 
 		assertNotNull(shifts);
@@ -201,13 +196,13 @@ public class TestLibrarianShift {
 	}
 	
 	@Test
-	public void getLibrarianShiftAndDateNonExistingLibrarian() {
+	public void testGetLibrarianShiftAndDateNonExistingLibrarian() {
 		ArrayList<LibrarianShift> shifts = null;
 
 		try {
 			shifts = service.getLibrarianShift(INVALID_LIBRARIAN_ID, VALID_DATE);
 		} catch (IllegalArgumentException e) {
-			fail();
+			fail(e.getMessage());
 		}
 
 		assertNotNull(shifts);
@@ -215,7 +210,7 @@ public class TestLibrarianShift {
 	}
 	
 	@Test
-	public void getLibrarianShiftAndDateEmpty() {
+	public void testGetLibrarianShiftAndDateEmpty() {
 		ArrayList<LibrarianShift> shifts = null;
 		String error = null;
 
@@ -226,128 +221,137 @@ public class TestLibrarianShift {
 		}
 
 		assertNull(shifts);
-		assertNotNull(error);
 		assertTrue(error.contains("A date parameter is required."));
 	}
 	
 	@Test
-	public void createLibrarianShift() {
+	public void testCreateLibrarianShift() {
 		LibrarianShift shift = null;
 
 		try {
-			shift = service.createLibrarianShift(INVALID_DATE, START_TIME, END_TIME, LIBRARIAN);
+			shift = service.createLibrarianShift(INVALID_DATE, START_TIME, END_TIME, VALID_LIBRARIAN_ID);
 		} catch (IllegalArgumentException e) {
-			fail();
+			System.out.println(e.getMessage());
+			fail(e.getMessage());
 		}
 
 		assertNotNull(shift);
+		verify(librarianShiftRepository, times(1)).save(shift);
+		verify(librarianRepository, times(1)).save(LIBRARIAN);
 		assertEquals(INVALID_DATE, shift.getDate());
 		assertEquals(START_TIME, shift.getStartTime());
 		assertEquals(END_TIME, shift.getEndTime());
 	}
 	
 	@Test
-	public void createLibrarianShiftEmptyDate() {
+	public void testCreateLibrarianShiftEmptyDate() {
 		LibrarianShift shift = null;
 		String error = null;
 
 		try {
-			shift = service.createLibrarianShift(null, START_TIME, END_TIME, LIBRARIAN);
+			shift = service.createLibrarianShift(null, START_TIME, END_TIME, VALID_LIBRARIAN_ID);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
 
+		verify(librarianShiftRepository, never()).save(any(LibrarianShift.class));
+		verify(librarianRepository, never()).save(any(Librarian.class));
 		assertNull(shift);
-		assertNotNull(error);
 		assertTrue(error.contains("Date can't be empty."));
 	}
 	
 	@Test
-	public void createLibrarianShiftEmptyStartTime() {
+	public void testCreateLibrarianShiftEmptyStartTime() {
 		LibrarianShift shift = null;
 		String error = null;
 
 		try {
-			shift = service.createLibrarianShift(INVALID_DATE, null, END_TIME, LIBRARIAN);
+			shift = service.createLibrarianShift(INVALID_DATE, null, END_TIME, VALID_LIBRARIAN_ID);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
 
+		verify(librarianShiftRepository, never()).save(any(LibrarianShift.class));
+		verify(librarianRepository, never()).save(any(Librarian.class));
 		assertNull(shift);
-		assertNotNull(error);
 		assertTrue(error.contains("Start Time can't be empty."));
 	}
 	
 	@Test
-	public void createLibrarianShiftEmptyEndTime() {
+	public void testCreateLibrarianShiftEmptyEndTime() {
 		LibrarianShift shift = null;
 		String error = null;
 
 		try {
-			shift = service.createLibrarianShift(INVALID_DATE, START_TIME, null, LIBRARIAN);
+			shift = service.createLibrarianShift(INVALID_DATE, START_TIME, null, VALID_LIBRARIAN_ID);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
 
+		verify(librarianShiftRepository, never()).save(any(LibrarianShift.class));
+		verify(librarianRepository, never()).save(any(Librarian.class));
 		assertNull(shift);
-		assertNotNull(error);
 		assertTrue(error.contains("End Time can't be empty."));
 	}
 	
 	@Test
-	public void createLibrarianShiftEmptyLibrarian() {
+	public void testCreateLibrarianShiftNonExistingLibrarian() {
 		LibrarianShift shift = null;
 		String error = null;
 
 		try {
-			shift = service.createLibrarianShift(INVALID_DATE, START_TIME, END_TIME, null);
+			shift = service.createLibrarianShift(INVALID_DATE, START_TIME, END_TIME, INVALID_LIBRARIAN_ID);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
 
+		verify(librarianShiftRepository, never()).save(any(LibrarianShift.class));
+		verify(librarianRepository, never()).save(any(Librarian.class));
 		assertNull(shift);
-		assertNotNull(error);
-		assertTrue(error.contains("Librarian can't be empty."));
+		assertTrue(error.contains("Librarian does not exist."));
 	}
 	
 	@Test
-	public void createLibrarianShiftInvertedTimes() {
+	public void testCreateLibrarianShiftInvertedTimes() {
 		LibrarianShift shift = null;
 		String error = null;
 
 		try {
-			shift = service.createLibrarianShift(INVALID_DATE, END_TIME, START_TIME, LIBRARIAN);
+			shift = service.createLibrarianShift(INVALID_DATE, END_TIME, START_TIME, VALID_LIBRARIAN_ID);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-
+		
+		verify(librarianShiftRepository, never()).save(any(LibrarianShift.class));
+		verify(librarianRepository, never()).save(any(Librarian.class));
 		assertNull(shift);
-		assertNotNull(error);
 		assertTrue(error.contains("Start Time can't be after End Time."));
 	}
 	
 	@Test
-	public void createLibrarianShiftOverlappingDuplicate() {
+	public void testCreateLibrarianShiftOverlappingDuplicate() {
 		LibrarianShift shift = null;
 		String error = null;
 
 		try {
-			shift = service.createLibrarianShift(VALID_DATE, START_TIME, END_TIME, LIBRARIAN);
+			shift = service.createLibrarianShift(VALID_DATE, START_TIME, END_TIME, VALID_LIBRARIAN_ID);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
+		
 
+		verify(librarianShiftRepository, never()).save(any(LibrarianShift.class));
+		verify(librarianRepository, never()).save(any(Librarian.class));
 		assertNull(shift);
-		assertNotNull(error);
 		assertTrue(error.contains("An overlapping shift already exists for the assigned librarian."));
 	}
 	
 	@Test
-	public void deleteLibrarianShift() {
+	public void testDeleteLibrarianShift() {
 		try {
 			service.deleteLibrarianShift(VALID_ID);
 		} catch(Exception e) {
-			fail();
+			fail(e.getMessage());
 		}
 	}
 }
