@@ -246,4 +246,17 @@ public class TestRoomBookingService {
         assert(errorMessage.contains("Member cannot be empty."));
         assert(errorMessage.contains("Room cannot be empty."));
     }
+
+    @Test
+    public void testGetRoomByIdSuccessful() {
+        Room room = roomBookingService.getRoomById(ROOM_ID);
+        assertNotNull(room);
+    }
+
+    @Test
+    public void testGetRoomByIdNonexistent() {
+        Exception e = assertThrows(NoSuchElementException.class,
+                () -> roomBookingService.getRoomById(INVALID_ROOM_ID));
+        assertEquals("No room with id " + INVALID_ROOM_ID + " exists.", e.getMessage());
+    }
 }
