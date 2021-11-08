@@ -419,6 +419,7 @@ public class TestOnlineLibraryPersistence {
 		assertEquals(memberId, retrievedMember.getId());
 	}
 
+	@Test
 	public void testPersistAndLoadLibraryOpeningHours() {
 		// Create opening hours
 		Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
@@ -446,6 +447,72 @@ public class TestOnlineLibraryPersistence {
 		assertEquals(startTime, libraryOpeningHours.getStartTime());
 		assertEquals(endTime, libraryOpeningHours.getEndTime());
 	}
+	
+	@Test
+	public void testPersistAndLoadLibraryOpeningHoursByDate() {
+		// Create opening hours
+		Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
+		Time startTime = java.sql.Time.valueOf(LocalTime.of(11, 35));
+		Time endTime = java.sql.Time.valueOf(LocalTime.of(13, 25));
+
+		LibraryOpeningHours libraryOpeningHours = new LibraryOpeningHours();
+
+		libraryOpeningHours.setDate(date);
+		libraryOpeningHours.setStartTime(startTime);
+		libraryOpeningHours.setEndTime(endTime);
+
+		// Persist opening hours
+		libraryOpeningHoursRepository.save(libraryOpeningHours);
+		int id = libraryOpeningHours.getId();
+
+		// Forget & retrieve opening hours
+		libraryOpeningHours = null;
+		ArrayList<LibraryOpeningHours> listOfLibraryOpeningHours = libraryOpeningHoursRepository.findLibraryOpeningHoursByDate(date);
+		libraryOpeningHours = listOfLibraryOpeningHours.get(0);
+		
+		// Check atributes
+		assertNotNull(listOfLibraryOpeningHours);
+		assertEquals(1, listOfLibraryOpeningHours.size());
+		assertNotNull(libraryOpeningHours);
+		assertEquals(id, libraryOpeningHours.getId());
+		assertEquals(date, libraryOpeningHours.getDate());
+		assertEquals(startTime, libraryOpeningHours.getStartTime());
+		assertEquals(endTime, libraryOpeningHours.getEndTime());
+	}
+	
+	@Test
+	public void testPersistAndLoadLibraryOpeningHoursByDateRange() {
+		// Create opening hours
+		Date date = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
+		Time startTime = java.sql.Time.valueOf(LocalTime.of(11, 35));
+		Time endTime = java.sql.Time.valueOf(LocalTime.of(13, 25));
+
+		LibraryOpeningHours libraryOpeningHours = new LibraryOpeningHours();
+
+		libraryOpeningHours.setDate(date);
+		libraryOpeningHours.setStartTime(startTime);
+		libraryOpeningHours.setEndTime(endTime);
+
+		// Persist opening hours
+		libraryOpeningHoursRepository.save(libraryOpeningHours);
+		int id = libraryOpeningHours.getId();
+
+		// Forget & retrieve opening hours
+		libraryOpeningHours = null;
+		Date startDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 01));
+		Date endDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.MARCH, 31));
+		ArrayList<LibraryOpeningHours> listOfLibraryOpeningHours = libraryOpeningHoursRepository.findLibraryOpeningHoursByDateBetween(startDate, endDate);
+		libraryOpeningHours = listOfLibraryOpeningHours.get(0);
+		
+		// Check atributes
+		assertNotNull(listOfLibraryOpeningHours);
+		assertEquals(1, listOfLibraryOpeningHours.size());
+		assertNotNull(libraryOpeningHours);
+		assertEquals(id, libraryOpeningHours.getId());
+		assertEquals(date, libraryOpeningHours.getDate());
+		assertEquals(startTime, libraryOpeningHours.getStartTime());
+		assertEquals(endTime, libraryOpeningHours.getEndTime());
+	}
 
 	@Test
 	public void testPersistAndLoadHoliday() {
@@ -467,6 +534,36 @@ public class TestOnlineLibraryPersistence {
 		holiday = holidayRepository.findHolidayById(id);
 
 		// Check attributes
+		assertNotNull(holiday);
+		assertEquals(id, holiday.getId());
+		assertEquals(startDate, holiday.getStartDate());
+		assertEquals(endDate, holiday.getEndDate());
+	}
+	
+	@Test
+	public void testPersistAndLoadHolidayFromRange() {
+		// Create Holiday
+		Date startDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 29));
+		Date endDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
+
+		Holiday holiday = new Holiday();
+
+		holiday.setStartDate(startDate);
+		holiday.setEndDate(endDate);
+
+		// Persist Holiday
+		holidayRepository.save(holiday);
+		int id = holiday.getId();
+
+		// Forget & retrieve Holiday
+		holiday = null;
+		Date spanningDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 29));
+		ArrayList<Holiday> holidays = holidayRepository.findHolidayByStartDateLessThanEqualAndEndDateGreaterThanEqual(spanningDate,spanningDate);
+		holiday = holidays.get(0);
+		
+		// Check attributes
+		assertNotNull(holidays);
+		assertEquals(1, holidays.size());
 		assertNotNull(holiday);
 		assertEquals(id, holiday.getId());
 		assertEquals(startDate, holiday.getStartDate());
