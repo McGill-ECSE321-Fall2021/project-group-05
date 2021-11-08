@@ -124,12 +124,12 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
       <td>Guillaume Delmas-Frenette</td>
       <td>
         <ul>
-          <li> Write all of the itemInfos DTOs </li>
-          <li> Write all of the item DTOs </li>
-          <li> Write all the creating item infos service and controller methods </li>
-          <li> Write all the creating item service and controller methods </li>
-          <li> Write all the delete items methods </li>
-          <li> Write integration and unit test for all the controller and service methods </li>
+          <li> Write all the itemInfos DTOs </li>
+          <li> Write all the items DTOs </li>
+          <li> Write all the creating itemInfos service and controller methods </li>
+          <li> Write all the creating items service and controller methods </li>
+          <li> Write all the delete items service and controller methods </li>
+          <li> Write integration and unit tests for all the controller and service methods </li>
         </ul>
       </td>
       <td> 25 hours </td>
