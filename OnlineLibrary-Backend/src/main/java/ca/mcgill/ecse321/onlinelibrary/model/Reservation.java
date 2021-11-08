@@ -27,10 +27,6 @@ public class Reservation {
         this.date = date;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
     public void setDate(Date date) {
         this.date = date;
     }
@@ -57,6 +53,10 @@ public class Reservation {
 
     public void setReservableItemInfo(ReservableItemInfo reservableItem){
         this.reservedItem = reservableItem;
+    }
+
+    public void setId(Integer id){
+        this.reservationId = id;
     }
     
 }

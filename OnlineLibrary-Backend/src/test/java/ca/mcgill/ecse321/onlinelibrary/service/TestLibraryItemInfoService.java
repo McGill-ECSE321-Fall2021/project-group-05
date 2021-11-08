@@ -27,13 +27,16 @@ import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.LibraryItemInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.NewsPaperInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.ReservationRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Book;
 import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.LibraryItemInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.Member;
 import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.ReservableItemInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.Reservation;
 
 @ExtendWith(MockitoExtension.class)
 public class TestLibraryItemInfoService {
@@ -49,6 +52,8 @@ public class TestLibraryItemInfoService {
 	private ArchiveInfoRepository archiveInfoDao;
 	@Mock
 	private LibraryItemInfoRepository libraryItemInfoDao;
+	@Mock
+	private ReservationRepository reservationDao;
 
 	@InjectMocks
 	private LibraryItemInfoService libraryItemInfoService;
@@ -65,10 +70,44 @@ public class TestLibraryItemInfoService {
 	private static final int NEWSPAPER_INFO_BAD_KEY = 8;
 	private static final int ARCHIVE_INFO_KEY = 9;
 	private static final int ARCHIVE_INFO_BAD_KEY = 10;
+	private static final int RESERVATION_KEY = 11;
+	private static final int MEMBER_KEY = 12;
 	
 
 	@BeforeEach
 	public void setMockOuput() {
+		lenient().when(reservationDao.findReservationByReservationId(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(RESERVATION_KEY)){
+				Reservation reservation = new Reservation(new Member("123 Main Street", "Seb"), new BookInfo(), new Date(200));
+				reservation.setId(RESERVATION_KEY);
+				return reservation;
+			} else {
+				return null;
+			}
+		});
+
+		lenient().when(reservationDao.findReservationByMember(any(Member.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(MEMBER_KEY)){
+				Member member = new Member("123 Main Street", "Seb");
+				member.setId(MEMBER_KEY);
+				Reservation reservation = new Reservation(member, new BookInfo(), new Date(200));
+				return reservation;
+			} else {
+				return null;
+			}
+		});
+
+		lenient().when(reservationDao.findReservationByReservedItem(any(ReservableItemInfo.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(BOOK_INFO_KEY)){
+				BookInfo bookInfo = new BookInfo();
+				bookInfo.setId(BOOK_INFO_KEY);
+				Reservation reservation = new Reservation(new Member("123 Main Street", "Seb"), bookInfo, new Date(200));
+				return reservation;
+			} else {
+				return null;
+			}
+		});
+
 		lenient().when(bookInfoDao.findBookInfoById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
 			if (invocation.getArgument(0).equals(BOOK_INFO_KEY)) {
 				BookInfo bookInfo = new BookInfo();

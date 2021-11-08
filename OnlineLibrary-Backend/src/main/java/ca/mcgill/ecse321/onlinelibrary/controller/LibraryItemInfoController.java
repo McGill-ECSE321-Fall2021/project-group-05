@@ -18,11 +18,15 @@ import ca.mcgill.ecse321.onlinelibrary.dto.BookInfoDto;
 import ca.mcgill.ecse321.onlinelibrary.dto.LibraryItemInfoDto;
 import ca.mcgill.ecse321.onlinelibrary.dto.MovieInfoDto;
 import ca.mcgill.ecse321.onlinelibrary.dto.NewsPaperInfoDto;
+import ca.mcgill.ecse321.onlinelibrary.dto.ReservationDto;
 import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.Member;
 import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.ReservableItemInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.Reservation;
 import ca.mcgill.ecse321.onlinelibrary.service.LibraryItemInfoService;
 
 @CrossOrigin(origins = "*")
@@ -36,6 +40,12 @@ public class LibraryItemInfoController {
     public List<LibraryItemInfoDto> getAllLibraryItemInfos(){
         return libraryItemInfoService.browseAllLibraryItemInfos().stream().map(p -> p.convertToDto()).collect(Collectors.toList());
     }
+	
+	@PostMapping(value = { "/reservation", "/reservation/"})
+	public ReservationDto reserveItem(@RequestParam Member member, @RequestParam ReservableItemInfo reservableItem, @RequestParam Date date) throws IllegalArgumentException {
+		Reservation reservation = libraryItemInfoService.reserveItem(member, reservableItem, date);
+		return ReservationDto.fromReservation(reservation);
+	}
 
 	@PostMapping(value = { "/bookInfo/{title}", "/bookInfo/{title}/"})
 	public BookInfoDto createBookInfo(@PathVariable("title") String title, @RequestParam int numberOfPage,
