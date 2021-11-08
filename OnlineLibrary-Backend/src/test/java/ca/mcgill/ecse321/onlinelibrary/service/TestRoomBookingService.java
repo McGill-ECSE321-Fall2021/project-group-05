@@ -73,11 +73,7 @@ public class TestRoomBookingService {
         String name = "Room" + ROOM_ID;
         Room room = null;
 
-        try {
-            room = roomBookingService.createRoom(capacity, name);
-        } catch (IllegalArgumentException e) {
-            fail();
-        }
+        room = roomBookingService.createRoom(capacity, name);
 
         assertNotNull(room);
         assertEquals(capacity, room.getCapacity());
@@ -110,11 +106,7 @@ public class TestRoomBookingService {
         Room room = new Room(10, "Room" + ROOM_ID);
         RoomBooking roomBooking = null;
 
-        try {
-            roomBooking = roomBookingService.createRoomBooking(date, startTime, endTime, member, room);
-        } catch (IllegalArgumentException e) {
-            fail();
-        }
+        roomBooking = roomBookingService.createRoomBooking(date,startTime, endTime, member, room);
 
         assertNotNull(roomBooking);
         assertEquals(date, roomBooking.getDate());
