@@ -59,9 +59,14 @@ public class LibraryItemInfoService {
 			errorMessage.add("A member needs to be assigned to a reservation.");
 			errorCount++;
 		} else {
+			if (member.getStatus() == Member.MemberStatus.INACTIVE){
+				errorMessage.add("Member account is inactive.");
+				errorCount++;
+			}
+
 			if (member.getStatus() == Member.MemberStatus.BLACKLISTED) {
-			errorMessage.add("Member is blacklisted.");
-			errorCount++;
+				errorMessage.add("Member is blacklisted.");
+				errorCount++;
 			}
 		}
 
@@ -80,6 +85,33 @@ public class LibraryItemInfoService {
 		}
 		Reservation reservation = new Reservation(member, reservableItem, date);
 		reservationRepository.save(reservation);
+		return reservation;
+	}
+
+	@Transactional
+	public Reservation getReservationByReservationId(Integer Id){
+		Reservation reservation = reservationRepository.findReservationByReservationId(Id);
+		if (reservation == null){
+			throw new IllegalArgumentException("The reservation with id " + Id + " was not found in the database.");
+		}
+		return reservation;
+	}
+
+	@Transactional
+	public List<Reservation> getReservationByMember(Member member){
+		List<Reservation> reservation = reservationRepository.findReservationByMember(member);
+		if (reservation == null){
+			throw new IllegalArgumentException("The reservation with member " + member + " was not found in the database.");
+		}
+		return reservation;
+	}
+
+	@Transactional
+	public List<Reservation> getReservationByReservableItemInfo(ReservableItemInfo reservableItemInfo){
+		List<Reservation> reservation = reservationRepository.findReservationByReservedItem(reservableItemInfo);
+		if (reservation == null){
+			throw new IllegalArgumentException("The reservation with the reservable item info " + reservableItemInfo + " was not found in the database.");
+		}
 		return reservation;
 	}
 
