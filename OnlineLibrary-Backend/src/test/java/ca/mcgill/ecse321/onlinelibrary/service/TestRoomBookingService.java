@@ -84,17 +84,10 @@ public class TestRoomBookingService {
     public void testCreateRoomEmptyName() {
         int capacity = 10;
         String name = "";
-        Room room = null;
-        String errorMessage = "";
 
-        try {
-            room = roomBookingService.createRoom(capacity, name);
-        } catch (IllegalArgumentException e) {
-            errorMessage += e.getMessage();
-        }
+        Exception e = assertThrows(IllegalArgumentException.class, () -> roomBookingService.createRoom(capacity, name));
 
-        assertNull(room);
-        assertTrue(errorMessage.contains("Name cannot be empty"));
+        assert(e.getMessage().contains("Name cannot be empty"));
     }
 
     @Test
@@ -123,17 +116,9 @@ public class TestRoomBookingService {
         Time endTime = Time.valueOf("23:59:59");
         Member member = new Member("123 Main Street", "John Doe");
         Room room = new Room(10, "Room" + ROOM_ID);
-        RoomBooking roomBooking = null;
-        String errorMessage = "";
 
-        try {
-            roomBooking = roomBookingService.createRoomBooking(date, startTime, endTime, member, room);
-        } catch (IllegalArgumentException e) {
-            errorMessage += e.getMessage();
-        }
-
-        assertNull(roomBooking);
-        assert(errorMessage.contains("Date cannot be empty."));
+        Exception e = assertThrows(IllegalArgumentException.class, () -> roomBookingService.createRoomBooking(date, startTime, endTime, member, room));
+        assert(e.getMessage().contains("Date cannot be empty."));
     }
 
     @Test
@@ -143,17 +128,9 @@ public class TestRoomBookingService {
         Time endTime = Time.valueOf("23:59:59");
         Member member = new Member("123 Main Street", "John Doe");
         Room room = new Room(10, "Room" + ROOM_ID);
-        RoomBooking roomBooking = null;
-        String errorMessage = "";
 
-        try {
-            roomBooking = roomBookingService.createRoomBooking(date, startTime, endTime, member, room);
-        } catch (IllegalArgumentException e) {
-            errorMessage += e.getMessage();
-        }
-
-        assertNull(roomBooking);
-        assert(errorMessage.contains("Start and end times cannot be empty."));
+        Exception e = assertThrows(IllegalArgumentException.class, () -> roomBookingService.createRoomBooking(date, startTime, endTime, member, room));
+        assert(e.getMessage().contains("Start and end times cannot be empty."));
     }
 
     @Test
@@ -163,17 +140,9 @@ public class TestRoomBookingService {
         Time endTime = null;
         Member member = new Member("123 Main Street", "John Doe");
         Room room = new Room(10, "Room" + ROOM_ID);
-        RoomBooking roomBooking = null;
-        String errorMessage = "";
 
-        try {
-            roomBooking = roomBookingService.createRoomBooking(date, startTime, endTime, member, room);
-        } catch (IllegalArgumentException e) {
-            errorMessage += e.getMessage();
-        }
-
-        assertNull(roomBooking);
-        assert(errorMessage.contains("Start and end times cannot be empty."));
+        Exception e = assertThrows(IllegalArgumentException.class, () -> roomBookingService.createRoomBooking(date, startTime, endTime, member, room));
+        assert(e.getMessage().contains("Start and end times cannot be empty."));
     }
 
     @Test
@@ -183,17 +152,9 @@ public class TestRoomBookingService {
         Time endTime = Time.valueOf("23:59:59");
         Member member = null;
         Room room = new Room(10, "Room" + ROOM_ID);
-        RoomBooking roomBooking = null;
-        String errorMessage = "";
 
-        try {
-            roomBooking = roomBookingService.createRoomBooking(date, startTime, endTime, member, room);
-        } catch (IllegalArgumentException e) {
-            errorMessage += e.getMessage();
-        }
-
-        assertNull(roomBooking);
-        assert(errorMessage.contains("Member cannot be empty."));
+        Exception e = assertThrows(IllegalArgumentException.class, () -> roomBookingService.createRoomBooking(date, startTime, endTime, member, room));
+        assert(e.getMessage().contains("Member cannot be empty."));
     }
 
     @Test
@@ -203,17 +164,9 @@ public class TestRoomBookingService {
         Time endTime = Time.valueOf("23:59:59");
         Member member = new Member("123 Main Street", "John Doe");
         Room room = null;
-        RoomBooking roomBooking = null;
-        String errorMessage = "";
 
-        try {
-            roomBooking = roomBookingService.createRoomBooking(date, startTime, endTime, member, room);
-        } catch (IllegalArgumentException e) {
-            errorMessage += e.getMessage();
-        }
-
-        assertNull(roomBooking);
-        assert(errorMessage.contains("Room cannot be empty."));
+        Exception e = assertThrows(IllegalArgumentException.class, () -> roomBookingService.createRoomBooking(date, startTime, endTime, member, room));
+        assert(e.getMessage().contains("Room cannot be empty."));
     }
 
     @Test
@@ -223,20 +176,12 @@ public class TestRoomBookingService {
         Time endTime = null;
         Member member = null;
         Room room = null;
-        RoomBooking roomBooking = null;
-        String errorMessage = "";
 
-        try {
-            roomBooking = roomBookingService.createRoomBooking(date, startTime, endTime, member, room);
-        } catch (IllegalArgumentException e) {
-            errorMessage += e.getMessage();
-        }
-
-        assertNull(roomBooking);
-        assert(errorMessage.contains("Date cannot be empty."));
-        assert(errorMessage.contains("Start and end times cannot be empty."));
-        assert(errorMessage.contains("Member cannot be empty."));
-        assert(errorMessage.contains("Room cannot be empty."));
+        Exception e = assertThrows(IllegalArgumentException.class, () -> roomBookingService.createRoomBooking(date, startTime, endTime, member, room));
+        assert(e.getMessage().contains("Date cannot be empty."));
+        assert(e.getMessage().contains("Start and end times cannot be empty."));
+        assert(e.getMessage().contains("Member cannot be empty."));
+        assert(e.getMessage().contains("Room cannot be empty."));
     }
 
     @Test
