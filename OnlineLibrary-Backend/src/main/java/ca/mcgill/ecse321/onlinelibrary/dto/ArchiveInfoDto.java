@@ -17,15 +17,6 @@ public class ArchiveInfoDto extends LibraryItemInfoDto{
 		this.publicationDate=publicationDate;
 	}
 
-	// public static ArchiveInfoDto convertToDto(ReservableItemInfo archiveInfo) {
-
-	// 	if (archiveInfo == null) {
-	// 		throw new IllegalArgumentException("There is no such archiveInfo.");
-	// 	}
-	// 	return new ArchiveInfoDto(archiveInfo.getId(), archiveInfo.getTitle(), archiveInfo.getDescription(),
-	// 			archiveInfo.getPublicationDate());
-	// }
-
 	public String getTitle() {
 		return this.title;
 	}
