@@ -63,7 +63,7 @@ echo "Fails to get room with invalid ID"
 curl -s --request GET "$base_url/room/999999"
 echo
 
-# Delete room successfully
+# Delete room
 echo "Deletes room successfully (no output)"
 curl -s --request DELETE "$base_url/room/$room_id"
 echo
