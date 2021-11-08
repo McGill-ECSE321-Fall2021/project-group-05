@@ -29,7 +29,7 @@ public class RoomBookingService {
             throw new IllegalArgumentException("Name cannot be empty.");
         }
 
-        Room room = new Room(capacity, name);
+        Room room = new Room(capacity, name.trim());
         roomRepository.save(room);
         return room;
     }
