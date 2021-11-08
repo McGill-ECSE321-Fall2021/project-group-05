@@ -9,6 +9,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,11 +24,13 @@ import org.mockito.stubbing.Answer;
 import ca.mcgill.ecse321.onlinelibrary.dao.AlbumInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.ArchiveInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.LibraryItemInfoRespository;
 import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.NewsPaperInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.LibraryItemInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
 
@@ -42,6 +46,8 @@ public class TestLibraryItemInfoService {
 	private NewsPaperInfoRepository newspaperInfoDao;
 	@Mock
 	private ArchiveInfoRepository archiveInfoDao;
+	@Mock
+	private LibraryItemInfoRespository libraryItemInfoRespositoryDao;
 
 	@InjectMocks
 	private LibraryItemInfoService libraryItemInfoService;
@@ -106,6 +112,27 @@ public class TestLibraryItemInfoService {
 			} else {
 				return null;
 			}
+		});
+		lenient().when(libraryItemInfoRespositoryDao.findAll()).thenAnswer( (InvocationOnMock invocation) -> {
+			List<LibraryItemInfo> listInfo = new ArrayList<LibraryItemInfo>();
+			ArchiveInfo archiveInfo = new ArchiveInfo();
+			archiveInfo.setId(ARCHIVE_INFO_KEY);
+			NewsPaperInfo newspaperInfo = new NewsPaperInfo();
+			newspaperInfo.setId(NEWSPAPER_INFO_KEY);
+			AlbumInfo albumInfo = new AlbumInfo();
+			albumInfo.setId(ALBUM_INFO_KEY);
+			MovieInfo movieInfo = new MovieInfo();
+			movieInfo.setId(MOVIE_INFO_KEY);
+			BookInfo bookInfo = new BookInfo();
+			bookInfo.setId(BOOK_INFO_KEY);
+
+			listInfo.add(archiveInfo);
+			listInfo.add(newspaperInfo);
+			listInfo.add(albumInfo);
+			listInfo.add(movieInfo);
+			listInfo.add(bookInfo);
+
+			return listInfo;
 		});
 		
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
@@ -807,5 +834,33 @@ public class TestLibraryItemInfoService {
 		}
 		assertNull(archiveInfo);
 		assertTrue(error.contains("The archiveInfo with id " + ARCHIVE_INFO_BAD_KEY + " was not found in the database."));
+	}
+	
+	@Test
+	public void testBrowseService(){
+		ArchiveInfo archiveInfo = new ArchiveInfo();
+		archiveInfo.setId(ARCHIVE_INFO_KEY);
+		archiveInfoDao.save(archiveInfo);
+		NewsPaperInfo newspaperInfo = new NewsPaperInfo();
+		newspaperInfo.setId(NEWSPAPER_INFO_KEY);
+		newspaperInfoDao.save(newspaperInfo);
+		AlbumInfo albumInfo = new AlbumInfo();
+		albumInfo.setId(ALBUM_INFO_KEY);
+		albumInfoDao.save(albumInfo);
+		MovieInfo movieInfo = new MovieInfo();
+		movieInfo.setId(MOVIE_INFO_KEY);
+		movieInfoDao.save(movieInfo);
+		BookInfo bookInfo = new BookInfo();
+		bookInfo.setId(BOOK_INFO_KEY);
+		bookInfoDao.save(bookInfo);
+
+		List<LibraryItemInfo> expected = (List<LibraryItemInfo>) libraryItemInfoRespositoryDao.findAll();
+		List<LibraryItemInfo> actual = libraryItemInfoService.browse();
+
+		for(int i = 0; i< expected.size(); i++){
+			
+			assertEquals(expected.get(i).getId(), actual.get(i).getId());
+			
+		}
 	}
 }
