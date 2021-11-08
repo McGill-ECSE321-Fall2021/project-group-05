@@ -57,24 +57,19 @@ public class RoomBookingService {
     @Transactional
     public RoomBooking createRoomBooking(Date date, Time startTime, Time endTime, Member member, Room room) {
         ArrayList<String> errorMessages = new ArrayList<>();
-        int errorCount = 0;
         if (date == null) {
             errorMessages.add("Date cannot be empty.");
-            errorCount++;
         }
         if (startTime == null || endTime == null) {
             errorMessages.add("Start and end times cannot be empty.");
-            errorCount++;
         }
         if (member == null) {
             errorMessages.add("Member cannot be empty.");
-            errorCount++;
         }
         if (room == null) {
             errorMessages.add("Room cannot be empty.");
-            errorCount++;
         }
-        if (errorCount > 0) {
+        if (errorMessages.size() > 0) {
             throw new IllegalArgumentException(String.join(" ", errorMessages));
         }
         RoomBooking roomBooking = new RoomBooking(date, startTime, endTime, member, room);
