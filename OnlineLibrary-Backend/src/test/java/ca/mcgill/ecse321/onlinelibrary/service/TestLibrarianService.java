@@ -187,7 +187,7 @@ public class TestLibrarianService {
 	public void testCreateLibrarianNullPassword() {
 		Exception error = assertThrows(IllegalArgumentException.class,
 				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, NEW_REG_USERNAME, null));
-		assertContains("Password must be at least 8 characters in length.", error.getMessage());
+		assertContains("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.", error.getMessage());
 	}
 
 	/**
@@ -198,19 +198,18 @@ public class TestLibrarianService {
 	public void testCreateLibrarianEmptyPassword() {
 		Exception error = assertThrows(IllegalArgumentException.class,
 				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, NEW_REG_USERNAME, ""));
-		assertContains("Password must be at least 8 characters in length.", error.getMessage());
+		assertContains("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.", error.getMessage());
 	}
 
 	/**
 	 * We expect the LibrarianService to return the error "Password must be at
-	 * least 8 characters in length." when the password is contains 7
-	 * characters.
+	 * least 8 characters in length." when the password has only 7 characters.
 	 */
 	@Test
 	public void testCreateLibrarianShortPassword() {
 		Exception error = assertThrows(IllegalArgumentException.class,
 				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, NEW_REG_USERNAME, SHORT_PASSWD));
-		assertContains("Password must be at least 8 characters in length.", error.getMessage());
+		assertContains("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.", error.getMessage());
 	}
 
 	/**
@@ -242,7 +241,7 @@ public class TestLibrarianService {
 	 */
 	@Test
 	public void testGetLibrarianByUsername() {
-		Librarian librarian = librarianService.getLibrarianById(OLD_REG_ID);
+		Librarian librarian = librarianService.getLibrarianByUsername(OLD_REG_USERNAME);
 
 		assertNotNull(librarian);
 		assertEquals(OLD_REG_FULL_NAME, librarian.getFullName());
@@ -288,6 +287,9 @@ public class TestLibrarianService {
 		assertTrue(regFound);
 	}
 
+	/**
+	 * Successfully delete librarian by username.
+	 */
 	@Test
 	public void testDeleteLibrarianByUsername() {
 		librarianService.deleteLibrarianByUsername(OLD_REG_USERNAME);
@@ -311,7 +313,7 @@ public class TestLibrarianService {
 	}
 
 	/**
-	 * We expect the error message "Librarian with username null not found."
+	 * We expect the error message "Librarian with username "null" not found."
 	 * when the given username is null.
 	 */
 	@Test
