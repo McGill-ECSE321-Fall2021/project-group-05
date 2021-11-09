@@ -117,5 +117,8 @@ public class RoomBooking {
 	public void setMember(Member member) {
 		this.member = member;
 	}
-    
+
+	public void setId(int id) {
+		this.id = id;
+	}
 }
