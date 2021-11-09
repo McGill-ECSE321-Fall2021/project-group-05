@@ -146,7 +146,16 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
     </tr>
     <tr>
       <td>Mircea Gosman</td>
-      <td></td>
+      <td>
+        <ul>
+          <li> Write Library OpeningHours DTO, Controller, Service, Service unit tests & Controller integration tests.</li>
+          <li> Write Librarian Shift DTO, Controller, Service, Service unit tests & Controller integration tests.</li>
+          <li> Write Holiday DTO, Controller, Service, Service unit tests & Controller integration tests.</li>
+          <li> Adjusted Persistence layer & its tests for Library Opening Hours, Librarian Shift and Holiday ressources.</li>
+          <li> Documented endpoint usage for Library Opening Hours, Librarian Shift and Holiday ressources on the wiki.</li>
+          <li> Review Pull Requests.</li>
+        </ul>
+      </td>
       <td></td>
     </tr>
     <tr>
