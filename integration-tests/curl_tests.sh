@@ -179,7 +179,7 @@ echo "Fails to get LibrarianShift Hours with invalid librarian ID"
 curl -s --request GET "$base_url/librarianShift/99999/2020-03-01"
 echo
 
-# Delete Library Opening Hours
+# Delete LibrarianShift
 echo "Deletes LibrarianShift successfully"
 curl -s --request DELETE "$base_url/librarianShift/$librarianShift_id"
 echo
