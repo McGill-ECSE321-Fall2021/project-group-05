@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ca.mcgill.ecse321.onlinelibrary.dao.AlbumInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.ArchiveInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.LibraryItemInfoRespository;
+import ca.mcgill.ecse321.onlinelibrary.dao.LibraryItemInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.NewsPaperInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
@@ -40,7 +40,7 @@ public class LibraryItemInfoService {
 	private NewsPaperInfoRepository newsPaperInfoRepository;
 	
 	@Autowired
-    private LibraryItemInfoRespository libraryItemInfoRespository;
+    private LibraryItemInfoRepository libraryItemInfoRespository;
 
 
 	@Transactional

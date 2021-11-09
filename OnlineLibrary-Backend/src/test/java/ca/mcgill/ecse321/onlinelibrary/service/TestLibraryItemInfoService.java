@@ -24,7 +24,7 @@ import org.mockito.stubbing.Answer;
 import ca.mcgill.ecse321.onlinelibrary.dao.AlbumInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.ArchiveInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.LibraryItemInfoRespository;
+import ca.mcgill.ecse321.onlinelibrary.dao.LibraryItemInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.NewsPaperInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
@@ -47,7 +47,7 @@ public class TestLibraryItemInfoService {
 	@Mock
 	private ArchiveInfoRepository archiveInfoDao;
 	@Mock
-	private LibraryItemInfoRespository libraryItemInfoDao;
+	private LibraryItemInfoRepository libraryItemInfoDao;
 
 	@InjectMocks
 	private LibraryItemInfoService libraryItemInfoService;
