@@ -2,6 +2,9 @@
 
 base_url="https://onlinelibrary-backend-05a.herokuapp.com"
 
+# Install jq (a JSON parser)
+sudo apt install -y jq &> /dev/null
+
 echo "Creates book successfully"
 curl --request POST "$base_url/bookInfo/aTitle?numberOfPage=256&author=John&isbn=123456789"
 echo
@@ -40,3 +43,31 @@ curl --request DELETE "$base_url/librarian?username=jocasta.nu"
 echo
 echo "Fails to delete librarian that does not exist"
 curl --request DELETE "$base_url/librarian?username=invalid.username"
+echo
+
+# Create room
+echo "Creates room successfully"
+response=$(curl -s --request POST "$base_url/room?capacity=10&name=A%20Nice%20Room")
+echo "$response"
+room_id=$(echo "$response" | jq -r '.["id"]')
+
+echo "Fails to create room with missing capacity"
+curl -s --request POST "$base_url/room?name=A%20Nice%20Room"
+echo
+
+# Get room by ID
+echo "Gets room successfully"
+curl -s --request GET "$base_url/room/$room_id"
+echo
+echo "Fails to get room with invalid ID"
+curl -s --request GET "$base_url/room/999999"
+echo
+
+# Delete room
+echo "Deletes room successfully (no output)"
+curl -s --request DELETE "$base_url/room/$room_id"
+echo
+echo "Fails to delete room with invalid ID"
+# Should not exist anymore
+curl -s --request DELETE "$base_url/room/$room_id"
+echo
