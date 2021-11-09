@@ -3,7 +3,6 @@ package ca.mcgill.ecse321.onlinelibrary.model;
 import javax.persistence.*;
 
 import ca.mcgill.ecse321.onlinelibrary.dto.AlbumInfoDto;
-import ca.mcgill.ecse321.onlinelibrary.dto.LibraryItemInfoDto;
 
 @Entity
 public class AlbumInfo extends ReservableItemInfo {

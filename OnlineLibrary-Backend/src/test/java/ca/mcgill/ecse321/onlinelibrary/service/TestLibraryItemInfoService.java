@@ -47,7 +47,7 @@ public class TestLibraryItemInfoService {
 	@Mock
 	private ArchiveInfoRepository archiveInfoDao;
 	@Mock
-	private LibraryItemInfoRespository libraryItemInfoRespositoryDao;
+	private LibraryItemInfoRespository libraryItemInfoDao;
 
 	@InjectMocks
 	private LibraryItemInfoService libraryItemInfoService;
@@ -113,7 +113,7 @@ public class TestLibraryItemInfoService {
 				return null;
 			}
 		});
-		lenient().when(libraryItemInfoRespositoryDao.findAll()).thenAnswer( (InvocationOnMock invocation) -> {
+		lenient().when(libraryItemInfoDao.findAll()).thenAnswer( (InvocationOnMock invocation) -> {
 			List<LibraryItemInfo> listInfo = new ArrayList<LibraryItemInfo>();
 			ArchiveInfo archiveInfo = new ArchiveInfo();
 			archiveInfo.setId(ARCHIVE_INFO_KEY);
@@ -840,22 +840,23 @@ public class TestLibraryItemInfoService {
 	public void testBrowseService(){
 		ArchiveInfo archiveInfo = new ArchiveInfo();
 		archiveInfo.setId(ARCHIVE_INFO_KEY);
-		archiveInfoDao.save(archiveInfo);
 		NewsPaperInfo newspaperInfo = new NewsPaperInfo();
 		newspaperInfo.setId(NEWSPAPER_INFO_KEY);
-		newspaperInfoDao.save(newspaperInfo);
 		AlbumInfo albumInfo = new AlbumInfo();
 		albumInfo.setId(ALBUM_INFO_KEY);
-		albumInfoDao.save(albumInfo);
 		MovieInfo movieInfo = new MovieInfo();
 		movieInfo.setId(MOVIE_INFO_KEY);
-		movieInfoDao.save(movieInfo);
 		BookInfo bookInfo = new BookInfo();
 		bookInfo.setId(BOOK_INFO_KEY);
-		bookInfoDao.save(bookInfo);
 
-		List<LibraryItemInfo> expected = (List<LibraryItemInfo>) libraryItemInfoRespositoryDao.findAll();
-		List<LibraryItemInfo> actual = libraryItemInfoService.browse();
+
+		Iterable<LibraryItemInfo> expectedIterable = libraryItemInfoDao.findAll();
+		List<LibraryItemInfo> expected = new ArrayList<LibraryItemInfo>();
+
+		for (LibraryItemInfo l: expectedIterable)
+			expected.add(l);
+
+		List<LibraryItemInfo> actual = libraryItemInfoService.browseAllLibraryItemInfos();
 
 		for(int i = 0; i< expected.size(); i++){
 			

@@ -1,7 +1,6 @@
 package ca.mcgill.ecse321.onlinelibrary.dto;
 
 import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.LibraryItemInfo;
 
 public class AlbumInfoDto extends ReservableItemInfoDto{
 	private String title;

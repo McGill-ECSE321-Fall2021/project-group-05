@@ -3,7 +3,6 @@ package ca.mcgill.ecse321.onlinelibrary.model;
 import java.sql.Date;
 import javax.persistence.*;
 
-import ca.mcgill.ecse321.onlinelibrary.dto.LibraryItemInfoDto;
 import ca.mcgill.ecse321.onlinelibrary.dto.NewsPaperInfoDto;
 
 @Entity

@@ -2,7 +2,6 @@ package ca.mcgill.ecse321.onlinelibrary.model;
 
 import javax.persistence.*;
 
-import ca.mcgill.ecse321.onlinelibrary.dto.LibraryItemInfoDto;
 import ca.mcgill.ecse321.onlinelibrary.dto.MovieInfoDto;
 
 @Entity

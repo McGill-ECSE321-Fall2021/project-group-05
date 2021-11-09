@@ -34,7 +34,7 @@ public class LibraryItemInfoController {
 
 	@GetMapping(value = { "/browse", "/browse/" })
     public List<LibraryItemInfoDto> getAllLibraryItemInfos(){
-        return libraryItemInfoService.browse().stream().map(p -> p.convertToDto()).collect(Collectors.toList());
+        return libraryItemInfoService.browseAllLibraryItemInfos().stream().map(p -> p.convertToDto()).collect(Collectors.toList());
     }
 
 	@PostMapping(value = { "/bookInfo/{title}", "/bookInfo/{title}/"})

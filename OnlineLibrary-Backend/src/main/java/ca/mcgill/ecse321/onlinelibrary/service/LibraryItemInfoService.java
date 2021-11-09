@@ -115,7 +115,7 @@ public class LibraryItemInfoService {
 	}
 	
 	@Transactional
-    public List<LibraryItemInfo> browse(){
+    public List<LibraryItemInfo> browseAllLibraryItemInfos(){
 
         List<LibraryItemInfo> lii = new ArrayList<LibraryItemInfo>();
         Iterable<LibraryItemInfo> iterativeItems = libraryItemInfoRespository.findAll();

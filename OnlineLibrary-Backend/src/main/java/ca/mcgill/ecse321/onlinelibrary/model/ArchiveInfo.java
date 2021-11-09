@@ -4,7 +4,6 @@ import java.sql.Date;
 import javax.persistence.*;
 
 import ca.mcgill.ecse321.onlinelibrary.dto.ArchiveInfoDto;
-import ca.mcgill.ecse321.onlinelibrary.dto.LibraryItemInfoDto;
 
 @Entity
 public class ArchiveInfo extends LibraryItemInfo {

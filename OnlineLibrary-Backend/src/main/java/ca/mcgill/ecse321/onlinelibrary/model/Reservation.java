@@ -24,7 +24,15 @@ public class Reservation {
     public Reservation(Member member, ReservableItemInfo reservableItem, Date date){
         this.member = member;
         this.reservedItem = reservableItem;
-        this.reservationDate = date;
+        this.setReservationDate(date);
+    }
+
+    public Date getReservationDate() {
+        return reservationDate;
+    }
+
+    public void setReservationDate(Date reservationDate) {
+        this.reservationDate = reservationDate;
     }
 
     public Integer getId(){
