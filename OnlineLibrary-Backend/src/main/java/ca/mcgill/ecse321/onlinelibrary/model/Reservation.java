@@ -34,7 +34,7 @@ public class Reservation {
     public void setReservationDate(Date reservationDate) {
         this.reservationDate = reservationDate;
     }
-
+    
     public Integer getId(){
         return this.reservationId;
     }
