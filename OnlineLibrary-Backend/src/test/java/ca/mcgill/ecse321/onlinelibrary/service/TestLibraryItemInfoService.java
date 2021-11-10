@@ -279,7 +279,7 @@ public class TestLibraryItemInfoService {
 	}
 
 	@Test
-	public void testReserveItemDataNull(){
+	public void testReserveItemDateNull(){
 		String error = "";
 		Reservation reservation = null;
 		Member member = new Member("123 Main Street", "Seb");
@@ -318,7 +318,7 @@ public class TestLibraryItemInfoService {
 	public void testGetReservationByReservationId(){
 		Reservation reservation = null;
 		try {
-			reservation = libraryItemInfoService.getReservationByReservationId(RESERVATION_KEY);
+			reservation = libraryItemInfoService.getReservationsByReservationId(RESERVATION_KEY);
 		} catch (IllegalArgumentException e){
 			fail();
 		}
@@ -331,12 +331,12 @@ public class TestLibraryItemInfoService {
 		String error = "";
 		Reservation reservation = null;
 		try {
-			reservation = libraryItemInfoService.getReservationByReservationId(RESERVATION_BAD_KEY);
+			reservation = libraryItemInfoService.getReservationsByReservationId(RESERVATION_BAD_KEY);
 		} catch (IllegalArgumentException e){
 			error += e.getMessage();
 		}
 		assertNull(reservation);
-		assertTrue(error.contains("The reservation with id " + RESERVATION_BAD_KEY + " was not found in the database."));
+		assertTrue(error.contains("The reservation with id was not found in the database."));
 	}
 
 	@Test
@@ -345,7 +345,7 @@ public class TestLibraryItemInfoService {
 		Member member = new Member("123 Road Street", "Seb");
 		member.setId(MEMBER_KEY);
 		try {
-			reservation = libraryItemInfoService.getReservationByMember(member);
+			reservation = libraryItemInfoService.getReservationsByMember(member);
 		} catch (IllegalArgumentException e){
 			fail();
 		}
@@ -360,12 +360,12 @@ public class TestLibraryItemInfoService {
 		Member member = new Member("123 Road Street", "Seb");
 		member.setId(MEMBER_BAD_KEY);
 		try {
-			reservation = libraryItemInfoService.getReservationByMember(member);
+			reservation = libraryItemInfoService.getReservationsByMember(member);
 		} catch (IllegalArgumentException e){
 			error += e.getMessage();
 		}
 		assertNull(reservation);
-		assertTrue(error.contains("The reservation with member " + member + " was not found in the database."));
+		assertTrue(error.contains("The reservation with member was not found in the database."));
 	}
 
 	@Test
@@ -374,7 +374,7 @@ public class TestLibraryItemInfoService {
 		BookInfo bookInfo = new BookInfo();
 		bookInfo.setId(BOOK_INFO_KEY);
 		try {
-			reservation = libraryItemInfoService.getReservationByReservableItemInfo(bookInfo);
+			reservation = libraryItemInfoService.getReservationsByReservableItemInfo(bookInfo);
 		} catch (IllegalArgumentException e){
 			fail();
 		}
@@ -389,12 +389,12 @@ public class TestLibraryItemInfoService {
 		BookInfo bookInfo = new BookInfo();
 		bookInfo.setId(BOOK_INFO_BAD_KEY);
 		try {
-			reservation = libraryItemInfoService.getReservationByReservableItemInfo(bookInfo);
+			reservation = libraryItemInfoService.getReservationsByReservableItemInfo(bookInfo);
 		} catch (IllegalArgumentException e){
 			error += e.getMessage();
 		}
 		assertNull(reservation);
-		assertTrue(error.contains("The reservation with the reservable item info " + bookInfo + " was not found in the database."));
+		assertTrue(error.contains("The reservation with the reservable item info was not found in the database."));
 	}
 
 	@Test

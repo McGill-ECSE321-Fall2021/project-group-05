@@ -53,34 +53,28 @@ public class LibraryItemInfoService {
 	@Transactional
 	public Reservation reserveItem(Member member, ReservableItemInfo reservableItem, Date date){
 		ArrayList<String> errorMessage = new ArrayList<String>();
-		int errorCount = 0;
 
 		if (member == null){
 			errorMessage.add("A member needs to be assigned to a reservation.");
-			errorCount++;
 		} else {
 			if (member.getStatus() == Member.MemberStatus.INACTIVE){
 				errorMessage.add("Member account is inactive.");
-				errorCount++;
 			}
 
 			if (member.getStatus() == Member.MemberStatus.BLACKLISTED) {
 				errorMessage.add("Member is blacklisted.");
-				errorCount++;
 			}
 		}
 
 		if (reservableItem == null){
 			errorMessage.add("An item needs to be assigned to a reservation");
-			errorCount++;
 		}
 
 		if (date == null){
 			errorMessage.add("Date cannot be null");
-			errorCount++;
 		}
 
-		if (errorCount > 0) {
+		if (errorMessage.size() > 0) {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
 		Reservation reservation = new Reservation(member, reservableItem, date);
@@ -89,28 +83,28 @@ public class LibraryItemInfoService {
 	}
 
 	@Transactional
-	public Reservation getReservationByReservationId(Integer Id){
+	public Reservation getReservationsByReservationId(Integer Id){
 		Reservation reservation = reservationRepository.findReservationByReservationId(Id);
 		if (reservation == null){
-			throw new IllegalArgumentException("The reservation with id " + Id + " was not found in the database.");
+			throw new IllegalArgumentException("The reservation with id was not found in the database.");
 		}
 		return reservation;
 	}
 
 	@Transactional
-	public List<Reservation> getReservationByMember(Member member){
+	public List<Reservation> getReservationsByMember(Member member){
 		List<Reservation> reservation = reservationRepository.findReservationByMember(member);
 		if (reservation == null){
-			throw new IllegalArgumentException("The reservation with member " + member + " was not found in the database.");
+			throw new IllegalArgumentException("The reservation with member was not found in the database.");
 		}
 		return reservation;
 	}
 
 	@Transactional
-	public List<Reservation> getReservationByReservableItemInfo(ReservableItemInfo reservableItemInfo){
+	public List<Reservation> getReservationsByReservableItemInfo(ReservableItemInfo reservableItemInfo){
 		List<Reservation> reservation = reservationRepository.findReservationByReservedItem(reservableItemInfo);
 		if (reservation == null){
-			throw new IllegalArgumentException("The reservation with the reservable item info " + reservableItemInfo + " was not found in the database.");
+			throw new IllegalArgumentException("The reservation with the reservable item info was not found in the database.");
 		}
 		return reservation;
 	}
