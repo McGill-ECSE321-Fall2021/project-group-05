@@ -48,4 +48,18 @@ public class MemberController {
 		member = memberService.activateAccount(member);
 		return MemberDto.fromMember(member);
 	}
+
+	@PostMapping(value = {"/member/{id}/applyPenalty", "/member/{id}/applyPenalty/"})
+	public MemberDto applyPenalty(@PathVariable("id") int id) {
+		Member member = memberService.getMemberById(id);
+		member = memberService.applyStatusPenalty(member);
+		return MemberDto.fromMember(member);
+	}
+
+	@PostMapping(value = {"/member/{id}/removePenalty", "/member/{id}/removePenalty/"})
+	public MemberDto removePenalty(@PathVariable("id") int id) {
+		Member member = memberService.getMemberById(id);
+		member = memberService.removeStatusPenalty(member);
+		return MemberDto.fromMember(member);
+	}
 }

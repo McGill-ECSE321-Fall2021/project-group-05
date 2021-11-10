@@ -90,6 +90,27 @@ public class MemberService {
 		return member;
 	}
 
+	@Transactional
+	public Member activateAccount(Member member) {
+		member.activate();
+		member = memberRepository.save(member);
+		return member;
+	}
+
+	@Transactional
+	public Member applyStatusPenalty(Member member) {
+		member.applyStatusPenalty();
+		member = memberRepository.save(member);
+		return member;
+	}
+
+	@Transactional
+	public Member removeStatusPenalty(Member member) {
+		member.removeStatusPenalty();
+		member = memberRepository.save(member);
+		return member;
+	}
+
 	// ========================================================================
 	// Helpers
 	// ========================================================================
@@ -151,15 +172,5 @@ public class MemberService {
 			return false;
 		}
 		return true;
-	}
-
-	@Transactional
-	public Member activateAccount(Member member) {
-		if (member.getStatus() != Member.MemberStatus.INACTIVE) {
-			throw new IllegalStateException("This member is already active.");
-		}
-		member.activate();
-		memberRepository.save(member);
-		return member;
 	}
 }

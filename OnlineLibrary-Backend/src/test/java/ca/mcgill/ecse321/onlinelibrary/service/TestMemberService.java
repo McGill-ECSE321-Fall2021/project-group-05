@@ -78,9 +78,9 @@ public class TestMemberService {
 	 * OLD_MEMBER_FULL_NAME, address OLD_MEMBER_ADDRESS, username
 	 * OLD_MEMBER_USERNAME, email address OLD_MEMBER_EMAIL_ADDRESS, and password
 	 * OLD_MEMBER_PASSWD
-	 * <li>one inactive member with ID OFFLINE_MEMBER_ID, full name
-	 * OFFLINE_MEMBER_FULL_NAME, address OFFLINE_MEMBER_ADDRESS, and no online
-	 * account
+	 * <li>one member with account status YELLOW, ID OFFLINE_MEMBER_ID, full
+	 * name OFFLINE_MEMBER_FULL_NAME, address OFFLINE_MEMBER_ADDRESS, and no
+	 * online account
 	 * </ul>
 	 */
 	@BeforeEach
@@ -94,6 +94,8 @@ public class TestMemberService {
 				return member;
 			} else if (OFFLINE_MEMBER_ID == (int) invocation.getArgument(0)) {
 				Member member = new Member(OFFLINE_MEMBER_ADDRESS, OFFLINE_MEMBER_FULL_NAME);
+				member.activate();
+				member.applyStatusPenalty();
 				return member;
 			} else {
 				return null;
@@ -115,38 +117,9 @@ public class TestMemberService {
 		lenient().when(memberDao.save(any(Member.class))).thenAnswer(returnParameterAsAnswer);
 	}
 
-	@Test
-	public void testGetMemberByIdSuccessful() {
-		Member member = memberService.getMemberById(OLD_MEMBER_ID);
-
-		assertNotNull(member);
-		assertEquals(OLD_MEMBER_FULL_NAME, member.getFullName());
-		assertEquals(OLD_MEMBER_ADDRESS, member.getAddress());
-		assertEquals(Member.MemberStatus.INACTIVE, member.getStatus());
-
-		OnlineAccount onlineAccount = member.getOnlineAccount();
-		assertNotNull(onlineAccount);
-		assertEquals(OLD_MEMBER_USERNAME, onlineAccount.getUsername());
-		assertEquals(OLD_MEMBER_EMAIL_ADDRESS, onlineAccount.getEmailAddress());
-		// TODO Update this if/when password hashing is implemented
-		assertEquals(OLD_MEMBER_PASSWD, onlineAccount.getPasswordHash());
-	}
-
-	@Test
-	public void testGetMemberByIdInexistent() {
-		Exception error = assertThrows(IllegalArgumentException.class,
-				() -> memberService.getMemberById(INVALID_MEMBER_ID));
-		assertContains("Member with ID \"" + INVALID_MEMBER_ID + "\" not found.", error.getMessage());
-	}
-
-	@Test
-	public void testActivateMemberAccount() {
-		Member member = memberService.getMemberById(OLD_MEMBER_ID);
-		assert (member.getStatus() == Member.MemberStatus.INACTIVE);
-		member = memberService.activateAccount(member);
-		assertNotNull(member);
-		assert (member.getStatus() == Member.MemberStatus.GREEN);
-	}
+	// ========================================================================
+	// Create methods
+	// ========================================================================
 
 	@Test
 	public void testRegisterCitizenInPerson() {
@@ -501,4 +474,94 @@ public class TestMemberService {
 		assertEquals("Member with ID \"" + OLD_MEMBER_ID + "\" already has an online account.", error.getMessage());
 	}
 
+	// ========================================================================
+	// Get methods
+	// ========================================================================
+
+	@Test
+	public void testGetMemberByIdSuccessful() {
+		Member member = memberService.getMemberById(OLD_MEMBER_ID);
+
+		assertNotNull(member);
+		assertEquals(OLD_MEMBER_FULL_NAME, member.getFullName());
+		assertEquals(OLD_MEMBER_ADDRESS, member.getAddress());
+		assertEquals(Member.MemberStatus.INACTIVE, member.getStatus());
+
+		OnlineAccount onlineAccount = member.getOnlineAccount();
+		assertNotNull(onlineAccount);
+		assertEquals(OLD_MEMBER_USERNAME, onlineAccount.getUsername());
+		assertEquals(OLD_MEMBER_EMAIL_ADDRESS, onlineAccount.getEmailAddress());
+		// TODO Update this if/when password hashing is implemented
+		assertEquals(OLD_MEMBER_PASSWD, onlineAccount.getPasswordHash());
+	}
+
+	@Test
+	public void testGetMemberByIdInexistent() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> memberService.getMemberById(INVALID_MEMBER_ID));
+		assertContains("Member with ID \"" + INVALID_MEMBER_ID + "\" not found.", error.getMessage());
+	}
+
+	// ========================================================================
+	// Update methods
+	// ========================================================================
+
+	@Test
+	public void testActivateMemberAccount() {
+		Member member = memberDao.findMemberById(OLD_MEMBER_ID);
+
+		member = memberService.activateAccount(member);
+		assertNotNull(member);
+		assertEquals(Member.MemberStatus.GREEN, member.getStatus());
+	}
+
+	@Test
+	public void testActivateMemberAccountInvalidState() {
+		Member member = memberDao.findMemberById(OFFLINE_MEMBER_ID);
+
+		Exception error = assertThrows(
+				IllegalStateException.class,
+				() -> memberService.activateAccount(member));
+		assertContains("Cannot activate an account that is already active.", error.getMessage());
+	}
+
+	@Test
+	public void testApplyPenalty() {
+		Member member = memberDao.findMemberById(OFFLINE_MEMBER_ID);
+
+		member = memberService.applyStatusPenalty(member);
+
+		assertNotNull(member);
+		assertEquals(Member.MemberStatus.RED, member.getStatus());
+	}
+
+	@Test
+	public void testApplyPenaltyInvalidState() {
+		Member member = memberDao.findMemberById(OLD_MEMBER_ID);
+
+		Exception error = assertThrows(
+				IllegalStateException.class,
+				() -> memberService.applyStatusPenalty(member));
+		assertContains("Cannot apply a status penalty to an inactive member account.", error.getMessage());
+	}
+
+	@Test
+	public void testRemovePenalty() {
+		Member member = memberDao.findMemberById(OFFLINE_MEMBER_ID);
+
+		member = memberService.removeStatusPenalty(member);
+
+		assertNotNull(member);
+		assertEquals(Member.MemberStatus.GREEN, member.getStatus());
+	}
+
+	@Test
+	public void testRemovePenaltyInvalidState() {
+		Member member = memberDao.findMemberById(OLD_MEMBER_ID);
+
+		Exception error = assertThrows(
+				IllegalStateException.class,
+				() -> memberService.removeStatusPenalty(member));
+		assertContains("Cannot remove a status penalty from an inactive member account.", error.getMessage());
+	}
 }
