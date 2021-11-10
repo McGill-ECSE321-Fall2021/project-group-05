@@ -8,8 +8,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse321.onlinelibrary.dto.CreateMemberRequestDto;
+import ca.mcgill.ecse321.onlinelibrary.dto.CreateOnlineAccountRequestDto;
 import ca.mcgill.ecse321.onlinelibrary.dto.MemberDto;
+import ca.mcgill.ecse321.onlinelibrary.dto.OnlineAccountDto;
 import ca.mcgill.ecse321.onlinelibrary.model.Member;
+import ca.mcgill.ecse321.onlinelibrary.model.OnlineAccount;
 import ca.mcgill.ecse321.onlinelibrary.service.MemberService;
 
 @CrossOrigin(origins = "*")
@@ -23,6 +26,13 @@ public class MemberController {
 	public MemberDto registerMember(@RequestBody CreateMemberRequestDto newMemberDto) {
 		Member member = memberService.registerMember(newMemberDto);
 		return MemberDto.fromMember(member);
+	}
+
+	@PostMapping(value = {"/member/{id}/onlineAccount", "/member/{id}/onlineAccount"})
+	public OnlineAccountDto createOnlineAccount(@PathVariable("id") int id,
+			@RequestBody CreateOnlineAccountRequestDto newOnlineAccountDto) {
+		OnlineAccount createdAccount = memberService.createOnlineAccount(id, newOnlineAccountDto);
+		return OnlineAccountDto.fromOnlineAccount(createdAccount);
 	}
 
 	@PostMapping(value = {"/activate/{id}", "/activate/{id}/"})

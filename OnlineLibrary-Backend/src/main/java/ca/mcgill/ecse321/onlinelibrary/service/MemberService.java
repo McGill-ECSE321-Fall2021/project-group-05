@@ -54,6 +54,28 @@ public class MemberService {
 	}
 
 	@Transactional
+	public OnlineAccount createOnlineAccount(int memberId, CreateOnlineAccountRequestDto accountDto) {
+		Member member = memberRepository.findMemberById(memberId);
+		if (member == null) {
+			throw new IllegalArgumentException("Member with ID \"" + memberId + "\" not found.");
+		}
+
+		ArrayList<String> errors = validateNewOnlineAccount(accountDto);
+		if (errors.size() > 0) {
+			throw new IllegalArgumentException(String.join(" ", errors));
+		}
+
+		OnlineAccount createdOnlineAccount = new OnlineAccount(accountDto.getPassword().trim(),
+				accountDto.getUsername().trim(), accountDto.getEmailAddress().trim(), member);
+		member.setOnlineAccount(createdOnlineAccount);
+		// Only need to save member and the update operation will cascade to the
+		// online account (right?)
+		memberRepository.save(member);
+
+		return createdOnlineAccount;
+	}
+
+	@Transactional
 	public Member getMemberById(int id) {
 		Member member = memberRepository.findMemberById(id);
 
