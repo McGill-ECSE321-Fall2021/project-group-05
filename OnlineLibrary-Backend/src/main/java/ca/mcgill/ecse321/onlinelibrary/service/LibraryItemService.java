@@ -225,6 +225,64 @@ public class LibraryItemService {
 		return result;
 	}
 
+	@Transactional
+	public Loan createLoan(ReservableItem reservableItem, Member member) {
+		ArrayList<String> errorMessages = new ArrayList<>();
+		if (reservableItem == null) {
+			errorMessages.add("Reservable item cannot be null.");
+		}
+		if (member == null) {
+			errorMessages.add("Member cannot be null.");
+		}
+		// Throw errors here first if any of the arguments are null
+		if (!errorMessages.isEmpty()) {
+			throw new IllegalArgumentException(String.join(" ", errorMessages));
+		}
+
+		// TODO: Get this value from application.properties or similar
+		if (member.getLoans().size() > 5) {
+			errorMessages.add("Member cannot have more than 5 loans.");
+		}
+		if (reservableItem.getLoan() != null) {
+			errorMessages.add("Item is already loaned.");
+		}
+		if (member.getStatus() == Member.MemberStatus.BLACKLISTED || member.getStatus() == Member.MemberStatus.INACTIVE) {
+			errorMessages.add("Member account is inactive or blacklisted.");
+		}
+
+		// Get associated item info
+		ReservableItemInfo itemInfo = (ReservableItemInfo) getAssociatedItemInfo(reservableItem);
+		// Get reservations for associated item info
+		List<Reservation> reservations = reservationRepository.findReservationByReservedItemOrderByReservationDateAsc(itemInfo);
+		// Does the member have a reservation for the item info?
+		Optional<Reservation> reservation = reservations.stream().filter(r -> r.getMember().equals(member)).findFirst();
+		// How many reservations are there for the item info?
+		int numberOfReservationsForThisItem = reservations.size();
+		// How many copies are available for the item info?
+		int numberOfAvailableCopiesForThisItem = (int) getAssociatedCopies(itemInfo).stream().filter((copy) -> (((ReservableItem) copy).getLoan() == null)).count();
+		// Can the user borrow this item using their reservation?
+		boolean hasReservation = reservation.isPresent() && reservations.indexOf(reservation.get()) < numberOfAvailableCopiesForThisItem;
+		// User cannot borrow the item.
+		if (!hasReservation && numberOfAvailableCopiesForThisItem <= numberOfReservationsForThisItem) {
+			errorMessages.add("Not enough copies available.");
+		}
+		if (!errorMessages.isEmpty()) {
+			throw new IllegalArgumentException(String.join(" ", errorMessages));
+		}
+
+		Calendar today = Calendar.getInstance();
+		today.set(Calendar.HOUR_OF_DAY, 0);
+		// TODO: Get this value from application.properties or associated ReservableItemInfo
+		today.add(Calendar.DATE, 15);
+		Date date = new Date(today.getTimeInMillis());
+
+		Loan loan = new Loan(date, reservableItem, member);
+		loanRepository.save(loan);
+		if (hasReservation) {
+			reservationRepository.delete(reservation.get());
+		}
+		return loan;
+	}
 
 	@Transactional
 	public List<Loan> getLoansByMember(Member member) {
