@@ -50,29 +50,6 @@ public class HolidayDto {
         return this.endDate;
     }
 	
-	// Setters
-	/**
-    * Sets the name of the holiday
-    * @param status the name of the holiday
-    */
-	public void setName(String name) {
-		this.name = name;
-	}
-	/**
-    * Sets the start date of the holiday
-    * @param status the start date of the holiday
-    */
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-	/**
-    * Sets the end date of the holiday
-    * @param status the end date of the holiday
-    */
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-	
 	/**
 	 * Create a transfer object from holiday
 	 * @param holiday to be transfered

@@ -42,6 +42,13 @@ public interface HolidayRepository extends CrudRepository<Holiday, Integer> {
 	
 	/**
 	 * Finds holidays contained in a given date range
+	 * 
+	 * About the repetition of parameters: 
+	 * The between keyword requires a start and an end parameter
+	 * Since this find method has 2 'between' keywords, it requires 4 parameters.
+	 * 
+	 * (Though its real use in the rest of the code will have a pair of parameter repeated twice.)
+	 * 
 	 * @param start date of the range 
 	 * @param end date of the range
 	 * @param start date of the range 
