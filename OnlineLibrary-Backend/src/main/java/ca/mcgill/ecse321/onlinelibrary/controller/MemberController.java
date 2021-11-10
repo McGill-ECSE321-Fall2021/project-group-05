@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.onlinelibrary.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +34,12 @@ public class MemberController {
 			@RequestBody CreateOnlineAccountRequestDto newOnlineAccountDto) {
 		OnlineAccount createdAccount = memberService.createOnlineAccount(id, newOnlineAccountDto);
 		return OnlineAccountDto.fromOnlineAccount(createdAccount);
+	}
+
+	@GetMapping(value = {"/member/{id}", "/member/{id}/"})
+	public MemberDto getMemberById(@PathVariable("id") int id) {
+		Member member = memberService.getMemberById(id);
+		return MemberDto.fromMember(member);
 	}
 
 	@PostMapping(value = {"/activate/{id}", "/activate/{id}/"})
