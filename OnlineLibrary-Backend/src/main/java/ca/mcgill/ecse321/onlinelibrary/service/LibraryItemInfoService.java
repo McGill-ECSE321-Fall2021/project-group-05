@@ -14,6 +14,7 @@ import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.LibraryItemInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.NewsPaperInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.ReservableItemInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.ReservationRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
@@ -49,6 +50,18 @@ public class LibraryItemInfoService {
 
 	@Autowired
 	private ReservationRepository reservationRepository;
+
+	@Autowired
+	private ReservableItemInfoRepository reservableItemInfoRepository;
+
+	@Transactional
+	public ReservableItemInfo getReservableItemInfo(int id){
+		ReservableItemInfo reservableItemInfo = reservableItemInfoRepository.findReservableItemInfoById(id);
+		if (reservableItemInfo == null){
+			throw new IllegalArgumentException("The reservation item info with id was not found in the database.");
+		}
+		return reservableItemInfo;
+	}
 
 	@Transactional
 	public Reservation reserveItem(Member member, ReservableItemInfo reservableItem, Date date){
@@ -107,6 +120,16 @@ public class LibraryItemInfoService {
 			throw new IllegalArgumentException("The reservation with the reservable item info was not found in the database.");
 		}
 		return reservation;
+	}
+
+	@Transactional
+	public void deleteReservationbyId(Integer id){
+		Reservation reservationToDelete = reservationRepository.findReservationByReservationId(id);
+
+		if (reservationToDelete == null){
+			throw new IllegalArgumentException("Reservation with ID was not found.");
+		}
+		reservationRepository.delete(reservationToDelete);
 	}
 
 	@Transactional

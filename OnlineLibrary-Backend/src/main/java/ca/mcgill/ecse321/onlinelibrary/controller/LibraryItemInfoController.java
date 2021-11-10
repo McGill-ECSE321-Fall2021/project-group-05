@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,7 @@ import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItemInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.Reservation;
 import ca.mcgill.ecse321.onlinelibrary.service.LibraryItemInfoService;
+import ca.mcgill.ecse321.onlinelibrary.service.MemberService;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -35,16 +37,44 @@ public class LibraryItemInfoController {
 
 	@Autowired
 	private LibraryItemInfoService libraryItemInfoService;
+	
+	@Autowired
+	private MemberService memberService;
 
 	@GetMapping(value = { "/browse", "/browse/" })
     public List<LibraryItemInfoDto> getAllLibraryItemInfos(){
         return libraryItemInfoService.browseAllLibraryItemInfos().stream().map(p -> p.convertToDto()).collect(Collectors.toList());
     }
-	
+
 	@PostMapping(value = { "/reservation", "/reservation/"})
-	public ReservationDto reserveItem(@RequestParam Member member, @RequestParam ReservableItemInfo reservableItem, @RequestParam Date date) throws IllegalArgumentException {
+	public ReservationDto reserveItem(@RequestParam int memberId, @RequestParam int reservableItemId, @RequestParam Date date) throws IllegalArgumentException {
+		Member member = memberService.getMemberById(memberId);
+		ReservableItemInfo reservableItem = libraryItemInfoService.getReservableItemInfo(reservableItemId);
 		Reservation reservation = libraryItemInfoService.reserveItem(member, reservableItem, date);
 		return ReservationDto.fromReservation(reservation);
+	}
+
+	@GetMapping(value = {"/reservation/{reservationId}", "/reservation/{reservationId}/"})
+	public ReservationDto getReservationsById(@RequestParam int Id) throws IllegalArgumentException {
+		Reservation reservation = libraryItemInfoService.getReservationsByReservationId(Id);
+		return ReservationDto.fromReservation(reservation);
+	}
+
+	@GetMapping(value = {"/reservation/{memberId}", "/reservation/{memberId}/"})
+	public List<ReservationDto> getReservationsByMember(@RequestParam int memberId) throws IllegalArgumentException{
+		Member member = memberService.getMemberById(memberId);
+		return libraryItemInfoService.getReservationsByMember(member).stream().map(reservation -> ReservationDto.fromReservation(reservation)).collect(Collectors.toList());
+	}
+
+	@GetMapping(value = {"/reservation/{reservableItemInfoId}", "/reservation/{reservableItemInfoId}/"})
+	public List<ReservationDto> getReservationsByReservableItemInfo(@RequestParam int reservableItemInfoId) throws IllegalArgumentException{
+		ReservableItemInfo reservableItemInfo = libraryItemInfoService.getReservableItemInfo(reservableItemInfoId);
+		return libraryItemInfoService.getReservationsByReservableItemInfo(reservableItemInfo).stream().map(reservation -> ReservationDto.fromReservation(reservation)).collect(Collectors.toList());
+	}
+
+	@DeleteMapping(value = {"/reservation/{reservationId}", "/reservation/{reservationId}/"})
+	public void deleteReservation(@RequestParam int reservationId) throws IllegalArgumentException{
+		libraryItemInfoService.deleteReservationbyId(reservationId);
 	}
 
 	@PostMapping(value = { "/bookInfo/{title}", "/bookInfo/{title}/"})

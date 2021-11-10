@@ -398,6 +398,40 @@ public class TestLibraryItemInfoService {
 	}
 
 	@Test
+	public void testDeleteReservation(){
+		Reservation reservation = null;
+		Member member = new Member("123 Main Street", "Seb");
+		member.activate();
+		BookInfo bookInfo = new BookInfo();
+		Date date = new Date(200);
+		reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+		reservation.setId(RESERVATION_KEY);
+		try {
+			libraryItemInfoService.deleteReservationbyId(RESERVATION_KEY);
+		} catch (IllegalArgumentException e){
+			fail();
+		}
+	}
+
+	@Test
+	public void testDeleteReservationBad(){
+		String error = "";
+		Reservation reservation = null;
+		Member member = new Member("123 Main Street", "Seb");
+		member.activate();
+		BookInfo bookInfo = new BookInfo();
+		Date date = new Date(200);
+		reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+		reservation.setId(RESERVATION_KEY);
+		try {
+			libraryItemInfoService.deleteReservationbyId(RESERVATION_BAD_KEY);
+		} catch (IllegalArgumentException e){
+			error += e.getMessage();
+		}
+		assertTrue(error.contains("Reservation with ID was not found."));
+	}
+
+	@Test
 	public void testCreateBookInfo() {
 		String title = "Title";
 		Integer numberOfPage = 10;
