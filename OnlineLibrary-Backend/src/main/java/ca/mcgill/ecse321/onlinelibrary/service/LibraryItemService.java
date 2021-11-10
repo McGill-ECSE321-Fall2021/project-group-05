@@ -300,4 +300,11 @@ public class LibraryItemService {
 		return reservableItem.getLoan();
 	}
 
+	@Transactional
+	public void returnItem(Loan loan) {
+        if (loan == null) {
+            throw new IllegalArgumentException("Loan cannot be null.");
+        }
+        loanRepository.delete(loan);
+    }
 }
