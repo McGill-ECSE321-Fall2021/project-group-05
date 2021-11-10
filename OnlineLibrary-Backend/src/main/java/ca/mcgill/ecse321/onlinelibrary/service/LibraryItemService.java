@@ -234,4 +234,12 @@ public class LibraryItemService {
 		return member.getLoans();
 	}
 
+	@Transactional
+	public Loan getLoanByReservableItem(ReservableItem reservableItem) {
+		if (reservableItem == null) {
+			throw new IllegalArgumentException("Reservable item cannot be null.");
+		}
+		return reservableItem.getLoan();
+	}
+
 }
