@@ -1,27 +1,18 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import ca.mcgill.ecse321.onlinelibrary.dao.*;
+import ca.mcgill.ecse321.onlinelibrary.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ca.mcgill.ecse321.onlinelibrary.dao.AlbumRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.ArchiveRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.BookRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.MovieRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.NewspaperRepository;
-import ca.mcgill.ecse321.onlinelibrary.model.Album;
-import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Archive;
-import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Book;
-import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Movie;
-import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Newspaper;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 
 @Service
@@ -41,6 +32,18 @@ public class LibraryItemService {
 	
 	@Autowired
 	private ArchiveRepository archiveRepository;
+
+	@Autowired
+	private LoanRepository loanRepository;
+
+	@Autowired
+	private ReservationRepository reservationRepository;
+
+	@Autowired
+	private LibraryItemRepository libraryItemRepository;
+
+	@Autowired
+	private ReservableItemRepository reservableItemRepository;
 
 	@Transactional
 	public Book createBook(BookInfo bookInfo) {
@@ -188,4 +191,10 @@ public class LibraryItemService {
 			archiveRepository.deleteById(id);
 		}
 	}
+
+	@Transactional
+	public ReservableItem getReservableItemById(int id) {
+		return reservableItemRepository.findReservableItemById(id);
+	}
+
 }
