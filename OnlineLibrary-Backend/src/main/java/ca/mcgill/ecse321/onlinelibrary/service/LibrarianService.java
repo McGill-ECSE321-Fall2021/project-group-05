@@ -110,4 +110,16 @@ public class LibrarianService {
 	public Iterable<Librarian> getAllLibrarians() {
 		return librarianRepository.findAll();
 	}
+
+	@Transactional
+	public Librarian updateLibrarian(Integer id, String newFullName, String newUsername, String newPasswordHash) {
+		Librarian librarian = librarianRepository.findLibrarianById(id);
+
+		librarian.setFullName(newFullName);
+		librarian.setUsername(newUsername);
+		librarian.setPasswordHash(newPasswordHash);
+		librarianRepository.save(librarian);
+		
+		return librarian;
+	}
 }

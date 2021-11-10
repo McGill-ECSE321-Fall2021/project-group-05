@@ -371,6 +371,18 @@ public class TestLibrarianService {
 		verify(librarianRepository, times(0)).delete(any(Librarian.class));
 	}
 
+	@Test
+	public void testUpdateLibrarian(){
+
+		librarianService.updateLibrarian(OLD_REG_ID,NEW_REG_FULL_NAME, NEW_REG_USERNAME, NEW_REG_PASSWD);
+
+		Librarian newLibrarian = librarianRepository.findLibrarianById(OLD_REG_ID);
+
+		assertEquals(NEW_REG_FULL_NAME, newLibrarian.getFullName());
+		assertEquals(NEW_REG_FULL_NAME, newLibrarian.getUsername());
+		assertEquals(NEW_REG_PASSWD, newLibrarian.getPasswordHash());
+	}
+
 	/**
 	 * Helper method to assert one string contains another. If
 	 * !actual.contains(expected), fails with a helpful error message. Does not

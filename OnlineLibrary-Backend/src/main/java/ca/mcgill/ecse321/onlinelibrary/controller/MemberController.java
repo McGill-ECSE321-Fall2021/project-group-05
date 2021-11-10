@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ca.mcgill.ecse321.onlinelibrary.dto.MemberDto;
 import ca.mcgill.ecse321.onlinelibrary.model.Member;
@@ -21,5 +23,11 @@ public class MemberController {
 		Member member = memberService.getMemberById(id);
 		member = memberService.activateAccount(member);
 		return MemberDto.fromMember(member);
+	}
+
+	@PutMapping(value = {"/member/{id}" ,"/member/{id}/"})
+	public MemberDto updateMember(@RequestBody Member member, @PathVariable Integer id){
+		return MemberDto.fromMember(memberService.updateMember
+			(id, member.getAddress(), member.getFullName()));
 	}
 }
