@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -48,6 +49,10 @@ public class TestLibrarianService {
 	private final String OLD_REG_FULL_NAME = "Alfred Pennyworth";
 	private final String OLD_REG_USERNAME = "alfred.pennyworth";
 	private final String OLD_REG_PASSWD = "a".repeat(MIN_PASSWD_LENGTH);
+
+	private String regular_librarian_full_name = OLD_REG_FULL_NAME;
+	private String regular_librarian_username = OLD_REG_USERNAME;
+	private String regular_librarian_password = OLD_REG_PASSWD; 
 
 	// New regular librarian
 	private final String NEW_REG_FULL_NAME = "Bilbo Baggins";
@@ -374,13 +379,12 @@ public class TestLibrarianService {
 	@Test
 	public void testUpdateLibrarian(){
 
-		librarianService.updateLibrarian(OLD_REG_ID,NEW_REG_FULL_NAME, NEW_REG_USERNAME, NEW_REG_PASSWD);
+		Librarian actualNewLibrarian = librarianService.updateLibrarian(OLD_REG_ID,NEW_REG_FULL_NAME, NEW_REG_USERNAME, NEW_REG_PASSWD);
 
-		Librarian newLibrarian = librarianRepository.findLibrarianById(OLD_REG_ID);
-
-		assertEquals(NEW_REG_FULL_NAME, newLibrarian.getFullName());
-		assertEquals(NEW_REG_FULL_NAME, newLibrarian.getUsername());
-		assertEquals(NEW_REG_PASSWD, newLibrarian.getPasswordHash());
+		assertEquals(NEW_REG_FULL_NAME, actualNewLibrarian.getFullName());
+		assertEquals(NEW_REG_USERNAME, actualNewLibrarian.getUsername());
+		assertEquals(NEW_REG_PASSWD, actualNewLibrarian.getPasswordHash());
+		assertEquals(OLD_REG_ID, actualNewLibrarian.getId());
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -64,5 +65,18 @@ public class TestMemberService {
 		member = memberService.activateAccount(member);
 		assertNotNull(member);
 		assert (member.getStatus() == Member.MemberStatus.GREEN);
+	}
+
+	@Test
+	public void testUpdateMember(){
+
+		String newAddress = "123 soleil";
+		String newName = "Bob the Builder";
+		Member actualMember = memberService.updateMember(this.MEMBER_ID, newAddress, newName);
+
+		assertNotNull(actualMember);
+		assertEquals(MEMBER_ID, actualMember.getId());
+		assertEquals(newAddress, actualMember.getAddress());
+		assertEquals(newName, actualMember.getFullName());
 	}
 }

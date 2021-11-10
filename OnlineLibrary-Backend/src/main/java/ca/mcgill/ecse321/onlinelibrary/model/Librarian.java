@@ -98,4 +98,8 @@ public class Librarian {
 		this.shifts.remove(shiftToRemove);
 		return true;
 	}
+
+    public void setId(Integer id) {
+		this.id= id;
+    }
 }

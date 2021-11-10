@@ -34,6 +34,12 @@ public class MemberService {
 	@Transactional
 	public Member updateMember(Integer id, String newAddress, String newFullName){
 		Member member = memberRepository.findMemberById(id);
+
+		if (member == null){
+			throw new IllegalArgumentException("A member with the id " + id + "does not exist");
+		}
+
+		member.setId(id);
 		member.setAddress(newAddress);
 		member.setFullName(newFullName);
 		return member;

@@ -115,6 +115,11 @@ public class LibrarianService {
 	public Librarian updateLibrarian(Integer id, String newFullName, String newUsername, String newPasswordHash) {
 		Librarian librarian = librarianRepository.findLibrarianById(id);
 
+		if (librarian == null){
+			throw new IllegalArgumentException ("Librarian with id "+ id + "doesn't exist");
+		}
+		
+		librarian.setId(id);
 		librarian.setFullName(newFullName);
 		librarian.setUsername(newUsername);
 		librarian.setPasswordHash(newPasswordHash);

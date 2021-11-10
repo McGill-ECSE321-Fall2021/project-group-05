@@ -138,4 +138,8 @@ public class Member {
     public void removeLoan(Loan loanToRemove) {
         this.loans.remove(loanToRemove);
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }
