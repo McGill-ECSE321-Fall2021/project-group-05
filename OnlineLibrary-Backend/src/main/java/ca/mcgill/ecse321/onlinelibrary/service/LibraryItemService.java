@@ -225,4 +225,13 @@ public class LibraryItemService {
 		return result;
 	}
 
+
+	@Transactional
+	public List<Loan> getLoansByMember(Member member) {
+		if (member == null) {
+			throw new IllegalArgumentException("Member cannot be null.");
+		}
+		return member.getLoans();
+	}
+
 }
