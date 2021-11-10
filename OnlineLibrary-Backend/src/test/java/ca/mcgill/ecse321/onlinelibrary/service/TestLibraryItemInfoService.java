@@ -29,6 +29,7 @@ import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.NewsPaperInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.Book;
 import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.LibraryItemInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
@@ -838,17 +839,6 @@ public class TestLibraryItemInfoService {
 	
 	@Test
 	public void testBrowseService(){
-		ArchiveInfo archiveInfo = new ArchiveInfo();
-		archiveInfo.setId(ARCHIVE_INFO_KEY);
-		NewsPaperInfo newspaperInfo = new NewsPaperInfo();
-		newspaperInfo.setId(NEWSPAPER_INFO_KEY);
-		AlbumInfo albumInfo = new AlbumInfo();
-		albumInfo.setId(ALBUM_INFO_KEY);
-		MovieInfo movieInfo = new MovieInfo();
-		movieInfo.setId(MOVIE_INFO_KEY);
-		BookInfo bookInfo = new BookInfo();
-		bookInfo.setId(BOOK_INFO_KEY);
-
 
 		Iterable<LibraryItemInfo> expectedIterable = libraryItemInfoDao.findAll();
 		List<LibraryItemInfo> expected = new ArrayList<LibraryItemInfo>();
