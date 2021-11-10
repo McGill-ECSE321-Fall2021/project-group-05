@@ -60,6 +60,10 @@ public class MemberService {
 			throw new IllegalArgumentException("Member with ID \"" + memberId + "\" not found.");
 		}
 
+		if (member.getOnlineAccount() != null) {
+			throw new IllegalArgumentException("Member with ID \"" + memberId + "\" already has an online account.");
+		}
+
 		ArrayList<String> errors = validateNewOnlineAccount(accountDto);
 		if (errors.size() > 0) {
 			throw new IllegalArgumentException(String.join(" ", errors));

@@ -372,4 +372,133 @@ public class TestMemberService {
 		verify(memberDao, times(1)).save(argThat((Member m) -> m.getOnlineAccount() != null
 				&& OFFLINE_MEMBER_USERNAME.equals(m.getOnlineAccount().getUsername())));
 	}
+
+	@Test
+	public void testCreateOnlineAccountNullUsername() {
+		CreateOnlineAccountRequestDto newOnlineAccount = new CreateOnlineAccountRequestDto(null,
+				"  " + OFFLINE_MEMBER_EMAIL_ADDRESS + "  ", "  " + OFFLINE_MEMBER_PASSWD + "  ");
+
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> memberService.createOnlineAccount(OFFLINE_MEMBER_ID, newOnlineAccount));
+		assertContains("Username cannot be empty", error.getMessage());
+	}
+
+	@Test
+	public void testCreateOnlineAccountEmptyUsername() {
+		CreateOnlineAccountRequestDto newOnlineAccount = new CreateOnlineAccountRequestDto("  ",
+				"  " + OFFLINE_MEMBER_EMAIL_ADDRESS + "  ", "  " + OFFLINE_MEMBER_PASSWD + "  ");
+
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> memberService.createOnlineAccount(OFFLINE_MEMBER_ID, newOnlineAccount));
+		assertContains("Username cannot be empty", error.getMessage());
+	}
+
+	@Test
+	public void testCreateOnlineAccountDuplicateUsername() {
+		CreateOnlineAccountRequestDto newOnlineAccount = new CreateOnlineAccountRequestDto(
+				"  " + OLD_MEMBER_USERNAME + "  ", "  " + OFFLINE_MEMBER_EMAIL_ADDRESS + "  ",
+				"  " + OFFLINE_MEMBER_PASSWD + "  ");
+
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> memberService.createOnlineAccount(OFFLINE_MEMBER_ID, newOnlineAccount));
+		assertContains("Username already taken.", error.getMessage());
+	}
+
+	@Test
+	public void testCreateOnlineAccountNullEmailAddress() {
+		CreateOnlineAccountRequestDto newOnlineAccount = new CreateOnlineAccountRequestDto(
+				"  " + OFFLINE_MEMBER_USERNAME + "  ", null, "  " + OFFLINE_MEMBER_PASSWD + "  ");
+
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> memberService.createOnlineAccount(OFFLINE_MEMBER_ID, newOnlineAccount));
+		assertContains("Email address cannot be empty.", error.getMessage());
+	}
+
+	@Test
+	public void testCreateOnlineAccountEmptyEmailAddress() {
+		CreateOnlineAccountRequestDto newOnlineAccount = new CreateOnlineAccountRequestDto(
+				"  " + OFFLINE_MEMBER_USERNAME + "  ", "  ", "  " + OFFLINE_MEMBER_PASSWD + "  ");
+
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> memberService.createOnlineAccount(OFFLINE_MEMBER_ID, newOnlineAccount));
+		assertContains("Email address cannot be empty.", error.getMessage());
+	}
+
+	@Test
+	public void testCreateOnlineAccountInvalidEmailAddress() {
+		CreateOnlineAccountRequestDto newOnlineAccount = new CreateOnlineAccountRequestDto(
+				"  " + OFFLINE_MEMBER_USERNAME + "  ", INVALID_EMAIL_ADDRESS, "  " + OFFLINE_MEMBER_PASSWD + "  ");
+
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> memberService.createOnlineAccount(OFFLINE_MEMBER_ID, newOnlineAccount));
+		assertContains("Invalid email address.", error.getMessage());
+	}
+
+	@Test
+	public void testCreateOnlineAccountNullPassword() {
+		CreateOnlineAccountRequestDto newOnlineAccount = new CreateOnlineAccountRequestDto(
+				"  " + OFFLINE_MEMBER_USERNAME + "  ", "  " + OFFLINE_MEMBER_EMAIL_ADDRESS + "  ", null);
+
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> memberService.createOnlineAccount(OFFLINE_MEMBER_ID, newOnlineAccount));
+		assertContains("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.", error.getMessage());
+	}
+
+	@Test
+	public void testCreateOnlineAccountShortPassword() {
+		CreateOnlineAccountRequestDto newOnlineAccount = new CreateOnlineAccountRequestDto(
+				"  " + OFFLINE_MEMBER_USERNAME + "  ", "  " + OFFLINE_MEMBER_EMAIL_ADDRESS + "  ",
+				"  " + SHORT_PASSWD + "  ");
+
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> memberService.createOnlineAccount(OFFLINE_MEMBER_ID, newOnlineAccount));
+		assertContains("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.", error.getMessage());
+	}
+
+	@Test
+	public void testCreateOnlineAccountAllFieldsInvalid() {
+		CreateOnlineAccountRequestDto newOnlineAccount = new CreateOnlineAccountRequestDto(null, INVALID_EMAIL_ADDRESS,
+				"  " + SHORT_PASSWD + "  ");
+
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> memberService.createOnlineAccount(OFFLINE_MEMBER_ID, newOnlineAccount));
+		assertContains("Username cannot be empty.", error.getMessage());
+		assertContains("Invalid email address.", error.getMessage());
+		assertContains("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.", error.getMessage());
+	}
+
+	/**
+	 * If the member ID does not exist, the member service should return an
+	 * error that *only* says the member was not found (if we used proper error
+	 * codes this would be a 404, as opposed to the other messages that would
+	 * come with a 400).
+	 */
+	@Test
+	public void testCreateOnlineAccountMemberIdInexistent() {
+		CreateOnlineAccountRequestDto newOnlineAccount = new CreateOnlineAccountRequestDto(
+				"  " + OFFLINE_MEMBER_USERNAME + "  ", "  " + OFFLINE_MEMBER_EMAIL_ADDRESS + "  ",
+				"  " + OFFLINE_MEMBER_PASSWD + "  ");
+
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> memberService.createOnlineAccount(INVALID_MEMBER_ID, newOnlineAccount));
+		assertEquals("Member with ID \"" + INVALID_MEMBER_ID + "\" not found.", error.getMessage());
+	}
+
+	/**
+	 * If the member already has an online account, the member service should
+	 * return an error that *only* says the member already has an online account
+	 * (the fact that the other fields are invalid is irrelevant, all that
+	 * matters is that the online account already exists).
+	 */
+	@Test
+	public void testCreateOnlineAccountExistingAccount() {
+		CreateOnlineAccountRequestDto newOnlineAccount = new CreateOnlineAccountRequestDto(
+				"  " + OFFLINE_MEMBER_USERNAME + "  ", "  " + OFFLINE_MEMBER_EMAIL_ADDRESS + "  ",
+				"  " + OFFLINE_MEMBER_PASSWD + "  ");
+
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> memberService.createOnlineAccount(OLD_MEMBER_ID, newOnlineAccount));
+		assertEquals("Member with ID \"" + OLD_MEMBER_ID + "\" already has an online account.", error.getMessage());
+	}
+
 }
