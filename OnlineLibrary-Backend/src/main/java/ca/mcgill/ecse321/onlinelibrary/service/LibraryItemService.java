@@ -214,4 +214,15 @@ public class LibraryItemService {
         }
 	}
 
+	@Transactional
+	public List<LibraryItem> getAssociatedCopies(LibraryItemInfo libraryItemInfoItemInfo) {
+        List<LibraryItem> result = new ArrayList<>();
+		for (LibraryItem libraryItem : libraryItemRepository.findAll()) {
+			if (getAssociatedItemInfo(libraryItem).equals(libraryItemInfoItemInfo)) {
+				result.add(libraryItem);
+			}
+		}
+		return result;
+	}
+
 }
