@@ -197,4 +197,21 @@ public class LibraryItemService {
 		return reservableItemRepository.findReservableItemById(id);
 	}
 
+	@Transactional
+	public LibraryItemInfo getAssociatedItemInfo(LibraryItem libraryItem) {
+		if (libraryItem instanceof Book) {
+            return ((Book) libraryItem).getBookInfo();
+        } else if (libraryItem instanceof Movie) {
+            return ((Movie) libraryItem).getMovieInfo();
+        } else if (libraryItem instanceof Album) {
+            return ((Album) libraryItem).getAlbumInfo();
+        } else if (libraryItem instanceof Newspaper) {
+            return ((Newspaper) libraryItem).getNewsPaperInfo();
+        } else if (libraryItem instanceof Archive) {
+            return ((Archive) libraryItem).getArchiveInfo();
+        } else {
+            throw new IllegalArgumentException("Could not find concrete class for library item.");
+        }
+	}
+
 }
