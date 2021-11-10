@@ -519,9 +519,11 @@ public class TestOnlineLibraryPersistence {
 		// Create Holiday
 		Date startDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 30));
 		Date endDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
+		String name = "Easter";
 
 		Holiday holiday = new Holiday();
 
+		holiday.setName(name);
 		holiday.setStartDate(startDate);
 		holiday.setEndDate(endDate);
 
@@ -536,6 +538,100 @@ public class TestOnlineLibraryPersistence {
 		// Check attributes
 		assertNotNull(holiday);
 		assertEquals(id, holiday.getId());
+		assertEquals(name, holiday.getName());
+		assertEquals(startDate, holiday.getStartDate());
+		assertEquals(endDate, holiday.getEndDate());
+	}
+	
+	@Test
+	public void testPersistAndLoadHolidayAtDate() {
+		// Create Holiday
+		Date startDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 30));
+		Date endDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
+		String name = "Easter";
+
+		Holiday holiday = new Holiday();
+
+		holiday.setName(name);
+		holiday.setStartDate(startDate);
+		holiday.setEndDate(endDate);
+
+		// Persist Holiday
+		holidayRepository.save(holiday);
+		int id = holiday.getId();
+
+		// Forget & retrieve Holiday
+		holiday = null;
+		Date randomDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 01));
+		ArrayList<Holiday> holidays = holidayRepository.findHolidayByStartDateOrEndDate(startDate, randomDate);
+		holiday = holidays.get(0);
+		
+		// Check attributes
+		assertNotNull(holiday);
+		assertEquals(id, holiday.getId());
+		assertEquals(name, holiday.getName());
+		assertEquals(startDate, holiday.getStartDate());
+		assertEquals(endDate, holiday.getEndDate());
+	}
+	
+	@Test
+	public void testPersistAndLoadHolidayAtSpecificDate() {
+		// Create Holiday
+		Date startDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 30));
+		Date endDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
+		String name = "Easter";
+
+		Holiday holiday = new Holiday();
+
+		holiday.setName(name);
+		holiday.setStartDate(startDate);
+		holiday.setEndDate(endDate);
+
+		// Persist Holiday
+		holidayRepository.save(holiday);
+		int id = holiday.getId();
+
+		// Forget & retrieve Holiday
+		holiday = null;
+		ArrayList<Holiday> holidays = holidayRepository.findHolidayByStartDateOrEndDate(startDate, endDate);
+		holiday = holidays.get(0);
+		
+		// Check attributes
+		assertNotNull(holiday);
+		assertEquals(id, holiday.getId());
+		assertEquals(name, holiday.getName());
+		assertEquals(startDate, holiday.getStartDate());
+		assertEquals(endDate, holiday.getEndDate());
+	}
+	
+	@Test
+	public void testPersistAndLoadHolidayInDateRange() {
+		// Create Holiday
+		Date startDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 30));
+		Date endDate = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
+		String name = "Easter";
+
+		Holiday holiday = new Holiday();
+
+		holiday.setName(name);
+		holiday.setStartDate(startDate);
+		holiday.setEndDate(endDate);
+
+		// Persist Holiday
+		holidayRepository.save(holiday);
+		int id = holiday.getId();
+
+		// Forget & retrieve Holiday
+		holiday = null;
+		Date start_range = java.sql.Date.valueOf(LocalDate.of(2020, Month.JANUARY, 01));
+		Date end_range = java.sql.Date.valueOf(LocalDate.of(2020, Month.MARCH, 31));
+		ArrayList<Holiday> holidays = holidayRepository.findHolidayByStartDateBetweenOrEndDateBetween(start_range, end_range, start_range, end_range);
+		holiday = holidays.get(0);
+		
+		// Check attributes
+		assertNotNull(holiday);
+		assertEquals(id, holiday.getId());
+		assertEquals(name, holiday.getName());
 		assertEquals(startDate, holiday.getStartDate());
 		assertEquals(endDate, holiday.getEndDate());
 	}
