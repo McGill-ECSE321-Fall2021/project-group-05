@@ -1,5 +1,8 @@
 package ca.mcgill.ecse321.onlinelibrary.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Holds the information required to create a new member, possibly with an
  * online account.
@@ -13,8 +16,9 @@ public class CreateMemberRequestDto {
 	private boolean isCitizen;
 	private CreateOnlineAccountRequestDto onlineAccount;
 
-	public CreateMemberRequestDto(String fullName, String address, boolean isCitizen,
-			CreateOnlineAccountRequestDto onlineAccount) {
+	@JsonCreator
+	public CreateMemberRequestDto(@JsonProperty("fullName") String fullName, @JsonProperty("address") String address,
+			@JsonProperty("isCitizen") boolean isCitizen, @JsonProperty("onlineAccount") CreateOnlineAccountRequestDto onlineAccount) {
 		this.fullName = fullName;
 		this.address = address;
 		this.isCitizen = isCitizen;
