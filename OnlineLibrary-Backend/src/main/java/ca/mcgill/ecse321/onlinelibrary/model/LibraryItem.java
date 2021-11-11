@@ -32,4 +32,6 @@ public abstract class LibraryItem {
     }
 
     public abstract LibraryItemDto convertToDto();
+
+    public abstract LibraryItemInfo getItemInfo();
 }
