@@ -95,4 +95,10 @@ public class RoomBookingService {
         }
         roomBookingRepository.delete(roomBooking);
     }
+
+    @Transactional
+    public Iterable<Room> getAllRooms() {
+        return roomRepository.findAll();
+    }
+
 }
