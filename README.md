@@ -135,7 +135,7 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
           <li> Review pull request </li>
         </ul>
       </td>
-      <td> 27 hours </td>
+      <td> 30 hours </td>
     </tr>
     <tr>
       <td>Kirollos Roufail</td>
