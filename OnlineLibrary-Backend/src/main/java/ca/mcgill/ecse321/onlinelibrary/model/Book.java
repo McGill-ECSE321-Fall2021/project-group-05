@@ -26,7 +26,13 @@ public class Book extends ReservableItem {
         return bookInfo;
     }
 
+    @Override
     public LibraryItemDto convertToDto() {
         return BookDto.fromBook(this);
     }
+    @Override
+    public LibraryItemInfo getItemInfo() {
+        return this.getBookInfo();
+    }
+
 }
