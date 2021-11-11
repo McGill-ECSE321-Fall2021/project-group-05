@@ -1,15 +1,9 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
-
-import java.sql.Date;
-
+import ca.mcgill.ecse321.onlinelibrary.dao.*;
+import ca.mcgill.ecse321.onlinelibrary.model.*;
+import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,27 +13,14 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
-import ca.mcgill.ecse321.onlinelibrary.dao.AlbumInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.AlbumRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.ArchiveInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.ArchiveRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.BookRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.MovieRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.NewsPaperInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.NewspaperRepository;
-import ca.mcgill.ecse321.onlinelibrary.model.Album;
-import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Archive;
-import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Book;
-import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Movie;
-import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Newspaper;
-import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TestLibraryItemService {
@@ -64,6 +45,18 @@ public class TestLibraryItemService {
 	private ArchiveRepository archiveDao;
 	@Mock 
 	private ArchiveInfoRepository archiveInfoDao;
+	@Mock
+	private LoanRepository loanDao;
+	@Mock
+	private ReservationRepository reservationDao;
+	@Mock
+	private LibraryItemRepository libraryItemDao;
+	@Mock
+	private ReservableItemRepository reservableItemDao;
+	@Mock
+	private Member memberWithTooManyLoans;
+	@Mock
+	private Book bookWithALoan;
 
 	private static final int BOOK_KEY = 1;
 	private static final int BOOK_BAD_KEY = 2;
@@ -75,11 +68,22 @@ public class TestLibraryItemService {
 	private static final int NEWSPAPER_BAD_KEY = 8;
 	private static final int ARCHIVE_KEY = 9;
 	private static final int ARCHIVE_BAD_KEY = 10;
-	
+	private static final BookInfo BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES = new BookInfo();
+	private static final BookInfo BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES = new BookInfo();
+	private static final Member MEMBER_WITH_RESERVATION = new Member("123 Main Street", "John Doe");
+	private static final Reservation RESERVATION = new Reservation(MEMBER_WITH_RESERVATION, BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES, new Date(0));
+	private static final Book LOANED_BOOK = new Book(new BookInfo());
+	private static final Loan LOAN = new Loan(new Date(0), LOANED_BOOK, new Member("123 Main Street", "John Doe"));
+
 	@InjectMocks
 	private LibraryItemInfoService libraryItemInfoService;
 	@InjectMocks
 	private LibraryItemService libraryItemService;
+
+	@BeforeAll
+	public static void setUp() {
+		MEMBER_WITH_RESERVATION.activate();
+	}
 
 	@BeforeEach
 	public void setMockOuput() {
@@ -161,7 +165,34 @@ public class TestLibraryItemService {
 			}
 		});
 		lenient().when(archiveInfoDao.save(any(ArchiveInfo.class))).then(returnParameterAsAnswer);
-		
+		lenient().when(loanDao.save(any(Loan.class))).then(returnParameterAsAnswer);
+		lenient().when(reservationDao.findReservationByReservedItemOrderByReservationDateAsc(any(ReservableItemInfo.class))).thenAnswer((InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES)) {
+				Reservation firstReservation = RESERVATION;
+				Reservation secondReservation = new Reservation(new Member("123 Main Street", "John Doe 2"), BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES, new Date(System.currentTimeMillis()));
+				return new ArrayList(Arrays.asList(firstReservation, secondReservation));
+			} else
+				return new ArrayList();
+		});
+		lenient().when(libraryItemDao.findAll()).thenAnswer((InvocationOnMock invocation) -> {
+			return new ArrayList<>(Arrays.asList(new Book(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES), new Book(BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES)));
+		});
+		lenient().when(memberWithTooManyLoans.getLoans()).then((InvocationOnMock invocation) -> {
+			List<Loan> loans = new ArrayList<>();
+			for (int i = 0; i < LibraryItemService.MAX_LOANS_PER_MEMBER; i++) {
+				loans.add(new Loan(new Date(0), new Book(new BookInfo()), memberWithTooManyLoans));
+			}
+			return loans;
+		});
+		lenient().when(bookWithALoan.getItemInfo()).thenReturn(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES);
+		lenient().when(bookWithALoan.getLoan()).thenReturn(LOAN);
+		lenient().when(reservableItemDao.findReservableItemById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(BOOK_KEY)) {
+				return new Book(new BookInfo());
+			} else {
+				return null;
+			}
+		});
 	}
 
 	@Test
@@ -442,5 +473,129 @@ public class TestLibraryItemService {
 			error+=e.getMessage();
 		}
 		assertTrue(error.contains("The archive with id " +  ARCHIVE_BAD_KEY + " doesn't exist."));
+	}
+
+	@Test
+	public void testCreateLoanSuccessful() {
+		Member member = new Member("123 Main Street", "John Doe");
+		member.activate();
+		Book book = new Book(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES);
+		Loan loan = libraryItemService.createLoan(book, member);
+		assertNotNull(loan);
+		assertEquals(book, loan.getReservableItem());
+		assertEquals(member, loan.getMember());
+	}
+
+	@Test
+	public void testCreateLoanMemberNull() {
+		Member member = null;
+		Book book = new Book(new BookInfo());
+		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(book, member));
+		assertEquals("Member cannot be null.", e.getMessage());
+	}
+
+	@Test
+	public void testCreateLoanReservableItemNull() {
+		Member member = new Member("123 Main Street", "John Doe");
+		Book book = null;
+		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(book, member));
+		assertEquals("Reservable item cannot be null.", e.getMessage());
+	}
+
+	@Test
+	public void testCreateLoanWithTooManyItems() {
+		Book book = new Book(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES);
+		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(book, memberWithTooManyLoans));
+		assertEquals("Member cannot have more than 5 loans.", e.getMessage());
+	}
+
+	@Test
+	public void testCreateLoanAlreadyLoaned() {
+		Member member = new Member("123 Main Street", "John Doe");
+		member.activate();
+        Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(bookWithALoan, member));
+        assertEquals("Item is already loaned.", e.getMessage());
+    }
+
+	@Test
+	public void testCreateLoanMemberInactive() {
+		Member member = new Member("123 Main Street", "John Doe");
+        Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(new Book(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES), member));
+        assertEquals("Member account is inactive or blacklisted.", e.getMessage());
+	}
+
+	@Test
+	public void testCreateLoanMemberBlackListed() {
+		Member member = new Member("123 Main Street", "John Doe");
+		member.activate();
+		// yellow
+		member.applyStatusPenalty();
+		// red
+		member.applyStatusPenalty();
+		// blacklisted
+		member.applyStatusPenalty();
+		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(new Book(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES), member));
+		assertEquals("Member account is inactive or blacklisted.", e.getMessage());
+	}
+
+	@Test
+	public void testCreateLoanWithNotEnoughCopies() {
+		Member member = new Member("123 Main Street", "John Doe");
+		member.activate();
+		Book book = new Book(BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES);
+		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(book, member));
+		assertEquals("Not enough copies available.", e.getMessage());
+	}
+
+	@Test
+	public void testCreateLoanSuccessfulWithReservation() {
+		Book book = new Book(BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES);
+		Loan loan = libraryItemService.createLoan(book, MEMBER_WITH_RESERVATION);
+		assertNotNull(loan);
+		verify(reservationDao, times(1)).delete(RESERVATION);
+	}
+
+	@Test
+	public void testReturnItemSuccessful() {
+		libraryItemService.returnItem(LOAN);
+		verify(loanDao, times(1)).delete(LOAN);
+	}
+
+	@Test
+	public void testReturnItemNullLoan() {
+		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.returnItem(null));
+		assertEquals("Loan cannot be null.", e.getMessage());
+	}
+
+	@Test
+	public void testGetReservableItemByIdSuccessful() {
+        assertNotNull(libraryItemService.getReservableItemById(BOOK_KEY));
+	}
+
+	@Test
+	public void testGetReservableItemByIdNonExistent() {
+        Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.getReservableItemById(BOOK_BAD_KEY));
+		assertEquals("The reservable item with id " + BOOK_BAD_KEY + " does not exist.", e.getMessage());
+	}
+
+	@Test
+	public void testGetAssociatedItemInfoSuccessful() {
+		BookInfo bookInfo = new BookInfo();
+		Book book = new Book(bookInfo);
+		assertEquals(bookInfo, libraryItemService.getAssociatedItemInfo(book));
+	}
+
+	@Test
+	public void testGetAssociatedItemInfoNull() {
+		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.getAssociatedItemInfo(null));
+        assertEquals("Library item cannot be null.", e.getMessage());
+	}
+
+	@Test
+	public void testGetAssociatedCopiesSuccessful() {
+		List<LibraryItem> copies = libraryItemService.getAssociatedCopies(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES);
+		for (LibraryItem libraryItem : copies) {
+			assertEquals(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES, libraryItem.getItemInfo());
+		}
 	}
 }

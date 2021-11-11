@@ -146,6 +146,14 @@ echo "Fails to get room with invalid ID"
 curl -s --request GET "$base_url/room/999999"
 echo
 
+# Get all rooms
+echo "Gets all rooms successfully"
+curl -s --request GET "$base_url/room/"
+echo
+# Get all room bookings
+echo "Gets all room bookings successfully"
+curl -s --request GET "$base_url/roomBooking/"
+
 # Delete room
 echo "Deletes room successfully (no output)"
 curl -s --request DELETE "$base_url/room/$room_id"
