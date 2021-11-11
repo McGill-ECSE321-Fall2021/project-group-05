@@ -199,7 +199,11 @@ public class LibraryItemService {
 
 	@Transactional
 	public ReservableItem getReservableItemById(int id) {
-		return reservableItemRepository.findReservableItemById(id);
+		ReservableItem reservableItem = reservableItemRepository.findReservableItemById(id);
+		if (reservableItem == null) {
+			throw new IllegalArgumentException("The reservable item with id " + id + " does not exist.");
+		}
+		return reservableItem;
 	}
 
 	@Transactional
