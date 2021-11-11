@@ -199,19 +199,10 @@ public class LibraryItemService {
 
 	@Transactional
 	public LibraryItemInfo getAssociatedItemInfo(LibraryItem libraryItem) {
-		if (libraryItem instanceof Book) {
-            return ((Book) libraryItem).getBookInfo();
-        } else if (libraryItem instanceof Movie) {
-            return ((Movie) libraryItem).getMovieInfo();
-        } else if (libraryItem instanceof Album) {
-            return ((Album) libraryItem).getAlbumInfo();
-        } else if (libraryItem instanceof Newspaper) {
-            return ((Newspaper) libraryItem).getNewsPaperInfo();
-        } else if (libraryItem instanceof Archive) {
-            return ((Archive) libraryItem).getArchiveInfo();
-        } else {
-            throw new IllegalArgumentException("Could not find concrete class for library item.");
-        }
+		if (libraryItem == null) {
+			throw new IllegalArgumentException("Library item cannot be null.");
+		}
+		return libraryItem.getItemInfo();
 	}
 
 	@Transactional
