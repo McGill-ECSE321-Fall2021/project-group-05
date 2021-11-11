@@ -4,16 +4,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse321.onlinelibrary.dto.CreateMemberRequestDto;
+import ca.mcgill.ecse321.onlinelibrary.dto.LoanDto;
 import ca.mcgill.ecse321.onlinelibrary.dto.CreateOnlineAccountRequestDto;
 import ca.mcgill.ecse321.onlinelibrary.dto.MemberDto;
 import ca.mcgill.ecse321.onlinelibrary.dto.OnlineAccountDto;
@@ -94,4 +89,10 @@ public class MemberController {
 		member = memberService.removeStatusPenalty(member);
 		return MemberDto.fromMember(member);
 	}
+
+	@GetMapping(value = {"/member/{id}/loans", "/member/{id}/loans/"})
+	public List<LoanDto> getLoansByMemberId(@PathVariable("id") int id) {
+        Member member = memberService.getMemberById(id);
+        return member.getLoans().stream().map(LoanDto::fromLoan).collect(Collectors.toList());
+    }
 }
