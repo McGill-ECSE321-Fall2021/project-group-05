@@ -62,4 +62,11 @@ public class RoomBookingController {
         roomBookingService.getAllRooms().forEach(room -> roomDtos.add(RoomDto.fromRoom(room)));
         return roomDtos;
     }
+
+    @GetMapping(value = {"/roomBooking", "/roomBooking/"})
+    public List<RoomBookingDto> getAllRoomBookings() {
+        List<RoomBookingDto> roomBookingDtos = new ArrayList<>();
+        roomBookingService.getAllRoomBookings().forEach(roomBooking -> roomBookingDtos.add(RoomBookingDto.fromRoomBooking(roomBooking)));
+        return roomBookingDtos;
+    }
 }
