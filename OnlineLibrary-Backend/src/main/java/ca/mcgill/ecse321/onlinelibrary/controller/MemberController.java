@@ -54,7 +54,7 @@ public class MemberController {
 				.collect(Collectors.toList());
 	}
 
-	@PutMapping(value = {"/activate/{id}", "/activate/{id}/"})
+	@PutMapping(value = {"/member/{id}/activate", "/member/{id}/activate"})
 	public MemberDto activateMemberAccount(@PathVariable("id") int id) {
 		Member member = memberService.getMemberById(id);
 		member = memberService.activateAccount(member);

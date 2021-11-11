@@ -100,11 +100,11 @@ echo
 
 # Activate account
 echo "Successfully activates account"
-curl --request POST "$base_url/activate/$member_id/"
+curl --request POST "$base_url/member/$member_id/activate"
 # TODO: Expect 200 response
 echo
 echo "Fail to activate already active account"
-curl --request POST "$base_url/activate/$member_id/"
+curl --request POST "$base_url/member/$member_id/activate"
 # TODO: Expect 400 response
 echo
 
