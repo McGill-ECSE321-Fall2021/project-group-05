@@ -66,7 +66,7 @@ echo
 # Get all rooms
 echo "Gets all rooms successfully"
 curl -s --request GET "$base_url/room/"
-
+echo
 # Get all room bookings
 echo "Gets all room bookings successfully"
 curl -s --request GET "$base_url/roomBooking/"
