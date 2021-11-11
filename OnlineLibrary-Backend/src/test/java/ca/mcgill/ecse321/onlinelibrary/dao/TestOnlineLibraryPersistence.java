@@ -337,7 +337,7 @@ public class TestOnlineLibraryPersistence {
 		reserve = null;
 		reserve2 = null;
 
-		List<Reservation> actualList = reservationRepository.findReservationByReservedItem(movieInfo);
+		List<Reservation> actualList = reservationRepository.findReservationByReservedItemOrderByReservationDateAsc(movieInfo);
 
 		assertNotNull(actualList);
 		assertEquals(reservationList, actualList);

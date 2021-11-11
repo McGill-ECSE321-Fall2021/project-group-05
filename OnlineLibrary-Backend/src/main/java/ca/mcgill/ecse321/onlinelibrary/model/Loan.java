@@ -36,6 +36,7 @@ public class Loan {
 
 	public Loan(Date returnDate, ReservableItem item, Member member) {
 		this.returnDate = returnDate;
+		this.numberOfRenewals = 0;
 
 		if (item == null)
 			throw new IllegalArgumentException("A reservable item is required for every loan.");

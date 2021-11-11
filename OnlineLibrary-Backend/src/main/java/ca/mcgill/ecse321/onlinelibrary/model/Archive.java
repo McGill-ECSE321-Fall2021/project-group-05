@@ -1,5 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
+import ca.mcgill.ecse321.onlinelibrary.dto.ArchiveDto;
+import ca.mcgill.ecse321.onlinelibrary.dto.LibraryItemDto;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -24,4 +26,12 @@ public class Archive extends LibraryItem{
         return archiveInfo;
     }
 
+    @Override
+    public LibraryItemDto convertToDto() {
+        return ArchiveDto.fromArchive(this);
+    }
+    @Override
+    public LibraryItemInfo getItemInfo() {
+        return this.getArchiveInfo();
+    }
 }
