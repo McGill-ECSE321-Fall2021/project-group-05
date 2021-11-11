@@ -560,43 +560,15 @@ public class TestLibraryItemService {
 	}
 
 	@Test
-	public void getAssociatedItemInfoSuccessfulBook() {
+	public void getAssociatedItemInfoSuccessful() {
 		BookInfo bookInfo = new BookInfo();
 		Book book = new Book(bookInfo);
 		assertEquals(bookInfo, libraryItemService.getAssociatedItemInfo(book));
 	}
 
 	@Test
-	public void getAssociatedItemInfoSuccessfulMovie() {
-        MovieInfo movieInfo = new MovieInfo();
-        Movie movie = new Movie(movieInfo);
-        assertEquals(movieInfo, libraryItemService.getAssociatedItemInfo(movie));
-    }
-
-	@Test
-	public void getAssociatedItemInfoSuccessfulAlbum() {
-        AlbumInfo albumInfo = new AlbumInfo();
-        Album album = new Album(albumInfo);
-        assertEquals(albumInfo, libraryItemService.getAssociatedItemInfo(album));
-    }
-
-	@Test
-	public void getAssociatedItemInfoSuccessfulArchive() {
-		ArchiveInfo archiveInfo = new ArchiveInfo();
-        Archive archive = new Archive(archiveInfo);
-        assertEquals(archiveInfo, libraryItemService.getAssociatedItemInfo(archive));
-	}
-
-	@Test
-	public void getAssociatedItemInfoSuccessfulNewspaper() {
-		NewsPaperInfo newspaperInfo = new NewsPaperInfo();
-        Newspaper newspaper = new Newspaper(newspaperInfo);
-        assertEquals(newspaperInfo, libraryItemService.getAssociatedItemInfo(newspaper));
-	}
-
-	@Test
 	public void getAssociatedItemInfoNull() {
 		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.getAssociatedItemInfo(null));
-        assertEquals("Could not find concrete class for library item.", e.getMessage());
+        assertEquals("Library item cannot be null.", e.getMessage());
 	}
 }
