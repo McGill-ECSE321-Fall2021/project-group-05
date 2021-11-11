@@ -470,7 +470,7 @@ public class TestLibraryItemService {
 	}
 
 	@Test
-	public void createLoanSuccessful() {
+	public void testCreateLoanSuccessful() {
 		Member member = new Member("123 Main Street", "John Doe");
 		member.activate();
 		Book book = new Book(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES);
@@ -481,7 +481,7 @@ public class TestLibraryItemService {
 	}
 
 	@Test
-	public void createLoanMemberNull() {
+	public void testCreateLoanMemberNull() {
 		Member member = null;
 		Book book = new Book(new BookInfo());
 		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(book, member));
@@ -489,7 +489,7 @@ public class TestLibraryItemService {
 	}
 
 	@Test
-	public void createLoanReservableItemNull() {
+	public void testCreateLoanReservableItemNull() {
 		Member member = new Member("123 Main Street", "John Doe");
 		Book book = null;
 		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(book, member));
@@ -497,7 +497,7 @@ public class TestLibraryItemService {
 	}
 
 	@Test
-	public void createLoanWithTooManyItems() {
+	public void testCreateLoanWithTooManyItems() {
 	    // Need help with this test........
 		Book book = new Book(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES);
 		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(book, memberWithTooManyLoans));
@@ -505,7 +505,7 @@ public class TestLibraryItemService {
 	}
 
 	@Test
-	public void createLoanAlreadyLoaned() {
+	public void testCreateLoanAlreadyLoaned() {
 		Member member = new Member("123 Main Street", "John Doe");
 		member.activate();
         Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(bookWithALoan, member));
@@ -513,14 +513,14 @@ public class TestLibraryItemService {
     }
 
 	@Test
-	public void createLoanMemberInactive() {
+	public void testCreateLoanMemberInactive() {
 		Member member = new Member("123 Main Street", "John Doe");
         Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(new Book(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES), member));
         assertEquals("Member account is inactive or blacklisted.", e.getMessage());
 	}
 
 	@Test
-	public void createLoanWithNotEnoughCopies() {
+	public void testCreateLoanWithNotEnoughCopies() {
 		Member member = new Member("123 Main Street", "John Doe");
 		member.activate();
 		Book book = new Book(BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES);
@@ -529,7 +529,7 @@ public class TestLibraryItemService {
 	}
 
 	@Test
-	public void createLoanSuccessfulWithReservation() {
+	public void testCreateLoanSuccessfulWithReservation() {
 		Book book = new Book(BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES);
 		MEMBER_WITH_RESERVATION.activate();
 		Loan loan = libraryItemService.createLoan(book, MEMBER_WITH_RESERVATION);
@@ -538,36 +538,36 @@ public class TestLibraryItemService {
 	}
 
 	@Test
-	public void returnItemSuccessful() {
+	public void testReturnItemSuccessful() {
 		libraryItemService.returnItem(LOAN);
 		verify(loanDao, times(1)).delete(LOAN);
 	}
 
 	@Test
-	public void returnItemNullLoan() {
+	public void testReturnItemNullLoan() {
 		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.returnItem(null));
 		assertEquals("Loan cannot be null.", e.getMessage());
 	}
 
 	@Test
-	public void getReservableItemByIdSuccessful() {
+	public void testGetReservableItemByIdSuccessful() {
         assertNotNull(libraryItemService.getReservableItemById(BOOK_KEY));
 	}
 
 	@Test
-	public void getReservableItemByIdNonExistent() {
+	public void testGetReservableItemByIdNonExistent() {
         assertNull(libraryItemService.getReservableItemById(BOOK_BAD_KEY));
 	}
 
 	@Test
-	public void getAssociatedItemInfoSuccessful() {
+	public void testGetAssociatedItemInfoSuccessful() {
 		BookInfo bookInfo = new BookInfo();
 		Book book = new Book(bookInfo);
 		assertEquals(bookInfo, libraryItemService.getAssociatedItemInfo(book));
 	}
 
 	@Test
-	public void getAssociatedItemInfoNull() {
+	public void testGetAssociatedItemInfoNull() {
 		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.getAssociatedItemInfo(null));
         assertEquals("Library item cannot be null.", e.getMessage());
 	}
