@@ -15,6 +15,7 @@ import org.mockito.stubbing.Answer;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -159,7 +160,6 @@ public class TestLibraryItemService {
 		});
 		lenient().when(archiveInfoDao.save(any(ArchiveInfo.class))).then(returnParameterAsAnswer);
 		lenient().when(loanDao.save(any(Loan.class))).then(returnParameterAsAnswer);
-		// TODO: Extract this to application.properties
 		lenient().when(reservationDao.findReservationByReservedItemOrderByReservationDateAsc(any(ReservableItemInfo.class))).thenAnswer((InvocationOnMock invocation) -> {
 			if (invocation.getArgument(0).equals(BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES)) {
 				Reservation firstReservation = RESERVATION;
@@ -171,13 +171,13 @@ public class TestLibraryItemService {
 		lenient().when(libraryItemDao.findAll()).thenAnswer((InvocationOnMock invocation) -> {
 			return new ArrayList<>(Arrays.asList(new Book(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES), new Book(BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES)));
 		});
-		lenient().when(memberWithTooManyLoans.getLoans()).then((InvocationOnMock invocation) -> new ArrayList(Arrays.asList(
-				new Loan(new Date(0), new Book(new BookInfo()), memberWithTooManyLoans),
-				new Loan(new Date(0), new Book(new BookInfo()), memberWithTooManyLoans),
-				new Loan(new Date(0), new Book(new BookInfo()), memberWithTooManyLoans),
-				new Loan(new Date(0), new Book(new BookInfo()), memberWithTooManyLoans),
-				new Loan(new Date(0), new Book(new BookInfo()), memberWithTooManyLoans)
-		)));
+		lenient().when(memberWithTooManyLoans.getLoans()).then((InvocationOnMock invocation) -> {
+			List<Loan> loans = new ArrayList<>();
+			for (int i = 0; i < LibraryItemService.MAX_LOANS_PER_MEMBER; i++) {
+				loans.add(new Loan(new Date(0), new Book(new BookInfo()), memberWithTooManyLoans));
+			}
+			return loans;
+		});
 		lenient().when(bookWithALoan.getItemInfo()).thenReturn(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES);
 		lenient().when(bookWithALoan.getLoan()).thenReturn(LOAN);
 		lenient().when(reservableItemDao.findReservableItemById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
