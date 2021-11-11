@@ -252,4 +252,10 @@ public class TestRoomBookingService {
         assertEquals("Room booking cannot be null.", error.getMessage());
         verify(roomBookingDao, times(0)).delete(any(RoomBooking.class));
     }
+
+    @Test
+    public void getAllRoomsSuccessful() {
+        Iterable<Room> rooms = roomBookingService.getAllRooms();
+        assertEquals(ALL_ROOMS, rooms);
+    }
 }
