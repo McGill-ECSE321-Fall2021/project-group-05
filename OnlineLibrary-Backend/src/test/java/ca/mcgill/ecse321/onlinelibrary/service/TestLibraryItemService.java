@@ -501,4 +501,11 @@ public class TestLibraryItemService {
         assertEquals("Item is already loaned.", e.getMessage());
     }
 
+	@Test
+	public void createLoanMemberInactive() {
+		Member member = new Member("123 Main Street", "John Doe");
+        Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(new Book(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES), member));
+        assertEquals("Member account is inactive or blacklisted.", e.getMessage());
+	}
+
 }
