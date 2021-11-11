@@ -28,7 +28,7 @@ public interface LoanRepository extends CrudRepository<Loan, Integer> {
      * @param reservableItem the reservable item associated with the loans
      * @return the loans associated with the reservable item
      */
-    Loan findLoanByReservableItem(ReservableItem reservableItem);
+    Loan findLoanByItem(ReservableItem reservableItem);
 }
 
 
