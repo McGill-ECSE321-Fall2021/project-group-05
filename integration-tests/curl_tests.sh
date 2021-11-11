@@ -127,3 +127,30 @@ echo "Fail to remove penalty from nonexistent member"
 curl --request POST "$base_url/member/9999999999/removePenalty"
 # TODO: Expect 404 response
 echo
+
+# Create room
+echo "Creates room successfully"
+response=$(curl -s --request POST "$base_url/room?capacity=10&name=A%20Nice%20Room")
+echo "$response"
+room_id=$(echo "$response" | jq -r '.["id"]')
+
+echo "Fails to create room with missing capacity"
+curl -s --request POST "$base_url/room?name=A%20Nice%20Room"
+echo
+
+# Get room by ID
+echo "Gets room successfully"
+curl -s --request GET "$base_url/room/$room_id"
+echo
+echo "Fails to get room with invalid ID"
+curl -s --request GET "$base_url/room/999999"
+echo
+
+# Delete room
+echo "Deletes room successfully (no output)"
+curl -s --request DELETE "$base_url/room/$room_id"
+echo
+echo "Fails to delete room with invalid ID"
+# Should not exist anymore
+curl -s --request DELETE "$base_url/room/$room_id"
+echo
