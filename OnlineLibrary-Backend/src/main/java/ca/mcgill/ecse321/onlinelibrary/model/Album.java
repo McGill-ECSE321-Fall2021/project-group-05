@@ -29,4 +29,9 @@ public class Album extends ReservableItem{
     public LibraryItemDto convertToDto() {
         return AlbumDto.fromAlbum(this);
     }
+
+    @Override
+    public LibraryItemInfo getItemInfo() {
+        return this.getAlbumInfo();
+    }
 }
