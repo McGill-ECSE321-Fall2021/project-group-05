@@ -1,5 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
+import ca.mcgill.ecse321.onlinelibrary.dto.LibraryItemDto;
+
 import javax.persistence.*;
 
 // WARNING: Changing the following `InheritanceType` to anything other than `JOINED` or `TABLE_PER_CLASS` will bring
@@ -29,4 +31,5 @@ public abstract class LibraryItem {
     	this.id = id;
     }
 
+    public abstract LibraryItemDto convertToDto();
 }
