@@ -45,11 +45,6 @@ public class LibrarianService {
 	public Librarian createLibrarian(String fullName, String username, String password) {
 		ArrayList<String> errorMessage = checkValidInput(fullName, username, password);
 
-		//checks if the username already exists
-		if (librarianRepository.existsLibrarianByUsername(username)) {
-			errorMessage.add("Username already taken.");
-		}
-
 		// Throw exception
 		if (errorMessage.size() > 0) {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
@@ -88,6 +83,12 @@ public class LibrarianService {
 	public Librarian updateLibrarian(Integer id, String newFullName, String newUsername, String newPasswordHash) {
 		Librarian librarian = getNonNullLibrarianFromRepo(id);
 
+		ArrayList<String> errorMessage = checkValidInput(newFullName, newUsername, newPasswordHash);
+
+		if (errorMessage.size()> 0 ){
+			throw new IllegalArgumentException(String.join(" ", errorMessage));
+		}
+
 		librarian.setFullName(newFullName);
 		librarian.setUsername(newUsername);
 		librarian.setPasswordHash(newPasswordHash);
@@ -121,6 +122,10 @@ public class LibrarianService {
 			if (username.length() == 0) {
 				errorMessage.add("Username cannot be empty.");
 			}
+			if (librarianRepository.existsLibrarianByUsername(username)) {
+				errorMessage.add("Username already taken.");
+			}
+
 		}
 
 		return errorMessage;
