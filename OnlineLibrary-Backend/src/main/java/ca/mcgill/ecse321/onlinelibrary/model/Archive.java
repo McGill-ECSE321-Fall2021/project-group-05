@@ -30,4 +30,8 @@ public class Archive extends LibraryItem{
     public LibraryItemDto convertToDto() {
         return ArchiveDto.fromArchive(this);
     }
+    @Override
+    public LibraryItemInfo getItemInfo() {
+        return this.getArchiveInfo();
+    }
 }
