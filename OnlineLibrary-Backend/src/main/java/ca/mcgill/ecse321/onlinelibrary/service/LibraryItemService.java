@@ -285,22 +285,6 @@ public class LibraryItemService {
 	}
 
 	@Transactional
-	public List<Loan> getLoansByMember(Member member) {
-		if (member == null) {
-			throw new IllegalArgumentException("Member cannot be null.");
-		}
-		return member.getLoans();
-	}
-
-	@Transactional
-	public Loan getLoanByReservableItem(ReservableItem reservableItem) {
-		if (reservableItem == null) {
-			throw new IllegalArgumentException("Reservable item cannot be null.");
-		}
-		return reservableItem.getLoan();
-	}
-
-	@Transactional
 	public void returnItem(Loan loan) {
         if (loan == null) {
             throw new IllegalArgumentException("Loan cannot be null.");
