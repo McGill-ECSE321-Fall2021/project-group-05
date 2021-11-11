@@ -265,6 +265,26 @@ public class TestLibraryItemInfoService {
 		assertNull(bookInfo);
 		assertTrue(error.contains("The bookInfo with id " + BOOK_INFO_BAD_KEY + " was not found in the database."));
 	}
+	
+	@Test
+	public void testUpdateBookInfo() {
+		BookInfo bookInfo = libraryItemInfoService.createBookInfo("Title", 123, "An author", 12345);
+		//int id = bookInfo.getId();
+		String newTitle = "Title2";
+		int newNumberOfPage = 321;
+		String newAuthor= "Author";
+		long newIsbn = 54321;
+		try {
+			bookInfo = libraryItemInfoService.updateBookInfo(bookInfo,newTitle, newNumberOfPage, newAuthor, newIsbn);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(bookInfo);
+		assertEquals(bookInfo.getTitle(), newTitle);
+		assertEquals(bookInfo.getNumberOfPage(), newNumberOfPage);
+		assertEquals(bookInfo.getAuthor(), newAuthor);
+		assertEquals(bookInfo.getIsbn(), newIsbn);
+	}
 
 	@Test
 	public void testCreateMovieInfo() {
@@ -403,6 +423,23 @@ public class TestLibraryItemInfoService {
 		}
 		assertNull(movieInfo);
 		assertTrue(error.contains("The movieInfo with id " + MOVIE_INFO_BAD_KEY + " was not found in the database."));
+	}
+	
+	@Test
+	public void testUpdateMovienfo() {
+		MovieInfo movieInfo = libraryItemInfoService.createMovieInfo("AGenre", "aDirector", 123);
+		String newGenre = "Genre2";
+		String newDirector = "Director2";
+		int length = 321;
+		try {
+			movieInfo = libraryItemInfoService.updateMovieInfo(movieInfo, newGenre, newDirector, length);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(movieInfo);
+		assertEquals(movieInfo.getGenre(), newGenre);
+		assertEquals(movieInfo.getDirector(), newDirector);
+		assertEquals(movieInfo.getLength(), length);
 	}
 	
 	@Test
@@ -560,6 +597,23 @@ public class TestLibraryItemInfoService {
 		assertNull(albumInfo);
 		assertTrue(error.contains("The albumInfo with id " + ALBUM_INFO_BAD_KEY + " was not found in the database."));
 	}
+	
+	@Test
+	public void testUpdateAlbumInfo() {
+		AlbumInfo albumInfo = libraryItemInfoService.createAlbumInfo("ATitle", "aComposer", "aGenre");
+		String newTitle = "Title2";
+		String newComposerPerformer = "ComposerPerformer2";
+		String newGenre = "Genre2";
+		try {
+			albumInfo = libraryItemInfoService.updateAlbumInfo(albumInfo, newTitle, newComposerPerformer, newGenre);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(albumInfo);
+		assertEquals(albumInfo.getTitle(), newTitle);
+		assertEquals(albumInfo.getComposerPerformer(), newComposerPerformer);
+		assertEquals(albumInfo.getGenre(), newGenre);
+	}
 
 	@Test
 	public void testCreateNewsPaperInfo() {
@@ -684,6 +738,24 @@ public class TestLibraryItemInfoService {
 		assertNull(newspaperInfo);
 		assertTrue(error.contains("The newsPaperInfo with id " + NEWSPAPER_INFO_BAD_KEY + " was not found in the database."));
 	}
+	
+	@Test
+	public void testUpdateNewspaperInfo() {
+		NewsPaperInfo newspaper = libraryItemInfoService.createNewspaperInfo(Date.valueOf("2020-11-11"), "AFrequency", 123);
+		Date newPublicationDate = Date.valueOf("2021-11-11");
+		String newFrequency = "Frequency2";
+		int newNumber = 321;
+		NewsPaperInfo newspaperInfo = null;
+		try {
+			newspaperInfo = libraryItemInfoService.updateNewspaperInfo(newspaper, newPublicationDate, newFrequency, newNumber);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(newspaperInfo);
+		assertEquals(newspaperInfo.getPublication(), newPublicationDate);
+		assertEquals(newspaperInfo.getFrequency(), newFrequency);
+		assertEquals(newspaperInfo.getNumber(), newNumber);
+	}
 
 	@Test
 	public void testCreateArchiveInfo() {
@@ -807,5 +879,22 @@ public class TestLibraryItemInfoService {
 		}
 		assertNull(archiveInfo);
 		assertTrue(error.contains("The archiveInfo with id " + ARCHIVE_INFO_BAD_KEY + " was not found in the database."));
+	}
+	
+	@Test
+	public void testUpdateArchivenfo() {
+		ArchiveInfo archiveInfo = libraryItemInfoService.createArchiveInfo("ATitle", "aDescription", Date.valueOf("2020-11-11"));
+		String newTitle = "Title2";
+		String newDescription = "Description2";
+		Date newPublicationDate = Date.valueOf("2021-11-11");
+		try {
+			archiveInfo = libraryItemInfoService.updateArchiveInfo(archiveInfo, newTitle, newDescription, newPublicationDate);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(archiveInfo);
+		assertEquals(archiveInfo.getTitle(), newTitle);
+		assertEquals(archiveInfo.getDescription(), newDescription);
+		assertEquals(archiveInfo.getPublicationDate(), newPublicationDate);
 	}
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,6 +35,14 @@ public class LibraryItemInfoController {
 		BookInfo bookInfo = libraryItemInfoService.createBookInfo(title, numberOfPage, author, isbn);
 		return BookInfoDto.fromBookInfo(bookInfo);
 	}
+	
+	@PutMapping(value = {"/bookInfo/{id}" ,"/bookInfo/{id}/"})
+	public BookInfoDto updateBookInfo(@PathVariable int id, @RequestParam String title,@RequestParam int numberOfPage, 
+			@RequestParam String author, @RequestParam long isbn) throws IllegalArgumentException {
+		BookInfo bookInfo = libraryItemInfoService.getBookInfo(id);
+		return BookInfoDto.fromBookInfo(libraryItemInfoService.updateBookInfo
+			(bookInfo, title, numberOfPage, author, isbn));
+	}
 
 	@PostMapping(value = { "/movieInfo", "/movieInfo/" })
 	public MovieInfoDto createMovieInfo(@RequestParam String genre, @RequestParam String director, @RequestParam int length)
@@ -41,12 +50,27 @@ public class LibraryItemInfoController {
 		MovieInfo movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
 		return MovieInfoDto.fromMovieInfo(movieInfo);
 	}
+	
+	@PutMapping(value = {"/movieInfo/{id}" ,"/movieInfo/{id}/"})
+	public MovieInfoDto updateMovieInfo(@PathVariable int id, @RequestParam String genre, @RequestParam String director, 
+			@RequestParam int length) throws IllegalArgumentException {
+		MovieInfo movieInfo = libraryItemInfoService.getMovieInfo(id);
+		return MovieInfoDto.fromMovieInfo(libraryItemInfoService.updateMovieInfo
+			(movieInfo, genre, director, length));
+	}
 
 	@PostMapping(value = { "/archiveInfo/{title}", "/archiveInfo/{title}/"})
-	public ArchiveInfoDto createArchiveInfo(@PathVariable("title") String title, @RequestParam String description, @RequestParam Date publicationDate)
-			throws IllegalArgumentException{
+	public ArchiveInfoDto createArchiveInfo(@PathVariable("title") String title, @RequestParam String description, 
+			@RequestParam Date publicationDate) throws IllegalArgumentException{
 		ArchiveInfo archiveInfo = libraryItemInfoService.createArchiveInfo(title, description, publicationDate);
 		return ArchiveInfoDto.fromArchiveInfo(archiveInfo);
+	}
+	
+	@PutMapping(value = {"/archiveInfo/{id}", "/archiveInfo/{id}/"})
+	public ArchiveInfoDto updateArchiveInfo(@PathVariable("id") int id, @RequestParam String title, 
+			@RequestParam String description, @RequestParam Date publicationDate) throws IllegalArgumentException{
+		ArchiveInfo archiveInfo = libraryItemInfoService.getArchiveInfo(id);
+		return ArchiveInfoDto.fromArchiveInfo(libraryItemInfoService.updateArchiveInfo(archiveInfo, title, description, publicationDate));
 	}
 
 	@PostMapping (value = { "/newsPaperInfo", "/newsPaperInfo/"})
@@ -55,11 +79,25 @@ public class LibraryItemInfoController {
 		NewsPaperInfo newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		return NewsPaperInfoDto.fromNewsPaperInfo(newsPaperInfo);
 	}
+	
+	@PutMapping(value = {"/newspaperInfo/{id}", "/newspaperInfo/{id}/"})
+	public NewsPaperInfoDto updateNewspaperInfo(@PathVariable("id") int id, @RequestParam Date publicationDate, 
+			@RequestParam String frequency, @RequestParam int number) throws IllegalArgumentException{
+		NewsPaperInfo newspaperInfo = libraryItemInfoService.getNewspaperInfo(id);
+		return NewsPaperInfoDto.fromNewsPaperInfo(libraryItemInfoService.updateNewspaperInfo(newspaperInfo, publicationDate, frequency, number));
+	}
 
 	@PostMapping(value = {"/albumInfo/{title}", "/albumInfo/{title}/"})
 	public AlbumInfoDto createAlbumInfo(@PathVariable("title") String title, @RequestParam String composerPerformer, String genre)
 			throws IllegalArgumentException {
 		AlbumInfo albumInfo = libraryItemInfoService.createAlbumInfo(title, composerPerformer, genre);
 		return AlbumInfoDto.fromAlbumInfo(albumInfo);
+	}
+	
+	@PutMapping(value = {"/albumInfo/{id}", "/albumInfo/{id}/"})
+	public AlbumInfoDto updateAlbumInfo(@PathVariable("id") int id, @RequestParam String title, 
+			@RequestParam String composerPerformer, @RequestParam String genre) throws IllegalArgumentException {
+		AlbumInfo albumInfo = libraryItemInfoService.getAlbumInfo(id);
+		return AlbumInfoDto.fromAlbumInfo(libraryItemInfoService.updateAlbumInfo(albumInfo, title, composerPerformer, genre));
 	}
 }
