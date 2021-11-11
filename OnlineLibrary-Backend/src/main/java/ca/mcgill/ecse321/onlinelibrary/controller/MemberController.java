@@ -28,12 +28,32 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 
+	/**
+	 * Register a new member with or without an online account.
+	 *
+	 * The full name and address are required. If an online account is provided,
+	 * the username, password, and email address are all required.
+	 *
+	 * @param newMemberDto
+	 *            The registration information for the new member
+	 * @return The created member
+	 */
 	@PostMapping(value = {"/member", "/member/"})
 	public MemberDto registerMember(@RequestBody CreateMemberRequestDto newMemberDto) {
 		Member member = memberService.registerMember(newMemberDto);
 		return MemberDto.fromMember(member);
 	}
 
+	/**
+	 * Adds an online account to an existing member that does not have an online
+	 * account yet.
+	 *
+	 * The username, password, and email address are all required.
+	 *
+	 * @param id Primary key of an existing member
+	 * @param newOnlineAccountDto Online account information
+	 * @return The created online account
+	 */
 	@PostMapping(value = {"/member/{id}/onlineAccount", "/member/{id}/onlineAccount/"})
 	public OnlineAccountDto createOnlineAccount(@PathVariable("id") int id,
 			@RequestBody CreateOnlineAccountRequestDto newOnlineAccountDto) {
