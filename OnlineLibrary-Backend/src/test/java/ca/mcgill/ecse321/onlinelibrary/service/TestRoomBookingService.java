@@ -258,4 +258,10 @@ public class TestRoomBookingService {
         Iterable<Room> rooms = roomBookingService.getAllRooms();
         assertEquals(ALL_ROOMS, rooms);
     }
+
+    @Test
+    public void testGetAllRoomBookingsSuccessful() {
+        Iterable<RoomBooking> roomBookings = roomBookingService.getAllRoomBookings();
+        assertEquals(ALL_ROOM_BOOKINGS, roomBookings);
+    }
 }
