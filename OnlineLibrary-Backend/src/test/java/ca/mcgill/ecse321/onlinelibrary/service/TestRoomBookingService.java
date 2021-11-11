@@ -16,6 +16,7 @@ import org.mockito.stubbing.Answer;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,6 +40,14 @@ public class TestRoomBookingService {
     private static final int INVALID_ROOM_ID = 999999;
     private static final int BOOKING_ID = 42;
     private static final int INVALID_BOOKING_ID = 999999;
+    private static final Iterable<Room> ALL_ROOMS = Arrays.asList(
+            new Room(10, "Room 1"),
+            new Room(20, "Room 2")
+    );
+    private static final Iterable<RoomBooking> ALL_ROOM_BOOKINGS = Arrays.asList(
+            new RoomBooking(new Date(0), new Time(0), new Time(10), new Member("123 Main Street", "John Doe 1"), new Room(10, "Room 1")),
+            new RoomBooking(new Date(0), new Time(0), new Time(10), new Member("123 Main Street", "John Doe 2"), new Room(20, "Room 2"))
+    );
 
     @BeforeEach
     public void setMockOutput() {
@@ -65,6 +74,8 @@ public class TestRoomBookingService {
                 return null;
             }
         });
+        lenient().when(roomDao.findAll()).thenReturn(ALL_ROOMS);
+        lenient().when(roomBookingDao.findAll()).thenReturn(ALL_ROOM_BOOKINGS);
     }
 
     @Test
