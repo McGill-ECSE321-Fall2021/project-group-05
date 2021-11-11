@@ -16,11 +16,11 @@ echo
 
 # Create librarian
 echo "Creates librarian successfully"
-curl -s --request POST "$base_url/librarian?fullName=Jocasta%20Nu,username=jocasta.nu,password=securepassword12345"
+curl -s --request POST "$base_url/librarian?fullName=Jocasta%20Nu&username=jocasta.nu&password=securepassword12345"
 # TODO: expect 200 response
 echo
 echo "Fails to create a librarian with missing password"
-curl -s --request POST "$base_url/librarian?fullName=Bilbo%20Baggins,username=bilbo.baggins"
+curl -s --request POST "$base_url/librarian?fullName=Bilbo%20Baggins&username=bilbo.baggins"
 # TODO: expect 400 response
 echo
 
