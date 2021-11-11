@@ -1,0 +1,1160 @@
+{
+	"info": {
+		"_postman_id": "6350183c-47cc-4fc7-8a51-a00ba9d46aa9",
+		"name": "Integration tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/test",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"test"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully create member",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"member_id\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fullName\": \"Obi-Wan Kenobi\",\r\n    \"address\": \"212 McGill Street\",\r\n    \"isCitizen\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/member",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to create member with empty name and address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fullName\": \"\",\r\n    \"address\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/member",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully create online account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"{{$guid}}\",\r\n    \"emailAddress\": \"{{$randomEmail}}\",\r\n    \"password\": \"{{$randomPassword}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/member/{{member_id}}/onlineAccount",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"{{member_id}}",
+						"onlineAccount"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to create online account with empty username, password, and email address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"\",\r\n    \"emailAddress\": \"\",\r\n    \"password\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/member/{{member_id}}/onlineAccount",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"{{member_id}}",
+						"onlineAccount"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get member by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Member ID is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"member_id\"));\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/{{member_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"{{member_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to get member with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/9999999",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"9999999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully get all members",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/all",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully activate member account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/{{member_id}}/activate",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"{{member_id}}",
+						"activate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to activate member account with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/9999999/activate",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"9999999",
+						"activate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully apply penalty",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/{{member_id}}/applyPenalty",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"{{member_id}}",
+						"applyPenalty"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to apply penalty for nonexistent member",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/9999999/applyPenalty",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"9999999",
+						"applyPenalty"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully remove penalty",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/{{member_id}}/removePenalty",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"{{member_id}}",
+						"removePenalty"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to remove penalty for nonexistent member",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/9999999/removePenalty",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"9999999",
+						"removePenalty"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully Create bookInfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"bookInfo_id\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/bookInfo/title/?numberOfPage=134&author=anAuthor&isbn={{$randomInt}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"bookInfo",
+						"title",
+						""
+					],
+					"query": [
+						{
+							"key": "numberOfPage",
+							"value": "134"
+						},
+						{
+							"key": "author",
+							"value": "anAuthor"
+						},
+						{
+							"key": "isbn",
+							"value": "{{$randomInt}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully create a book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/book/{{bookInfo_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"book",
+						"{{bookInfo_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fails to create a bookInfo with numberOfPage = 0",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/bookInfo/title/?numberOfPage=0&author=anAuthor&isbn={{$randomInt}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"bookInfo",
+						"title",
+						""
+					],
+					"query": [
+						{
+							"key": "numberOfPage",
+							"value": "0"
+						},
+						{
+							"key": "author",
+							"value": "anAuthor"
+						},
+						{
+							"key": "isbn",
+							"value": "{{$randomInt}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fails to create a book with invalid id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/book/9999",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"book",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully create librarian",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"librarian_id\", jsonData.id);\r",
+							"pm.collectionVariables.set(\"librarian_username\", jsonData.username);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/librarian?fullName=Test Librarian&username={{$guid}}&password=test-librarian-password",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"librarian"
+					],
+					"query": [
+						{
+							"key": "fullName",
+							"value": "Test Librarian"
+						},
+						{
+							"key": "username",
+							"value": "{{$guid}}"
+						},
+						{
+							"key": "password",
+							"value": "test-librarian-password"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully create 2nd librarian",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"librarian2_id\", jsonData.id);\r",
+							"pm.collectionVariables.set(\"librarian2_username\", jsonData.username);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/librarian?fullName=Test Librarian&username={{$guid}}&password=test-librarian-password",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"librarian"
+					],
+					"query": [
+						{
+							"key": "fullName",
+							"value": "Test Librarian"
+						},
+						{
+							"key": "username",
+							"value": "{{$guid}}"
+						},
+						{
+							"key": "password",
+							"value": "test-librarian-password"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to create librarian with empty name, username, and password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/librarian?fullName=  &username=  &password=  ",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"librarian"
+					],
+					"query": [
+						{
+							"key": "fullName",
+							"value": "  "
+						},
+						{
+							"key": "username",
+							"value": "  "
+						},
+						{
+							"key": "password",
+							"value": "  "
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully get librarian by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/librarian/{{librarian_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"librarian",
+						"{{librarian_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to get librarian with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/librarian/9999999",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"librarian",
+						"9999999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully get librarian by username",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/librarian?username={{librarian_username}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"librarian"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "{{librarian_username}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to get librarian with invalid username",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/librarian?username={{$guid}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"librarian"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "{{$guid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully get all librarians",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/librarian/all",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"librarian",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully delete librarian by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/librarian/{{librarian_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"librarian",
+						"{{librarian_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to delete librarian with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/librarian/{{librarian_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"librarian",
+						"{{librarian_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully delete librarian by username",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/librarian?username={{librarian2_username}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"librarian"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "{{librarian2_username}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to delete librarian with invalid username",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/librarian?username={{librarian2_username}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"librarian"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "{{librarian2_username}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:9999"
+		},
+		{
+			"key": "member_id",
+			"value": ""
+		},
+		{
+			"key": "bookInfo_id",
+			"value": ""
+		},
+		{
+			"key": "movieInfo_id",
+			"value": ""
+		},
+		{
+			"key": "albumInfo_id",
+			"value": ""
+		},
+		{
+			"key": "newspaperInfo_id",
+			"value": ""
+		},
+		{
+			"key": "archiveInfo_id",
+			"value": ""
+		},
+		{
+			"key": "librarian_id",
+			"value": ""
+		},
+		{
+			"key": "librarian_username",
+			"value": ""
+		},
+		{
+			"key": "librarian2_id",
+			"value": ""
+		},
+		{
+			"key": "librarian2_username",
+			"value": ""
+		}
+	]
+}
