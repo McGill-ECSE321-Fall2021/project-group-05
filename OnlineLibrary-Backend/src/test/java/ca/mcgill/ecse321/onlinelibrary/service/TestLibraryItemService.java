@@ -498,7 +498,6 @@ public class TestLibraryItemService {
 
 	@Test
 	public void testCreateLoanWithTooManyItems() {
-	    // Need help with this test........
 		Book book = new Book(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES);
 		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(book, memberWithTooManyLoans));
 		assertEquals("Member cannot have more than 5 loans.", e.getMessage());
