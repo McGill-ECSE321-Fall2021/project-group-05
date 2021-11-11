@@ -240,7 +240,7 @@ public class LibraryItemService {
 		}
 
 		// TODO: Get this value from application.properties or similar
-		if (member.getLoans().size() > 5) {
+		if (member.getLoans().size() >= 5) {
 			errorMessages.add("Member cannot have more than 5 loans.");
 		}
 		if (reservableItem.getLoan() != null) {
