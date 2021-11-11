@@ -115,7 +115,7 @@ public class LibraryItemInfoService {
 
 	@Transactional
 	public List<Reservation> getReservationsByReservableItemInfo(ReservableItemInfo reservableItemInfo){
-		List<Reservation> reservation = reservationRepository.findReservationByReservedItemOrderByReservationDateAsc(reservableItemInfo);
+		List<Reservation> reservation = reservationRepository.findReservationByReservedItemOrderByDateAsc(reservableItemInfo);
 		if (reservation == null){
 			throw new IllegalArgumentException("The reservation with the reservable item info was not found in the database.");
 		}

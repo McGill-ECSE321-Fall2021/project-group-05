@@ -252,7 +252,7 @@ public class LibraryItemService {
 		// Get associated item info
 		ReservableItemInfo itemInfo = (ReservableItemInfo) getAssociatedItemInfo(reservableItem);
 		// Get reservations for associated item info
-		List<Reservation> reservations = reservationRepository.findReservationByReservedItemOrderByReservationDateAsc(itemInfo);
+		List<Reservation> reservations = reservationRepository.findReservationByReservedItemOrderByDateAsc(itemInfo);
 		// Does the member have a reservation for the item info?
 		Optional<Reservation> reservation = reservations.stream().filter(r -> r.getMember().equals(member)).findFirst();
 		// How many reservations are there for the item info?
