@@ -68,6 +68,8 @@ public class TestLibraryItemService {
 	private static final BookInfo BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES = new BookInfo();
 	private static final Member MEMBER_WITH_RESERVATION = new Member("123 Main Street", "John Doe");
 	private static final Reservation RESERVATION = new Reservation(MEMBER_WITH_RESERVATION, BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES, new Date(0));
+	private static final Book LOANED_BOOK = new Book(new BookInfo());
+	private static final Loan LOAN = new Loan(new Date(0), LOANED_BOOK, new Member("123 Main Street", "John Doe"));
 
 	@InjectMocks
 	private LibraryItemInfoService libraryItemInfoService;
@@ -175,7 +177,7 @@ public class TestLibraryItemService {
 				new Loan(new Date(0), new Book(new BookInfo()), memberWithTooManyLoans)
 		)));
 		lenient().when(bookWithALoan.getBookInfo()).thenReturn(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES);
-		lenient().when(bookWithALoan.getLoan()).thenReturn(new Loan(new Date(0), bookWithALoan, new Member("123 Main Street", "John Doe")));
+		lenient().when(bookWithALoan.getLoan()).thenReturn(LOAN);
 	}
 
 	@Test
@@ -524,5 +526,17 @@ public class TestLibraryItemService {
 		Loan loan = libraryItemService.createLoan(book, MEMBER_WITH_RESERVATION);
 		assertNotNull(loan);
 		verify(reservationDao, times(1)).delete(RESERVATION);
+	}
+
+	@Test
+	public void returnItemSuccessful() {
+		libraryItemService.returnItem(LOAN);
+		verify(loanDao, times(1)).delete(LOAN);
+	}
+
+	@Test
+	public void returnItemNullLoan() {
+		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.returnItem(null));
+		assertEquals("Loan cannot be null.", e.getMessage());
 	}
 }
