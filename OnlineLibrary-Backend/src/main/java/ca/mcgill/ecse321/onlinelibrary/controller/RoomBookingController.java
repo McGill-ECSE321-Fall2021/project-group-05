@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -52,5 +54,12 @@ public class RoomBookingController {
     @DeleteMapping(value = {"/roomBooking/{id}", "/roomBooking/{id}/"})
     public void deleteRoomBooking(@PathVariable("id") int id) {
         roomBookingService.deleteRoomBooking(roomBookingService.getRoomBookingById(id));
+    }
+
+    @GetMapping(value = {"/room", "/room/"})
+    public List<RoomDto> getAllRooms() {
+        List<RoomDto> roomDtos = new ArrayList<>();
+        roomBookingService.getAllRooms().forEach(room -> roomDtos.add(RoomDto.fromRoom(room)));
+        return roomDtos;
     }
 }
