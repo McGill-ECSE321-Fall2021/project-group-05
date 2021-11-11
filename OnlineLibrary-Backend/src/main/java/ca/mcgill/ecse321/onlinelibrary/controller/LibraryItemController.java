@@ -90,4 +90,10 @@ public class LibraryItemController {
 	public void returnItem(@PathVariable("reservableItemId") int reservableItemId) {
 		libraryItemService.returnItem(libraryItemService.getReservableItemById(reservableItemId).getLoan());
 	}
+
+	@GetMapping(value = {"/reservableItem/{reservableItemId}", "/reservableItem/{reservableItemId}/"})
+	public ReservableItemDto getReservableItemById(@PathVariable("reservableItemId") int reservableItemId) {
+        return (ReservableItemDto) libraryItemService.getReservableItemById(reservableItemId).convertToDto();
+    }
+
 }
