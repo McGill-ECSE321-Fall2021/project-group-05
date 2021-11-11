@@ -96,4 +96,9 @@ public class LibraryItemController {
         return (ReservableItemDto) libraryItemService.getReservableItemById(reservableItemId).convertToDto();
     }
 
+
+	@GetMapping(value = {"/reservableItem/{reservableItemId}/loan", "/reservableItem/{reservableItemId}/loan/"})
+	public LoanDto getLoanFromReservableItemId(@PathVariable("reservableItemId") int reservableItemId) {
+        return LoanDto.fromLoan(libraryItemService.getReservableItemById(reservableItemId).getLoan());
+    }
 }
