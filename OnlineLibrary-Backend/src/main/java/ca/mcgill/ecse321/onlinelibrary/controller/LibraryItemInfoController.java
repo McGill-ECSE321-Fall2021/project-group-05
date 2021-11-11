@@ -55,25 +55,25 @@ public class LibraryItemInfoController {
 	}
 
 	@GetMapping(value = {"/reservation/{reservationId}", "/reservation/{reservationId}/"})
-	public ReservationDto getReservationsById(@RequestParam int Id) throws IllegalArgumentException {
+	public ReservationDto getReservationsById(@PathVariable("reservationId") int Id) throws IllegalArgumentException {
 		Reservation reservation = libraryItemInfoService.getReservationsByReservationId(Id);
 		return ReservationDto.fromReservation(reservation);
 	}
 
-	@GetMapping(value = {"/reservation/{memberId}", "/reservation/{memberId}/"})
+	@GetMapping(value = {"/reservation", "/reservation/"})
 	public List<ReservationDto> getReservationsByMember(@RequestParam int memberId) throws IllegalArgumentException{
 		Member member = memberService.getMemberById(memberId);
 		return libraryItemInfoService.getReservationsByMember(member).stream().map(reservation -> ReservationDto.fromReservation(reservation)).collect(Collectors.toList());
 	}
 
-	@GetMapping(value = {"/reservation/{reservableItemInfoId}", "/reservation/{reservableItemInfoId}/"})
+	@GetMapping(value = {"/reservation", "/reservation/"})
 	public List<ReservationDto> getReservationsByReservableItemInfo(@RequestParam int reservableItemInfoId) throws IllegalArgumentException{
 		ReservableItemInfo reservableItemInfo = libraryItemInfoService.getReservableItemInfo(reservableItemInfoId);
 		return libraryItemInfoService.getReservationsByReservableItemInfo(reservableItemInfo).stream().map(reservation -> ReservationDto.fromReservation(reservation)).collect(Collectors.toList());
 	}
 
 	@DeleteMapping(value = {"/reservation/{reservationId}", "/reservation/{reservationId}/"})
-	public void deleteReservation(@RequestParam int reservationId) throws IllegalArgumentException{
+	public void deleteReservation(@PathVariable("reservationId") int reservationId) throws IllegalArgumentException{
 		libraryItemInfoService.deleteReservationbyId(reservationId);
 	}
 
