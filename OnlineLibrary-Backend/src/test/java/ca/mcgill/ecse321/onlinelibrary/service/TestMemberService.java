@@ -72,10 +72,9 @@ public class TestMemberService {
 
 		String newAddress = "123 soleil";
 		String newName = "Bob the Builder";
-		Member actualMember = memberService.updateMember(this.MEMBER_ID, newAddress, newName);
+		Member actualMember = memberService.updateMember(MEMBER_ID, newAddress, newName);
 
 		assertNotNull(actualMember);
-		assertEquals(MEMBER_ID, actualMember.getId());
 		assertEquals(newAddress, actualMember.getAddress());
 		assertEquals(newName, actualMember.getFullName());
 	}
