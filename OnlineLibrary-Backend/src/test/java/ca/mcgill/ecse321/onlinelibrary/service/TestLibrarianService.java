@@ -1,11 +1,11 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
+import static ca.mcgill.ecse321.onlinelibrary.service.TestHelper.assertContains;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.lenient;
@@ -114,7 +114,8 @@ public class TestLibrarianService {
 	 */
 	@Test
 	public void testCreateLibrarian() {
-		Librarian librarian = librarianService.createLibrarian(NEW_REG_FULL_NAME, NEW_REG_USERNAME, NEW_REG_PASSWD);
+		Librarian librarian = librarianService.createLibrarian("  " + NEW_REG_FULL_NAME + "  ",
+				"  " + NEW_REG_USERNAME + "  ", "  " + NEW_REG_PASSWD + "  ");
 
 		assertNotNull(librarian);
 		assertEquals(NEW_REG_FULL_NAME, librarian.getFullName());
@@ -142,7 +143,7 @@ public class TestLibrarianService {
 	@Test
 	public void testCreateLibrarianEmptyFullName() {
 		Exception error = assertThrows(IllegalArgumentException.class,
-				() -> librarianService.createLibrarian("", NEW_REG_USERNAME, NEW_REG_PASSWD));
+				() -> librarianService.createLibrarian("  ", NEW_REG_USERNAME, NEW_REG_PASSWD));
 		assertContains("Full name cannot be empty.", error.getMessage());
 	}
 
@@ -164,7 +165,7 @@ public class TestLibrarianService {
 	@Test
 	public void testCreateLibrarianEmptyUsername() {
 		Exception error = assertThrows(IllegalArgumentException.class,
-				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, "", NEW_REG_PASSWD));
+				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, "  ", NEW_REG_PASSWD));
 		assertContains("Username cannot be empty.", error.getMessage());
 	}
 
@@ -197,18 +198,19 @@ public class TestLibrarianService {
 	@Test
 	public void testCreateLibrarianEmptyPassword() {
 		Exception error = assertThrows(IllegalArgumentException.class,
-				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, NEW_REG_USERNAME, ""));
+				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, NEW_REG_USERNAME, "  "));
 		assertContains("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.", error.getMessage());
 	}
 
 	/**
 	 * We expect the LibrarianService to return the error "Password must be at
-	 * least 8 characters in length." when the password has only 7 characters.
+	 * least 8 characters in length." when the password contains only 7
+	 * non-whitespace characters.
 	 */
 	@Test
 	public void testCreateLibrarianShortPassword() {
 		Exception error = assertThrows(IllegalArgumentException.class,
-				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, NEW_REG_USERNAME, SHORT_PASSWD));
+				() -> librarianService.createLibrarian(NEW_REG_FULL_NAME, NEW_REG_USERNAME, SHORT_PASSWD + "   "));
 		assertContains("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.", error.getMessage());
 	}
 
@@ -369,21 +371,5 @@ public class TestLibrarianService {
 				() -> librarianService.deleteLibrarianById(HEAD_ID));
 		assertContains("Cannot delete head librarian.", error.getMessage());
 		verify(librarianRepository, times(0)).delete(any(Librarian.class));
-	}
-
-	/**
-	 * Helper method to assert one string contains another. If
-	 * !actual.contains(expected), fails with a helpful error message. Does not
-	 * check for null inputs.
-	 *
-	 * @param expected
-	 * @param actual
-	 */
-	public void assertContains(String expected, String actual) {
-		if (!actual.contains(expected)) {
-			String msg = String.format("Expected message containing \"%s\" but received message \"%s\"", expected,
-					actual);
-			fail(msg);
-		}
 	}
 }

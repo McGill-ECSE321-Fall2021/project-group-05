@@ -9,6 +9,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,11 +24,14 @@ import org.mockito.stubbing.Answer;
 import ca.mcgill.ecse321.onlinelibrary.dao.AlbumInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.ArchiveInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.LibraryItemInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.NewsPaperInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.Book;
 import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.LibraryItemInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
 
@@ -42,6 +47,8 @@ public class TestLibraryItemInfoService {
 	private NewsPaperInfoRepository newspaperInfoDao;
 	@Mock
 	private ArchiveInfoRepository archiveInfoDao;
+	@Mock
+	private LibraryItemInfoRepository libraryItemInfoDao;
 
 	@InjectMocks
 	private LibraryItemInfoService libraryItemInfoService;
@@ -107,7 +114,28 @@ public class TestLibraryItemInfoService {
 				return null;
 			}
 		});
-	
+		lenient().when(libraryItemInfoDao.findAll()).thenAnswer( (InvocationOnMock invocation) -> {
+			List<LibraryItemInfo> listInfo = new ArrayList<LibraryItemInfo>();
+			ArchiveInfo archiveInfo = new ArchiveInfo();
+			archiveInfo.setId(ARCHIVE_INFO_KEY);
+			NewsPaperInfo newspaperInfo = new NewsPaperInfo();
+			newspaperInfo.setId(NEWSPAPER_INFO_KEY);
+			AlbumInfo albumInfo = new AlbumInfo();
+			albumInfo.setId(ALBUM_INFO_KEY);
+			MovieInfo movieInfo = new MovieInfo();
+			movieInfo.setId(MOVIE_INFO_KEY);
+			BookInfo bookInfo = new BookInfo();
+			bookInfo.setId(BOOK_INFO_KEY);
+
+			listInfo.add(archiveInfo);
+			listInfo.add(newspaperInfo);
+			listInfo.add(albumInfo);
+			listInfo.add(movieInfo);
+			listInfo.add(bookInfo);
+
+			return listInfo;
+		});
+		
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
 		};
@@ -896,5 +924,22 @@ public class TestLibraryItemInfoService {
 		assertEquals(archiveInfo.getTitle(), newTitle);
 		assertEquals(archiveInfo.getDescription(), newDescription);
 		assertEquals(archiveInfo.getPublicationDate(), newPublicationDate);
+  }
+  @Test
+	public void testBrowseService(){
+
+		Iterable<LibraryItemInfo> expectedIterable = libraryItemInfoDao.findAll();
+		List<LibraryItemInfo> expected = new ArrayList<LibraryItemInfo>();
+
+		for (LibraryItemInfo l: expectedIterable)
+			expected.add(l);
+
+		List<LibraryItemInfo> actual = libraryItemInfoService.browseAllLibraryItemInfos();
+
+		for(int i = 0; i< expected.size(); i++){
+			
+			assertEquals(expected.get(i).getId(), actual.get(i).getId());
+			
+		}
 	}
 }

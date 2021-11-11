@@ -14,7 +14,7 @@ public class ArchiveDto extends LibraryItemDto{
 		if (archive == null) {
 			throw new IllegalArgumentException("There is no such archive.");
 		}
-		return new ArchiveDto(archive.getId(), ArchiveInfoDto.fromArchiveInfo(archive.getArchiveInfo()));
+		return new ArchiveDto(archive.getId(), archive.getArchiveInfo().convertToDto());
 	}
 	
 	public ArchiveInfoDto getArchiveInfo() {
