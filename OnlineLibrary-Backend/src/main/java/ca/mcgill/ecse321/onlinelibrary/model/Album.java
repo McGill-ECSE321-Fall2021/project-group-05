@@ -1,5 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
+import ca.mcgill.ecse321.onlinelibrary.dto.AlbumDto;
+import ca.mcgill.ecse321.onlinelibrary.dto.LibraryItemDto;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -22,5 +24,9 @@ public class Album extends ReservableItem{
 
     public AlbumInfo getAlbumInfo() {
         return albumInfo;
+    }
+
+    public LibraryItemDto convertToDto() {
+        return AlbumDto.fromAlbum(this);
     }
 }
