@@ -3,6 +3,7 @@ package ca.mcgill.ecse321.onlinelibrary.service;
 import ca.mcgill.ecse321.onlinelibrary.dao.*;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -78,6 +79,11 @@ public class TestLibraryItemService {
 	private LibraryItemInfoService libraryItemInfoService;
 	@InjectMocks
 	private LibraryItemService libraryItemService;
+
+	@BeforeAll
+	public static void setUp() {
+		MEMBER_WITH_RESERVATION.activate();
+	}
 
 	@BeforeEach
 	public void setMockOuput() {
@@ -544,7 +550,6 @@ public class TestLibraryItemService {
 	@Test
 	public void testCreateLoanSuccessfulWithReservation() {
 		Book book = new Book(BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES);
-		MEMBER_WITH_RESERVATION.activate();
 		Loan loan = libraryItemService.createLoan(book, MEMBER_WITH_RESERVATION);
 		assertNotNull(loan);
 		verify(reservationDao, times(1)).delete(RESERVATION);
