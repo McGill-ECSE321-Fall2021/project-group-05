@@ -468,4 +468,13 @@ public class TestLibraryItemService {
 		assertEquals(book, loan.getReservableItem());
 		assertEquals(member, loan.getMember());
 	}
+
+	@Test
+	public void createLoanMemberNull() {
+		Member member = null;
+		Book book = new Book(new BookInfo());
+		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(book, member));
+		assertEquals("Member cannot be null.", e.getMessage());
+	}
+
 }
