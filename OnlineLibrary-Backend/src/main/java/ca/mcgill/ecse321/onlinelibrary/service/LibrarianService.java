@@ -18,7 +18,7 @@ public class LibrarianService {
 
 	@Transactional
 	public void deleteLibrarianById(int id) {
-		Librarian librarianToDelete = getNoneNullLibrarianFromRepo(id);
+		Librarian librarianToDelete = getNonNullLibrarianFromRepo(id);
 		
 		if (librarianToDelete.isHead()) {
 			throw new IllegalArgumentException("Cannot delete head librarian.");
@@ -76,7 +76,7 @@ public class LibrarianService {
 	@Transactional
 	public Librarian getLibrarianById(int id) {
 
-		return getNoneNullLibrarianFromRepo(id);
+		return getNonNullLibrarianFromRepo(id);
 	}
 
 	@Transactional
@@ -86,9 +86,8 @@ public class LibrarianService {
 
 	@Transactional
 	public Librarian updateLibrarian(Integer id, String newFullName, String newUsername, String newPasswordHash) {
-		Librarian librarian = getNoneNullLibrarianFromRepo(id);
-		
-		librarian.setId(id);
+		Librarian librarian = getNonNullLibrarianFromRepo(id);
+
 		librarian.setFullName(newFullName);
 		librarian.setUsername(newUsername);
 		librarian.setPasswordHash(newPasswordHash);
@@ -97,7 +96,6 @@ public class LibrarianService {
 		return librarian;
 	}
 
-	//TODO: Implement check valid input by taking code from the create service
 	private ArrayList<String> checkValidInput(String fullName, String username, String password){
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		// Full name not empty
@@ -128,9 +126,7 @@ public class LibrarianService {
 		return errorMessage;
 	}
 
-	//TODO: implement this method that makes sure that the librarian exists in the db
-	//This can be taken from line 100-104 and reused in multiple services
-	private Librarian getNoneNullLibrarianFromRepo(int id){
+	private Librarian getNonNullLibrarianFromRepo(int id){
 		Librarian librarian = librarianRepository.findLibrarianById(id);
 
 		if (librarian == null) {
