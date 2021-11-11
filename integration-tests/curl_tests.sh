@@ -48,7 +48,7 @@ echo
 
 # Create member
 echo "Successfully create member without online account"
-response=$(curl --request POST "$base_url/member/" --data '
+response=$(curl --request POST -H "Content-Type: application/json" "$base_url/member/" --data '
 {
 	"fullName": "Obi-Wan Kenobi",
 	"address": "212 McGill Street"
@@ -58,13 +58,13 @@ echo "$response"
 member_id=$(echo "$response" | jq -r '.["id"]')
 echo
 echo "Fails to create member with missing full name"
-curl --request POST "$base_url/member/" --data '{"address": "212 McGill Street"}'
+curl --request POST -H "Content-Type: application/json" "$base_url/member/"  --data '{"address": "212 McGill Street"}'
 # TODO: Expect 400 response
 echo
 
 # Create online account
 echo "Successfully create online account"
-curl --request POST "$base_url/member/$member_id/onlineAccount/" --data '
+curl --request POST -H "Content-Type: application/json" "$base_url/member/$member_id/onlineAccount/" --data '
 {
 	"username": "ben-kenobi",
 	"emailAddress": "obi-wan.kenobi@mail.mcgill.ca",
@@ -73,7 +73,7 @@ curl --request POST "$base_url/member/$member_id/onlineAccount/" --data '
 # TODO: Expect 200 response
 echo
 echo "Fails to create online account for member that already has an account"
-curl --request POST "$base_url/member/$member_id/onlineAccount/" --data '
+curl --request POST -H "Content-Type: application/json" "$base_url/member/$member_id/onlineAccount/" --data '
 {
 	"username": "ben-kenobi",
 	"emailAddress": "obi-wan.kenobi@mail.mcgill.ca",
