@@ -50,6 +50,8 @@ public class TestLibraryItemService {
 	@Mock
 	private LibraryItemRepository libraryItemDao;
 	@Mock
+	private ReservableItemRepository reservableItemDao;
+	@Mock
 	private Member memberWithTooManyLoans;
 	@Mock
 	private Book bookWithALoan;
@@ -178,6 +180,13 @@ public class TestLibraryItemService {
 		)));
 		lenient().when(bookWithALoan.getBookInfo()).thenReturn(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES);
 		lenient().when(bookWithALoan.getLoan()).thenReturn(LOAN);
+		lenient().when(reservableItemDao.findReservableItemById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(BOOK_KEY)) {
+				return new Book(new BookInfo());
+			} else {
+				return null;
+			}
+		});
 	}
 
 	@Test
@@ -539,4 +548,15 @@ public class TestLibraryItemService {
 		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.returnItem(null));
 		assertEquals("Loan cannot be null.", e.getMessage());
 	}
+
+	@Test
+	public void getReservableItemByIdSuccessful() {
+        assertNotNull(libraryItemService.getReservableItemById(BOOK_KEY));
+	}
+
+	@Test
+	public void getReservableItemByIdNonExistent() {
+        assertNull(libraryItemService.getReservableItemById(BOOK_BAD_KEY));
+	}
+
 }
