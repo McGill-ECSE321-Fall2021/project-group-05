@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ca.mcgill.ecse321.onlinelibrary.dto.MemberDto;
 import ca.mcgill.ecse321.onlinelibrary.model.Member;
@@ -26,8 +27,8 @@ public class MemberController {
 	}
 
 	@PutMapping(value = {"/member/{id}" ,"/member/{id}/"})
-	public MemberDto updateMember(@RequestBody Member member, @PathVariable Integer id){
+	public MemberDto updateMember(@RequestParam String address, @RequestParam String fullName, @PathVariable Integer id){
 		return MemberDto.fromMember(memberService.updateMember
-			(id, member.getAddress(), member.getFullName()));
+			(id, address, fullName));
 	}
 }
