@@ -52,30 +52,24 @@ public class LibrarianService {
 			errorMessage.add("Full name cannot be empty.");
 		}
 		// Username not empty and unique
-		if (username == null) {
+		if (username == null || username.trim().length() == 0) {
 			errorMessage.add("Username cannot be empty.");
-		} else {
-			username = username.trim();
-			if (username.length() == 0) {
-				errorMessage.add("Username cannot be empty.");
-			}
-			if (librarianRepository.existsLibrarianByUsername(username)) {
-				errorMessage.add("Username already taken.");
-			}
+		}
+		if (librarianRepository.existsLibrarianByUsername(username)) {
+			errorMessage.add("Username already taken.");
 		}
 		// Password long enough
-		if (password == null) {
+		if (password == null || password.trim().length() < MIN_PASSWD_LENGTH) {
 			errorMessage.add("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.");
-		} else {
-			password = password.trim();
-			if (password.length() < MIN_PASSWD_LENGTH) {
-				errorMessage.add("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.");
-			}
 		}
 		// Throw exception
 		if (errorMessage.size() > 0) {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
+
+		fullName = fullName.trim();
+		username = username.trim();
+		password = password.trim();
 
 		// TODO Hash password before saving
 
