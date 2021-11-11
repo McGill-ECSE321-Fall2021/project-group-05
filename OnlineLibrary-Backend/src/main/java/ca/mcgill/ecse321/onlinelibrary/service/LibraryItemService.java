@@ -18,6 +18,9 @@ import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 @Service
 public class LibraryItemService {
 
+	// TODO: Get this value from application.properties or similar
+	public static final int MAX_LOANS_PER_MEMBER = 5;
+
 	@Autowired
 	private BookRepository bookRepository;
 	
@@ -230,8 +233,7 @@ public class LibraryItemService {
 			throw new IllegalArgumentException(String.join(" ", errorMessages));
 		}
 
-		// TODO: Get this value from application.properties or similar
-		if (member.getLoans().size() >= 5) {
+		if (member.getLoans().size() >= MAX_LOANS_PER_MEMBER) {
 			errorMessages.add("Member cannot have more than 5 loans.");
 		}
 		if (reservableItem.getLoan() != null) {
