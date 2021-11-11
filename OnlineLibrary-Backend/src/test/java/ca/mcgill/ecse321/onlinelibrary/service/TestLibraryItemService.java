@@ -493,4 +493,12 @@ public class TestLibraryItemService {
 		assertEquals("Member cannot have more than 5 loans.", e.getMessage());
 	}
 
+	@Test
+	public void createLoanAlreadyLoaned() {
+		Member member = new Member("123 Main Street", "John Doe");
+		member.activate();
+        Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(bookWithALoan, member));
+        assertEquals("Item is already loaned.", e.getMessage());
+    }
+
 }
