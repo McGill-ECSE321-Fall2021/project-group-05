@@ -101,4 +101,8 @@ public class RoomBookingService {
         return roomRepository.findAll();
     }
 
+    @Transactional
+    public Iterable<RoomBooking> getAllRoomBookings() {
+        return roomBookingRepository.findAll();
+    }
 }
