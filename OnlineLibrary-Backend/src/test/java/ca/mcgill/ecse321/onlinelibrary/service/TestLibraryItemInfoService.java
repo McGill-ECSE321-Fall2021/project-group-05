@@ -100,7 +100,7 @@ public class TestLibraryItemInfoService {
 			}
 		});
 
-		lenient().when(reservationDao.findReservationByReservedItem(any(ReservableItemInfo.class))).thenAnswer( (InvocationOnMock invocation) -> {
+		lenient().when(reservationDao.findReservationByReservedItemOrderByReservationDateAsc(any(ReservableItemInfo.class))).thenAnswer( (InvocationOnMock invocation) -> {
 			if (((BookInfo) invocation.getArgument(0)).getId().equals(BOOK_INFO_KEY)){
 				BookInfo bookInfo = new BookInfo();
 				bookInfo.setId(BOOK_INFO_KEY);
