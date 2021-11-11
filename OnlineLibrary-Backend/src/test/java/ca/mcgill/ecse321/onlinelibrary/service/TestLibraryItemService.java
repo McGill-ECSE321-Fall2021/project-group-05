@@ -590,4 +590,12 @@ public class TestLibraryItemService {
 		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.getAssociatedItemInfo(null));
         assertEquals("Library item cannot be null.", e.getMessage());
 	}
+
+	@Test
+	public void testGetAssociatedCopiesSuccessful() {
+		List<LibraryItem> copies = libraryItemService.getAssociatedCopies(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES);
+		for (LibraryItem libraryItem : copies) {
+			assertEquals(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES, libraryItem.getItemInfo());
+		}
+	}
 }
