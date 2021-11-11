@@ -508,4 +508,13 @@ public class TestLibraryItemService {
         assertEquals("Member account is inactive or blacklisted.", e.getMessage());
 	}
 
+	@Test
+	public void createLoanWithNotEnoughCopies() {
+		Member member = new Member("123 Main Street", "John Doe");
+		member.activate();
+		Book book = new Book(BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES);
+		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(book, member));
+		assertEquals("Not enough copies available.", e.getMessage());
+	}
+
 }
