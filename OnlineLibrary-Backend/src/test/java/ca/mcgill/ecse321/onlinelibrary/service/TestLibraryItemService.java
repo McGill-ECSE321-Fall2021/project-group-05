@@ -519,6 +519,20 @@ public class TestLibraryItemService {
 	}
 
 	@Test
+	public void testCreateLoanMemberBlackListed() {
+		Member member = new Member("123 Main Street", "John Doe");
+		member.activate();
+		// yellow
+		member.applyStatusPenalty();
+		// red
+		member.applyStatusPenalty();
+		// blacklisted
+		member.applyStatusPenalty();
+		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(new Book(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES), member));
+		assertEquals("Member account is inactive or blacklisted.", e.getMessage());
+	}
+
+	@Test
 	public void testCreateLoanWithNotEnoughCopies() {
 		Member member = new Member("123 Main Street", "John Doe");
 		member.activate();
