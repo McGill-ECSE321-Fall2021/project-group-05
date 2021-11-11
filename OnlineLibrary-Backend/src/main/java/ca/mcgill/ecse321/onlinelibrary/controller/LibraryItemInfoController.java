@@ -72,7 +72,7 @@ public class LibraryItemInfoController {
 	public ArchiveInfoDto createArchiveInfo(@PathVariable("title") String title, @RequestParam String description, 
 			@RequestParam Date publicationDate) throws IllegalArgumentException{
 		ArchiveInfo archiveInfo = libraryItemInfoService.createArchiveInfo(title, description, publicationDate);
-		return archiveInfo.convertToDto();
+		return ArchiveInfoDto.fromArchiveInfo(archiveInfo);
 	}
 	
 	@PutMapping(value = {"/archiveInfo/{id}", "/archiveInfo/{id}/"})
