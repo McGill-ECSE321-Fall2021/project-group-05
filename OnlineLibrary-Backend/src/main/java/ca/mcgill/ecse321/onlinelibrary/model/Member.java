@@ -58,6 +58,13 @@ public class Member {
 		return this.id;
 	}
 
+	/**
+	 * Strictly for testing members with no online account. DO NOT USE EXCEPT FOR TESTING.
+	 */
+	public void setId(Integer id){
+		this.id  = id;
+	}
+
 	public String getAddress() {
 		return this.address;
 	}

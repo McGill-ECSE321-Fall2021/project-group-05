@@ -1,7 +1,6 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
 import java.util.ArrayList;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +87,12 @@ public class MemberService {
 		}
 
 		return member;
+	}
+
+	@Transactional
+	public Iterable<Member> getAllMembers() {
+		Iterable<Member> members = memberRepository.findAll();
+		return members;
 	}
 
 	@Transactional

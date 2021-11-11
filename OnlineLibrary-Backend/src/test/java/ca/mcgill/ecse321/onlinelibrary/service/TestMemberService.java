@@ -5,12 +5,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -85,21 +88,34 @@ public class TestMemberService {
 	 */
 	@BeforeEach
 	public void setMockOuput() {
+		// Create existing members
+		Member oldMember = new Member(OLD_MEMBER_ADDRESS, OLD_MEMBER_FULL_NAME);
+		// Doesn't look like there's an easy way to set private fields in Mockito :(
+		oldMember.setId(OLD_MEMBER_ID);
+		OnlineAccount oldOnlineAccount = new OnlineAccount(OLD_MEMBER_PASSWD, OLD_MEMBER_USERNAME,
+				OLD_MEMBER_EMAIL_ADDRESS, oldMember);
+		oldMember.setOnlineAccount(oldOnlineAccount);
+
+		Member offlineMember = new Member(OFFLINE_MEMBER_ADDRESS, OFFLINE_MEMBER_FULL_NAME);
+		offlineMember.setId(OFFLINE_MEMBER_ID);
+		offlineMember.activate();
+		offlineMember.applyStatusPenalty();
+
 		lenient().when(memberDao.findMemberById(anyInt())).thenAnswer((InvocationOnMock invocation) -> {
 			if (OLD_MEMBER_ID == (int) invocation.getArgument(0)) {
-				Member member = new Member(OLD_MEMBER_ADDRESS, OLD_MEMBER_FULL_NAME);
-				OnlineAccount onlineAccount = new OnlineAccount(OLD_MEMBER_PASSWD, OLD_MEMBER_USERNAME,
-						OLD_MEMBER_EMAIL_ADDRESS, member);
-				member.setOnlineAccount(onlineAccount);
-				return member;
+				return oldMember;
 			} else if (OFFLINE_MEMBER_ID == (int) invocation.getArgument(0)) {
-				Member member = new Member(OFFLINE_MEMBER_ADDRESS, OFFLINE_MEMBER_FULL_NAME);
-				member.activate();
-				member.applyStatusPenalty();
-				return member;
+				return offlineMember;
 			} else {
 				return null;
 			}
+		});
+
+		lenient().when(memberDao.findAll()).thenAnswer((InvocationOnMock invocation) -> {
+			ArrayList<Member> members = new ArrayList<Member>(2);
+			members.add(oldMember);
+			members.add(offlineMember);
+			return members;
 		});
 
 		lenient().when(onlineAccountDao.existsOnlineAccountByUsername(any(String.class)))
@@ -500,6 +516,28 @@ public class TestMemberService {
 		Exception error = assertThrows(IllegalArgumentException.class,
 				() -> memberService.getMemberById(INVALID_MEMBER_ID));
 		assertContains("Member with ID \"" + INVALID_MEMBER_ID + "\" not found.", error.getMessage());
+	}
+
+	@Test
+	public void testGetAllMembers() {
+		Iterable<Member> members = memberService.getAllMembers();
+
+		int count = 0;
+		boolean oldMemberFound = false;
+		boolean offlineMemberFound = false;
+		for (Member m : members) {
+			count++;
+			if (OLD_MEMBER_ID == m.getId()) {
+				oldMemberFound = true;
+			}
+			else if (OFFLINE_MEMBER_ID == m.getId()) {
+				offlineMemberFound = true;
+			}
+		}
+
+		assertEquals(2, count);
+		assertTrue(oldMemberFound);
+		assertTrue(offlineMemberFound);
 	}
 
 	// ========================================================================

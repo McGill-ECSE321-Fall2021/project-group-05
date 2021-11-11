@@ -1,5 +1,9 @@
 package ca.mcgill.ecse321.onlinelibrary.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +44,13 @@ public class MemberController {
 	public MemberDto getMemberById(@PathVariable("id") int id) {
 		Member member = memberService.getMemberById(id);
 		return MemberDto.fromMember(member);
+	}
+
+	@GetMapping(value = {"/member/all", "/member/all/"})
+	public List<MemberDto> getAllMembers() {
+		Iterable<Member> members = memberService.getAllMembers();
+		return StreamSupport.stream(members.spliterator(), true).map((Member m) -> MemberDto.fromMember(m))
+				.collect(Collectors.toList());
 	}
 
 	@PostMapping(value = {"/activate/{id}", "/activate/{id}/"})
