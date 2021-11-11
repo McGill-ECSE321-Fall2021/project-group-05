@@ -574,7 +574,8 @@ public class TestLibraryItemService {
 
 	@Test
 	public void testGetReservableItemByIdNonExistent() {
-        assertNull(libraryItemService.getReservableItemById(BOOK_BAD_KEY));
+        Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.getReservableItemById(BOOK_BAD_KEY));
+		assertEquals("The reservable item with id " + BOOK_BAD_KEY + " does not exist.", e.getMessage());
 	}
 
 	@Test
