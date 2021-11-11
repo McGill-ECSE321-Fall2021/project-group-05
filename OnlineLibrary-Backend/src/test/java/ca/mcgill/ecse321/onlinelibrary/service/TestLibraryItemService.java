@@ -178,7 +178,7 @@ public class TestLibraryItemService {
 				new Loan(new Date(0), new Book(new BookInfo()), memberWithTooManyLoans),
 				new Loan(new Date(0), new Book(new BookInfo()), memberWithTooManyLoans)
 		)));
-		lenient().when(bookWithALoan.getBookInfo()).thenReturn(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES);
+		lenient().when(bookWithALoan.getItemInfo()).thenReturn(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES);
 		lenient().when(bookWithALoan.getLoan()).thenReturn(LOAN);
 		lenient().when(reservableItemDao.findReservableItemById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
 			if (invocation.getArgument(0).equals(BOOK_KEY)) {
