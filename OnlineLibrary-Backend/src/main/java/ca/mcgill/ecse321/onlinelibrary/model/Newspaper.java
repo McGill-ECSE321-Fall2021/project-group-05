@@ -30,4 +30,9 @@ public class Newspaper extends LibraryItem{
     public LibraryItemDto convertToDto() {
         return NewsPaperDto.fromNewsPaper(this);
     }
+
+    @Override
+    public LibraryItemInfo getItemInfo() {
+        return this.getNewsPaperInfo();
+    }
 }
