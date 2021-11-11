@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 base_url="https://onlinelibrary-backend-05a.herokuapp.com"
+# base_url="http://localhost:9999"
+
+# Install jq (a JSON parser)
+sudo apt install -y jq &> /dev/null
 
 echo "Creates book successfully"
 curl --request POST "$base_url/bookInfo/aTitle?numberOfPage=256&author=John&isbn=123456789"
@@ -40,3 +44,86 @@ curl --request DELETE "$base_url/librarian?username=jocasta.nu"
 echo
 echo "Fails to delete librarian that does not exist"
 curl --request DELETE "$base_url/librarian?username=invalid.username"
+echo
+
+# Create member
+echo "Successfully create member without online account"
+response=$(curl --request POST "$base_url/member/" --data '
+{
+	"fullName": "Obi-Wan Kenobi",
+	"address": "212 McGill Street"
+}')
+# TODO: Expect 200 response
+echo "$response"
+member_id=$(echo "$response" | jq -r '.["id"]')
+echo
+echo "Fails to create member with missing full name"
+curl --request POST "$base_url/member/" --data '{"address": "212 McGill Street"}'
+# TODO: Expect 400 response
+echo
+
+# Create online account
+echo "Successfully create online account"
+curl --request POST "$base_url/member/$member_id/onlineAccount/" --data '
+{
+	"username": "ben-kenobi",
+	"emailAddress": "obi-wan.kenobi@mail.mcgill.ca",
+	"password": "thehighground123"
+}'
+# TODO: Expect 200 response
+echo
+echo "Fails to create online account for member that already has an account"
+curl --request POST "$base_url/member/$member_id/onlineAccount/" --data '
+{
+	"username": "ben-kenobi",
+	"emailAddress": "obi-wan.kenobi@mail.mcgill.ca",
+	"password": "thehighground123"
+}'
+# TODO: Expect 400 response
+echo
+
+# Get member by ID
+echo "Successfully get member by ID"
+curl --request GET "$base_url/member/$member_id/"
+# TODO Expect 200 response
+echo
+echo "Fail to get nonexistent member"
+curl --request GET "$base_url/member/9999999999/"
+# TODO: Expect 404 response
+echo
+
+# Get all members
+echo "Successfully get all members (there should be at least one)"
+curl --request GET "$base_url/member/all/"
+# TODO: Expect 200 response
+echo
+
+# Activate account
+echo "Successfully activates account"
+curl --request POST "$base_url/activate/$member_id/"
+# TODO: Expect 200 response
+echo
+echo "Fail to activate already active account"
+curl --request POST "$base_url/activate/$member_id/"
+# TODO: Expect 400 response
+echo
+
+# Apply status penalty
+echo "Successfully apply penalty to account"
+curl --request POST "$base_url/member/$member_id/applyPenalty"
+# TODO: Expect 200 response
+echo
+echo "Fail to apply penalty to nonexistent member"
+curl --request POST "$base_url/member/9999999999/applyPenalty"
+# TODO: Expect 404 response
+echo
+
+# Remove status penalty
+echo "Successfully remove penalty from account"
+curl --request POST "$base_url/member/$member_id/removeenalty"
+# TODO: Expect 200 response
+echo
+echo "Fail to remove penalty from nonexistent member"
+curl --request POST "$base_url/member/9999999999/removePenalty"
+# TODO: Expect 404 response
+echo
