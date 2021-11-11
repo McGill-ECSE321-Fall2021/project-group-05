@@ -29,4 +29,9 @@ public class Movie extends ReservableItem{
     public LibraryItemDto convertToDto() {
         return MovieDto.fromMovie(this);
     }
+
+    @Override
+    public LibraryItemInfo getItemInfo() {
+        return this.getMovieInfo();
+    }
 }
