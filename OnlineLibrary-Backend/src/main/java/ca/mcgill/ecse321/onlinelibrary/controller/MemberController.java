@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,21 +54,21 @@ public class MemberController {
 				.collect(Collectors.toList());
 	}
 
-	@PostMapping(value = {"/activate/{id}", "/activate/{id}/"})
+	@PutMapping(value = {"/activate/{id}", "/activate/{id}/"})
 	public MemberDto activateMemberAccount(@PathVariable("id") int id) {
 		Member member = memberService.getMemberById(id);
 		member = memberService.activateAccount(member);
 		return MemberDto.fromMember(member);
 	}
 
-	@PostMapping(value = {"/member/{id}/applyPenalty", "/member/{id}/applyPenalty/"})
+	@PutMapping(value = {"/member/{id}/applyPenalty", "/member/{id}/applyPenalty/"})
 	public MemberDto applyPenalty(@PathVariable("id") int id) {
 		Member member = memberService.getMemberById(id);
 		member = memberService.applyStatusPenalty(member);
 		return MemberDto.fromMember(member);
 	}
 
-	@PostMapping(value = {"/member/{id}/removePenalty", "/member/{id}/removePenalty/"})
+	@PutMapping(value = {"/member/{id}/removePenalty", "/member/{id}/removePenalty/"})
 	public MemberDto removePenalty(@PathVariable("id") int id) {
 		Member member = memberService.getMemberById(id);
 		member = memberService.removeStatusPenalty(member);
