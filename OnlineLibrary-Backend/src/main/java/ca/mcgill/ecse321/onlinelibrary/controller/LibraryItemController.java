@@ -86,7 +86,7 @@ public class LibraryItemController {
 		return LoanDto.fromLoan(loan);
 	}
 
-	@DeleteMapping(value = {"/reservableItem/{reservableItemId}/return", "/reservableItem/{reservableItemId}/return/"})
+	@DeleteMapping(value = {"/reservableItem/{reservableItemId}/loan", "/reservableItem/{reservableItemId}/loan/"})
 	public void returnItem(@PathVariable("reservableItemId") int reservableItemId) {
 		libraryItemService.returnItem(libraryItemService.getReservableItemById(reservableItemId).getLoan());
 	}
