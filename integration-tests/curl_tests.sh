@@ -120,7 +120,7 @@ echo
 
 # Remove status penalty
 echo "Successfully remove penalty from account"
-curl --request POST "$base_url/member/$member_id/removeenalty"
+curl --request POST "$base_url/member/$member_id/removePenalty"
 # TODO: Expect 200 response
 echo
 echo "Fail to remove penalty from nonexistent member"
