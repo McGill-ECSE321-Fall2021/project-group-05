@@ -1,15 +1,8 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
-
-import java.sql.Date;
-
+import ca.mcgill.ecse321.onlinelibrary.dao.*;
+import ca.mcgill.ecse321.onlinelibrary.model.*;
+import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,27 +12,13 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
-import ca.mcgill.ecse321.onlinelibrary.dao.AlbumInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.AlbumRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.ArchiveInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.ArchiveRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.BookRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.MovieRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.NewsPaperInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.NewspaperRepository;
-import ca.mcgill.ecse321.onlinelibrary.model.Album;
-import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Archive;
-import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Book;
-import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Movie;
-import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Newspaper;
-import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TestLibraryItemService {
@@ -64,6 +43,16 @@ public class TestLibraryItemService {
 	private ArchiveRepository archiveDao;
 	@Mock 
 	private ArchiveInfoRepository archiveInfoDao;
+	@Mock
+	private LoanRepository loanDao;
+	@Mock
+	private ReservationRepository reservationDao;
+	@Mock
+	private LibraryItemRepository libraryItemDao;
+	@Mock
+	private Member memberWithTooManyLoans;
+	@Mock
+	private Book bookWithALoan;
 
 	private static final int BOOK_KEY = 1;
 	private static final int BOOK_BAD_KEY = 2;
@@ -75,7 +64,11 @@ public class TestLibraryItemService {
 	private static final int NEWSPAPER_BAD_KEY = 8;
 	private static final int ARCHIVE_KEY = 9;
 	private static final int ARCHIVE_BAD_KEY = 10;
-	
+	private static final BookInfo BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES = new BookInfo();
+	private static final BookInfo BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES = new BookInfo();
+	private static final Member MEMBER_WITH_RESERVATION = new Member("123 Main Street", "John Doe");
+	private static final Reservation RESERVATION = new Reservation(MEMBER_WITH_RESERVATION, BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES, new Date(0));
+
 	@InjectMocks
 	private LibraryItemInfoService libraryItemInfoService;
 	@InjectMocks
@@ -161,7 +154,28 @@ public class TestLibraryItemService {
 			}
 		});
 		lenient().when(archiveInfoDao.save(any(ArchiveInfo.class))).then(returnParameterAsAnswer);
-		
+		lenient().when(loanDao.save(any(Loan.class))).then(returnParameterAsAnswer);
+		// TODO: Extract this to application.properties
+		lenient().when(reservationDao.findReservationByReservedItemOrderByReservationDateAsc(any(ReservableItemInfo.class))).thenAnswer((InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES)) {
+				Reservation firstReservation = RESERVATION;
+				Reservation secondReservation = new Reservation(new Member("123 Main Street", "John Doe 2"), BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES, new Date(System.currentTimeMillis()));
+				return new ArrayList(Arrays.asList(firstReservation, secondReservation));
+			} else
+				return new ArrayList();
+		});
+		lenient().when(libraryItemDao.findAll()).thenAnswer((InvocationOnMock invocation) -> {
+			return new ArrayList<>(Arrays.asList(new Book(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES), new Book(BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES)));
+		});
+		lenient().when(memberWithTooManyLoans.getLoans()).then((InvocationOnMock invocation) -> new ArrayList(Arrays.asList(
+				new Loan(new Date(0), new Book(new BookInfo()), memberWithTooManyLoans),
+				new Loan(new Date(0), new Book(new BookInfo()), memberWithTooManyLoans),
+				new Loan(new Date(0), new Book(new BookInfo()), memberWithTooManyLoans),
+				new Loan(new Date(0), new Book(new BookInfo()), memberWithTooManyLoans),
+				new Loan(new Date(0), new Book(new BookInfo()), memberWithTooManyLoans)
+		)));
+		lenient().when(bookWithALoan.getBookInfo()).thenReturn(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES);
+		lenient().when(bookWithALoan.getLoan()).thenReturn(new Loan(new Date(0), bookWithALoan, new Member("123 Main Street", "John Doe")));
 	}
 
 	@Test
