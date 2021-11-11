@@ -517,4 +517,12 @@ public class TestLibraryItemService {
 		assertEquals("Not enough copies available.", e.getMessage());
 	}
 
+	@Test
+	public void createLoanSuccessfulWithReservation() {
+		Book book = new Book(BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES);
+		MEMBER_WITH_RESERVATION.activate();
+		Loan loan = libraryItemService.createLoan(book, MEMBER_WITH_RESERVATION);
+		assertNotNull(loan);
+		verify(reservationDao, times(1)).delete(RESERVATION);
+	}
 }
