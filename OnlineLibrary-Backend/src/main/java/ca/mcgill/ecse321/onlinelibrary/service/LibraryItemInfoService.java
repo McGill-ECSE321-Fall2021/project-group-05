@@ -14,12 +14,17 @@ import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.LibraryItemInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.NewsPaperInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.ReservableItemInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.ReservationRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.LibraryItemInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.Reservation;
+import ca.mcgill.ecse321.onlinelibrary.model.Member;
+import ca.mcgill.ecse321.onlinelibrary.model.ReservableItemInfo;
 
 @Service
 public class LibraryItemInfoService {
@@ -42,6 +47,90 @@ public class LibraryItemInfoService {
 	@Autowired
     private LibraryItemInfoRepository libraryItemInfoRespository;
 
+
+	@Autowired
+	private ReservationRepository reservationRepository;
+
+	@Autowired
+	private ReservableItemInfoRepository reservableItemInfoRepository;
+
+	@Transactional
+	public ReservableItemInfo getReservableItemInfo(int id){
+		ReservableItemInfo reservableItemInfo = reservableItemInfoRepository.findReservableItemInfoById(id);
+		if (reservableItemInfo == null){
+			throw new IllegalArgumentException("The reservation item info with id was not found in the database.");
+		}
+		return reservableItemInfo;
+	}
+
+	@Transactional
+	public Reservation reserveItem(Member member, ReservableItemInfo reservableItem, Date date){
+		ArrayList<String> errorMessage = new ArrayList<String>();
+
+		if (member == null){
+			errorMessage.add("A member needs to be assigned to a reservation.");
+		} else {
+			if (member.getStatus() == Member.MemberStatus.INACTIVE){
+				errorMessage.add("Member account is inactive.");
+			}
+
+			if (member.getStatus() == Member.MemberStatus.BLACKLISTED) {
+				errorMessage.add("Member is blacklisted.");
+			}
+		}
+
+		if (reservableItem == null){
+			errorMessage.add("An item needs to be assigned to a reservation");
+		}
+
+		if (date == null){
+			errorMessage.add("Date cannot be null");
+		}
+
+		if (errorMessage.size() > 0) {
+			throw new IllegalArgumentException(String.join(" ", errorMessage));
+		}
+		Reservation reservation = new Reservation(member, reservableItem, date);
+		reservationRepository.save(reservation);
+		return reservation;
+	}
+
+	@Transactional
+	public Reservation getReservationsByReservationId(Integer Id){
+		Reservation reservation = reservationRepository.findReservationByReservationId(Id);
+		if (reservation == null){
+			throw new IllegalArgumentException("The reservation with id was not found in the database.");
+		}
+		return reservation;
+	}
+
+	@Transactional
+	public List<Reservation> getReservationsByMember(Member member){
+		List<Reservation> reservation = reservationRepository.findReservationByMember(member);
+		if (reservation == null){
+			throw new IllegalArgumentException("The reservation with member was not found in the database.");
+		}
+		return reservation;
+	}
+
+	@Transactional
+	public List<Reservation> getReservationsByReservableItemInfo(ReservableItemInfo reservableItemInfo){
+		List<Reservation> reservation = reservationRepository.findReservationByReservedItemOrderByDateAsc(reservableItemInfo);
+		if (reservation == null){
+			throw new IllegalArgumentException("The reservation with the reservable item info was not found in the database.");
+		}
+		return reservation;
+	}
+
+	@Transactional
+	public void deleteReservationbyId(Integer id){
+		Reservation reservationToDelete = reservationRepository.findReservationByReservationId(id);
+
+		if (reservationToDelete == null){
+			throw new IllegalArgumentException("Reservation with ID was not found.");
+		}
+		reservationRepository.delete(reservationToDelete);
+	}
 
 	@Transactional
 	public BookInfo createBookInfo(String title, int numberOfPage, String author, long isbn) {

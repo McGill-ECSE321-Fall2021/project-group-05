@@ -16,5 +16,5 @@ public interface ReservationRepository extends CrudRepository<Reservation, Integ
      */
     Reservation findReservationByReservationId(Integer id);
     List<Reservation> findReservationByMember(Member member);
-    List<Reservation> findReservationByReservedItemOrderByReservationDateAsc(ReservableItemInfo reservableItemInfo);
+    List<Reservation> findReservationByReservedItemOrderByDateAsc(ReservableItemInfo reservableItemInfo);
 }
