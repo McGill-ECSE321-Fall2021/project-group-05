@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.5.4'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jacoco'
 }
 
 group = 'com.example'
@@ -38,5 +39,36 @@ test {
 	testLogging {
 		exceptionFormat "full"
 	}
+	finalizedBy jacocoTestReport // report is always generated after tests run
 }
 
+jacocoTestReport {
+	afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude:  [
+                    'ca/mcgill/ecse321/onlinelibrary/controller/*',
+                    'ca/mcgill/ecse321/onlinelibrary/dto/*'
+            ])
+        }))
+    }
+	dependsOn test // tests are required to run before generating the report
+}
+
+jacocoTestCoverageVerification {
+	afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude:  [
+                    'ca/mcgill/ecse321/onlinelibrary/controller/*',
+                    'ca/mcgill/ecse321/onlinelibrary/dto/*'
+            ])
+        }))
+    }
+
+	violationRules {
+		rule {
+			limit {
+				minimum = 0.7
+			}
+		}
+	}
+}

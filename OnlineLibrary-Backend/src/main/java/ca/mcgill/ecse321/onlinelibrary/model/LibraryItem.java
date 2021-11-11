@@ -24,5 +24,9 @@ public abstract class LibraryItem {
     public Integer getId() {
         return this.id;
     }
+    
+    public void setId(int id) {
+    	this.id = id;
+    }
 
 }

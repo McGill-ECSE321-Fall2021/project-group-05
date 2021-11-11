@@ -106,3 +106,65 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
     </tr>
   </tbody>
 </table>
+
+## Deliverable 2
+<table>
+  <tbody>
+    <tr>
+      <th>Team Member</th>
+      <th>Responsibilities</th>
+      <th>Hours (incl. meetings)</th>
+    </tr>
+    <tr>
+      <td>Gabriel Lacroix</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Guillaume Delmas-Frenette</td>
+      <td>
+        <ul>
+          <li> Write all the itemInfos DTOs </li>
+          <li> Write all the items DTOs </li>
+          <li> Write all the creating itemInfos service and controller methods </li>
+          <li> Write all the creating items service and controller methods </li>
+          <li> Write all the delete items service and controller methods </li>
+          <li> Write all the update itemInfos service and controller methods </li>
+          <li> Write the documentation for the RESTful services aforementioned
+          <li> Write integration and unit tests for all the controller and service methods aforementioned</li>
+          <li> Review pull request </li>
+        </ul>
+      </td>
+      <td> 30 hours </td>
+    </tr>
+    <tr>
+      <td>Kirollos Roufail</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Louis Hildebrand</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Mircea Gosman</td>
+      <td>
+        <ul>
+          <li> Write Library OpeningHours DTO, Controller, Service, Service unit tests & Controller integration tests.</li>
+          <li> Write Librarian Shift DTO, Controller, Service, Service unit tests & Controller integration tests.</li>
+          <li> Write Holiday DTO, Controller, Service, Service unit tests & Controller integration tests.</li>
+          <li> Adjusted Persistence layer & its tests for Library Opening Hours, Librarian Shift and Holiday ressources.</li>
+          <li> Documented endpoint usage for Library Opening Hours, Librarian Shift and Holiday ressources on the wiki.</li>
+          <li> Review Pull Requests.</li>
+        </ul>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Sebastian Ionascu</td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>

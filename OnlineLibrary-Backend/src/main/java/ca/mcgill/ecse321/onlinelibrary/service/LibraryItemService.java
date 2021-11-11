@@ -60,6 +60,19 @@ public class LibraryItemService {
 		return book;
 	}
 	
+	@Transactional
+	public void deleteBook(int id) {
+		Book book = bookRepository.findBookById(id);
+		if (book == null){
+			throw new IllegalArgumentException("The book with id " +  id + " doesn't exist.");
+		}
+		if (book.getLoan() != null) {
+			throw new IllegalArgumentException("This book is currently part of a loan, it can't be deleted.");
+		} else {
+			bookRepository.deleteById(id);
+		}
+	}
+	
 	@Transactional 
 	public Movie createMovie(MovieInfo movieInfo) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
@@ -76,6 +89,19 @@ public class LibraryItemService {
 		movie.setStatus(ItemStatus.Available);
 		movieRepository.save(movie);
 		return movie;
+	}
+	
+	@Transactional
+	public void deleteMovie(int id) {
+		Movie movie = movieRepository.findMovieById(id);
+		if (movie == null){
+			throw new IllegalArgumentException("The movie with id " +  id + " doesn't exist.");
+		}
+		if (movie.getLoan() != null) {
+			throw new IllegalArgumentException("This movie is currently part of a loan, it can't be deleted.");
+		} else {
+			movieRepository.deleteById(id);
+		}
 	}
 	
 	@Transactional
@@ -97,6 +123,19 @@ public class LibraryItemService {
 	}
 	
 	@Transactional
+	public void deleteAlbum(int id) {
+		Album album = albumRepository.findAlbumById(id);
+		if (album == null){
+			throw new IllegalArgumentException("The album with id " +  id + " doesn't exist.");
+		}
+		if (album.getLoan() != null) {
+			throw new IllegalArgumentException("This album is currently part of a loan, it can't be deleted.");
+		} else {
+			albumRepository.deleteById(id);
+		}
+	}
+	
+	@Transactional
 	public Newspaper createNewspaper(NewsPaperInfo newspaperInfo) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount = 0;
@@ -114,6 +153,16 @@ public class LibraryItemService {
 	}
 	
 	@Transactional
+	public void deleteNewspaper(int id) {
+		Newspaper newspaper = newspaperRepository.findNewspaperById(id);
+		if (newspaper == null){
+			throw new IllegalArgumentException("The newspaper with id " +  id + " doesn't exist.");
+		} else {
+			newspaperRepository.deleteById(id);
+		}
+	}
+	
+	@Transactional
 	public Archive createArchive(ArchiveInfo archiveInfo) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount = 0;
@@ -128,5 +177,15 @@ public class LibraryItemService {
 		Archive archive= new Archive (archiveInfo);
 		archiveRepository.save(archive);
 		return archive;
+	}
+	
+	@Transactional
+	public void deleteArchive(int id) {
+		Archive archive = archiveRepository.findArchiveById(id);
+		if (archive == null){
+			throw new IllegalArgumentException("The archive with id " +  id + " doesn't exist.");
+		} else {
+			archiveRepository.deleteById(id);
+		}
 	}
 }
