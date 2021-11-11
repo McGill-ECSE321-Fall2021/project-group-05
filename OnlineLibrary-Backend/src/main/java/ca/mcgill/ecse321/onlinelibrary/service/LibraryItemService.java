@@ -20,6 +20,8 @@ public class LibraryItemService {
 
 	// TODO: Get this value from application.properties or similar
 	public static final int MAX_LOANS_PER_MEMBER = 5;
+	// TODO: Get this value from application.properties or associated ReservableItemInfo
+	public static final int NUMBER_OF_DAYS_BEFORE_RENEWAL = 15;
 
 	@Autowired
 	private BookRepository bookRepository;
@@ -265,8 +267,7 @@ public class LibraryItemService {
 
 		Calendar today = Calendar.getInstance();
 		today.set(Calendar.HOUR_OF_DAY, 0);
-		// TODO: Get this value from application.properties or associated ReservableItemInfo
-		today.add(Calendar.DATE, 15);
+		today.add(Calendar.DATE, NUMBER_OF_DAYS_BEFORE_RENEWAL);
 		Date date = new Date(today.getTimeInMillis());
 
 		Loan loan = new Loan(date, reservableItem, member);
