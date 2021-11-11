@@ -33,7 +33,7 @@ public class MemberController {
 		return MemberDto.fromMember(member);
 	}
 
-	@PostMapping(value = {"/member/{id}/onlineAccount", "/member/{id}/onlineAccount"})
+	@PostMapping(value = {"/member/{id}/onlineAccount", "/member/{id}/onlineAccount/"})
 	public OnlineAccountDto createOnlineAccount(@PathVariable("id") int id,
 			@RequestBody CreateOnlineAccountRequestDto newOnlineAccountDto) {
 		OnlineAccount createdAccount = memberService.createOnlineAccount(id, newOnlineAccountDto);
