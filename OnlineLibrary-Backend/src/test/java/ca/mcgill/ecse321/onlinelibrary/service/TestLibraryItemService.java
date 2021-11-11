@@ -457,4 +457,15 @@ public class TestLibraryItemService {
 		}
 		assertTrue(error.contains("The archive with id " +  ARCHIVE_BAD_KEY + " doesn't exist."));
 	}
+
+	@Test
+	public void createLoanSuccessful() {
+		Member member = new Member("123 Main Street", "John Doe");
+		member.activate();
+		Book book = new Book(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES);
+		Loan loan = libraryItemService.createLoan(book, member);
+		assertNotNull(loan);
+		assertEquals(book, loan.getReservableItem());
+		assertEquals(member, loan.getMember());
+	}
 }
