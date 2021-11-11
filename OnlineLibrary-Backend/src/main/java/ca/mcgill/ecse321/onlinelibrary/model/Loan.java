@@ -22,7 +22,7 @@ public class Loan {
 	private Date returnDate;
 	private int numberOfRenewals;
 
-	@OneToOne(optional = false)
+	@OneToOne(optional = false, orphanRemoval = true)
 	@JoinColumn(name = "library_item_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private ReservableItem item;
