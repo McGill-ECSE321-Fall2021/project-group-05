@@ -118,6 +118,70 @@
 			"response": []
 		},
 		{
+			"name": "Successfully activate member account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/{{member_id}}/activate",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"{{member_id}}",
+						"activate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to activate member account with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/9999999/activate",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"9999999",
+						"activate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Successfully create online account",
 			"event": [
 				{
@@ -202,297 +266,6 @@
 			"response": []
 		},
 		{
-			"name": "Get member by ID",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Member ID is correct\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"member_id\"));\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{BASE_URL}}/member/{{member_id}}",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"member",
-						"{{member_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Fail to get member with invalid ID",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{BASE_URL}}/member/9999999",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"member",
-						"9999999"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Successfully get all members",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{BASE_URL}}/member/all",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"member",
-						"all"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Successfully activate member account",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"url": {
-					"raw": "{{BASE_URL}}/member/{{member_id}}/activate",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"member",
-						"{{member_id}}",
-						"activate"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Fail to activate member account with invalid ID",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"url": {
-					"raw": "{{BASE_URL}}/member/9999999/activate",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"member",
-						"9999999",
-						"activate"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Successfully apply penalty",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"url": {
-					"raw": "{{BASE_URL}}/member/{{member_id}}/applyPenalty",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"member",
-						"{{member_id}}",
-						"applyPenalty"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Fail to apply penalty for nonexistent member",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"url": {
-					"raw": "{{BASE_URL}}/member/9999999/applyPenalty",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"member",
-						"9999999",
-						"applyPenalty"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Successfully remove penalty",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"url": {
-					"raw": "{{BASE_URL}}/member/{{member_id}}/removePenalty",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"member",
-						"{{member_id}}",
-						"removePenalty"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Fail to remove penalty for nonexistent member",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"url": {
-					"raw": "{{BASE_URL}}/member/9999999/removePenalty",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"member",
-						"9999999",
-						"removePenalty"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Successfully Create bookInfo",
 			"event": [
 				{
@@ -542,38 +315,6 @@
 			"response": []
 		},
 		{
-			"name": "Successfully create a book",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "{{BASE_URL}}/book/{{bookInfo_id}}",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"book",
-						"{{bookInfo_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Fails to create a bookInfo with numberOfPage = 0",
 			"event": [
 				{
@@ -615,6 +356,41 @@
 							"key": "isbn",
 							"value": "{{$randomInt}}"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully create a book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"book_id\", jsonData.id);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/book/{{bookInfo_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"book",
+						"{{bookInfo_id}}"
 					]
 				}
 			},
@@ -792,6 +568,187 @@
 			"response": []
 		},
 		{
+			"name": "Successfully creates a loan",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const jsonData = pm.response.json();",
+							"pm.collectionVariables.set(\"loan_id\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservableItem/{{book_id}}/loan?memberId={{member_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservableItem",
+						"{{book_id}}",
+						"loan"
+					],
+					"query": [
+						{
+							"key": "memberId",
+							"value": "{{member_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to create a loan with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(500);",
+							"});",
+							"",
+							"const jsonData = pm.response.json();",
+							"pm.collectionVariables.set(\"loan_id\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservableItem/999999/loan?memberId={{member_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservableItem",
+						"999999",
+						"loan"
+					],
+					"query": [
+						{
+							"key": "memberId",
+							"value": "{{member_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get member by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Member ID is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"member_id\"));\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/{{member_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"{{member_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to get member with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/9999999",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"9999999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully get all members",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/all",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Successfully get librarian by ID",
 			"event": [
 				{
@@ -957,6 +914,326 @@
 			"response": []
 		},
 		{
+			"name": "Successfully gets the associated loan",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservableItem/{{book_id}}/loan",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservableItem",
+						"{{book_id}}",
+						"loan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to get the associated loan with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(500);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservableItem/999999/loan",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservableItem",
+						"999999",
+						"loan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully get reservable item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservableItem/{{book_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservableItem",
+						"{{book_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to get reservable item with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(500);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservableItem/999999",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservableItem",
+						"999999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully get associated item info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservableItem/{{book_id}}/itemInfo/",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservableItem",
+						"{{book_id}}",
+						"itemInfo",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to get associated item info with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(500);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservableItem/999999/itemInfo/",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservableItem",
+						"999999",
+						"itemInfo",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully apply penalty",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/{{member_id}}/applyPenalty",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"{{member_id}}",
+						"applyPenalty"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to apply penalty for nonexistent member",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/9999999/applyPenalty",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"9999999",
+						"applyPenalty"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully remove penalty",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/{{member_id}}/removePenalty",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"{{member_id}}",
+						"removePenalty"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to remove penalty for nonexistent member",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/9999999/removePenalty",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"9999999",
+						"removePenalty"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Successfully delete librarian by ID",
 			"event": [
 				{
@@ -1037,12 +1314,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/librarian?username={{librarian2_username}}",
+					"raw": "{{BASE_URL}}/librarian/delete?username={{librarian2_username}}",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
-						"librarian"
+						"librarian",
+						"delete"
 					],
 					"query": [
 						{
@@ -1073,17 +1351,118 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/librarian?username={{librarian2_username}}",
+					"raw": "{{BASE_URL}}/librarian/delete?username={{librarian2_username}}",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
-						"librarian"
+						"librarian",
+						"delete"
 					],
 					"query": [
 						{
 							"key": "username",
 							"value": "{{librarian2_username}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully deletes a loan",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservableItem/{{book_id}}/loan",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservableItem",
+						"{{book_id}}",
+						"loan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to delete a loan with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(500);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservableItem/999999/loan",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservableItem",
+						"999999",
+						"loan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully creates a movieInfo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/movieInfo/?genre=aGenre&description=aDescritption&director=Adirector&length=67",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"movieInfo",
+						""
+					],
+					"query": [
+						{
+							"key": "genre",
+							"value": "aGenre"
+						},
+						{
+							"key": "description",
+							"value": "aDescritption"
+						},
+						{
+							"key": "director",
+							"value": "Adirector"
+						},
+						{
+							"key": "length",
+							"value": "67"
 						}
 					]
 				}
@@ -1114,7 +1493,7 @@
 	"variable": [
 		{
 			"key": "BASE_URL",
-			"value": "http://localhost:9999"
+			"value": "https://online-library-backend-05a.herokuapp.com"
 		},
 		{
 			"key": "member_id",
@@ -1154,6 +1533,14 @@
 		},
 		{
 			"key": "librarian2_username",
+			"value": ""
+		},
+		{
+			"key": "book_id",
+			"value": ""
+		},
+		{
+			"key": "loan_id",
 			"value": ""
 		}
 	]
