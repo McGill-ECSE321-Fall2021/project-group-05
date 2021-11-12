@@ -41,11 +41,22 @@ jobs:
   integration-tests:
     needs: deploy
     runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        node-version: [12.x]
     steps:
     - uses: actions/checkout@v2
-    - name: Grant execute permission for curl test script
-      run: chmod +x curl_tests.sh
-      working-directory: integration-tests
-    - name: Run the curl integration tests for the REST API
-      run: ./curl_tests.sh
-      working-directory: integration-tests
+    - name: Set up Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+        registry-url: https://registry.npmjs.org/
+    - name: Install dependencies
+      run: npm install
+    - name: Install newman
+      run: npm install -g newman
+    - name: Run the API and Postman's tests
+      run: | 
+        npm run start:dev &
+        sleep 60
+        newman run "Example.postman_collection.json"
