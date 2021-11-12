@@ -45,7 +45,12 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v2
-    - uses: matt-ball/newman-action@v1.0.2
+    - name: Run Postman tests with Newman
+      id: run-newman
+      uses: anthonyvscode/newman-action@v1.1
       with:
         apiKey: PMAK-618e7628206277003fe06498-0b9e219fc92326c3bd9302f018a468cb75
         collection: 09cea390-b8d5-45d1-a964-290860a91105
+        reporters: cli
+    - name: Output summary to console
+      run: echo ${{ steps.run-newman.outputs.summary }}
