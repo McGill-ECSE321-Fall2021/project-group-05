@@ -41,9 +41,6 @@ jobs:
   integration-tests:
     needs: deploy
     runs-on: ubuntu-18.04
-    strategy:
-      matrix:
-        node-version: [12.x]
     steps:
     - uses: actions/checkout@v2
     - name: Run Postman integration tests with Newman
