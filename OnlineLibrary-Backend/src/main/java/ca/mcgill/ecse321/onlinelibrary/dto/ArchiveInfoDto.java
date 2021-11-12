@@ -1,8 +1,8 @@
 package ca.mcgill.ecse321.onlinelibrary.dto;
 
-import java.sql.Date;
-
 import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
+
+import java.sql.Date;
 
 public class ArchiveInfoDto extends LibraryItemInfoDto{
 	private String title;

@@ -1,8 +1,9 @@
 package ca.mcgill.ecse321.onlinelibrary.dto;
 
+import ca.mcgill.ecse321.onlinelibrary.model.LibrarianShift;
+
 import java.sql.Date;
 import java.sql.Time;
-import ca.mcgill.ecse321.onlinelibrary.model.LibrarianShift;
 
 public class LibrarianShiftDto {
 	private Integer id;

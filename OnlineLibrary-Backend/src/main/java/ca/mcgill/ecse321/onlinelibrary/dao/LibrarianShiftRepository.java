@@ -1,11 +1,10 @@
 package ca.mcgill.ecse321.onlinelibrary.dao;
 
-import java.sql.Date;
-import java.util.ArrayList;
-
+import ca.mcgill.ecse321.onlinelibrary.model.LibrarianShift;
 import org.springframework.data.repository.CrudRepository;
 
-import ca.mcgill.ecse321.onlinelibrary.model.LibrarianShift;
+import java.sql.Date;
+import java.util.ArrayList;
 
 public interface LibrarianShiftRepository extends CrudRepository<LibrarianShift, Integer> {
 

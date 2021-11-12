@@ -1,9 +1,9 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
-import javax.persistence.*;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import javax.persistence.*;
 import java.sql.Date;
 @Entity
 public class Reservation {

@@ -1,20 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
-import static ca.mcgill.ecse321.onlinelibrary.service.TestHelper.assertContains;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import ca.mcgill.ecse321.onlinelibrary.dao.LibrarianRepository;
+import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,8 +10,14 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import ca.mcgill.ecse321.onlinelibrary.dao.LibrarianRepository;
-import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
+import java.util.ArrayList;
+import java.util.List;
+
+import static ca.mcgill.ecse321.onlinelibrary.service.TestHelper.assertContains;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TestLibrarianService {

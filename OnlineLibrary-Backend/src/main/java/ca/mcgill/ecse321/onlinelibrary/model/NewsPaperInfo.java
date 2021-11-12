@@ -1,9 +1,9 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
-import java.sql.Date;
-import javax.persistence.*;
-
 import ca.mcgill.ecse321.onlinelibrary.dto.NewsPaperInfoDto;
+
+import javax.persistence.Entity;
+import java.sql.Date;
 
 @Entity
 public class NewsPaperInfo extends LibraryItemInfo {

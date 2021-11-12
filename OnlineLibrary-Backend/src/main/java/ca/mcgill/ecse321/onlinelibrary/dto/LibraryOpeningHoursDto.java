@@ -1,10 +1,10 @@
 package ca.mcgill.ecse321.onlinelibrary.dto;
 
 
+import ca.mcgill.ecse321.onlinelibrary.model.LibraryOpeningHours;
+
 import java.sql.Date;
 import java.sql.Time;
-
-import ca.mcgill.ecse321.onlinelibrary.model.LibraryOpeningHours;
 
 public class LibraryOpeningHoursDto {
     private Integer id;
