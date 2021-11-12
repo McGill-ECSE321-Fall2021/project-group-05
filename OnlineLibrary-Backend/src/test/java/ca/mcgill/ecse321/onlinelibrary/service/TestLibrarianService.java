@@ -382,21 +382,4 @@ public class TestLibrarianService {
 		assertEquals(NEW_REG_USERNAME, actualNewLibrarian.getUsername());
 		assertEquals(NEW_REG_PASSWD, actualNewLibrarian.getPasswordHash());
 	}
-
-	/**
-	 * Helper method to assert one string contains another. If
-	 * !actual.contains(expected), fails with a helpful error message. Does not
-	 * check for null inputs.
-	 *
-	 * @param expected
-	 * @param actual
-	 */
-	public void assertContains(String expected, String actual) {
-		if (!actual.contains(expected)) {
-			String msg = String.format("Expected message containing \"%s\" but received message \"%s\"", expected,
-					actual);
-			fail(msg);
-		}
-	}
-
 }
