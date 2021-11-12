@@ -49,8 +49,7 @@ jobs:
       id: run-newman
       uses: anthonyvscode/newman-action@v1.1
       with:
-        apiKey: PMAK-618e7628206277003fe06498-0b9e219fc92326c3bd9302f018a468cb75
-        collection: 09cea390-b8d5-45d1-a964-290860a91105
+        collection: OnlineLibrary-Backend/src/test/integration/postman-tests.json
         reporters: cli
     - name: Output summary to console
       run: echo ${{ steps.run-newman.outputs.summary }}
