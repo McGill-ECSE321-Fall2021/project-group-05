@@ -172,8 +172,20 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
     </tr>
     <tr>
       <td>Sebastian Ionascu</td>
-      <td></td>
-      <td></td>
+      <td>
+        <ul>
+          <li> Creation of Reservation class and its corresponding methods.</li>
+          <li> Creation of persistence unit tests for Reservation class.</li>
+          <li> Creation of Reservation DTO class and its corresponding methods.</li>
+          <li> Write create Reservation services and controller methods.</li>
+          <li> Write get Reservation services and controller methods in three different ways (by Reservation ID, by Member ID and by Reservable Item Info ID).</li>
+          <li> Write delete Reservation services and controller methods.</li>
+          <li> Write units tests for all the Reservation services.</li>
+          <li> Write the documentation for the RESTful services of Reservation.</li>
+          <li> Review Pull Requests.</li>
+        </ul>
+      </td>
+      <td> 35 hours </td>
     </tr>
   </tbody>
 </table>
