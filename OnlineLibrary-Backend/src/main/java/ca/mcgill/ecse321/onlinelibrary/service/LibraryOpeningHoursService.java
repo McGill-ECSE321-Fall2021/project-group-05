@@ -2,6 +2,8 @@ package ca.mcgill.ecse321.onlinelibrary.service;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,38 +29,40 @@ public class LibraryOpeningHoursService {
 	}
 	
 	@Transactional
-	public ArrayList<LibraryOpeningHours> getLibraryOpeningHours(Date date) {
+	public ArrayList<LibraryOpeningHours> getLibraryOpeningHours(LocalDate date) {
 		if(date == null) 
 			throw new IllegalArgumentException("A date is required.");
 		
 		
-		ArrayList<LibraryOpeningHours> openingHoursOfDate = libraryOpeningHoursRepository.findLibraryOpeningHoursByDate(date);
+		ArrayList<LibraryOpeningHours> openingHoursOfDate = libraryOpeningHoursRepository.findLibraryOpeningHoursByDate(Date.valueOf(date));
 		
 		return openingHoursOfDate;
 	}
 	
 	@Transactional
-	public ArrayList<LibraryOpeningHours> getLibraryOpeningHours(Date startDate, Date endDate) {
+	public ArrayList<LibraryOpeningHours> getLibraryOpeningHours(LocalDate startDate, LocalDate endDate) {
 		if(startDate == null || endDate == null) 
 			throw new IllegalArgumentException("Two date parameters are required.");
 		
-		if(startDate.compareTo(endDate) == 1) 
+		if(startDate.compareTo(endDate) > 0) 
 			throw new IllegalArgumentException("The start date can't be after the end date.");
 		
-		ArrayList<LibraryOpeningHours> openingHoursOfDate = libraryOpeningHoursRepository.findLibraryOpeningHoursByDateBetween(startDate, endDate);
+		ArrayList<LibraryOpeningHours> openingHoursOfDate = 
+				libraryOpeningHoursRepository.findLibraryOpeningHoursByDateBetween(Date.valueOf(startDate), Date.valueOf(endDate));
 		
 		return openingHoursOfDate;
 	}
 	
 	@Transactional
-	public LibraryOpeningHours createLibraryOpeningHours(Date date, Time startTime, Time endTime) {
+	public LibraryOpeningHours createLibraryOpeningHours(LocalDate date, LocalTime startTime, LocalTime endTime) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount=0;
 		if (date == null) {
 			errorMessage.add("Date can't be empty.");
 			errorCount++;
 		} else {
-			ArrayList<Holiday> holidays = holidayRepository.findHolidayByStartDateLessThanEqualAndEndDateGreaterThanEqual(date, date);
+			ArrayList<Holiday> holidays = 
+					holidayRepository.findHolidayByStartDateLessThanEqualAndEndDateGreaterThanEqual(Date.valueOf(date), Date.valueOf(date));
 			
 			if(holidays != null && holidays.size() != 0) {
 				errorMessage.add("Date coincides with a federal holiday.");
@@ -76,15 +80,16 @@ public class LibraryOpeningHoursService {
 			errorCount++;
 		}
 		
-		if(startTime != null && endTime != null && startTime.compareTo(endTime) != -1) {
+		if(startTime != null && endTime != null && startTime.compareTo(endTime) >= 0) {
 			errorMessage.add("Start Time must be before End Time.");
 			errorCount++;
 		} else if (date != null) {
-			ArrayList<LibraryOpeningHours> openingHoursOfDate = libraryOpeningHoursRepository.findLibraryOpeningHoursByDate(date);
+			ArrayList<LibraryOpeningHours> openingHoursOfDate = 
+					libraryOpeningHoursRepository.findLibraryOpeningHoursByDate(Date.valueOf(date));
 
 			if (openingHoursOfDate != null) {
 				for(LibraryOpeningHours openingHours : openingHoursOfDate) {
-					if(isOverlapping(startTime, endTime, openingHours.getStartTime(), openingHours.getEndTime())) {    
+					if(isOverlapping(Time.valueOf(startTime), Time.valueOf(endTime), openingHours.getStartTime(), openingHours.getEndTime())) {    
 						errorMessage.add("Opening hours have already been set for this date and time.");
 						errorCount++;
 						break;
@@ -97,7 +102,7 @@ public class LibraryOpeningHoursService {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
 		
-		LibraryOpeningHours libraryOpeningHours = new LibraryOpeningHours(date, startTime, endTime);
+		LibraryOpeningHours libraryOpeningHours = new LibraryOpeningHours(Date.valueOf(date), Time.valueOf(startTime), Time.valueOf(endTime));
 		libraryOpeningHoursRepository.save(libraryOpeningHours);
 		
 		return libraryOpeningHours;

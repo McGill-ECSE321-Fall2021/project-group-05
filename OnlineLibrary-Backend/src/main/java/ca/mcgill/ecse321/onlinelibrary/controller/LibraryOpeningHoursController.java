@@ -1,7 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.controller;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,24 +26,24 @@ public class LibraryOpeningHoursController {
 	
 	@GetMapping(value = { "/libraryOpeningHours/{date}", "/libraryOpeningHours/{date}/" })
 	public List<LibraryOpeningHoursDto> getLibraryOpeningHours(
-			@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd") Date date)throws IllegalArgumentException {
+			@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date)throws IllegalArgumentException {
 		return service.getLibraryOpeningHours(date).stream()
 				.map(LOH -> LibraryOpeningHoursDto.fromLibraryOpeningHours(LOH)).collect(Collectors.toList());
 	}
 	
 	@GetMapping(value = { "/libraryOpeningHours/{startDate}/{endDate}", "/libraryOpeningHours/{startDate}/{endDate}/" })
 	public List<LibraryOpeningHoursDto> getLibraryOpeningHours(
-			@PathVariable("startDate") @DateTimeFormat(pattern="yyyy-MM-dd")  Date startDate, 
-			@PathVariable("endDate") @DateTimeFormat(pattern="yyyy-MM-dd")  Date endDate) throws IllegalArgumentException {
+			@PathVariable("startDate") @DateTimeFormat(pattern="yyyy-MM-dd")  LocalDate startDate, 
+			@PathVariable("endDate") @DateTimeFormat(pattern="yyyy-MM-dd")  LocalDate endDate) throws IllegalArgumentException {
 		return service.getLibraryOpeningHours(startDate, endDate).stream()
 				.map(LOH -> LibraryOpeningHoursDto.fromLibraryOpeningHours(LOH)).collect(Collectors.toList());
 	}
 	
 	@PostMapping(value = { "/libraryOpeningHours", "/libraryOpeningHours/"})
 	public LibraryOpeningHoursDto createLibraryOpeningHours(
-			@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Date date,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) Time startTime, 
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) Time endTime)
+			@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime, 
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime endTime)
 	throws IllegalArgumentException {
 		LibraryOpeningHours libraryOpeningHours = service.createLibraryOpeningHours(date, startTime, endTime);
 		return LibraryOpeningHoursDto.fromLibraryOpeningHours(libraryOpeningHours);

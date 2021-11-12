@@ -2,6 +2,8 @@ package ca.mcgill.ecse321.onlinelibrary.service;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +30,11 @@ public class LibrarianShiftService {
 	}
 	
 	@Transactional
-	public ArrayList<LibrarianShift> getLibrarianShift(Date date) {
+	public ArrayList<LibrarianShift> getLibrarianShift(LocalDate date) {
 		if(date == null) 
 			throw new IllegalArgumentException("A date parameter is required.");
-
-		return librarianShiftRepository.findLibrarianShiftByDate(date);
+		
+		return librarianShiftRepository.findLibrarianShiftByDate(Date.valueOf(date));
 	}
 	
 	@Transactional
@@ -41,15 +43,15 @@ public class LibrarianShiftService {
 	}
 	
 	@Transactional
-	public ArrayList<LibrarianShift> getLibrarianShift(int librarianId, Date date) {
+	public ArrayList<LibrarianShift> getLibrarianShift(int librarianId, LocalDate date) {
 		if(date == null) 
 			throw new IllegalArgumentException("A date parameter is required.");
 		
-		return librarianShiftRepository.findLibrarianShiftByDateAndLibrarianId(date, librarianId);
+		return librarianShiftRepository.findLibrarianShiftByDateAndLibrarianId(Date.valueOf(date), librarianId);
 	}
 	
 	@Transactional
-	public LibrarianShift createLibrarianShift(Date date, Time startTime, Time endTime, int librarianId) {
+	public LibrarianShift createLibrarianShift(LocalDate date, LocalTime startTime, LocalTime endTime, int librarianId) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount=0;
 
@@ -68,7 +70,7 @@ public class LibrarianShiftService {
 			errorCount++;
 		}
 
-		if(startTime != null && endTime != null && startTime.compareTo(endTime) == 1) {
+		if(startTime != null && endTime != null && startTime.compareTo(endTime) > 0) {
 			errorMessage.add("Start Time can't be after End Time.");
 			errorCount++;
 		}
@@ -80,11 +82,12 @@ public class LibrarianShiftService {
 		}
 
 		if(errorCount == 0) {
-			ArrayList<LibrarianShift> shifts = librarianShiftRepository.findLibrarianShiftByDateAndLibrarianId(date, librarian.getId());
+			ArrayList<LibrarianShift> shifts = 
+					librarianShiftRepository.findLibrarianShiftByDateAndLibrarianId(Date.valueOf(date), librarian.getId());
 
 			if(shifts != null && shifts.size() != 0) {
 				for(LibrarianShift shift : shifts) {
-					if(isOverlapping(startTime, endTime, shift.getStartTime(), shift.getEndTime())) {
+					if(isOverlapping(Time.valueOf(startTime), Time.valueOf(endTime), shift.getStartTime(), shift.getEndTime())) {
 						errorMessage.add("An overlapping shift already exists for the assigned librarian.");
 						errorCount++;
 						break;
@@ -97,7 +100,7 @@ public class LibrarianShiftService {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
 
-		LibrarianShift librarianShift = new LibrarianShift(date, startTime, endTime, librarian);
+		LibrarianShift librarianShift = new LibrarianShift(Date.valueOf(date), Time.valueOf(startTime), Time.valueOf(endTime), librarian);
 		librarian.addShift(librarianShift);
 		librarianShiftRepository.save(librarianShift);
 		librarianRepository.save(librarian);
