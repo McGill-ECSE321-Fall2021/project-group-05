@@ -2,6 +2,8 @@ package ca.mcgill.ecse321.onlinelibrary.model;
 
 import javax.persistence.*;
 
+import ca.mcgill.ecse321.onlinelibrary.dto.MovieInfoDto;
+
 @Entity
 public class MovieInfo extends ReservableItemInfo {
 	private String genre;
@@ -30,6 +32,10 @@ public class MovieInfo extends ReservableItemInfo {
 
 	public int getLength() {
 		return length;
+	}
+
+	public MovieInfoDto convertToDto() {
+		return new MovieInfoDto(this.getId(), director, director, length);
 	}
 
 }

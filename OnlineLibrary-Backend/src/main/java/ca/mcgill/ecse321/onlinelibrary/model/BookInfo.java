@@ -2,6 +2,8 @@ package ca.mcgill.ecse321.onlinelibrary.model;
 
 import javax.persistence.*;
 
+import ca.mcgill.ecse321.onlinelibrary.dto.BookInfoDto;
+
 @Entity
 public class BookInfo extends ReservableItemInfo {
 	private String title;
@@ -39,5 +41,9 @@ public class BookInfo extends ReservableItemInfo {
 
 	public void setIsbn(long isbn) {
 		this.isbn = isbn;
+	}
+
+	public BookInfoDto convertToDto() {
+		return new BookInfoDto(title, numberOfPage, author, isbn, this.getId());
 	}
 }

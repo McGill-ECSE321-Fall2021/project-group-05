@@ -9,6 +9,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,13 +24,19 @@ import org.mockito.stubbing.Answer;
 import ca.mcgill.ecse321.onlinelibrary.dao.AlbumInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.ArchiveInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.LibraryItemInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.NewsPaperInfoRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.ReservationRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.LibraryItemInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.Member;
 import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
 import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.ReservableItemInfo;
+import ca.mcgill.ecse321.onlinelibrary.model.Reservation;
 
 @ExtendWith(MockitoExtension.class)
 public class TestLibraryItemInfoService {
@@ -42,6 +50,10 @@ public class TestLibraryItemInfoService {
 	private NewsPaperInfoRepository newspaperInfoDao;
 	@Mock
 	private ArchiveInfoRepository archiveInfoDao;
+	@Mock
+	private LibraryItemInfoRepository libraryItemInfoDao;
+	@Mock
+	private ReservationRepository reservationDao;
 
 	@InjectMocks
 	private LibraryItemInfoService libraryItemInfoService;
@@ -58,10 +70,48 @@ public class TestLibraryItemInfoService {
 	private static final int NEWSPAPER_INFO_BAD_KEY = 8;
 	private static final int ARCHIVE_INFO_KEY = 9;
 	private static final int ARCHIVE_INFO_BAD_KEY = 10;
+	private static final int RESERVATION_KEY = 11;
+	private static final int RESERVATION_BAD_KEY = 12;
+	private static final int MEMBER_KEY = 13;
+	private static final int MEMBER_BAD_KEY = 14;
 	
 
 	@BeforeEach
 	public void setMockOuput() {
+		lenient().when(reservationDao.findReservationByReservationId(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(RESERVATION_KEY)){
+				Reservation reservation = new Reservation(new Member("123 Main Street", "Seb"), new BookInfo(), new Date(200));
+				reservation.setId(RESERVATION_KEY);
+				return reservation;
+			} else {
+				return null;
+			}
+		});
+
+		lenient().when(reservationDao.findReservationByMember(any(Member.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (((Member) invocation.getArgument(0)).getId().equals(MEMBER_KEY)){
+				Member member = new Member("123 Main Street", "Seb");
+				member.setId(MEMBER_KEY);
+				List<Reservation> reservation = new ArrayList<Reservation>();
+				reservation.add(new Reservation(member, new BookInfo(), new Date(200)));
+				return reservation;
+			} else {
+				return null;
+			}
+		});
+
+		lenient().when(reservationDao.findReservationByReservedItemOrderByDateAsc(any(ReservableItemInfo.class))).thenAnswer( (InvocationOnMock invocation) -> {
+			if (((BookInfo) invocation.getArgument(0)).getId().equals(BOOK_INFO_KEY)){
+				BookInfo bookInfo = new BookInfo();
+				bookInfo.setId(BOOK_INFO_KEY);
+				List<Reservation> reservation = new ArrayList<Reservation>();
+				reservation.add(new Reservation(new Member("123 Main Street", "Seb"), bookInfo, new Date(200)));
+				return reservation;
+			} else {
+				return null;
+			}
+		});
+
 		lenient().when(bookInfoDao.findBookInfoById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
 			if (invocation.getArgument(0).equals(BOOK_INFO_KEY)) {
 				BookInfo bookInfo = new BookInfo();
@@ -107,7 +157,28 @@ public class TestLibraryItemInfoService {
 				return null;
 			}
 		});
-	
+		lenient().when(libraryItemInfoDao.findAll()).thenAnswer( (InvocationOnMock invocation) -> {
+			List<LibraryItemInfo> listInfo = new ArrayList<LibraryItemInfo>();
+			ArchiveInfo archiveInfo = new ArchiveInfo();
+			archiveInfo.setId(ARCHIVE_INFO_KEY);
+			NewsPaperInfo newspaperInfo = new NewsPaperInfo();
+			newspaperInfo.setId(NEWSPAPER_INFO_KEY);
+			AlbumInfo albumInfo = new AlbumInfo();
+			albumInfo.setId(ALBUM_INFO_KEY);
+			MovieInfo movieInfo = new MovieInfo();
+			movieInfo.setId(MOVIE_INFO_KEY);
+			BookInfo bookInfo = new BookInfo();
+			bookInfo.setId(BOOK_INFO_KEY);
+
+			listInfo.add(archiveInfo);
+			listInfo.add(newspaperInfo);
+			listInfo.add(albumInfo);
+			listInfo.add(movieInfo);
+			listInfo.add(bookInfo);
+
+			return listInfo;
+		});
+		
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
 			return invocation.getArgument(0);
 		};
@@ -116,6 +187,248 @@ public class TestLibraryItemInfoService {
 		lenient().when(albumInfoDao.save(any(AlbumInfo.class))).then(returnParameterAsAnswer);
 		lenient().when(newspaperInfoDao.save(any(NewsPaperInfo.class))).then(returnParameterAsAnswer);
 		lenient().when(archiveInfoDao.save(any(ArchiveInfo.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(reservationDao.save(any(Reservation.class))).thenAnswer(returnParameterAsAnswer);
+	}
+
+	@Test
+	public void testReserveItem(){
+		Reservation reservation = null;
+		Member member = new Member("123 Main Street", "Seb");
+		member.activate();
+		BookInfo bookInfo = new BookInfo();
+		Date date = new Date(200);
+		try {
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+		} catch (IllegalArgumentException e){
+			fail();
+		}
+		assertNotNull(reservation);
+		assertEquals(reservation.getMember(), member);
+		assertEquals(reservation.getReservableItemInfo(), bookInfo);
+		assertEquals(reservation.getDate(), date);
+	}
+
+	@Test
+	public void testReserveItemMemberNull(){
+		String error = "";
+		Reservation reservation = null;
+		Member member = null;
+		BookInfo bookInfo = new BookInfo();
+		Date date = new Date(200);
+		try {
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+		} catch (IllegalArgumentException e){
+			error += e.getMessage();
+		}
+		assertNull(reservation);
+		assertTrue(error.contains("A member needs to be assigned to a reservation."));
+	}
+
+	@Test
+	public void testReserveItemMemberInactive(){
+		String error = "";
+		Reservation reservation = null;
+		Member member = new Member("123 Main Street", "Seb");
+		//member.activate();
+		BookInfo bookInfo = new BookInfo();
+		Date date = new Date(200);
+		try {
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+		} catch (IllegalArgumentException e){
+			error += e.getMessage();
+		}
+		assertNull(reservation);
+		assertTrue(error.contains("Member account is inactive."));
+	}
+
+	@Test
+	public void testReserveItemMemberBlacklisted(){
+		String error = "";
+		Reservation reservation = null;
+		Member member = new Member("123 Main Street", "Seb");
+		member.activate();
+		member.applyStatusPenalty(); //yellow
+		member.applyStatusPenalty(); //red
+		member.applyStatusPenalty(); //blacklisted
+		BookInfo bookInfo = new BookInfo();
+		Date date = new Date(200);
+		try {
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+		} catch (IllegalArgumentException e){
+			error += e.getMessage();
+		}
+		assertNull(reservation);
+		assertTrue(error.contains("Member is blacklisted."));
+	}
+
+	@Test
+	public void testReserveItemReservableItemInfoNull(){
+		String error = "";
+		Reservation reservation = null;
+		Member member = new Member("123 Main Street", "Seb");
+		member.activate();
+		BookInfo bookInfo = null;
+		Date date = new Date(200);
+		try {
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+		} catch (IllegalArgumentException e){
+			error += e.getMessage();
+		}
+		assertNull(reservation);
+		assertTrue(error.contains("An item needs to be assigned to a reservation"));
+	}
+
+	@Test
+	public void testReserveItemDateNull(){
+		String error = "";
+		Reservation reservation = null;
+		Member member = new Member("123 Main Street", "Seb");
+		member.activate();
+		BookInfo bookInfo = new BookInfo();
+		Date date = null;
+		try {
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+		} catch (IllegalArgumentException e){
+			error += e.getMessage();
+		}
+		assertNull(reservation);
+		assertTrue(error.contains("Date cannot be null"));
+	}
+
+	@Test
+	public void testReserveItemAllNull(){
+		String error = "";
+		Reservation reservation = null;
+		Member member = null;
+		//member.activate();
+		BookInfo bookInfo = null;
+		Date date = null;
+		try {
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+		} catch (IllegalArgumentException e){
+			error += e.getMessage();
+		}
+		assertNull(reservation);
+		assertTrue(error.contains("A member needs to be assigned to a reservation."));
+		assertTrue(error.contains("An item needs to be assigned to a reservation"));
+		assertTrue(error.contains("Date cannot be null"));
+	}
+
+	@Test
+	public void testGetReservationByReservationId(){
+		Reservation reservation = null;
+		try {
+			reservation = libraryItemInfoService.getReservationsByReservationId(RESERVATION_KEY);
+		} catch (IllegalArgumentException e){
+			fail();
+		}
+		assertNotNull(reservation);
+		assertEquals(RESERVATION_KEY, reservation.getId());
+	}
+
+	@Test
+	public void testGetReservationByReservationBadId(){
+		String error = "";
+		Reservation reservation = null;
+		try {
+			reservation = libraryItemInfoService.getReservationsByReservationId(RESERVATION_BAD_KEY);
+		} catch (IllegalArgumentException e){
+			error += e.getMessage();
+		}
+		assertNull(reservation);
+		assertTrue(error.contains("The reservation with id was not found in the database."));
+	}
+
+	@Test
+	public void testGetReservationByMember(){
+		List<Reservation> reservation = null;
+		Member member = new Member("123 Road Street", "Seb");
+		member.setId(MEMBER_KEY);
+		try {
+			reservation = libraryItemInfoService.getReservationsByMember(member);
+		} catch (IllegalArgumentException e){
+			fail();
+		}
+		assertNotNull(reservation);
+		assertEquals(MEMBER_KEY, reservation.get(0).getMember().getId());
+	}
+
+	@Test
+	public void testGetReservationByBadMember(){
+		String error = "";
+		List<Reservation> reservation = null;
+		Member member = new Member("123 Road Street", "Seb");
+		member.setId(MEMBER_BAD_KEY);
+		try {
+			reservation = libraryItemInfoService.getReservationsByMember(member);
+		} catch (IllegalArgumentException e){
+			error += e.getMessage();
+		}
+		assertNull(reservation);
+		assertTrue(error.contains("The reservation with member was not found in the database."));
+	}
+
+	@Test
+	public void testGetReservationByReservableItemInfo(){
+		List<Reservation> reservation = null;
+		BookInfo bookInfo = new BookInfo();
+		bookInfo.setId(BOOK_INFO_KEY);
+		try {
+			reservation = libraryItemInfoService.getReservationsByReservableItemInfo(bookInfo);
+		} catch (IllegalArgumentException e){
+			fail();
+		}
+		assertNotNull(reservation);
+		assertEquals(BOOK_INFO_KEY, reservation.get(0).getReservableItemInfo().getId());
+	}
+
+	@Test
+	public void testGetReservationByBadReservableItemInfo(){
+		String error = "";
+		List<Reservation> reservation = null;
+		BookInfo bookInfo = new BookInfo();
+		bookInfo.setId(BOOK_INFO_BAD_KEY);
+		try {
+			reservation = libraryItemInfoService.getReservationsByReservableItemInfo(bookInfo);
+		} catch (IllegalArgumentException e){
+			error += e.getMessage();
+		}
+		assertNull(reservation);
+		assertTrue(error.contains("The reservation with the reservable item info was not found in the database."));
+	}
+
+	@Test
+	public void testDeleteReservation(){
+		Reservation reservation = null;
+		Member member = new Member("123 Main Street", "Seb");
+		member.activate();
+		BookInfo bookInfo = new BookInfo();
+		Date date = new Date(200);
+		reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+		reservation.setId(RESERVATION_KEY);
+		try {
+			libraryItemInfoService.deleteReservationbyId(RESERVATION_KEY);
+		} catch (IllegalArgumentException e){
+			fail();
+		}
+	}
+
+	@Test
+	public void testDeleteReservationBad(){
+		String error = "";
+		Reservation reservation = null;
+		Member member = new Member("123 Main Street", "Seb");
+		member.activate();
+		BookInfo bookInfo = new BookInfo();
+		Date date = new Date(200);
+		reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+		reservation.setId(RESERVATION_KEY);
+		try {
+			libraryItemInfoService.deleteReservationbyId(RESERVATION_BAD_KEY);
+		} catch (IllegalArgumentException e){
+			error += e.getMessage();
+		}
+		assertTrue(error.contains("Reservation with ID was not found."));
 	}
 
 	@Test
@@ -265,6 +578,26 @@ public class TestLibraryItemInfoService {
 		assertNull(bookInfo);
 		assertTrue(error.contains("The bookInfo with id " + BOOK_INFO_BAD_KEY + " was not found in the database."));
 	}
+	
+	@Test
+	public void testUpdateBookInfo() {
+		BookInfo bookInfo = libraryItemInfoService.createBookInfo("Title", 123, "An author", 12345);
+		//int id = bookInfo.getId();
+		String newTitle = "Title2";
+		int newNumberOfPage = 321;
+		String newAuthor= "Author";
+		long newIsbn = 54321;
+		try {
+			bookInfo = libraryItemInfoService.updateBookInfo(bookInfo,newTitle, newNumberOfPage, newAuthor, newIsbn);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(bookInfo);
+		assertEquals(bookInfo.getTitle(), newTitle);
+		assertEquals(bookInfo.getNumberOfPage(), newNumberOfPage);
+		assertEquals(bookInfo.getAuthor(), newAuthor);
+		assertEquals(bookInfo.getIsbn(), newIsbn);
+	}
 
 	@Test
 	public void testCreateMovieInfo() {
@@ -403,6 +736,23 @@ public class TestLibraryItemInfoService {
 		}
 		assertNull(movieInfo);
 		assertTrue(error.contains("The movieInfo with id " + MOVIE_INFO_BAD_KEY + " was not found in the database."));
+	}
+	
+	@Test
+	public void testUpdateMovienfo() {
+		MovieInfo movieInfo = libraryItemInfoService.createMovieInfo("AGenre", "aDirector", 123);
+		String newGenre = "Genre2";
+		String newDirector = "Director2";
+		int length = 321;
+		try {
+			movieInfo = libraryItemInfoService.updateMovieInfo(movieInfo, newGenre, newDirector, length);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(movieInfo);
+		assertEquals(movieInfo.getGenre(), newGenre);
+		assertEquals(movieInfo.getDirector(), newDirector);
+		assertEquals(movieInfo.getLength(), length);
 	}
 	
 	@Test
@@ -560,6 +910,23 @@ public class TestLibraryItemInfoService {
 		assertNull(albumInfo);
 		assertTrue(error.contains("The albumInfo with id " + ALBUM_INFO_BAD_KEY + " was not found in the database."));
 	}
+	
+	@Test
+	public void testUpdateAlbumInfo() {
+		AlbumInfo albumInfo = libraryItemInfoService.createAlbumInfo("ATitle", "aComposer", "aGenre");
+		String newTitle = "Title2";
+		String newComposerPerformer = "ComposerPerformer2";
+		String newGenre = "Genre2";
+		try {
+			albumInfo = libraryItemInfoService.updateAlbumInfo(albumInfo, newTitle, newComposerPerformer, newGenre);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(albumInfo);
+		assertEquals(albumInfo.getTitle(), newTitle);
+		assertEquals(albumInfo.getComposerPerformer(), newComposerPerformer);
+		assertEquals(albumInfo.getGenre(), newGenre);
+	}
 
 	@Test
 	public void testCreateNewsPaperInfo() {
@@ -684,6 +1051,24 @@ public class TestLibraryItemInfoService {
 		assertNull(newspaperInfo);
 		assertTrue(error.contains("The newsPaperInfo with id " + NEWSPAPER_INFO_BAD_KEY + " was not found in the database."));
 	}
+	
+	@Test
+	public void testUpdateNewspaperInfo() {
+		NewsPaperInfo newspaper = libraryItemInfoService.createNewspaperInfo(Date.valueOf("2020-11-11"), "AFrequency", 123);
+		Date newPublicationDate = Date.valueOf("2021-11-11");
+		String newFrequency = "Frequency2";
+		int newNumber = 321;
+		NewsPaperInfo newspaperInfo = null;
+		try {
+			newspaperInfo = libraryItemInfoService.updateNewspaperInfo(newspaper, newPublicationDate, newFrequency, newNumber);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(newspaperInfo);
+		assertEquals(newspaperInfo.getPublication(), newPublicationDate);
+		assertEquals(newspaperInfo.getFrequency(), newFrequency);
+		assertEquals(newspaperInfo.getNumber(), newNumber);
+	}
 
 	@Test
 	public void testCreateArchiveInfo() {
@@ -807,5 +1192,39 @@ public class TestLibraryItemInfoService {
 		}
 		assertNull(archiveInfo);
 		assertTrue(error.contains("The archiveInfo with id " + ARCHIVE_INFO_BAD_KEY + " was not found in the database."));
+	}
+	
+	@Test
+	public void testUpdateArchivenfo() {
+		ArchiveInfo archiveInfo = libraryItemInfoService.createArchiveInfo("ATitle", "aDescription", Date.valueOf("2020-11-11"));
+		String newTitle = "Title2";
+		String newDescription = "Description2";
+		Date newPublicationDate = Date.valueOf("2021-11-11");
+		try {
+			archiveInfo = libraryItemInfoService.updateArchiveInfo(archiveInfo, newTitle, newDescription, newPublicationDate);
+		} catch (IllegalArgumentException e) {
+			fail();
+		}
+		assertNotNull(archiveInfo);
+		assertEquals(archiveInfo.getTitle(), newTitle);
+		assertEquals(archiveInfo.getDescription(), newDescription);
+		assertEquals(archiveInfo.getPublicationDate(), newPublicationDate);
+  }
+  @Test
+	public void testBrowseService(){
+
+		Iterable<LibraryItemInfo> expectedIterable = libraryItemInfoDao.findAll();
+		List<LibraryItemInfo> expected = new ArrayList<LibraryItemInfo>();
+
+		for (LibraryItemInfo l: expectedIterable)
+			expected.add(l);
+
+		List<LibraryItemInfo> actual = libraryItemInfoService.browseAllLibraryItemInfos();
+
+		for(int i = 0; i< expected.size(); i++){
+			
+			assertEquals(expected.get(i).getId(), actual.get(i).getId());
+			
+		}
 	}
 }

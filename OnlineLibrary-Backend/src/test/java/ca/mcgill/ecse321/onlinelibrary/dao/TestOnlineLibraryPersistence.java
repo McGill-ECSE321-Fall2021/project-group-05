@@ -284,9 +284,10 @@ public class TestOnlineLibraryPersistence {
 		String director = "Seb";
 		movieInfo.setDirector(director);
 		movieInfoRepository.save(movieInfo);
+		java.sql.Date sqlDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
 		
-		Reservation reserve = new Reservation(member, movieInfo, Calendar.getInstance().getTime());
-		Reservation reserve2 = new Reservation(member2, movieInfo, Calendar.getInstance().getTime());
+		Reservation reserve = new Reservation(member, movieInfo, sqlDate);
+		Reservation reserve2 = new Reservation(member2, movieInfo, sqlDate);
 		reservationRepository.save(reserve);
 		reservationRepository.save(reserve2);
 
@@ -324,9 +325,10 @@ public class TestOnlineLibraryPersistence {
 		String director = "Seb";
 		movieInfo.setDirector(director);
 		movieInfoRepository.save(movieInfo);
+		java.sql.Date sqlDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
 		
-		Reservation reserve = new Reservation(member, movieInfo, Calendar.getInstance().getTime());
-		Reservation reserve2 = new Reservation(member2, movieInfo, Calendar.getInstance().getTime());
+		Reservation reserve = new Reservation(member, movieInfo, sqlDate);
+		Reservation reserve2 = new Reservation(member2, movieInfo, sqlDate);
 		reservationRepository.save(reserve);
 		reservationRepository.save(reserve2);
 
@@ -337,7 +339,7 @@ public class TestOnlineLibraryPersistence {
 		reserve = null;
 		reserve2 = null;
 
-		List<Reservation> actualList = reservationRepository.findReservationByReservedItem(movieInfo);
+		List<Reservation> actualList = reservationRepository.findReservationByReservedItemOrderByDateAsc(movieInfo);
 
 		assertNotNull(actualList);
 		assertEquals(reservationList, actualList);
@@ -358,9 +360,10 @@ public class TestOnlineLibraryPersistence {
 		bookInfo.setAuthor("Kiro");
 		bookInfo.setIsbn(1234);
 		bookinfoRepository.save(bookInfo);
+		java.sql.Date sqlDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
 		
-		Reservation reserve = new Reservation(member, movieInfo, Calendar.getInstance().getTime());
-		Reservation reserve2 = new Reservation(member, bookInfo, Calendar.getInstance().getTime());
+		Reservation reserve = new Reservation(member, movieInfo, sqlDate);
+		Reservation reserve2 = new Reservation(member, bookInfo, sqlDate);
 		reservationRepository.save(reserve);
 		reservationRepository.save(reserve2);
 

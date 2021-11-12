@@ -1,31 +1,27 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import ca.mcgill.ecse321.onlinelibrary.dao.*;
+import ca.mcgill.ecse321.onlinelibrary.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ca.mcgill.ecse321.onlinelibrary.dao.AlbumRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.ArchiveRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.BookRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.MovieRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.NewspaperRepository;
-import ca.mcgill.ecse321.onlinelibrary.model.Album;
-import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Archive;
-import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Book;
-import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Movie;
-import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Newspaper;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem.ItemStatus;
 
 @Service
 public class LibraryItemService {
+
+	// TODO: Get this value from application.properties or similar
+	public static final int MAX_LOANS_PER_MEMBER = 5;
+	// TODO: Get this value from application.properties or associated ReservableItemInfo
+	public static final int NUMBER_OF_DAYS_BEFORE_RENEWAL = 15;
 
 	@Autowired
 	private BookRepository bookRepository;
@@ -41,6 +37,18 @@ public class LibraryItemService {
 	
 	@Autowired
 	private ArchiveRepository archiveRepository;
+
+	@Autowired
+	private LoanRepository loanRepository;
+
+	@Autowired
+	private ReservationRepository reservationRepository;
+
+	@Autowired
+	private LibraryItemRepository libraryItemRepository;
+
+	@Autowired
+	private ReservableItemRepository reservableItemRepository;
 
 	@Transactional
 	public Book createBook(BookInfo bookInfo) {
@@ -188,4 +196,97 @@ public class LibraryItemService {
 			archiveRepository.deleteById(id);
 		}
 	}
+
+	@Transactional
+	public ReservableItem getReservableItemById(int id) {
+		ReservableItem reservableItem = reservableItemRepository.findReservableItemById(id);
+		if (reservableItem == null) {
+			throw new IllegalArgumentException("The reservable item with id " + id + " does not exist.");
+		}
+		return reservableItem;
+	}
+
+	@Transactional
+	public LibraryItemInfo getAssociatedItemInfo(LibraryItem libraryItem) {
+		if (libraryItem == null) {
+			throw new IllegalArgumentException("Library item cannot be null.");
+		}
+		return libraryItem.getItemInfo();
+	}
+
+	@Transactional
+	public List<LibraryItem> getAssociatedCopies(LibraryItemInfo libraryItemInfo) {
+        List<LibraryItem> result = new ArrayList<>();
+		for (LibraryItem libraryItem : libraryItemRepository.findAll()) {
+			if (getAssociatedItemInfo(libraryItem).equals(libraryItemInfo)) {
+				result.add(libraryItem);
+			}
+		}
+		return result;
+	}
+
+	@Transactional
+	public Loan createLoan(ReservableItem reservableItem, Member member) {
+		ArrayList<String> errorMessages = new ArrayList<>();
+		if (reservableItem == null) {
+			errorMessages.add("Reservable item cannot be null.");
+		}
+		if (member == null) {
+			errorMessages.add("Member cannot be null.");
+		}
+		// Throw errors here first if any of the arguments are null
+		if (!errorMessages.isEmpty()) {
+			throw new IllegalArgumentException(String.join(" ", errorMessages));
+		}
+
+		if (member.getLoans().size() >= MAX_LOANS_PER_MEMBER) {
+			errorMessages.add("Member cannot have more than 5 loans.");
+		}
+		if (reservableItem.getLoan() != null) {
+			errorMessages.add("Item is already loaned.");
+		}
+		if (member.getStatus() == Member.MemberStatus.BLACKLISTED || member.getStatus() == Member.MemberStatus.INACTIVE) {
+			errorMessages.add("Member account is inactive or blacklisted.");
+		}
+
+		// Get associated item info
+		ReservableItemInfo itemInfo = (ReservableItemInfo) getAssociatedItemInfo(reservableItem);
+		// Get reservations for associated item info
+		List<Reservation> reservations = reservationRepository.findReservationByReservedItemOrderByDateAsc(itemInfo);
+		// Does the member have a reservation for the item info?
+		Optional<Reservation> reservation = reservations.stream().filter(r -> r.getMember().equals(member)).findFirst();
+		// How many reservations are there for the item info?
+		int numberOfReservationsForThisItem = reservations.size();
+		// How many copies are available for the item info?
+		int numberOfAvailableCopiesForThisItem = (int) getAssociatedCopies(itemInfo).stream().filter((copy) -> (((ReservableItem) copy).getLoan() == null)).count();
+		// Can the user borrow this item using their reservation?
+		boolean hasReservation = reservation.isPresent() && reservations.indexOf(reservation.get()) < numberOfAvailableCopiesForThisItem;
+		// User cannot borrow the item.
+		if (!hasReservation && numberOfAvailableCopiesForThisItem <= numberOfReservationsForThisItem) {
+			errorMessages.add("Not enough copies available.");
+		}
+		if (!errorMessages.isEmpty()) {
+			throw new IllegalArgumentException(String.join(" ", errorMessages));
+		}
+
+		Calendar today = Calendar.getInstance();
+		today.set(Calendar.HOUR_OF_DAY, 0);
+		today.add(Calendar.DATE, NUMBER_OF_DAYS_BEFORE_RENEWAL);
+		Date date = new Date(today.getTimeInMillis());
+
+		Loan loan = new Loan(date, reservableItem, member);
+		loanRepository.save(loan);
+		if (hasReservation) {
+			reservationRepository.delete(reservation.get());
+		}
+		return loan;
+	}
+
+	@Transactional
+	public void returnItem(Loan loan) {
+        if (loan == null) {
+            throw new IllegalArgumentException("Loan cannot be null.");
+        }
+        loanRepository.delete(loan);
+    }
 }

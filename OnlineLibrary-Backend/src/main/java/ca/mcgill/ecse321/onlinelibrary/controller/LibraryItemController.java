@@ -1,27 +1,11 @@
 package ca.mcgill.ecse321.onlinelibrary.controller;
 
+import ca.mcgill.ecse321.onlinelibrary.dto.*;
+import ca.mcgill.ecse321.onlinelibrary.model.*;
+import ca.mcgill.ecse321.onlinelibrary.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import ca.mcgill.ecse321.onlinelibrary.dto.AlbumDto;
-import ca.mcgill.ecse321.onlinelibrary.dto.ArchiveDto;
-import ca.mcgill.ecse321.onlinelibrary.dto.BookDto;
-import ca.mcgill.ecse321.onlinelibrary.dto.MovieDto;
-import ca.mcgill.ecse321.onlinelibrary.dto.NewsPaperDto;
-import ca.mcgill.ecse321.onlinelibrary.model.Album;
-import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Archive;
-import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Book;
-import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Movie;
-import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Newspaper;
 import ca.mcgill.ecse321.onlinelibrary.service.LibraryItemInfoService;
 import ca.mcgill.ecse321.onlinelibrary.service.LibraryItemService;
 
@@ -33,6 +17,8 @@ public class LibraryItemController {
 	private LibraryItemInfoService libraryItemInfoService;
 	@Autowired
 	private LibraryItemService libraryItemService;
+	@Autowired
+	private MemberService memberService;
 
 	@PostMapping(value = {"/book/{bookInfoId}", "/book/{bookInfoId}/"})
 	public BookDto createBookDto(@PathVariable("bookInfoId") int bookInfoId) throws IllegalArgumentException {
@@ -93,5 +79,32 @@ public class LibraryItemController {
 	public void deleteArchive(@PathVariable("archiveId") int archiveId) throws IllegalArgumentException {
 		libraryItemService.deleteArchive(archiveId);
 	}
-	
+
+	@PostMapping(value = {"/reservableItem/{reservableItemId}/loan", "/reservableItem/{reservableItemId}/loan/"})
+	public LoanDto createLoan(@PathVariable("reservableItemId") int reservableItemId, @RequestParam int memberId) {
+		Loan loan = libraryItemService.createLoan(libraryItemService.getReservableItemById(reservableItemId), memberService.getMemberById(memberId));
+		return LoanDto.fromLoan(loan);
+	}
+
+	@DeleteMapping(value = {"/reservableItem/{reservableItemId}/loan", "/reservableItem/{reservableItemId}/loan/"})
+	public void returnItem(@PathVariable("reservableItemId") int reservableItemId) {
+		libraryItemService.returnItem(libraryItemService.getReservableItemById(reservableItemId).getLoan());
+	}
+
+	@GetMapping(value = {"/reservableItem/{reservableItemId}", "/reservableItem/{reservableItemId}/"})
+	public ReservableItemDto getReservableItemById(@PathVariable("reservableItemId") int reservableItemId) {
+        return (ReservableItemDto) libraryItemService.getReservableItemById(reservableItemId).convertToDto();
+    }
+
+	@GetMapping(value = { "/reservableItem/{reservableItemId}/itemInfo",
+			"/reservableItem/{reservableItemId}/itemInfo/" })
+	public ReservableItemInfoDto getAssociatedItemInfo(@PathVariable("reservableItemId") int reservableItemId) {
+		return (ReservableItemInfoDto) libraryItemService
+				.getAssociatedItemInfo(libraryItemService.getReservableItemById(reservableItemId)).convertToDto();
+	}
+
+	@GetMapping(value = {"/reservableItem/{reservableItemId}/loan", "/reservableItem/{reservableItemId}/loan/"})
+	public LoanDto getLoanFromReservableItemId(@PathVariable("reservableItemId") int reservableItemId) {
+        return LoanDto.fromLoan(libraryItemService.getReservableItemById(reservableItemId).getLoan());
+    }
 }

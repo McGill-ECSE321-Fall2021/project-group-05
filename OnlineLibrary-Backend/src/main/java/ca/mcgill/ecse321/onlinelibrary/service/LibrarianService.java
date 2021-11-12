@@ -50,6 +50,10 @@ public class LibrarianService {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
 
+		fullName = fullName.trim();
+		username = username.trim();
+		password = password.trim();
+
 		// TODO Hash password before saving
 
 		Librarian librarian = new Librarian(fullName, username, password, false);

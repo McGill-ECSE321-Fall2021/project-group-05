@@ -129,11 +129,13 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
           <li> Write all the creating itemInfos service and controller methods </li>
           <li> Write all the creating items service and controller methods </li>
           <li> Write all the delete items service and controller methods </li>
+          <li> Write all the update itemInfos service and controller methods </li>
           <li> Write the documentation for the RESTful services aforementioned
-          <li> Write integration and unit tests for all the controller and service methods </li>
+          <li> Write integration and unit tests for all the controller and service methods aforementioned</li>
+          <li> Review pull request </li>
         </ul>
       </td>
-      <td> 27 hours </td>
+      <td> 30 hours </td>
     </tr>
     <tr>
       <td>Kirollos Roufail</td>

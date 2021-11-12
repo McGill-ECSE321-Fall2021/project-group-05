@@ -1,5 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
+import ca.mcgill.ecse321.onlinelibrary.dto.LibraryItemDto;
+import ca.mcgill.ecse321.onlinelibrary.dto.NewsPaperDto;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -22,5 +24,15 @@ public class Newspaper extends LibraryItem{
 
     public NewsPaperInfo getNewsPaperInfo() {
         return newsPaperInfo;
+    }
+
+    @Override
+    public LibraryItemDto convertToDto() {
+        return NewsPaperDto.fromNewsPaper(this);
+    }
+
+    @Override
+    public LibraryItemInfo getItemInfo() {
+        return this.getNewsPaperInfo();
     }
 }

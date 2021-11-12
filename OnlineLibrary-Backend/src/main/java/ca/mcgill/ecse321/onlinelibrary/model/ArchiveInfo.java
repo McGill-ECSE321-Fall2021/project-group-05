@@ -3,6 +3,8 @@ package ca.mcgill.ecse321.onlinelibrary.model;
 import java.sql.Date;
 import javax.persistence.*;
 
+import ca.mcgill.ecse321.onlinelibrary.dto.ArchiveInfoDto;
+
 @Entity
 public class ArchiveInfo extends LibraryItemInfo {
 
@@ -32,6 +34,10 @@ public class ArchiveInfo extends LibraryItemInfo {
 
 	public Date getPublicationDate() {
 		return publicationDate;
+	}
+
+	public ArchiveInfoDto convertToDto() {
+		return new ArchiveInfoDto(this.getId(), this.title, this.description, this.publicationDate);
 	}
 
 }

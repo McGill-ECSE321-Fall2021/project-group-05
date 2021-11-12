@@ -28,7 +28,7 @@ public abstract class ReservableItem extends LibraryItem {
         this.status = status;
     }
     
-    @OneToOne(cascade = { CascadeType.ALL })
+    @OneToOne(optional = true, cascade = {CascadeType.ALL})
 	@JoinColumn(name = "loan_id")
     private Loan loan;
 
