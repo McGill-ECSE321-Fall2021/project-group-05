@@ -1,10 +1,1119 @@
 {
 	"info": {
-		"_postman_id": "fa0497ae-abff-43c1-9b4d-b9197cb8628a",
+		"_postman_id": "8a249d6c-91bc-439f-af6c-d777566a660d",
 		"name": "Integration tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "Holiday",
+			"item": [
+				{
+					"name": "Successfully create Holiday",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"holiday_id\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/holiday?name=Easter&startDate=2020-03-01&endDate=2020-03-02",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"holiday"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Easter"
+								},
+								{
+									"key": "startDate",
+									"value": "2020-03-01"
+								},
+								{
+									"key": "endDate",
+									"value": "2020-03-02"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail to create Holiday with missing name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/holiday?startDate=2020-03-01&endDate=2020-03-02",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"holiday"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2020-03-01"
+								},
+								{
+									"key": "endDate",
+									"value": "2020-03-02"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get holiday by date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Holiday ID is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].id).to.eql(pm.collectionVariables.get(\"holiday_id\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/holiday/2020-03-01",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"holiday",
+								"2020-03-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail to get holiday by date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an empty list.\", function () {",
+									"    var res = pm.response.json();",
+									"    pm.expect(res.length).to.eql(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/holiday/2019-03-01",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"holiday",
+								"2019-03-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get holiday by start and end dates",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Holiday ID is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].id).to.eql(pm.collectionVariables.get(\"holiday_id\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/holiday/2020-02-01/2020-04-01",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"holiday",
+								"2020-02-01",
+								"2020-04-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail to get holiday by start and end dates",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an empty list.\", function () {",
+									"    var res = pm.response.json();",
+									"    pm.expect(res.length).to.eql(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/holiday/2019-04-01/2020-02-01",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"holiday",
+								"2019-04-01",
+								"2020-02-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete holiday",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/holiday/{{holiday_id}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"holiday",
+								"{{holiday_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail to delete holiday with invalid ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/holiday/{{holiday_id}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"holiday",
+								"{{holiday_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "LibraryOpeningHours",
+			"item": [
+				{
+					"name": "Successfully create LOH",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"LOH_id\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/libraryOpeningHours?date=2020-03-01&startTime=10:00:00&endTime=17:00:00",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"libraryOpeningHours"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2020-03-01"
+								},
+								{
+									"key": "startTime",
+									"value": "10:00:00"
+								},
+								{
+									"key": "endTime",
+									"value": "17:00:00"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail to create LOH with missing date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/libraryOpeningHours?startTime=10:00:00&endTime=17:00:00",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"libraryOpeningHours"
+							],
+							"query": [
+								{
+									"key": "startTime",
+									"value": "10:00:00"
+								},
+								{
+									"key": "endTime",
+									"value": "17:00:00"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get LOH by date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Holiday ID is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].id).to.eql(pm.collectionVariables.get(\"LOH_id\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/libraryOpeningHours/2020-03-01",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"libraryOpeningHours",
+								"2020-03-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail to get LOH by date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an empty list.\", function () {",
+									"    var res = pm.response.json();",
+									"    pm.expect(res.length).to.eql(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/libraryOpeningHours/2019-03-01",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"libraryOpeningHours",
+								"2019-03-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get LOH by start and end dates",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Holiday ID is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].id).to.eql(pm.collectionVariables.get(\"LOH_id\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/libraryOpeningHours/2020-02-01/2020-04-01",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"libraryOpeningHours",
+								"2020-02-01",
+								"2020-04-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail to get LOH by start and end dates",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {",
+									"    pm.response.to.have.status(500);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/libraryOpeningHours/2020-04-01/2020-02-01",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"libraryOpeningHours",
+								"2020-04-01",
+								"2020-02-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete LOH",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/libraryOpeningHours/{{LOH_id}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"libraryOpeningHours",
+								"{{LOH_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail to delete LOH with invalid ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/libraryOpeningHours/{{LOH_id}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"libraryOpeningHours",
+								"{{LOH_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Librarian Shifts",
+			"item": [
+				{
+					"name": "Add Temporary Librarian",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"librarian_id_for_shift\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/librarian?fullName=Jocasta Nu&username=joacasta.nu&password=securepassword12345",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"librarian"
+							],
+							"query": [
+								{
+									"key": "fullName",
+									"value": "Jocasta Nu"
+								},
+								{
+									"key": "username",
+									"value": "joacasta.nu"
+								},
+								{
+									"key": "password",
+									"value": "securepassword12345"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Successfully create LS Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"librarian_shift_id\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/librarianShift?date=2020-03-01&startTime=10:00:00&endTime=17:00:00&librarianId={{librarian_id_for_shift}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"librarianShift"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2020-03-01"
+								},
+								{
+									"key": "startTime",
+									"value": "10:00:00"
+								},
+								{
+									"key": "endTime",
+									"value": "17:00:00"
+								},
+								{
+									"key": "librarianId",
+									"value": "{{librarian_id_for_shift}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail to create LS with missing date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/librarianShift?startTime=10:00:00&endTime=17:00:00&librarianId={{librarian_id_for_shift}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"librarianShift"
+							],
+							"query": [
+								{
+									"key": "startTime",
+									"value": "10:00:00"
+								},
+								{
+									"key": "endTime",
+									"value": "17:00:00"
+								},
+								{
+									"key": "librarianId",
+									"value": "{{librarian_id_for_shift}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get LS by date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Shift ID is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].id).to.eql(pm.collectionVariables.get(\"librarian_shift_id\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/librarianShift/2020-03-01",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"librarianShift",
+								"2020-03-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail to get LS by date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an empty list.\", function () {",
+									"    var res = pm.response.json();",
+									"    pm.expect(res.length).to.eql(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/librarianShift/2019-03-01",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"librarianShift",
+								"2019-03-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get LS by librarianId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Shift ID is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].id).to.eql(pm.collectionVariables.get(\"librarian_shift_id\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/librarianShift?librarianId={{librarian_id_for_shift}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"librarianShift"
+							],
+							"query": [
+								{
+									"key": "librarianId",
+									"value": "{{librarian_id_for_shift}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail to get LS by librarianId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an empty list.\", function () {",
+									"    var res = pm.response.json();",
+									"    pm.expect(res.length).to.eql(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/librarianShift?librarianId=-1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"librarianShift"
+							],
+							"query": [
+								{
+									"key": "librarianId",
+									"value": "-1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get LS by date & LibrarianID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Shift ID is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData[0].id).to.eql(pm.collectionVariables.get(\"librarian_shift_id\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/librarianShift/{{librarian_id_for_shift}}/2020-03-01",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"librarianShift",
+								"{{librarian_id_for_shift}}",
+								"2020-03-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail to get LS by date & invalid librarianId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an empty list.\", function () {",
+									"    var res = pm.response.json();",
+									"    pm.expect(res.length).to.eql(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/librarianShift/-1/2020-03-01",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"librarianShift",
+								"-1",
+								"2020-03-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete LS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/librarianShift/{{librarian_shift_id}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"librarianShift",
+								"{{librarian_shift_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail to delete LS with invalid ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 500\", function () {\r",
+									"    pm.response.to.have.status(500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/libraryOpeningHours/{{librarian_shift_id}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"libraryOpeningHours",
+								"{{librarian_shift_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Temporary Librarian",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/librarian/{{librarian_id_for_shift}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"librarian",
+								"{{librarian_id_for_shift}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Test",
 			"event": [
