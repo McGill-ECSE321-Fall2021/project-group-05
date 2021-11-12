@@ -1272,6 +1272,97 @@
 			"response": []
 		},
 		{
+			"name": "Successfully create reservation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"reservation_id\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservation?memberId={{member_id}}&reservableItemId={{bookInfo_id}}&date=2021-11-11",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservation"
+					],
+					"query": [
+						{
+							"key": "memberId",
+							"value": "{{member_id}}"
+						},
+						{
+							"key": "reservableItemId",
+							"value": "{{bookInfo_id}}"
+						},
+						{
+							"key": "date",
+							"value": "2021-11-11"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to create reservation with invalid member and item ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservation?memberId=9999999&reservableItemId=9999999&date=2021-11-11",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservation"
+					],
+					"query": [
+						{
+							"key": "memberId",
+							"value": "9999999"
+						},
+						{
+							"key": "reservableItemId",
+							"value": "9999999"
+						},
+						{
+							"key": "date",
+							"value": "2021-11-11"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get member by ID",
 			"event": [
 				{
@@ -1728,6 +1819,227 @@
 			"response": []
 		},
 		{
+			"name": "Successfully get all library item infos (browse)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/browse",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"browse"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully get reservation by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservation/{{reservation_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservation",
+						"{{reservation_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to get reservation with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservation/9999999",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservation",
+						"9999999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully get reservation by member",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/{{member_id}}/reservation",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"{{member_id}}",
+						"reservation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to get reservation with invalid member",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/9999999/reservation",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"9999999",
+						"reservation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully get reservation by reservable item ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservableItemInfo/{{bookInfo_id}}/reservation/",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservableItemInfo",
+						"{{bookInfo_id}}",
+						"reservation",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to get reservation with invalid reservable item ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservableItemInfo/9999999/reservation",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservableItemInfo",
+						"9999999",
+						"reservation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Successfully apply penalty",
 			"event": [
 				{
@@ -2021,6 +2333,464 @@
 						{
 							"key": "password",
 							"value": "bobmakesgoodpasswords123456"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully update book info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/bookInfo/{{bookInfo_id}}?title=Updated book title&numberOfPage=100&author=Updated Author&isbn={{$randomInt}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"bookInfo",
+						"{{bookInfo_id}}"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "Updated book title"
+						},
+						{
+							"key": "numberOfPage",
+							"value": "100"
+						},
+						{
+							"key": "author",
+							"value": "Updated Author"
+						},
+						{
+							"key": "isbn",
+							"value": "{{$randomInt}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to update book info with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/bookInfo/9999999?title=Updated book title&numberOfPage=100&author=Updated Author&isbn={{$randomInt}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"bookInfo",
+						"9999999"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "Updated book title"
+						},
+						{
+							"key": "numberOfPage",
+							"value": "100"
+						},
+						{
+							"key": "author",
+							"value": "Updated Author"
+						},
+						{
+							"key": "isbn",
+							"value": "{{$randomInt}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully update movie info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/movieInfo/{{movieInfo_id}}?genre=Updated genre&director=Updated Director&length=120",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"movieInfo",
+						"{{movieInfo_id}}"
+					],
+					"query": [
+						{
+							"key": "genre",
+							"value": "Updated genre"
+						},
+						{
+							"key": "director",
+							"value": "Updated Director"
+						},
+						{
+							"key": "length",
+							"value": "120"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to update movie info with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/movieInfo/9999999?genre=Updated genre&director=Updated Director&length=120",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"movieInfo",
+						"9999999"
+					],
+					"query": [
+						{
+							"key": "genre",
+							"value": "Updated genre"
+						},
+						{
+							"key": "director",
+							"value": "Updated Director"
+						},
+						{
+							"key": "length",
+							"value": "120"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully update archive info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/archiveInfo/{{archiveInfo_id}}?title=Updated archive title&description=Updated description&publicationDate=2021-11-11",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"archiveInfo",
+						"{{archiveInfo_id}}"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "Updated archive title"
+						},
+						{
+							"key": "description",
+							"value": "Updated description"
+						},
+						{
+							"key": "publicationDate",
+							"value": "2021-11-11"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to update archive info with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/archiveInfo/9999999?title=Updated archive title&description=Updated description&publicationDate=2021-11-11",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"archiveInfo",
+						"9999999"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "Updated archive title"
+						},
+						{
+							"key": "description",
+							"value": "Updated description"
+						},
+						{
+							"key": "publicationDate",
+							"value": "2021-11-11"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully update newspaper info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/newspaperInfo/{{newspaperInfo_id}}?publicationDate=2021-11-11&frequency=Updated frequency&number=42",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"newspaperInfo",
+						"{{newspaperInfo_id}}"
+					],
+					"query": [
+						{
+							"key": "publicationDate",
+							"value": "2021-11-11"
+						},
+						{
+							"key": "frequency",
+							"value": "Updated frequency"
+						},
+						{
+							"key": "number",
+							"value": "42"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to update newspaper info with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/newspaperInfo/9999999?publicationDate=2021-11-11&frequency=Updated frequency&number=42",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"newspaperInfo",
+						"9999999"
+					],
+					"query": [
+						{
+							"key": "publicationDate",
+							"value": "2021-11-11"
+						},
+						{
+							"key": "frequency",
+							"value": "Updated frequency"
+						},
+						{
+							"key": "number",
+							"value": "42"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully update album info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/albumInfo/{{albumInfo_id}}?title=Updated Title&composerPerformer=Updated Composer Performer&genre=Updated genre",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"albumInfo",
+						"{{albumInfo_id}}"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "Updated Title"
+						},
+						{
+							"key": "composerPerformer",
+							"value": "Updated Composer Performer"
+						},
+						{
+							"key": "genre",
+							"value": "Updated genre"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to update album info with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/albumInfo/9999999?title=Updated Title&composerPerformer=Updated Composer Performer&genre=Updated genre",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"albumInfo",
+						"9999999"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "Updated Title"
+						},
+						{
+							"key": "composerPerformer",
+							"value": "Updated Composer Performer"
+						},
+						{
+							"key": "genre",
+							"value": "Updated genre"
 						}
 					]
 				}
@@ -2539,6 +3309,69 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Successfully delete reservation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservation/{{reservation_id}}/",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservation",
+						"{{reservation_id}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to delete reservation with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/reservation/9999999",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"reservation",
+						"9999999"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -2628,6 +3461,10 @@
 		},
 		{
 			"key": "loan_id",
+			"value": ""
+		},
+		{
+			"key": "reservation_id",
 			"value": ""
 		}
 	]
