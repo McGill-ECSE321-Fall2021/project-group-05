@@ -4136,6 +4136,107 @@
 					]
 				},
 				{
+					"name": "Loan",
+					"item": [
+						{
+							"name": "Successfully deletes a loan",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/reservableItem/{{book_id}}/loan",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"reservableItem",
+										"{{book_id}}",
+										"loan"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Fail to get deleted loan",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 500\", function () {\r",
+											"    pm.response.to.have.status(500);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/reservableItem/{{book_id}}/loan",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"reservableItem",
+										"{{book_id}}",
+										"loan"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Fail to delete a loan with invalid ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(500);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/reservableItem/999999/loan",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"reservableItem",
+										"999999",
+										"loan"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "LibraryItem",
 					"item": [
 						{
@@ -4446,75 +4547,6 @@
 									"path": [
 										"archive",
 										"9999"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Loan",
-					"item": [
-						{
-							"name": "Successfully deletes a loan",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 200\", function () {",
-											"    pm.response.to.have.status(200);",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "{{BASE_URL}}/reservableItem/{{book_id}}/loan",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"reservableItem",
-										"{{book_id}}",
-										"loan"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Fail to delete a loan with invalid ID",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 200\", function () {",
-											"    pm.response.to.have.status(500);",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "{{BASE_URL}}/reservableItem/999999/loan",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"reservableItem",
-										"999999",
-										"loan"
 									]
 								}
 							},
