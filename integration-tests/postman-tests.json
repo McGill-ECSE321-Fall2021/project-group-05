@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "6350183c-47cc-4fc7-8a51-a00ba9d46aa9",
+		"_postman_id": "c8cc3dfb-2466-4b3b-a433-63c5aea64732",
 		"name": "Integration tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -1234,6 +1234,178 @@
 			"response": []
 		},
 		{
+			"name": "Update Member successfully",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/{{member_id}}?address=123 University street&fullName=Bob The Builder",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"{{member_id}}"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "123 University street"
+						},
+						{
+							"key": "fullName",
+							"value": "Bob The Builder"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to update Member",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/member/9999999?address=123 University street&fullName=Bob The Builder",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"member",
+						"9999999"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "123 University street"
+						},
+						{
+							"key": "fullName",
+							"value": "Bob The Builder"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Librarian successfully",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/librarian/{{librarian_id}}?fullName=Bob The Builder&username=bob.builds&password=bobmakesgoodpasswords123456",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"librarian",
+						"{{librarian_id}}"
+					],
+					"query": [
+						{
+							"key": "fullName",
+							"value": "Bob The Builder"
+						},
+						{
+							"key": "username",
+							"value": "bob.builds"
+						},
+						{
+							"key": "password",
+							"value": "bobmakesgoodpasswords123456"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail to update Librarian",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/librarian/9999999?fullName=Bob The Builder&username=bob.builds&password=bobmakesgoodpasswords123456",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"librarian",
+						"9999999"
+					],
+					"query": [
+						{
+							"key": "fullName",
+							"value": "Bob The Builder"
+						},
+						{
+							"key": "username",
+							"value": "bob.builds"
+						},
+						{
+							"key": "password",
+							"value": "bobmakesgoodpasswords123456"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Successfully delete librarian by ID",
 			"event": [
 				{
@@ -1435,6 +1607,19 @@
 		},
 		{
 			"name": "Successfully creates a movieInfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
