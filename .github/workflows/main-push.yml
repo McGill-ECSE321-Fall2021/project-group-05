@@ -46,17 +46,7 @@ jobs:
         node-version: [12.x]
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
+    - name: Run Postman integration tests with Newman
+      uses: matt-ball/newman-action@v1.0.2
       with:
-        node-version: ${{ matrix.node-version }}
-        registry-url: https://registry.npmjs.org/
-    - name: Install dependencies
-      run: npm install
-    - name: Install newman
-      run: npm install -g newman
-    - name: Run the API and Postman's tests
-      run: | 
-        npm run start:dev &
-        sleep 60
-        newman run "postman-tests.json"
+        collection: ../../integration-tests/postman-tests.json
