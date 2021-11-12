@@ -43,7 +43,7 @@ public class TestLibraryItemService {
 	private NewsPaperInfoRepository newspaperInfoDao;
 	@Mock
 	private ArchiveRepository archiveDao;
-	@Mock 
+	@Mock
 	private ArchiveInfoRepository archiveInfoDao;
 	@Mock
 	private LoanRepository loanDao;
@@ -170,9 +170,9 @@ public class TestLibraryItemService {
 			if (invocation.getArgument(0).equals(BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES)) {
 				Reservation firstReservation = RESERVATION;
 				Reservation secondReservation = new Reservation(new Member("123 Main Street", "John Doe 2"), BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES, new Date(System.currentTimeMillis()));
-				return new ArrayList(Arrays.asList(firstReservation, secondReservation));
+				return new ArrayList<Reservation>(Arrays.asList(firstReservation, secondReservation));
 			} else
-				return new ArrayList();
+				return new ArrayList<Reservation>();
 		});
 		lenient().when(libraryItemDao.findAll()).thenAnswer((InvocationOnMock invocation) -> {
 			return new ArrayList<>(Arrays.asList(new Book(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES), new Book(BOOK_INFO_WITH_MORE_RESERVATIONS_THAN_COPIES)));
@@ -230,19 +230,17 @@ public class TestLibraryItemService {
 		assertNull(book);
 		assertTrue(error.contains("BookInfo can't be empty."));
 	}
-	
+
 	@Test
 	public void testDeleteBook() {
-		BookInfo bookInfo = libraryItemInfoService.createBookInfo("Title", 167, "Author", 123818);
-		Book book = libraryItemService.createBook(bookInfo);
 		try {
 			libraryItemService.deleteBook(BOOK_KEY);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
 	}
-	
-	@Test 
+
+	@Test
 	public void testDeleteBookInexistant () {
 		String error="";
 		try {
@@ -252,7 +250,7 @@ public class TestLibraryItemService {
 		}
 		assertTrue(error.contains("The book with id " +  BOOK_BAD_KEY + " doesn't exist."));
 	}
-	
+
 	@Test
 	public void testCreateMovie() {
 		MovieInfo movieInfo = null;
@@ -272,7 +270,7 @@ public class TestLibraryItemService {
 		assertEquals(movie.getMovieInfo().getLength(), length);
 		assertEquals(movie.getStatus(), ItemStatus.Available);
 	}
-	
+
 	@Test
 	public void testCreateMovieNullMovieInfo() {
 		String error = "";
@@ -286,19 +284,17 @@ public class TestLibraryItemService {
 		assertNull(movie);
 		assertTrue(error.contains("MovieInfo can't be empty."));
 	}
-	
+
 	@Test
 	public void testDeleteMovie() {
-		MovieInfo movieInfo = libraryItemInfoService.createMovieInfo("Genre", "Director", 125);
-		Movie movie = libraryItemService.createMovie(movieInfo);
 		try {
 			libraryItemService.deleteMovie(MOVIE_KEY);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
 	}
-	
-	@Test 
+
+	@Test
 	public void testDeleteMovieInexistant () {
 		String error="";
 		try {
@@ -308,7 +304,7 @@ public class TestLibraryItemService {
 		}
 		assertTrue(error.contains("The movie with id " +  MOVIE_BAD_KEY + " doesn't exist."));
 	}
-	
+
 	@Test
 	public void testCreateAlbum() {
 		AlbumInfo albumInfo = null;
@@ -328,7 +324,7 @@ public class TestLibraryItemService {
 		assertEquals(album.getAlbumInfo().getGenre(), genre);
 		assertEquals(album.getStatus(), ItemStatus.Available);
 	}
-	
+
 	@Test
 	public void testCreateAlbumNullAlbumInfo() {
 		String error = "";
@@ -342,19 +338,17 @@ public class TestLibraryItemService {
 		assertNull(album);
 		assertTrue(error.contains("AlbumInfo can't be empty."));
 	}
-	
+
 	@Test
 	public void testDeleteAlbum() {
-		AlbumInfo albumInfo = libraryItemInfoService.createAlbumInfo("title", "composerPerformer", "genre");
-		Album album = libraryItemService.createAlbum(albumInfo);
 		try {
 			libraryItemService.deleteAlbum(ALBUM_KEY);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
 	}
-	
-	@Test 
+
+	@Test
 	public void testDeleteAlbumInexistant () {
 		String error="";
 		try {
@@ -364,7 +358,7 @@ public class TestLibraryItemService {
 		}
 		assertTrue(error.contains("The album with id " +  ALBUM_BAD_KEY + " doesn't exist."));
 	}
-	
+
 	@Test
 	public void testCreateNewspaper() {
 		NewsPaperInfo newspaperInfo = null;
@@ -383,7 +377,7 @@ public class TestLibraryItemService {
 		assertEquals(newspaper.getNewsPaperInfo().getFrequency(), frequency);
 		assertEquals(newspaper.getNewsPaperInfo().getNumber(), number);
 	}
-	
+
 	@Test
 	public void testCreateNewspaperNullNewsPaperInfo() {
 		String error = "";
@@ -397,19 +391,17 @@ public class TestLibraryItemService {
 		assertNull(newspaper);
 		assertTrue(error.contains("NewspaperInfo can't be empty."));
 	}
-	
+
 	@Test
 	public void testDeleteNewsPaper() {
-		NewsPaperInfo newspaperInfo = libraryItemInfoService.createNewspaperInfo(Date.valueOf("2021-12-12"), "aFrequency", 56);
-		Newspaper newspaper = libraryItemService.createNewspaper(newspaperInfo);
 		try {
 			libraryItemService.deleteNewspaper(NEWSPAPER_KEY);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
 	}
-	
-	@Test 
+
+	@Test
 	public void testDeleteNewspaperInexistant () {
 		String error="";
 		try {
@@ -419,7 +411,7 @@ public class TestLibraryItemService {
 		}
 		assertTrue(error.contains("The newspaper with id " +  NEWSPAPER_BAD_KEY + " doesn't exist."));
 	}
-	
+
 	@Test
 	public void testCreateArchive() {
 		ArchiveInfo archiveInfo = null;
@@ -438,7 +430,7 @@ public class TestLibraryItemService {
 		assertEquals(archive.getArchiveInfo().getDescription(), description);
 		assertEquals(archive.getArchiveInfo().getPublicationDate(), publicationDate);
 	}
-	
+
 	@Test
 	public void testCreateArchiveNullArchiveInfo() {
 		String error = "";
@@ -452,19 +444,17 @@ public class TestLibraryItemService {
 		assertNull(archive);
 		assertTrue(error.contains("archiveInfo can't be empty."));
 	}
-	
+
 	@Test
 	public void testDeleteArchive() {
-		ArchiveInfo archiveInfo = libraryItemInfoService.createArchiveInfo("title", "description", Date.valueOf("2021-12-12"));
-		Archive archive = libraryItemService.createArchive(archiveInfo);
 		try {
 			libraryItemService.deleteArchive(ARCHIVE_KEY);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
 	}
-	
-	@Test 
+
+	@Test
 	public void testDeleteArchiveInexistant () {
 		String error="";
 		try {
@@ -513,15 +503,15 @@ public class TestLibraryItemService {
 	public void testCreateLoanAlreadyLoaned() {
 		Member member = new Member("123 Main Street", "John Doe");
 		member.activate();
-        Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(bookWithALoan, member));
-        assertEquals("Item is already loaned.", e.getMessage());
-    }
+		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(bookWithALoan, member));
+		assertEquals("Item is already loaned.", e.getMessage());
+	}
 
 	@Test
 	public void testCreateLoanMemberInactive() {
 		Member member = new Member("123 Main Street", "John Doe");
-        Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(new Book(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES), member));
-        assertEquals("Member account is inactive or blacklisted.", e.getMessage());
+		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.createLoan(new Book(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES), member));
+		assertEquals("Member account is inactive or blacklisted.", e.getMessage());
 	}
 
 	@Test
@@ -569,12 +559,12 @@ public class TestLibraryItemService {
 
 	@Test
 	public void testGetReservableItemByIdSuccessful() {
-        assertNotNull(libraryItemService.getReservableItemById(BOOK_KEY));
+		assertNotNull(libraryItemService.getReservableItemById(BOOK_KEY));
 	}
 
 	@Test
 	public void testGetReservableItemByIdNonExistent() {
-        Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.getReservableItemById(BOOK_BAD_KEY));
+		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.getReservableItemById(BOOK_BAD_KEY));
 		assertEquals("The reservable item with id " + BOOK_BAD_KEY + " does not exist.", e.getMessage());
 	}
 
@@ -588,7 +578,7 @@ public class TestLibraryItemService {
 	@Test
 	public void testGetAssociatedItemInfoNull() {
 		Exception e = assertThrows(IllegalArgumentException.class, () -> libraryItemService.getAssociatedItemInfo(null));
-        assertEquals("Library item cannot be null.", e.getMessage());
+		assertEquals("Library item cannot be null.", e.getMessage());
 	}
 
 	@Test
