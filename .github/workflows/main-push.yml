@@ -46,5 +46,4 @@ jobs:
     - name: Run Postman integration tests with Newman
       uses: matt-ball/newman-action@v1.0.2
       with:
-        collection: postman-tests.json
-      working-directory: integration-tests
+        collection: integration-tests/postman-tests.json
