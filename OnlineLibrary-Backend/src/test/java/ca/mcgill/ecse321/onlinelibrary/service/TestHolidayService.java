@@ -36,10 +36,13 @@ public class TestHolidayService {
 	@InjectMocks
 	private HolidayService service;
 
-	private static final Date START_DATE = Date.valueOf(LocalDate.of(2020, Month.JANUARY, 01));
-	private static final Date ALTERNATIVE_START_DATE = Date.valueOf(LocalDate.of(2020, Month.JANUARY, 02));
-	private static final Date END_DATE = Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
-	private static final Date INVALID_DATE = Date.valueOf(LocalDate.of(2020, Month.MAY, 28));
+	private static final LocalDate L_START_DATE = LocalDate.of(2020, Month.JANUARY, 01);
+	private static final LocalDate L_ALTERNATIVE_START_DATE = LocalDate.of(2020, Month.JANUARY, 02);
+	private static final LocalDate L_END_DATE = LocalDate.of(2020, Month.JANUARY, 31);
+	private static final LocalDate L_INVALID_DATE = LocalDate.of(2020, Month.MAY, 28);
+	private static final Date START_DATE = Date.valueOf(L_START_DATE);
+	private static final Date ALTERNATIVE_START_DATE = Date.valueOf(L_ALTERNATIVE_START_DATE);
+	private static final Date END_DATE = Date.valueOf(L_END_DATE);
 	private static final String EXISTING_NAME = "Easter";
 	private static final String NEW_NAME = "Christmas";
 	private static final int VALID_ID = 1;
@@ -89,7 +92,7 @@ public class TestHolidayService {
 		ArrayList<Holiday> holidays = null;
 
 		try {
-			holidays = service.getHolidays(START_DATE);
+			holidays = service.getHolidays(L_START_DATE);
 		} catch (IllegalArgumentException e) {
 			fail(e.getMessage());
 		}
@@ -104,7 +107,7 @@ public class TestHolidayService {
 		ArrayList<Holiday> holidays = null;
 
 		try {
-			holidays = service.getHolidays(INVALID_DATE);
+			holidays = service.getHolidays(L_INVALID_DATE);
 		} catch (IllegalArgumentException e) {
 			fail(e.getMessage());
 		}
@@ -134,7 +137,7 @@ public class TestHolidayService {
 		ArrayList<Holiday> holidays = null;
 
 		try {
-			holidays = service.getHolidays(START_DATE, END_DATE);
+			holidays = service.getHolidays(L_START_DATE, L_END_DATE);
 		} catch (IllegalArgumentException e) {
 			fail(e.getMessage());
 		}
@@ -149,7 +152,7 @@ public class TestHolidayService {
 		ArrayList<Holiday> holidays = null;
 
 		try {
-			holidays = service.getHolidays(INVALID_DATE, INVALID_DATE);
+			holidays = service.getHolidays(L_INVALID_DATE, L_INVALID_DATE);
 		} catch (IllegalArgumentException e) {
 			fail(e.getMessage());
 		}
@@ -164,7 +167,7 @@ public class TestHolidayService {
 		String error = null;
 		
 		try {
-			holidays = service.getHolidays(null, END_DATE);
+			holidays = service.getHolidays(null, L_END_DATE);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -180,7 +183,7 @@ public class TestHolidayService {
 		String error = null;
 		
 		try {
-			holidays = service.getHolidays(END_DATE, START_DATE);
+			holidays = service.getHolidays(L_END_DATE, L_START_DATE);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -195,7 +198,7 @@ public class TestHolidayService {
 		Holiday holiday = null;
 
 		try {
-			holiday = service.createHoliday(NEW_NAME, ALTERNATIVE_START_DATE, END_DATE);
+			holiday = service.createHoliday(NEW_NAME, L_ALTERNATIVE_START_DATE, L_END_DATE);
 		} catch (IllegalArgumentException e) {
 			fail(e.getMessage());
 		}
@@ -213,7 +216,7 @@ public class TestHolidayService {
 		String error = null;
 
 		try {
-			holiday = service.createHoliday(null, ALTERNATIVE_START_DATE, END_DATE);
+			holiday = service.createHoliday(null, L_ALTERNATIVE_START_DATE, L_END_DATE);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -230,7 +233,7 @@ public class TestHolidayService {
 		String error = null;
 
 		try {
-			holiday = service.createHoliday(NEW_NAME, null, END_DATE);
+			holiday = service.createHoliday(NEW_NAME, null, L_END_DATE);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -247,7 +250,7 @@ public class TestHolidayService {
 		String error = null;
 
 		try {
-			holiday = service.createHoliday(NEW_NAME, ALTERNATIVE_START_DATE, null);
+			holiday = service.createHoliday(NEW_NAME, L_ALTERNATIVE_START_DATE, null);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -264,7 +267,7 @@ public class TestHolidayService {
 		String error = null;
 
 		try {
-			holiday = service.createHoliday(NEW_NAME, END_DATE, ALTERNATIVE_START_DATE);
+			holiday = service.createHoliday(NEW_NAME, L_END_DATE, L_ALTERNATIVE_START_DATE);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -281,7 +284,7 @@ public class TestHolidayService {
 		String error = null;
 
 		try {
-			holiday = service.createHoliday(EXISTING_NAME, START_DATE, END_DATE);
+			holiday = service.createHoliday(EXISTING_NAME, L_START_DATE, L_END_DATE);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}

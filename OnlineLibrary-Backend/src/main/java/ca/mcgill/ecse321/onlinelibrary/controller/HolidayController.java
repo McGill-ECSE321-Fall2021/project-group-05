@@ -1,6 +1,6 @@
 package ca.mcgill.ecse321.onlinelibrary.controller;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,22 +24,22 @@ public class HolidayController {
 	private HolidayService service;
 	
 	@GetMapping(value = { "/holiday/{date}", "/holiday/{date}/" })
-	public List<HolidayDto> getHolidays(@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd") Date date) throws IllegalArgumentException {
+	public List<HolidayDto> getHolidays(@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date) throws IllegalArgumentException {
 		return service.getHolidays(date).stream()
 				.map(holiday -> HolidayDto.fromHoliday(holiday)).collect(Collectors.toList());
 	}
 	
 	@GetMapping(value = { "/holiday/{startDate}/{endDate}", "/holiday/{startDate}/{endDate}/" })
-	public List<HolidayDto> getHolidays(@PathVariable("startDate") @DateTimeFormat(pattern="yyyy-MM-dd") Date startDate,
-			@PathVariable("endDate") @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate) throws IllegalArgumentException {
+	public List<HolidayDto> getHolidays(@PathVariable("startDate") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate startDate,
+			@PathVariable("endDate") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate endDate) throws IllegalArgumentException {
 		return service.getHolidays(startDate, endDate).stream()
 				.map(holiday -> HolidayDto.fromHoliday(holiday)).collect(Collectors.toList());
 	}
 	
 	@PostMapping(value = { "/holiday", "/holiday/"})
 	public HolidayDto createHoliday(@RequestParam String name, 
-			@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Date startDate,
-			@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate) throws IllegalArgumentException{
+			@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate startDate,
+			@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate endDate) throws IllegalArgumentException{
 		Holiday holiday = service.createHoliday(name, startDate, endDate);
 		return HolidayDto.fromHoliday(holiday);
 	}

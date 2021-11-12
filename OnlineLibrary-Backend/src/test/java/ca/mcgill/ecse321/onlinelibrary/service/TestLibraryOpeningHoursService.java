@@ -41,13 +41,18 @@ public class TestLibraryOpeningHoursService {
 
 	@InjectMocks
 	private LibraryOpeningHoursService service;
-
-	private static final Date OPENING_DATE = Date.valueOf(LocalDate.of(2020, Month.JANUARY, 01));
-	private static final Date ENDING_DATE = Date.valueOf(LocalDate.of(2020, Month.JANUARY, 31));
-	private static final Date INVALID_DATE = Date.valueOf(LocalDate.of(2020, Month.MAY, 28));
-	private static final Date HOLIDAY_DATE = Date.valueOf(LocalDate.of(2020, Month.JANUARY, 01));
-	private static final Time START_TIME = Time.valueOf(LocalTime.of(11, 35));
-	private static final Time END_TIME = Time.valueOf(LocalTime.of(12, 38));
+	
+	private static final LocalDate L_OPENING_DATE = LocalDate.of(2020, Month.JANUARY, 01);
+	private static final LocalDate L_ENDING_DATE = LocalDate.of(2020, Month.JANUARY, 31);
+	private static final LocalDate L_INVALID_DATE = LocalDate.of(2020, Month.MAY, 28);
+	private static final LocalDate L_HOLIDAY_DATE = LocalDate.of(2020, Month.JANUARY, 01);
+	private static final LocalTime L_START_TIME = LocalTime.of(11, 35);
+	private static final LocalTime L_END_TIME = LocalTime.of(12, 38);
+	private static final Date OPENING_DATE = Date.valueOf(L_OPENING_DATE);
+	private static final Date ENDING_DATE = Date.valueOf(L_ENDING_DATE);
+	private static final Date HOLIDAY_DATE = Date.valueOf(L_HOLIDAY_DATE);
+	private static final Time START_TIME = Time.valueOf(L_START_TIME);
+	private static final Time END_TIME = Time.valueOf(L_END_TIME);
 	private static final int VALID_ID = 1;
 
 	@BeforeEach
@@ -94,7 +99,7 @@ public class TestLibraryOpeningHoursService {
 		ArrayList<LibraryOpeningHours> openingHoursOfDate = null;
 		
 		try {
-			openingHoursOfDate = service.getLibraryOpeningHours(OPENING_DATE);
+			openingHoursOfDate = service.getLibraryOpeningHours(L_OPENING_DATE);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
@@ -109,7 +114,7 @@ public class TestLibraryOpeningHoursService {
 		ArrayList<LibraryOpeningHours> openingHoursOfDate = null;
 		
 		try {
-			openingHoursOfDate = service.getLibraryOpeningHours(INVALID_DATE);
+			openingHoursOfDate = service.getLibraryOpeningHours(L_INVALID_DATE);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
@@ -139,7 +144,7 @@ public class TestLibraryOpeningHoursService {
 		ArrayList<LibraryOpeningHours> openingHoursOfDate = null;
 		
 		try {
-			openingHoursOfDate = service.getLibraryOpeningHours(OPENING_DATE, ENDING_DATE);
+			openingHoursOfDate = service.getLibraryOpeningHours(L_OPENING_DATE, L_ENDING_DATE);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
@@ -155,7 +160,7 @@ public class TestLibraryOpeningHoursService {
 		ArrayList<LibraryOpeningHours> openingHoursOfDate = null;
 		
 		try {
-			openingHoursOfDate = service.getLibraryOpeningHours(ENDING_DATE, INVALID_DATE);
+			openingHoursOfDate = service.getLibraryOpeningHours(L_ENDING_DATE, L_INVALID_DATE);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
@@ -186,11 +191,12 @@ public class TestLibraryOpeningHoursService {
 		String error = null;
 		
 		try {
-			openingHoursOfDate = service.getLibraryOpeningHours(ENDING_DATE, OPENING_DATE);
+			openingHoursOfDate = service.getLibraryOpeningHours(L_ENDING_DATE, L_OPENING_DATE);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-		
+		System.out.println(L_OPENING_DATE);
+		System.out.println(L_ENDING_DATE);
 		assertNull(openingHoursOfDate);
 		assertNotNull(error);
 		assertTrue(error.contains("The start date can't be after the end date."));
@@ -201,7 +207,7 @@ public class TestLibraryOpeningHoursService {
 		LibraryOpeningHours openingHoursOfDate = null;
 		
 		try {
-			openingHoursOfDate = service.createLibraryOpeningHours(ENDING_DATE, START_TIME, END_TIME);
+			openingHoursOfDate = service.createLibraryOpeningHours(L_ENDING_DATE, L_START_TIME, L_END_TIME);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
@@ -219,7 +225,7 @@ public class TestLibraryOpeningHoursService {
 		String error = null;
 		
 		try {
-			openingHoursOfDate = service.createLibraryOpeningHours(null, START_TIME, END_TIME);
+			openingHoursOfDate = service.createLibraryOpeningHours(null, L_START_TIME, L_END_TIME);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -236,7 +242,7 @@ public class TestLibraryOpeningHoursService {
 		String error = null;
 		
 		try {
-			openingHoursOfDate = service.createLibraryOpeningHours(ENDING_DATE, null, END_TIME);
+			openingHoursOfDate = service.createLibraryOpeningHours(L_ENDING_DATE, null, L_END_TIME);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -253,7 +259,7 @@ public class TestLibraryOpeningHoursService {
 		String error = null;
 		
 		try {
-			openingHoursOfDate = service.createLibraryOpeningHours(ENDING_DATE, START_TIME, null);
+			openingHoursOfDate = service.createLibraryOpeningHours(L_ENDING_DATE, L_START_TIME, null);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -270,7 +276,7 @@ public class TestLibraryOpeningHoursService {
 		String error = null;
 		
 		try {
-			openingHoursOfDate = service.createLibraryOpeningHours(ENDING_DATE, END_TIME, START_TIME);
+			openingHoursOfDate = service.createLibraryOpeningHours(L_ENDING_DATE, L_END_TIME, L_START_TIME);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -287,7 +293,7 @@ public class TestLibraryOpeningHoursService {
 		String error = null;
 		
 		try {
-			openingHoursOfDate = service.createLibraryOpeningHours(OPENING_DATE, START_TIME, END_TIME);
+			openingHoursOfDate = service.createLibraryOpeningHours(L_OPENING_DATE, L_START_TIME, L_END_TIME);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -304,7 +310,7 @@ public class TestLibraryOpeningHoursService {
 		String error = null;
 		
 		try {
-			openingHoursOfDate = service.createLibraryOpeningHours(OPENING_DATE, START_TIME, END_TIME);
+			openingHoursOfDate = service.createLibraryOpeningHours(L_OPENING_DATE, L_START_TIME, L_END_TIME);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
