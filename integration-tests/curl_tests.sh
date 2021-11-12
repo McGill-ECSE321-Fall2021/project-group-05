@@ -78,7 +78,7 @@ response=$(curl -s --request POST "$base_url/holiday?name=Easter&startDate=2020-
 echo "$response"
 holiday_id=$(echo "$response" | jq -r '.["id"]')
 echo "Fails to create Holiday with missing name"
-curl -s --request POST "$base_url/holiday?startDate=2020-03-01&endDate=2020-03-02"
+curl -s --request POST "$base_url/holiday?startDate=2020-03-01&endDate=2020-03-03"
 echo 
 
 # Get holiday by date
@@ -93,7 +93,7 @@ echo
 echo "Gets holiday by date successfully"
 curl -s --request GET "$base_url/holiday/2020-02-01/2020-04-01"
 echo
-echo "Fails to get holiday with inverdated startDate & endDate"
+echo "Fails to get holiday with inverted startDate & endDate"
 curl -s --request GET "$base_url/holiday/2019-04-01/2020-02-01"
 echo
 
@@ -126,7 +126,7 @@ echo
 echo "Gets Library Opening Hours by date successfully"
 curl -s --request GET "$base_url/libraryOpeningHours/2020-02-01/2020-04-01"
 echo
-echo "Fails to get Library Opening Hours with inverdated startDate & endDate"
+echo "Fails to get Library Opening Hours with inverted startDate & endDate"
 curl -s --request GET "$base_url/libraryOpeningHours/2019-04-01/2020-02-01"
 echo
 
@@ -142,7 +142,7 @@ echo
 echo "Creates Librarian Shift successfully"
 
 # Create Librarian
-librarian=$(curl --request POST "$base_url/librarian?fullName=Jocasta%20Nu,username=jocasta.nu,password=securepassword12345")
+librarian=$(curl --request POST "$base_url/librarian?fullName=Jocasta%20Nu&username=jocasta.nu&password=securepassword12345")
 librarian_id=$(echo "$response" | jq -r '.["id"]')
 
 # Create LibrarianShift Succesfully
@@ -165,10 +165,10 @@ echo
 
 # Get LibrarianShift by librarian ID
 echo "Gets LibrarianShift by librarian ID successfully"
-curl -s --request GET "$base_url/librarianShift/$librarian_id"
+curl -s --request GET "$base_url/librarianShift/librarianId=$librarian_id"
 echo
 echo "Fails to get LibrarianShift Hours with invalid librarian ID"
-curl -s --request GET "$base_url/librarianShift/99999"
+curl -s --request GET "$base_url/librarianShift/librarianId=99999"
 echo
 
 # Get LibrarianShift by librarian ID and date
@@ -181,10 +181,10 @@ echo
 
 # Delete LibrarianShift
 echo "Deletes LibrarianShift successfully"
-curl -s --request DELETE "$base_url/librarianShift/$librarianShift_id"
+curl -s --request DELETE "$base_url/librarianShift?$librarianShift_id"
 echo
 echo "Fails to delete LibrarianShift with invalid ID"
-curl -s --request DELETE "$base_url/librarianShift/$librarianShift_id"
+curl -s --request DELETE "$base_url/librarianShift?$librarianShift_id"
 echo
 
 # Delete leftover Librarian
