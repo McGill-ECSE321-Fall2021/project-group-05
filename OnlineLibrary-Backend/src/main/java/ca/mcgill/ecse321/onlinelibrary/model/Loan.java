@@ -22,7 +22,7 @@ public class Loan {
 	private Date returnDate;
 	private int numberOfRenewals;
 
-	@OneToOne(optional = false)
+	@OneToOne(optional = false, orphanRemoval = true)
 	@JoinColumn(name = "library_item_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private ReservableItem item;
@@ -41,6 +41,7 @@ public class Loan {
 		if (item == null)
 			throw new IllegalArgumentException("A reservable item is required for every loan.");
 		this.item = item;
+		this.item.setLoan(this);
 
 		if (member == null)
 			throw new IllegalArgumentException("A member is required for every loan");
