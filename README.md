@@ -168,7 +168,7 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
           <li> Review Pull Requests.</li>
         </ul>
       </td>
-      <td></td>
+      <td> 37 hours </td>
     </tr>
     <tr>
       <td>Sebastian Ionascu</td>
