@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c8cc3dfb-2466-4b3b-a433-63c5aea64732",
+		"_postman_id": "fa0497ae-abff-43c1-9b4d-b9197cb8628a",
 		"name": "Integration tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -266,168 +266,6 @@
 			"response": []
 		},
 		{
-			"name": "Successfully Create bookInfo",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"const jsonData = pm.response.json();\r",
-							"pm.collectionVariables.set(\"bookInfo_id\", jsonData.id);"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "{{BASE_URL}}/bookInfo/title/?numberOfPage=134&author=anAuthor&isbn={{$randomInt}}",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"bookInfo",
-						"title",
-						""
-					],
-					"query": [
-						{
-							"key": "numberOfPage",
-							"value": "134"
-						},
-						{
-							"key": "author",
-							"value": "anAuthor"
-						},
-						{
-							"key": "isbn",
-							"value": "{{$randomInt}}"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Fails to create a bookInfo with numberOfPage = 0",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "{{BASE_URL}}/bookInfo/title/?numberOfPage=0&author=anAuthor&isbn={{$randomInt}}",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"bookInfo",
-						"title",
-						""
-					],
-					"query": [
-						{
-							"key": "numberOfPage",
-							"value": "0"
-						},
-						{
-							"key": "author",
-							"value": "anAuthor"
-						},
-						{
-							"key": "isbn",
-							"value": "{{$randomInt}}"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Successfully create a book",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"const jsonData = pm.response.json();\r",
-							"pm.collectionVariables.set(\"book_id\", jsonData.id);\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "{{BASE_URL}}/book/{{bookInfo_id}}",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"book",
-						"{{bookInfo_id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Fails to create a book with invalid id",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "{{BASE_URL}}/book/9999",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"book",
-						"9999"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Successfully create librarian",
 			"event": [
 				{
@@ -568,6 +406,170 @@
 			"response": []
 		},
 		{
+			"name": "Successfully creates a bookInfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"bookInfo_id\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/bookInfo/title/?numberOfPage=134&author=anAuthor&isbn={{$randomInt}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"bookInfo",
+						"title",
+						""
+					],
+					"query": [
+						{
+							"key": "numberOfPage",
+							"value": "134"
+						},
+						{
+							"key": "author",
+							"value": "anAuthor"
+						},
+						{
+							"key": "isbn",
+							"value": "{{$randomInt}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fails to create a bookInfo with numberOfPage = 0",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/bookInfo/title/?numberOfPage=0&author=anAuthor&isbn={{$randomInt}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"bookInfo",
+						"title",
+						""
+					],
+					"query": [
+						{
+							"key": "numberOfPage",
+							"value": "0"
+						},
+						{
+							"key": "author",
+							"value": "anAuthor"
+						},
+						{
+							"key": "isbn",
+							"value": "{{$randomInt}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully create a book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"book_id\", jsonData.id);\r",
+							"\r",
+							"console.log(pm.collectionVariables.get(\"book_id\"));\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/book/{{bookInfo_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"book",
+						"{{bookInfo_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fails to create a book with invalid id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/book/9999",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"book",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Successfully creates a loan",
 			"event": [
 				{
@@ -644,6 +646,626 @@
 							"key": "memberId",
 							"value": "{{member_id}}"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully creates a movieInfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"movieInfo_id\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/movieInfo/?genre=aGenre&description=aDescritption&director=Adirector&length=67",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"movieInfo",
+						""
+					],
+					"query": [
+						{
+							"key": "genre",
+							"value": "aGenre"
+						},
+						{
+							"key": "description",
+							"value": "aDescritption"
+						},
+						{
+							"key": "director",
+							"value": "Adirector"
+						},
+						{
+							"key": "length",
+							"value": "67"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fails to create a movieInfo with missing argument (genre)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/movieInfo/?description=aDescritption&director=Adirector&length=67",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"movieInfo",
+						""
+					],
+					"query": [
+						{
+							"key": "description",
+							"value": "aDescritption"
+						},
+						{
+							"key": "director",
+							"value": "Adirector"
+						},
+						{
+							"key": "length",
+							"value": "67"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully creates a movie",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"movie_id\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/movie/{{movieInfo_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"movie",
+						"{{movieInfo_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fails to create a movie with invalid movieInfo id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/movie/9999999",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"movie",
+						"9999999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully create an albumInfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"albumInfo_id\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/albumInfo/title/?composerPerformer=aComposerPerformer&genre=aGenre",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"albumInfo",
+						"title",
+						""
+					],
+					"query": [
+						{
+							"key": "composerPerformer",
+							"value": "aComposerPerformer"
+						},
+						{
+							"key": "genre",
+							"value": "aGenre"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fails to create an albumInfo with empty genre",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/albumInfo/title/?composerPerformer=aComposerPerformer&genre=",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"albumInfo",
+						"title",
+						""
+					],
+					"query": [
+						{
+							"key": "composerPerformer",
+							"value": "aComposerPerformer"
+						},
+						{
+							"key": "genre",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully creates an album",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"album_id\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/album/{{albumInfo_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"album",
+						"{{albumInfo_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fails to create an album with invalid id for albumInfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/album/9999",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"album",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sucessfully creates a newpaperInfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"newspaperInfo_id\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/newsPaperInfo/?publication=2021-12-12&frequency=aFrequency&number=0",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"newsPaperInfo",
+						""
+					],
+					"query": [
+						{
+							"key": "publication",
+							"value": "2021-12-12"
+						},
+						{
+							"key": "frequency",
+							"value": "aFrequency"
+						},
+						{
+							"key": "number",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fails to create a newspaperInfo with empty number",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/newsPaperInfo/?publication=2021-12-12&frequency=aFrequency&number=",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"newsPaperInfo",
+						""
+					],
+					"query": [
+						{
+							"key": "publication",
+							"value": "2021-12-12"
+						},
+						{
+							"key": "frequency",
+							"value": "aFrequency"
+						},
+						{
+							"key": "number",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully creates a newspaper",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"newspaper_id\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/newspaper/{{newspaperInfo_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"newspaper",
+						"{{newspaperInfo_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fails to create a newspaper with invalid newspaperInfo id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/newspaper/9999",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"newspaper",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully create an archiveInfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"archiveInfo_id\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/archiveInfo/title/?description=aDescription&publicationDate=2021-12-12",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"archiveInfo",
+						"title",
+						""
+					],
+					"query": [
+						{
+							"key": "description",
+							"value": "aDescription"
+						},
+						{
+							"key": "publicationDate",
+							"value": "2021-12-12"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fails to create an archiveInfo with missing publication date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/archiveInfo/title/?description=aDescription",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"archiveInfo",
+						"title",
+						""
+					],
+					"query": [
+						{
+							"key": "description",
+							"value": "aDescription"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully creates an archive",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"archive_id\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/archive/{{archiveInfo_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"archive",
+						"{{archiveInfo_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fails to create an archive with invalid ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/archive/9999",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"archive",
+						"9999"
 					]
 				}
 			},
@@ -1606,7 +2228,72 @@
 			"response": []
 		},
 		{
-			"name": "Successfully creates a movieInfo",
+			"name": "Successfully delete a book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(pm.collectionVariables.get(\"book_id\"));\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/book/{{book_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"book",
+						"{{book_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fails to delete a book with invalid id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/book/9999",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"book",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully deletes a movie",
 			"event": [
 				{
 					"listen": "test",
@@ -1621,34 +2308,233 @@
 				}
 			],
 			"request": {
-				"method": "POST",
+				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/movieInfo/?genre=aGenre&description=aDescritption&director=Adirector&length=67",
+					"raw": "{{BASE_URL}}/movie/{{movie_id}}",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
-						"movieInfo",
-						""
+						"movie",
+						"{{movie_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fails to delete a movie with invalid id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/movie/9999",
+					"host": [
+						"{{BASE_URL}}"
 					],
-					"query": [
-						{
-							"key": "genre",
-							"value": "aGenre"
-						},
-						{
-							"key": "description",
-							"value": "aDescritption"
-						},
-						{
-							"key": "director",
-							"value": "Adirector"
-						},
-						{
-							"key": "length",
-							"value": "67"
-						}
+					"path": [
+						"movie",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Succefully deletes an album",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/album/{{album_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"album",
+						"{{album_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fails to delete an album with invalid id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/album/9999",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"album",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully deletes a newspaper",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/newspaper/{{newspaper_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"newspaper",
+						"{{newspaper_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fails to delete newspaper with invalid id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/newspaper/9999",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"newspaper",
+						"9999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Successfully deletes an archive",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/archive/{{archive_id}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"archive",
+						"{{archive_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fails to delete an archive with invalid id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/archive/9999",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"archive",
+						"9999"
 					]
 				}
 			},
@@ -1678,7 +2564,7 @@
 	"variable": [
 		{
 			"key": "BASE_URL",
-			"value": "https://online-library-backend-05a.herokuapp.com"
+			"value": "https://onlinelibrary-backend-05a.herokuapp.com"
 		},
 		{
 			"key": "member_id",
@@ -1722,6 +2608,22 @@
 		},
 		{
 			"key": "book_id",
+			"value": ""
+		},
+		{
+			"key": "movie_id",
+			"value": ""
+		},
+		{
+			"key": "album_id",
+			"value": ""
+		},
+		{
+			"key": "newspaper_id",
+			"value": ""
+		},
+		{
+			"key": "archive_id",
 			"value": ""
 		},
 		{
