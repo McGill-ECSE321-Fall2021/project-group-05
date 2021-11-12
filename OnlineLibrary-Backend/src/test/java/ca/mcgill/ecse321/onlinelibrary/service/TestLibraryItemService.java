@@ -185,7 +185,14 @@ public class TestLibraryItemService {
 			return loans;
 		});
 		lenient().when(bookWithALoan.getItemInfo()).thenReturn(BOOK_INFO_WITH_LESS_RESERVATIONS_THAN_COPIES);
-		lenient().when(bookWithALoan.getLoan()).thenReturn(LOAN);
+		lenient().when(loanDao.findLoanByItem(any(ReservableItem.class))).thenAnswer((InvocationOnMock invocation) -> {
+			if (bookWithALoan.equals(invocation.getArgument(0))) {
+				return LOAN;
+			}
+			else {
+				return null;
+			}
+		});
 		lenient().when(reservableItemDao.findReservableItemById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
 			if (invocation.getArgument(0).equals(BOOK_KEY)) {
 				return new Book(new BookInfo());
