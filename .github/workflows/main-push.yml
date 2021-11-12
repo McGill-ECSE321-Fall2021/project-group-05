@@ -43,9 +43,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v2
-    - name: Grant execute permission for curl test script
-      run: chmod +x curl_tests.sh
-      working-directory: integration-tests
-    - name: Run the curl integration tests for the REST API
-      run: ./curl_tests.sh
-      working-directory: integration-tests
+    - name: Run Postman integration tests with Newman
+      uses: matt-ball/newman-action@v1.0.2
+      with:
+        collection: ../../integration-tests/postman-tests.json
