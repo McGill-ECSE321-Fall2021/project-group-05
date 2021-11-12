@@ -1,6 +1,10 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.sql.Date;
 import java.sql.Time;
 
@@ -17,6 +21,7 @@ public class LibrarianShift {
 
 	// Association
 	@ManyToOne(optional = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Librarian librarian;
 
 	// Constructors
@@ -31,7 +36,6 @@ public class LibrarianShift {
 		if (librarian == null)
 			throw new IllegalArgumentException("A Librarian is required for every LibrarianShift.");
 		this.librarian = librarian;
-		librarian.addShift(this);
 	}
 
 	// Interface
@@ -70,14 +74,6 @@ public class LibrarianShift {
 	public void setLibrarian(Librarian newLibrarian) {
 		if (newLibrarian == null)
 			throw new IllegalArgumentException("A Librarian is required for every LibrarianShift.");
-		if (newLibrarian == this.librarian)
-			return;
-
-		Librarian existingLibrarian = this.librarian;
 		this.librarian = newLibrarian;
-
-		if (existingLibrarian != null)
-			existingLibrarian.removeShift(this);
-		this.librarian.addShift(this);
 	}
 }

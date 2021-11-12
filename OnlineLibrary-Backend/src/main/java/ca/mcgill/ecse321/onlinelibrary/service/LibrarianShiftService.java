@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class LibrarianShiftService {
 	@Autowired
 	LibrarianShiftRepository librarianShiftRepository;
-	
+
 
 	@Autowired
 	LibrarianRepository librarianRepository;
@@ -27,28 +27,28 @@ public class LibrarianShiftService {
 	public void deleteLibrarianShift(int id) {
 		librarianShiftRepository.deleteById(id);
 	}
-	
+
 	@Transactional
 	public ArrayList<LibrarianShift> getLibrarianShift(LocalDate date) {
-		if(date == null) 
+		if(date == null)
 			throw new IllegalArgumentException("A date parameter is required.");
-		
+
 		return librarianShiftRepository.findLibrarianShiftByDate(Date.valueOf(date));
 	}
-	
+
 	@Transactional
 	public ArrayList<LibrarianShift> getLibrarianShift(int librarianId) {
 		return librarianShiftRepository.findLibrarianShiftByLibrarianId(librarianId);
 	}
-	
+
 	@Transactional
 	public ArrayList<LibrarianShift> getLibrarianShift(int librarianId, LocalDate date) {
-		if(date == null) 
+		if(date == null)
 			throw new IllegalArgumentException("A date parameter is required.");
-		
+
 		return librarianShiftRepository.findLibrarianShiftByDateAndLibrarianId(Date.valueOf(date), librarianId);
 	}
-	
+
 	@Transactional
 	public LibrarianShift createLibrarianShift(LocalDate date, LocalTime startTime, LocalTime endTime, int librarianId) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
@@ -81,7 +81,7 @@ public class LibrarianShiftService {
 		}
 
 		if(errorCount == 0) {
-			ArrayList<LibrarianShift> shifts = 
+			ArrayList<LibrarianShift> shifts =
 					librarianShiftRepository.findLibrarianShiftByDateAndLibrarianId(Date.valueOf(date), librarian.getId());
 
 			if(shifts != null && shifts.size() != 0) {
@@ -92,7 +92,7 @@ public class LibrarianShiftService {
 						break;
 					}
 				}
-			}	
+			}
 		}
 
 		if (errorCount > 0) {
@@ -100,13 +100,11 @@ public class LibrarianShiftService {
 		}
 
 		LibrarianShift librarianShift = new LibrarianShift(Date.valueOf(date), Time.valueOf(startTime), Time.valueOf(endTime), librarian);
-		librarian.addShift(librarianShift);
 		librarianShiftRepository.save(librarianShift);
-		librarianRepository.save(librarian);
 
 		return librarianShift;
 	}
-	
+
 	private boolean isOverlapping(Time start1, Time end1, Time start2, Time end2) {
 		return (start2.compareTo(start1) == -1 && end2.compareTo(start1) == 1)
 				|| (end2.compareTo(end1) == 1 && start2.compareTo(end1) == -1)

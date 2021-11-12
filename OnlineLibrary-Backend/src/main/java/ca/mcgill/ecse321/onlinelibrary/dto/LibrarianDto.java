@@ -15,7 +15,7 @@ public class LibrarianDto {
 	private boolean isHead;
 
 	private List<LibrarianShiftDto> shifts;
-	
+
 	public LibrarianDto(int id, String fullName, String username, boolean isHead) {
 		this.id = id;
 		this.fullName = fullName;
@@ -24,17 +24,17 @@ public class LibrarianDto {
 		this.shifts = new ArrayList<LibrarianShiftDto>();
 	}
 
-	public static LibrarianDto fromLibrarian(Librarian librarian) {
+	public static LibrarianDto fromLibrarian(Librarian librarian, Iterable<LibrarianShift> shifts) {
 		if (librarian == null) {
 			throw new IllegalArgumentException("Librarian cannot be null.");
 		}
 		LibrarianDto librarianDto = new LibrarianDto(librarian.getId(), librarian.getFullName(), librarian.getUsername(),
 				librarian.isHead());
 
-		for(LibrarianShift shift : librarian.getShifts()) {
+		for(LibrarianShift shift : shifts) {
 			librarianDto.shifts.add(LibrarianShiftDto.fromLibrarianShift(shift));
 		}
-		
+
 		return librarianDto;
 	}
 
@@ -53,7 +53,6 @@ public class LibrarianDto {
 	public boolean isHead() {
 		return this.isHead;
 	}
-	
 
 	public List<LibrarianShiftDto> getShifts() {
 		return Collections.unmodifiableList(this.shifts);

@@ -26,15 +26,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class TestLibrarianShift {
+public class TestLibrarianShiftService {
 	@Mock
 	private LibrarianShiftRepository librarianShiftRepository;
 	@Mock
 	private LibrarianRepository librarianRepository;
-	
+
 	@InjectMocks
 	private LibrarianShiftService service;
-	
+
 
 	private static final LocalDate L_VALID_DATE = LocalDate.of(2020, Month.JANUARY, 1);
 	private static final LocalDate L_INVALID_DATE = LocalDate.of(2020, Month.JANUARY, 2);
@@ -48,7 +48,7 @@ public class TestLibrarianShift {
 	private static final int VALID_LIBRARIAN_ID = 1;
 	private static final int INVALID_LIBRARIAN_ID = -1;
 	private static final int VALID_ID = 1;
-	
+
 	@BeforeEach
 	public void setMockOuput() {
 		Mockito.when(LIBRARIAN.getId()).thenReturn(VALID_LIBRARIAN_ID);
@@ -95,7 +95,7 @@ public class TestLibrarianShift {
 			}
 		});
 	}
-	
+
 	@Test
 	public void testGetLibrarianShiftDateExisting() {
 		ArrayList<LibrarianShift> shifts = null;
@@ -110,7 +110,7 @@ public class TestLibrarianShift {
 		assertEquals(1, shifts.size());
 		assertEquals(VALID_DATE, shifts.get(0).getDate());
 	}
-	
+
 	@Test
 	public void testGetLibrarianShiftDateNonExisting() {
 		ArrayList<LibrarianShift> shifts = null;
@@ -124,14 +124,14 @@ public class TestLibrarianShift {
 		assertNotNull(shifts);
 		assertEquals(0, shifts.size());
 	}
-	
+
 	@Test
 	public void testGetLibrarianShiftDateEmpty() {
-		Exception ex = assertThrows(IllegalArgumentException.class, 
+		Exception ex = assertThrows(IllegalArgumentException.class,
 				() -> {service.getLibrarianShift(null);});
 		assertTrue(ex.getMessage().contains("A date parameter is required."));
 	}
-	
+
 	@Test
 	public void testGetLibrarianShiftLibrarianExisting() {
 		ArrayList<LibrarianShift> shifts = null;
@@ -147,7 +147,7 @@ public class TestLibrarianShift {
 		assertEquals(VALID_LIBRARIAN_ID, shifts.get(0).getLibrarian().getId());
 		assertEquals(VALID_DATE, shifts.get(0).getDate());
 	}
-	
+
 	@Test
 	public void testGetLibrarianShiftLibrarianNonExisting() {
 		ArrayList<LibrarianShift> shifts = null;
@@ -161,7 +161,7 @@ public class TestLibrarianShift {
 		assertNotNull(shifts);
 		assertEquals(0, shifts.size());
 	}
-	
+
 	@Test
 	public void testGetLibrarianShiftAndDateExisting() {
 		ArrayList<LibrarianShift> shifts = null;
@@ -177,7 +177,7 @@ public class TestLibrarianShift {
 		assertEquals(VALID_LIBRARIAN_ID, shifts.get(0).getLibrarian().getId());
 		assertEquals(VALID_DATE, shifts.get(0).getDate());
 	}
-	
+
 	@Test
 	public void testGetLibrarianShiftAndDateNonExistingDate() {
 		ArrayList<LibrarianShift> shifts = null;
@@ -191,7 +191,7 @@ public class TestLibrarianShift {
 		assertNotNull(shifts);
 		assertEquals(0, shifts.size());
 	}
-	
+
 	@Test
 	public void testGetLibrarianShiftAndDateNonExistingLibrarian() {
 		ArrayList<LibrarianShift> shifts = null;
@@ -205,7 +205,7 @@ public class TestLibrarianShift {
 		assertNotNull(shifts);
 		assertEquals(0, shifts.size());
 	}
-	
+
 	@Test
 	public void testGetLibrarianShiftAndDateEmpty() {
 		ArrayList<LibrarianShift> shifts = null;
@@ -220,7 +220,7 @@ public class TestLibrarianShift {
 		assertNull(shifts);
 		assertTrue(error.contains("A date parameter is required."));
 	}
-	
+
 	@Test
 	public void testCreateLibrarianShift() {
 		LibrarianShift shift = null;
@@ -234,12 +234,11 @@ public class TestLibrarianShift {
 
 		assertNotNull(shift);
 		verify(librarianShiftRepository, times(1)).save(shift);
-		verify(librarianRepository, times(1)).save(LIBRARIAN);
 		assertEquals(INVALID_DATE, shift.getDate());
 		assertEquals(START_TIME, shift.getStartTime());
 		assertEquals(END_TIME, shift.getEndTime());
 	}
-	
+
 	@Test
 	public void testCreateLibrarianShiftEmptyDate() {
 		LibrarianShift shift = null;
@@ -256,7 +255,7 @@ public class TestLibrarianShift {
 		assertNull(shift);
 		assertTrue(error.contains("Date can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateLibrarianShiftEmptyStartTime() {
 		LibrarianShift shift = null;
@@ -273,7 +272,7 @@ public class TestLibrarianShift {
 		assertNull(shift);
 		assertTrue(error.contains("Start Time can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateLibrarianShiftEmptyEndTime() {
 		LibrarianShift shift = null;
@@ -290,7 +289,7 @@ public class TestLibrarianShift {
 		assertNull(shift);
 		assertTrue(error.contains("End Time can't be empty."));
 	}
-	
+
 	@Test
 	public void testCreateLibrarianShiftNonExistingLibrarian() {
 		LibrarianShift shift = null;
@@ -307,7 +306,7 @@ public class TestLibrarianShift {
 		assertNull(shift);
 		assertTrue(error.contains("Librarian does not exist."));
 	}
-	
+
 	@Test
 	public void testCreateLibrarianShiftInvertedTimes() {
 		LibrarianShift shift = null;
@@ -318,13 +317,13 @@ public class TestLibrarianShift {
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-		
+
 		verify(librarianShiftRepository, never()).save(any(LibrarianShift.class));
 		verify(librarianRepository, never()).save(any(Librarian.class));
 		assertNull(shift);
 		assertTrue(error.contains("Start Time can't be after End Time."));
 	}
-	
+
 	@Test
 	public void testCreateLibrarianShiftOverlappingDuplicate() {
 		LibrarianShift shift = null;
@@ -335,14 +334,14 @@ public class TestLibrarianShift {
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-		
+
 
 		verify(librarianShiftRepository, never()).save(any(LibrarianShift.class));
 		verify(librarianRepository, never()).save(any(Librarian.class));
 		assertNull(shift);
 		assertTrue(error.contains("An overlapping shift already exists for the assigned librarian."));
 	}
-	
+
 	@Test
 	public void testDeleteLibrarianShift() {
 		try {
