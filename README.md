@@ -153,8 +153,15 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
     </tr>
     <tr>
       <td>Louis Hildebrand</td>
-      <td></td>
-      <td></td>
+      <td>
+        <ul>
+          <li>Create controller and service layers for creating, getting, and deleting members (with or without online accounts) and librarians</li>
+          <li>Write unit tests for member and librarian service layers</li>
+          <li>Write integration tests for member and librarian controllers</li>
+          <li>Write the test plan</li>
+        </ul>
+      </td>
+      <td>41.5 hours</td>
     </tr>
     <tr>
       <td>Mircea Gosman</td>
