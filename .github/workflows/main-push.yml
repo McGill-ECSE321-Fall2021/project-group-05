@@ -38,12 +38,14 @@ jobs:
         heroku_api_key: 64118b4c-0551-49a2-8fa2-45cee48f24b0
         heroku_app_name: "onlinelibrary-backend-05a"
         heroku_email: "louis.t.hildebrand@gmail.com"
-  integration-tests:
-    needs: deploy
-    runs-on: ubuntu-18.04
-    steps:
-    - uses: actions/checkout@v2
-    - name: Run Postman integration tests with Newman
-      uses: matt-ball/newman-action@v1.0.2
-      with:
-        collection: postman-tests.json
+# TODO: Figure out how to automate integration tests as part of CI pipeline
+# Possibly use https://github.com/marketplace/actions/newman-action
+#  integration-tests:
+#    needs: deploy
+#    runs-on: ubuntu-18.04
+#    steps:
+#    - uses: actions/checkout@v2
+#    - name: Run Postman integration tests with Newman
+#      uses: matt-ball/newman-action@v1.0.2
+#      with:
+#        collection: postman-tests.json
