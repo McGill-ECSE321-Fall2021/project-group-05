@@ -395,7 +395,6 @@ public class TestOnlineLibraryPersistence {
 		Loan loan = new Loan(date, reservableItem, member);
 		int numberOfRenewals = 2;
 		loan.setNumberOfRenewals(numberOfRenewals);
-		reservableItem.setLoan(loan);
 		member.addLoan(loan);
 		loanRepository.save(loan);
 

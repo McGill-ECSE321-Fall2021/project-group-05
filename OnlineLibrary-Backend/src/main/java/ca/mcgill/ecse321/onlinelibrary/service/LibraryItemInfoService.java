@@ -27,10 +27,9 @@ public class LibraryItemInfoService {
 
 	@Autowired
 	private NewsPaperInfoRepository newsPaperInfoRepository;
-	
-	@Autowired
-    private LibraryItemInfoRepository libraryItemInfoRespository;
 
+	@Autowired
+	private LibraryItemInfoRepository libraryItemInfoRespository;
 
 	@Autowired
 	private ReservationRepository reservationRepository;
@@ -128,7 +127,7 @@ public class LibraryItemInfoService {
 		bookInfoRepository.save(bookInfo);
 		return bookInfo;
 	}
-	
+
 	@Transactional
 	public BookInfo getBookInfo(int id) {
 		BookInfo bookInfo = bookInfoRepository.findBookInfoById(id);
@@ -137,7 +136,7 @@ public class LibraryItemInfoService {
 		}
 		return bookInfo;
 	}
-	
+
 	@Transactional
 	public BookInfo updateBookInfo(BookInfo bookInfo, String title, int numberOfPage, String author, long isbn) {
 		checkArgumentsBook(title, numberOfPage, author, isbn);
@@ -159,19 +158,19 @@ public class LibraryItemInfoService {
 		movieInfoRepository.save(movieInfo);
 		return movieInfo;
 	}
-	
-	@Transactional
-    public List<LibraryItemInfo> browseAllLibraryItemInfos(){
 
-        List<LibraryItemInfo> lii = new ArrayList<LibraryItemInfo>();
-        Iterable<LibraryItemInfo> iterativeItems = libraryItemInfoRespository.findAll();
-        for (LibraryItemInfo item : iterativeItems){
-            lii.add(item);
-        }
-        
-        return lii;
-    }
-	
+	@Transactional
+	public List<LibraryItemInfo> browseAllLibraryItemInfos(){
+
+		List<LibraryItemInfo> lii = new ArrayList<LibraryItemInfo>();
+		Iterable<LibraryItemInfo> iterativeItems = libraryItemInfoRespository.findAll();
+		for (LibraryItemInfo item : iterativeItems){
+			lii.add(item);
+		}
+
+		return lii;
+	}
+
 	@Transactional
 	public MovieInfo getMovieInfo(int id) {
 		MovieInfo movieInfo = movieInfoRepository.findMovieInfoById(id);
@@ -180,7 +179,7 @@ public class LibraryItemInfoService {
 		}
 		return movieInfo;
 	}
-	
+
 	@Transactional
 	public MovieInfo updateMovieInfo(MovieInfo movieInfo, String genre, String director, int length) {
 		checkArgumentsMovie(genre,director,length);
@@ -201,7 +200,7 @@ public class LibraryItemInfoService {
 		newsPaperInfoRepository.save(newsPaperInfo);
 		return newsPaperInfo;
 	}
-	
+
 	@Transactional
 	public NewsPaperInfo getNewspaperInfo(int id) {
 		NewsPaperInfo newsPaperInfo = newsPaperInfoRepository.findNewsPaperInfoById(id);
@@ -210,7 +209,7 @@ public class LibraryItemInfoService {
 		}
 		return newsPaperInfo;
 	}
-	
+
 	@Transactional
 	public NewsPaperInfo updateNewspaperInfo(NewsPaperInfo newspaperInfo, Date publicationDate, String frequency, int number) {
 		checkArgumentsNewspaperInfo(publicationDate, frequency, number);
@@ -231,7 +230,7 @@ public class LibraryItemInfoService {
 		albumInfoRepository.save(albumInfo);
 		return albumInfo;
 	}
-	
+
 	@Transactional
 	public AlbumInfo getAlbumInfo(int id) {
 		AlbumInfo albumInfo = albumInfoRepository.findAlbumInfoById(id);
@@ -240,7 +239,7 @@ public class LibraryItemInfoService {
 		}
 		return albumInfo;
 	}
-	
+
 	@Transactional
 	public AlbumInfo updateAlbumInfo(AlbumInfo albumInfo, String title, String composerPerformer, String genre) {
 		checkArgumentsAlbum(title, composerPerformer, genre);
@@ -261,7 +260,7 @@ public class LibraryItemInfoService {
 		archiveInfoRepository.save(archiveInfo);
 		return archiveInfo;
 	}
-	
+
 	@Transactional
 	public ArchiveInfo getArchiveInfo(int id) {
 		ArchiveInfo archiveInfo = archiveInfoRepository.findArchiveInfoById(id);
@@ -270,7 +269,7 @@ public class LibraryItemInfoService {
 		}
 		return archiveInfo;
 	}
-	
+
 	@Transactional
 	public ArchiveInfo updateArchiveInfo(ArchiveInfo archiveInfo, String title, String description, Date publicationDate) {
 		checkArgumentsArchive(title,description,publicationDate);
@@ -280,7 +279,7 @@ public class LibraryItemInfoService {
 		archiveInfoRepository.save(archiveInfo);
 		return archiveInfo;
 	}
-	
+
 	private void checkArgumentsBook(String title, int numberOfPage, String author, long isbn) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		if (title == null || title.trim().length() == 0) {
@@ -299,7 +298,7 @@ public class LibraryItemInfoService {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
 	}
-	
+
 	private void checkArgumentsMovie(String genre, String director, int length) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		if (genre == null || genre.trim().length() == 0) {
@@ -317,7 +316,7 @@ public class LibraryItemInfoService {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
 	}
-	
+
 	private void checkArgumentsAlbum(String title, String composerPerformer, String genre) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 
@@ -337,7 +336,7 @@ public class LibraryItemInfoService {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
 	}
-	
+
 	private void checkArgumentsNewspaperInfo(Date publicationDate, String frequency, int number) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 
@@ -357,7 +356,7 @@ public class LibraryItemInfoService {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
 	}
-	
+
 	private void checkArgumentsArchive(String title, String description, Date publicationDate) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		if (title == null || title.trim().length() == 0) {

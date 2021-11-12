@@ -21,8 +21,7 @@ public class Loan {
 	private Date returnDate;
 	private int numberOfRenewals;
 
-	@OneToOne(optional = false, orphanRemoval = true)
-	@OnDelete(action = OnDeleteAction.CASCADE)
+	@OneToOne(optional = false)
 	private ReservableItem item;
 	@ManyToOne(optional = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -39,7 +38,6 @@ public class Loan {
 		if (item == null)
 			throw new IllegalArgumentException("A reservable item is required for every loan.");
 		this.item = item;
-		this.item.setLoan(this);
 
 		if (member == null)
 			throw new IllegalArgumentException("A member is required for every loan");
