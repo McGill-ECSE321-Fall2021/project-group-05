@@ -23,16 +23,16 @@ public class LibraryItemService {
 
 	@Autowired
 	private BookRepository bookRepository;
-	
+
 	@Autowired
 	private MovieRepository movieRepository;
-	
+
 	@Autowired
 	private AlbumRepository albumRepository;
-	
+
 	@Autowired
 	private NewspaperRepository newspaperRepository;
-	
+
 	@Autowired
 	private ArchiveRepository archiveRepository;
 
@@ -65,21 +65,22 @@ public class LibraryItemService {
 		bookRepository.save(book);
 		return book;
 	}
-	
+
 	@Transactional
 	public void deleteBook(int id) {
 		Book book = bookRepository.findBookById(id);
 		if (book == null){
 			throw new IllegalArgumentException("The book with id " +  id + " doesn't exist.");
 		}
-		if (book.getLoan() != null) {
+		Loan loan = loanRepository.findLoanByItem(book);
+		if (loan != null) {
 			throw new IllegalArgumentException("This book is currently part of a loan, it can't be deleted.");
 		} else {
 			bookRepository.deleteById(id);
 		}
 	}
-	
-	@Transactional 
+
+	@Transactional
 	public Movie createMovie(MovieInfo movieInfo) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount = 0;
@@ -87,7 +88,7 @@ public class LibraryItemService {
 			errorMessage.add("MovieInfo can't be empty.");
 			errorCount++;
 		}
-		
+
 		if (errorCount > 0) {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
@@ -96,20 +97,21 @@ public class LibraryItemService {
 		movieRepository.save(movie);
 		return movie;
 	}
-	
+
 	@Transactional
 	public void deleteMovie(int id) {
 		Movie movie = movieRepository.findMovieById(id);
 		if (movie == null){
 			throw new IllegalArgumentException("The movie with id " +  id + " doesn't exist.");
 		}
-		if (movie.getLoan() != null) {
+		Loan loan = loanRepository.findLoanByItem(movie);
+		if (loan != null) {
 			throw new IllegalArgumentException("This movie is currently part of a loan, it can't be deleted.");
 		} else {
 			movieRepository.deleteById(id);
 		}
 	}
-	
+
 	@Transactional
 	public Album createAlbum(AlbumInfo albumInfo) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
@@ -118,7 +120,7 @@ public class LibraryItemService {
 			errorMessage.add("AlbumInfo can't be empty.");
 			errorCount++;
 		}
-		
+
 		if (errorCount > 0) {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
@@ -127,20 +129,21 @@ public class LibraryItemService {
 		albumRepository.save(album);
 		return album;
 	}
-	
+
 	@Transactional
 	public void deleteAlbum(int id) {
 		Album album = albumRepository.findAlbumById(id);
 		if (album == null){
 			throw new IllegalArgumentException("The album with id " +  id + " doesn't exist.");
 		}
-		if (album.getLoan() != null) {
+		Loan loan = loanRepository.findLoanByItem(album);
+		if (loan != null) {
 			throw new IllegalArgumentException("This album is currently part of a loan, it can't be deleted.");
 		} else {
 			albumRepository.deleteById(id);
 		}
 	}
-	
+
 	@Transactional
 	public Newspaper createNewspaper(NewsPaperInfo newspaperInfo) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
@@ -149,7 +152,7 @@ public class LibraryItemService {
 			errorMessage.add("NewspaperInfo can't be empty.");
 			errorCount++;
 		}
-		
+
 		if (errorCount > 0) {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
@@ -157,7 +160,7 @@ public class LibraryItemService {
 		newspaperRepository.save(newspaper);
 		return newspaper;
 	}
-	
+
 	@Transactional
 	public void deleteNewspaper(int id) {
 		Newspaper newspaper = newspaperRepository.findNewspaperById(id);
@@ -167,7 +170,7 @@ public class LibraryItemService {
 			newspaperRepository.deleteById(id);
 		}
 	}
-	
+
 	@Transactional
 	public Archive createArchive(ArchiveInfo archiveInfo) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
@@ -176,7 +179,7 @@ public class LibraryItemService {
 			errorMessage.add("archiveInfo can't be empty.");
 			errorCount++;
 		}
-		
+
 		if (errorCount > 0) {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
@@ -184,7 +187,7 @@ public class LibraryItemService {
 		archiveRepository.save(archive);
 		return archive;
 	}
-	
+
 	@Transactional
 	public void deleteArchive(int id) {
 		Archive archive = archiveRepository.findArchiveById(id);
@@ -214,7 +217,7 @@ public class LibraryItemService {
 
 	@Transactional
 	public List<LibraryItem> getAssociatedCopies(LibraryItemInfo libraryItemInfo) {
-        List<LibraryItem> result = new ArrayList<>();
+		List<LibraryItem> result = new ArrayList<>();
 		for (LibraryItem libraryItem : libraryItemRepository.findAll()) {
 			if (getAssociatedItemInfo(libraryItem).equals(libraryItemInfo)) {
 				result.add(libraryItem);
@@ -240,7 +243,8 @@ public class LibraryItemService {
 		if (member.getLoans().size() >= MAX_LOANS_PER_MEMBER) {
 			errorMessages.add("Member cannot have more than 5 loans.");
 		}
-		if (reservableItem.getLoan() != null) {
+		Loan existingLoan = loanRepository.findLoanByItem(reservableItem);
+		if (existingLoan != null) {
 			errorMessages.add("Item is already loaned.");
 		}
 		if (member.getStatus() == Member.MemberStatus.BLACKLISTED || member.getStatus() == Member.MemberStatus.INACTIVE) {
@@ -256,7 +260,8 @@ public class LibraryItemService {
 		// How many reservations are there for the item info?
 		int numberOfReservationsForThisItem = reservations.size();
 		// How many copies are available for the item info?
-		int numberOfAvailableCopiesForThisItem = (int) getAssociatedCopies(itemInfo).stream().filter((copy) -> (((ReservableItem) copy).getLoan() == null)).count();
+		// Needing to manually get the loan is kind of ugly, but it hopefully works
+		int numberOfAvailableCopiesForThisItem = (int) getAssociatedCopies(itemInfo).stream().filter((copy) -> loanRepository.findLoanByItem((ReservableItem)copy) == null).count();
 		// Can the user borrow this item using their reservation?
 		boolean hasReservation = reservation.isPresent() && reservations.indexOf(reservation.get()) < numberOfAvailableCopiesForThisItem;
 		// User cannot borrow the item.
@@ -272,19 +277,30 @@ public class LibraryItemService {
 		today.add(Calendar.DATE, NUMBER_OF_DAYS_BEFORE_RENEWAL);
 		Date date = new Date(today.getTimeInMillis());
 
-		Loan loan = new Loan(date, reservableItem, member);
-		loanRepository.save(loan);
+		Loan newLoan = new Loan(date, reservableItem, member);
+		loanRepository.save(newLoan);
 		if (hasReservation) {
 			reservationRepository.delete(reservation.get());
 		}
-		return loan;
+		return newLoan;
 	}
 
+	/**
+	 * Throws an exception if the loan is null.
+	 */
 	@Transactional
 	public void returnItem(Loan loan) {
-        if (loan == null) {
-            throw new IllegalArgumentException("Loan cannot be null.");
-        }
-        loanRepository.delete(loan);
-    }
+		if (loan == null) {
+			throw new IllegalArgumentException("Loan cannot be null.");
+		}
+		loanRepository.delete(loan);
+	}
+
+	/**
+	 * Will return null if no loan exists.
+	 */
+	@Transactional
+	public Loan getLoanByReservableItem(ReservableItem item) {
+		return loanRepository.findLoanByItem(item);
+	}
 }
