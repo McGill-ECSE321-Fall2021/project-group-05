@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
+
 import static ca.mcgill.ecse321.onlinelibrary.service.TestHelper.assertContains;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -601,5 +602,17 @@ public class TestMemberService {
 				IllegalStateException.class,
 				() -> memberService.removeStatusPenalty(member));
 		assertContains("Cannot remove a status penalty from an inactive member account.", error.getMessage());
+	}
+
+	@Test
+	public void testUpdateMember(){
+
+		String newAddress = "123 soleil";
+		String newName = "Bob the Builder";
+		Member actualMember = memberService.updateMember(OLD_MEMBER_ID, newAddress, newName);
+
+		assertNotNull(actualMember);
+		assertEquals(newAddress, actualMember.getAddress());
+		assertEquals(newName, actualMember.getFullName());
 	}
 }

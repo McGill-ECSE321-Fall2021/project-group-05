@@ -372,4 +372,14 @@ public class TestLibrarianService {
 		assertContains("Cannot delete head librarian.", error.getMessage());
 		verify(librarianRepository, times(0)).delete(any(Librarian.class));
 	}
+
+	@Test
+	public void testUpdateLibrarian(){
+
+		Librarian actualNewLibrarian = librarianService.updateLibrarian(OLD_REG_ID,NEW_REG_FULL_NAME, NEW_REG_USERNAME, NEW_REG_PASSWD);
+
+		assertEquals(NEW_REG_FULL_NAME, actualNewLibrarian.getFullName());
+		assertEquals(NEW_REG_USERNAME, actualNewLibrarian.getUsername());
+		assertEquals(NEW_REG_PASSWD, actualNewLibrarian.getPasswordHash());
+	}
 }

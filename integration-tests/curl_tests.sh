@@ -16,7 +16,9 @@ echo
 
 # Create librarian
 echo "Creates librarian successfully"
-curl -s --request POST "$base_url/librarian?fullName=Jocasta%20Nu&username=jocasta.nu&password=securepassword12345"
+response=$(curl --request POST "$base_url/librarian?fullName=Jocasta%20Nu,username=jocasta.nu,password=securepassword12345")
+echo "$response"
+librarian_id=$(echo "$response" | jq -r '.["id"]')
 # TODO: expect 200 response
 echo
 echo "Fails to create a librarian with missing password"
@@ -36,6 +38,10 @@ echo
 echo "Gets all librarians successfully"
 curl -s --request GET "$base_url/librarian/all"
 # TODO: expect 200 response
+echo
+echo "update a librarian successfully"
+curl --request PUT "$base_url/librarian/$librarian_id?fullName=Bob%20The%20Builder&username=Bobby&password=thisisagoodpassword1234"
+#TODO: expect 200 response
 echo
 
 # Delete librarian

@@ -138,7 +138,6 @@ public class Member {
 	public void addLoan(Loan newLoan) {
 		this.loans.add(newLoan);
 	}
-
 	public void removeLoan(Loan loanToRemove) {
 		this.loans.remove(loanToRemove);
 	}

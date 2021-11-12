@@ -6,7 +6,13 @@ import java.util.stream.StreamSupport;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ca.mcgill.ecse321.onlinelibrary.dto.CreateMemberRequestDto;
 import ca.mcgill.ecse321.onlinelibrary.dto.LoanDto;
 import ca.mcgill.ecse321.onlinelibrary.dto.CreateOnlineAccountRequestDto;
@@ -76,6 +82,11 @@ public class MemberController {
 		return MemberDto.fromMember(member);
 	}
 
+	@PutMapping(value = {"/member/{id}" ,"/member/{id}/"})
+	public MemberDto updateMember(@RequestParam String address, @RequestParam String fullName, @PathVariable Integer id){
+		return MemberDto.fromMember(memberService.updateMember
+			(id, address, fullName));
+	}
 	@PutMapping(value = {"/member/{id}/applyPenalty", "/member/{id}/applyPenalty/"})
 	public MemberDto applyPenalty(@PathVariable("id") int id) {
 		Member member = memberService.getMemberById(id);

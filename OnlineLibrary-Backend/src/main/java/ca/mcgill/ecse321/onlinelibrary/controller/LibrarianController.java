@@ -45,6 +45,12 @@ public class LibrarianController {
 		return librarianDtos;
 	}
 
+	@PutMapping(value = {"/librarian/{id}" ,"/librarian/{id}/"})
+	public LibrarianDto updateLibrarian(@RequestParam String fullName, @RequestParam String username, @RequestParam String password, @PathVariable Integer id){
+		return LibrarianDto.fromLibrarian(librarianService.updateLibrarian
+			(id, fullName, username, password));
+	}
+
 	@DeleteMapping(value = {"/librarian/delete", "/librarian/delete"})
 	public void deleteLibrarianByUsername(@RequestParam String username) {
 		librarianService.deleteLibrarianByUsername(username);
