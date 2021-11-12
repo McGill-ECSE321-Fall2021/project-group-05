@@ -47,7 +47,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Set up Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
         registry-url: https://registry.npmjs.org/
@@ -59,4 +59,4 @@ jobs:
       run: | 
         npm run start:dev &
         sleep 60
-        newman run "Example.postman_collection.json"
+        newman run "postman-tests.json"
