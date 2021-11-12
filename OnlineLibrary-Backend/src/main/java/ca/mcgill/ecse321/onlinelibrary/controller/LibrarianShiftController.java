@@ -1,7 +1,8 @@
 package ca.mcgill.ecse321.onlinelibrary.controller;
 
-import java.sql.Date;
-import java.sql.Time;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,28 +27,28 @@ public class LibrarianShiftController {
 	
 	@GetMapping(value = { "/librarianShift/{date}", "/librarianShift/{date}/" })
 	public List<LibrarianShiftDto> getLibrarianShift(
-			@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd") Date date) throws IllegalArgumentException {
+			@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date) throws IllegalArgumentException {
 		return service.getLibrarianShift(date).stream()
 				.map(LS -> LibrarianShiftDto.fromLibrarianShift(LS)).collect(Collectors.toList());
 	}
 	
-	@GetMapping(value = { "/librarianShift/{librarianId}", "/librarianShift/{librarianId}/" })
-	public List<LibrarianShiftDto> getLibraryOpeningHours(@PathVariable("librarianId") int librarianId) throws IllegalArgumentException {
+	@GetMapping(value = { "/librarianShift", "/librarianShift/" })
+	public List<LibrarianShiftDto> getLibrarianShift(@RequestParam("librarianId") int librarianId) throws IllegalArgumentException {
 		return service.getLibrarianShift(librarianId).stream()
 				.map(LS -> LibrarianShiftDto.fromLibrarianShift(LS)).collect(Collectors.toList());
 	}
 	
 	@GetMapping(value = { "/librarianShift/{librarianId}/{date}", "/librarianShift/{librarianId}/{date}/" })
-	public List<LibrarianShiftDto> getLibraryOpeningHours(@PathVariable("librarianId") int librarianId, 
-			@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd") Date date) throws IllegalArgumentException {
+	public List<LibrarianShiftDto> getLibrarianShift(@PathVariable("librarianId") int librarianId, 
+			@PathVariable("date") @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date) throws IllegalArgumentException {
 		return service.getLibrarianShift(librarianId, date).stream()
 				.map(LS -> LibrarianShiftDto.fromLibrarianShift(LS)).collect(Collectors.toList());
 	}
 	
 	@PostMapping(value = { "/librarianShift", "/librarianShift/"})
-	public LibrarianShiftDto createLibrarianShift(@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Date date, 
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) Time startTime, 
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) Time endTime, 
+	public LibrarianShiftDto createLibrarianShift(@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date, 
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime, 
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime endTime, 
 			@RequestParam int librarianId) throws IllegalArgumentException{
 		LibrarianShift librarianShift = service.createLibrarianShift(date, startTime, endTime, librarianId);
 		return LibrarianShiftDto.fromLibrarianShift(librarianShift);

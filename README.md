@@ -139,8 +139,17 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
     </tr>
     <tr>
       <td>Kirollos Roufail</td>
-      <td></td>
-      <td></td>
+      <td>
+      <ul> 
+        <li> Write the service and controller for browse all LibraryItemInfos </li>
+        <li> Write the service and controller for update Librarian </li>
+        <li> Write the service and controller for update Member </li>
+        <li> Write unit tests for the service methods that I wrote </li>
+        <li> Write integration tests for the controllers that I wrote </li>
+        <li> Write convert to dto methods in the model </li>
+        </ul>
+        </td>
+      <td> 25 hours </td>
     </tr>
     <tr>
       <td>Louis Hildebrand</td>

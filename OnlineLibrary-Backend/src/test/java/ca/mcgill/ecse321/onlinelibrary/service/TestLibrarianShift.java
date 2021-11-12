@@ -44,10 +44,15 @@ public class TestLibrarianShift {
 	@InjectMocks
 	private LibrarianShiftService service;
 	
-	private static final Date VALID_DATE = Date.valueOf(LocalDate.of(2020, Month.JANUARY, 1));
-	private static final Date INVALID_DATE = Date.valueOf(LocalDate.of(2020, Month.JANUARY, 2));
-	private static final Time START_TIME = Time.valueOf(LocalTime.of(11, 35));
-	private static final Time END_TIME = Time.valueOf(LocalTime.of(12, 38));
+
+	private static final LocalDate L_VALID_DATE = LocalDate.of(2020, Month.JANUARY, 1);
+	private static final LocalDate L_INVALID_DATE = LocalDate.of(2020, Month.JANUARY, 2);
+	private static final LocalTime L_START_TIME = LocalTime.of(11, 35);
+	private static final LocalTime L_END_TIME = LocalTime.of(12, 38);
+	private static final Date VALID_DATE = Date.valueOf(L_VALID_DATE);
+	private static final Date INVALID_DATE = Date.valueOf(L_INVALID_DATE);
+	private static final Time START_TIME = Time.valueOf(L_START_TIME);
+	private static final Time END_TIME = Time.valueOf(L_END_TIME);
 	private static final Librarian LIBRARIAN = Mockito.spy(new Librarian("Bob", "Ross", "Angry", false));
 	private static final int VALID_LIBRARIAN_ID = 1;
 	private static final int INVALID_LIBRARIAN_ID = -1;
@@ -105,7 +110,7 @@ public class TestLibrarianShift {
 		ArrayList<LibrarianShift> shifts = null;
 
 		try {
-			shifts = service.getLibrarianShift(VALID_DATE);
+			shifts = service.getLibrarianShift(L_VALID_DATE);
 		} catch (IllegalArgumentException e) {
 			fail(e.getMessage());
 		}
@@ -120,7 +125,7 @@ public class TestLibrarianShift {
 		ArrayList<LibrarianShift> shifts = null;
 
 		try {
-			shifts = service.getLibrarianShift(INVALID_DATE);
+			shifts = service.getLibrarianShift(L_INVALID_DATE);
 		} catch (IllegalArgumentException e) {
 			fail(e.getMessage());
 		}
@@ -171,7 +176,7 @@ public class TestLibrarianShift {
 		ArrayList<LibrarianShift> shifts = null;
 
 		try {
-			shifts = service.getLibrarianShift(VALID_LIBRARIAN_ID, VALID_DATE);
+			shifts = service.getLibrarianShift(VALID_LIBRARIAN_ID, L_VALID_DATE);
 		} catch (IllegalArgumentException e) {
 			fail(e.getMessage());
 		}
@@ -187,7 +192,7 @@ public class TestLibrarianShift {
 		ArrayList<LibrarianShift> shifts = null;
 
 		try {
-			shifts = service.getLibrarianShift(VALID_LIBRARIAN_ID, INVALID_DATE);
+			shifts = service.getLibrarianShift(VALID_LIBRARIAN_ID, L_INVALID_DATE);
 		} catch (IllegalArgumentException e) {
 			fail(e.getMessage());
 		}
@@ -201,7 +206,7 @@ public class TestLibrarianShift {
 		ArrayList<LibrarianShift> shifts = null;
 
 		try {
-			shifts = service.getLibrarianShift(INVALID_LIBRARIAN_ID, VALID_DATE);
+			shifts = service.getLibrarianShift(INVALID_LIBRARIAN_ID, L_VALID_DATE);
 		} catch (IllegalArgumentException e) {
 			fail(e.getMessage());
 		}
@@ -230,7 +235,7 @@ public class TestLibrarianShift {
 		LibrarianShift shift = null;
 
 		try {
-			shift = service.createLibrarianShift(INVALID_DATE, START_TIME, END_TIME, VALID_LIBRARIAN_ID);
+			shift = service.createLibrarianShift(L_INVALID_DATE, L_START_TIME, L_END_TIME, VALID_LIBRARIAN_ID);
 		} catch (IllegalArgumentException e) {
 			System.out.println(e.getMessage());
 			fail(e.getMessage());
@@ -250,7 +255,7 @@ public class TestLibrarianShift {
 		String error = null;
 
 		try {
-			shift = service.createLibrarianShift(null, START_TIME, END_TIME, VALID_LIBRARIAN_ID);
+			shift = service.createLibrarianShift(null, L_START_TIME, L_END_TIME, VALID_LIBRARIAN_ID);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -267,7 +272,7 @@ public class TestLibrarianShift {
 		String error = null;
 
 		try {
-			shift = service.createLibrarianShift(INVALID_DATE, null, END_TIME, VALID_LIBRARIAN_ID);
+			shift = service.createLibrarianShift(L_INVALID_DATE, null, L_END_TIME, VALID_LIBRARIAN_ID);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -284,7 +289,7 @@ public class TestLibrarianShift {
 		String error = null;
 
 		try {
-			shift = service.createLibrarianShift(INVALID_DATE, START_TIME, null, VALID_LIBRARIAN_ID);
+			shift = service.createLibrarianShift(L_INVALID_DATE, L_START_TIME, null, VALID_LIBRARIAN_ID);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -301,7 +306,7 @@ public class TestLibrarianShift {
 		String error = null;
 
 		try {
-			shift = service.createLibrarianShift(INVALID_DATE, START_TIME, END_TIME, INVALID_LIBRARIAN_ID);
+			shift = service.createLibrarianShift(L_INVALID_DATE, L_START_TIME, L_END_TIME, INVALID_LIBRARIAN_ID);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -318,7 +323,7 @@ public class TestLibrarianShift {
 		String error = null;
 
 		try {
-			shift = service.createLibrarianShift(INVALID_DATE, END_TIME, START_TIME, VALID_LIBRARIAN_ID);
+			shift = service.createLibrarianShift(L_INVALID_DATE, L_END_TIME, L_START_TIME, VALID_LIBRARIAN_ID);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -335,7 +340,7 @@ public class TestLibrarianShift {
 		String error = null;
 
 		try {
-			shift = service.createLibrarianShift(VALID_DATE, START_TIME, END_TIME, VALID_LIBRARIAN_ID);
+			shift = service.createLibrarianShift(L_VALID_DATE, L_START_TIME, L_END_TIME, VALID_LIBRARIAN_ID);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
