@@ -117,8 +117,27 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
     </tr>
     <tr>
       <td>Gabriel Lacroix</td>
-      <td></td>
-      <td></td>
+      <td>
+        <li>Add test coverage verification rule to CI</li>
+        <li>Refactor the CI process</li>
+        <li>Create a simple bash script integrated into the CI pipeline to run integration tests (later replaced by Postman)</li>
+        <li>Review pull requests</li>
+        <li>Make necessary changes to model, DTOs, service and controller classes, write unit tests for service methods, write integration tests for endpoints using cURL and Postman, and document those endpoints in the wiki for the following use-cases:
+          <ul>
+            <li>Collect registration fees and confirm that an address is within city bounds (activating a member's account)</li>
+            <li>Create and delete rooms</li>
+            <li>Create and delete room bookings</li>
+            <li>Query all rooms</li>
+            <li>Query all room bookings</li>
+            <li>Checkout and return items</li>
+            <li>Get all copies of a library item info</li>
+            <li>Get the item info associated with a library item</li>
+            <li>Get the details about a library item</li>
+            <li>Get the loan associated with a library item (if there is one)</li>
+          </ul>
+        </li>
+      </td>
+      <td>40 hours</td>
     </tr>
     <tr>
       <td>Guillaume Delmas-Frenette</td>
@@ -153,8 +172,15 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
     </tr>
     <tr>
       <td>Louis Hildebrand</td>
-      <td></td>
-      <td></td>
+      <td>
+        <ul>
+          <li>Create controller and service layers for creating, getting, and deleting members (with or without online accounts) and librarians</li>
+          <li>Write unit tests for member and librarian service layers</li>
+          <li>Write integration tests for member and librarian controllers</li>
+          <li>Write the test plan</li>
+        </ul>
+      </td>
+      <td>41.5 hours</td>
     </tr>
     <tr>
       <td>Mircea Gosman</td>
