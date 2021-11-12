@@ -1,30 +1,14 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-
+import ca.mcgill.ecse321.onlinelibrary.dao.*;
+import ca.mcgill.ecse321.onlinelibrary.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ca.mcgill.ecse321.onlinelibrary.dao.AlbumInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.ArchiveInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.BookInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.LibraryItemInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.MovieInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.NewsPaperInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.ReservableItemInfoRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.ReservationRepository;
-import ca.mcgill.ecse321.onlinelibrary.model.AlbumInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.ArchiveInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.BookInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.LibraryItemInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.MovieInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
-import ca.mcgill.ecse321.onlinelibrary.model.Reservation;
-import ca.mcgill.ecse321.onlinelibrary.model.Member;
-import ca.mcgill.ecse321.onlinelibrary.model.ReservableItemInfo;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class LibraryItemInfoService {

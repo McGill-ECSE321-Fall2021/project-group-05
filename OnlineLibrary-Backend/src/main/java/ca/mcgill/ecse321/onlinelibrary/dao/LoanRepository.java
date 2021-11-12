@@ -1,7 +1,6 @@
 package ca.mcgill.ecse321.onlinelibrary.dao;
 
 import ca.mcgill.ecse321.onlinelibrary.model.Loan;
-
 import ca.mcgill.ecse321.onlinelibrary.model.Member;
 import ca.mcgill.ecse321.onlinelibrary.model.ReservableItem;
 import org.springframework.data.repository.CrudRepository;

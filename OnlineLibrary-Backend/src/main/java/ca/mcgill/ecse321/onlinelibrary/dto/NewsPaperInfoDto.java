@@ -1,7 +1,8 @@
 package ca.mcgill.ecse321.onlinelibrary.dto;
 
-import java.sql.Date;
 import ca.mcgill.ecse321.onlinelibrary.model.NewsPaperInfo;
+
+import java.sql.Date;
 
 public class NewsPaperInfoDto extends LibraryItemInfoDto {
 

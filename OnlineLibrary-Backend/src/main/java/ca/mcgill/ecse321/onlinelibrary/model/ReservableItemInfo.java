@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+
 import ca.mcgill.ecse321.onlinelibrary.dto.ReservableItemInfoDto;
 
 @Entity

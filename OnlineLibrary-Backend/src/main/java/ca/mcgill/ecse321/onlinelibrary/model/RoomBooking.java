@@ -1,9 +1,8 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
+import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
-
-import javax.persistence.*;
 
 @Entity
 public class RoomBooking {

@@ -1,11 +1,11 @@
 package ca.mcgill.ecse321.onlinelibrary.dto;
 
+import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
+import ca.mcgill.ecse321.onlinelibrary.model.LibrarianShift;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
-import ca.mcgill.ecse321.onlinelibrary.model.LibrarianShift;
 
 public class LibrarianDto {
 

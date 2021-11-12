@@ -1,15 +1,17 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import ca.mcgill.ecse321.onlinelibrary.dao.HolidayRepository;
+import ca.mcgill.ecse321.onlinelibrary.dao.LibraryOpeningHoursRepository;
+import ca.mcgill.ecse321.onlinelibrary.model.Holiday;
+import ca.mcgill.ecse321.onlinelibrary.model.LibraryOpeningHours;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -18,19 +20,9 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
 
-import org.mockito.invocation.InvocationOnMock;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-
-import ca.mcgill.ecse321.onlinelibrary.dao.HolidayRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.LibraryOpeningHoursRepository;
-import ca.mcgill.ecse321.onlinelibrary.model.Holiday;
-import ca.mcgill.ecse321.onlinelibrary.model.LibraryOpeningHours;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TestLibraryOpeningHoursService {

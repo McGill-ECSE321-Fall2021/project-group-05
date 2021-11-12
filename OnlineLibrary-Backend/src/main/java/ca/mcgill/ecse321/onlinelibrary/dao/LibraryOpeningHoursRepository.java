@@ -1,8 +1,8 @@
 package ca.mcgill.ecse321.onlinelibrary.dao;
 
+import ca.mcgill.ecse321.onlinelibrary.model.LibraryOpeningHours;
 import org.springframework.data.repository.CrudRepository;
 
-import ca.mcgill.ecse321.onlinelibrary.model.LibraryOpeningHours;
 import java.sql.Date;
 import java.util.ArrayList;
 

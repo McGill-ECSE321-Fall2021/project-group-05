@@ -1,26 +1,15 @@
 package ca.mcgill.ecse321.onlinelibrary.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import ca.mcgill.ecse321.onlinelibrary.dto.CreateMemberRequestDto;
-import ca.mcgill.ecse321.onlinelibrary.dto.LoanDto;
-import ca.mcgill.ecse321.onlinelibrary.dto.CreateOnlineAccountRequestDto;
-import ca.mcgill.ecse321.onlinelibrary.dto.MemberDto;
-import ca.mcgill.ecse321.onlinelibrary.dto.OnlineAccountDto;
+import ca.mcgill.ecse321.onlinelibrary.dto.*;
 import ca.mcgill.ecse321.onlinelibrary.model.Member;
 import ca.mcgill.ecse321.onlinelibrary.model.OnlineAccount;
 import ca.mcgill.ecse321.onlinelibrary.service.MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @CrossOrigin(origins = "*")
 @RestController

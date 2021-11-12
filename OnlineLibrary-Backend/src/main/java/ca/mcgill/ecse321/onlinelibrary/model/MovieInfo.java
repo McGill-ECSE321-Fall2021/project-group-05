@@ -1,8 +1,8 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
-import javax.persistence.*;
-
 import ca.mcgill.ecse321.onlinelibrary.dto.MovieInfoDto;
+
+import javax.persistence.Entity;
 
 @Entity
 public class MovieInfo extends ReservableItemInfo {
