@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
@@ -23,7 +22,6 @@ public class Loan {
 	private int numberOfRenewals;
 
 	@OneToOne(optional = false, orphanRemoval = true)
-	@JoinColumn(name = "library_item_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private ReservableItem item;
 	@ManyToOne(optional = false)

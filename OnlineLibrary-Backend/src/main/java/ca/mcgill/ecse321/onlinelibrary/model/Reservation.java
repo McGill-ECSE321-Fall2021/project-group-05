@@ -7,56 +7,60 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.sql.Date;
 @Entity
 public class Reservation {
-    @Id
+	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer reservationId;
+	private Integer reservationId;
 
-    private Date date;
-    
-    @OnDelete (action = OnDeleteAction.CASCADE)
-    @ManyToOne (optional = false)
-    private Member member;
-    
-    @OnDelete (action = OnDeleteAction.CASCADE)
-    @ManyToOne (optional = false)
-    private ReservableItemInfo reservedItem;
+	private Date date;
 
-    public Reservation(Member member, ReservableItemInfo reservableItem, Date date){
-        this.member = member;
-        this.reservedItem = reservableItem;
-        this.date = date;
-    }
+	@OnDelete (action = OnDeleteAction.CASCADE)
+	@ManyToOne (optional = false)
+	private Member member;
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-    
-    public Integer getId(){
-        return this.reservationId;
-    }
+	@OnDelete (action = OnDeleteAction.CASCADE)
+	@ManyToOne (optional = false)
+	private ReservableItemInfo reservedItem;
 
-    public Member getMember(){
-        return this.member;
-    }
+	protected Reservation() {
 
-    public Date getDate(){
-        return this.date;
-    }
+	}
 
-    public ReservableItemInfo getReservableItemInfo(){
-        return this.reservedItem;
-    }
+	public Reservation(Member member, ReservableItemInfo reservableItem, Date date){
+		this.member = member;
+		this.reservedItem = reservableItem;
+		this.date = date;
+	}
 
-    public void setMember(Member member){
-        this.member = member;
-    }
+	public void setDate(Date date) {
+		this.date = date;
+	}
 
-    public void setReservableItemInfo(ReservableItemInfo reservableItem){
-        this.reservedItem = reservableItem;
-    }
+	public Integer getId(){
+		return this.reservationId;
+	}
 
-    public void setId(Integer id){
-        this.reservationId = id;
-    }
-    
+	public Member getMember(){
+		return this.member;
+	}
+
+	public Date getDate(){
+		return this.date;
+	}
+
+	public ReservableItemInfo getReservableItemInfo(){
+		return this.reservedItem;
+	}
+
+	public void setMember(Member member){
+		this.member = member;
+	}
+
+	public void setReservableItemInfo(ReservableItemInfo reservableItem){
+		this.reservedItem = reservableItem;
+	}
+
+	public void setId(Integer id){
+		this.reservationId = id;
+	}
+
 }

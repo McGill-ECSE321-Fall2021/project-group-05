@@ -22,7 +22,7 @@ public class ReservationDto {
 			throw new IllegalArgumentException("There is no such reservation.");
 		}
 		return new ReservationDto(reservation.getId(), MemberDto.fromMember(reservation.getMember()),
-				(ReservableItemInfoDto)reservation.getReservableItemInfo().convertToDto(), reservation.getDate());
+				reservation.getReservableItemInfo().convertToDto(), reservation.getDate());
 	}
 
 	public Integer getId() {
