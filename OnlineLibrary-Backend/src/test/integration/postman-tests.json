@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "09cea390-b8d5-45d1-a964-290860a91105",
+		"_postman_id": "1e9fccb7-d6c8-4fcb-ad9a-8c5f01b22fe3",
 		"name": "Integration tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -4678,7 +4678,7 @@
 	"variable": [
 		{
 			"key": "BASE_URL",
-			"value": "https://onlinelibrary-backend-05a.herokuapp.com"
+			"value": "https://onlinelibrary-backend-ci-05a.herokuapp.com"
 		},
 		{
 			"key": "LOH_DATE",

@@ -9,9 +9,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-18.04
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 15
@@ -31,3 +29,20 @@ jobs:
     - name: Check test coverage ratio
       run: ./gradlew jacocoTestCoverageVerification
       working-directory: OnlineLibrary-Backend
+  # Deploy to CI app and run integration tests against CI app
+  integration-tests:
+    needs: build
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: 64118b4c-0551-49a2-8fa2-45cee48f24b0
+        heroku_app_name: "onlinelibrary-backend-ci-05a"
+        heroku_email: "louis.t.hildebrand@gmail.com"
+    - name: Run Postman tests with Newman
+      id: run-newman
+      uses: anthonyvscode/newman-action@v1.1
+      with:
+        collection: OnlineLibrary-Backend/src/test/integration/postman-tests.json
+        reporters: cli
