@@ -6,6 +6,7 @@ on:
     - main
     paths:
     - "OnlineLibrary-Backend/**"
+    - ".github/workflows/main-pullrequest-backend.yml"
 
 jobs:
   build:
