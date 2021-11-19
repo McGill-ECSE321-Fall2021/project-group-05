@@ -13,7 +13,7 @@
 <style>
 header nav ul {
   background-color: #000;
-  height: 100px;
+  height: 75px;
 }
 nav ul {
   display: flex;
