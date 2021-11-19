@@ -47,7 +47,7 @@ jobs:
         collection: OnlineLibrary-Backend/src/test/integration/postman-tests.json
         reporters: cli
   deploy:
-    needs: build
+    needs: integration-tests
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v2
