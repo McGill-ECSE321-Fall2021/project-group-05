@@ -7,7 +7,7 @@ on:
     paths:
     - "OnlineLibrary-Backend/**"
     - ".github/workflows/main-push-backend.yml"
-  workflow-dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
