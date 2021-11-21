@@ -652,7 +652,30 @@
 											"\r",
 											"const jsonData = pm.response.json();\r",
 											"pm.collectionVariables.set(\"librarian_id\", jsonData.id);\r",
-											"pm.collectionVariables.set(\"librarian_username\", jsonData.username);"
+											"\r",
+											"const expectedUsername = pm.variables.replaceIn('{{librarian_username}}')\r",
+											"pm.test(\"Librarian username is correct\", function () {\r",
+											"    pm.expect(jsonData.username).to.eql(expectedUsername);\r",
+											"});\r",
+											"\r",
+											"const expectedFullName = pm.variables.replaceIn('{{librarian_full_name}}')\r",
+											"pm.test(\"Librarian full name is correct\", function () {\r",
+											"    pm.expect(jsonData.fullName).to.eql(expectedFullName);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const fullName = \"Test Librarian\"\r",
+											"pm.collectionVariables.set(\"librarian_full_name\", fullName)\r",
+											"const username = pm.variables.replaceIn('{{$guid}}')\r",
+											"pm.collectionVariables.set(\"librarian_username\", username)\r",
+											"const password = pm.variables.replaceIn('{{$randomPassword}}')\r",
+											"pm.collectionVariables.set(\"librarian_password\", password)"
 										],
 										"type": "text/javascript"
 									}
@@ -662,7 +685,7 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/librarian?fullName=Test Librarian&username={{$guid}}&password=test-librarian-password",
+									"raw": "{{BASE_URL}}/librarian?fullName={{librarian_full_name}}&username={{librarian_username}}&password={{librarian_password}}",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -672,15 +695,15 @@
 									"query": [
 										{
 											"key": "fullName",
-											"value": "Test Librarian"
+											"value": "{{librarian_full_name}}"
 										},
 										{
 											"key": "username",
-											"value": "{{$guid}}"
+											"value": "{{librarian_username}}"
 										},
 										{
 											"key": "password",
-											"value": "test-librarian-password"
+											"value": "{{librarian_password}}"
 										}
 									]
 								}
@@ -2403,7 +2426,7 @@
 							"response": []
 						},
 						{
-							"name": "Successfully log in",
+							"name": "Successfully log in member",
 							"event": [
 								{
 									"listen": "test",
@@ -2454,7 +2477,7 @@
 							"response": []
 						},
 						{
-							"name": "Fail to log in with invalid password",
+							"name": "Fail to log in member with invalid password",
 							"event": [
 								{
 									"listen": "test",
@@ -2721,6 +2744,99 @@
 									"path": [
 										"reservableItem",
 										"999999"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Successfully log in librarian",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"const jsonData = pm.response.json();\r",
+											"const expectedUsername = pm.variables.replaceIn('{{librarian_username}}')\r",
+											"pm.test(\"Librarian username is correct\", function () {\r",
+											"    pm.expect(jsonData.librarian.username).to.eql(expectedUsername);\r",
+											"});\r",
+											"\r",
+											"const expectedFullName = pm.variables.replaceIn('{{librarian_full_name}}')\r",
+											"pm.test(\"Librarian full name is correct\", function () {\r",
+											"    pm.expect(jsonData.librarian.fullName).to.eql(expectedFullName);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/librarian/login?username={{librarian_username}}&password={{librarian_password}}",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"librarian",
+										"login"
+									],
+									"query": [
+										{
+											"key": "username",
+											"value": "{{librarian_username}}"
+										},
+										{
+											"key": "password",
+											"value": "{{librarian_password}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Fail to log in librarian with invalid password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 500\", function () {\r",
+											"    pm.response.to.have.status(500);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/librarian/login?username={{librarian_username}}&password=short",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"librarian",
+										"login"
+									],
+									"query": [
+										{
+											"key": "username",
+											"value": "{{librarian_username}}"
+										},
+										{
+											"key": "password",
+											"value": "short"
+										}
 									]
 								}
 							},
@@ -4840,7 +4956,15 @@
 			"value": ""
 		},
 		{
+			"key": "librarian_full_name",
+			"value": ""
+		},
+		{
 			"key": "librarian_username",
+			"value": ""
+		},
+		{
+			"key": "librarian_password",
 			"value": ""
 		},
 		{
