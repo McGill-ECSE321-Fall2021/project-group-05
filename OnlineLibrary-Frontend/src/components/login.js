@@ -49,7 +49,7 @@ export default {
         .then(function (response) {
           // Store stringified member info in session storage and redirect to member home page
           if (response.status === 200) {
-            sessionStorage.setItem("loggedInMember", JSON.stringify(response))
+            sessionStorage.setItem("loggedInMember", JSON.stringify(response.data))
             // TODO: Get url of member home page
             window.location.href = "/member-home/"
           }
@@ -59,7 +59,7 @@ export default {
           }
         })
         // TODO: Do actual error handling
-        .catch(error => self.memberErrorMsg = "An unexpected error occurred. Please try again.")
+        .catch(error => self.memberErrorMsg = "Invalid username or password.")
     },
     doLogInLibrarian(username, password) {
       var self = this;
@@ -72,7 +72,7 @@ export default {
         .then(function (response) {
           // Store stringified member info in session storage and redirect to member home page
           if (response.status === 200) {
-            sessionStorage.setItem("loggedInLibrarian", JSON.stringify(response))
+            sessionStorage.setItem("loggedInLibrarian", JSON.stringify(response.data))
             // TODO: Get url of librarian home page
             window.location.href = "/librarian-home/"
           }
@@ -82,7 +82,7 @@ export default {
           }
         })
         // TODO: Do actual error handling
-        .catch(error => self.librarianErrorMsg = "An unexpected error occurred. Please try again.")
+        .catch(error => self.librarianErrorMsg = "Invalid username or password.")
     }
   }
 }
