@@ -40,7 +40,7 @@ export default {
   methods: {
     doLogInMember: function (username, password) {
       var self = this;
-      AXIOS.post('/member/login', {}, {
+      AXIOS.get('/member/login', {
         params: {
           username,
           password
@@ -63,7 +63,7 @@ export default {
     },
     doLogInLibrarian(username, password) {
       var self = this;
-      AXIOS.post('/librarian/login', {}, {
+      AXIOS.get('/librarian/login', {
         params: {
           username,
           password
