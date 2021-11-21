@@ -51,6 +51,12 @@ public class MemberController {
 		return OnlineAccountDto.fromOnlineAccount(createdAccount);
 	}
 
+	@GetMapping(value = {"/member/login", "/member/login/"})
+	public MemberLoginResponseDto logIn(@RequestParam String username, @RequestParam String password) {
+		Member member = memberService.logIn(username, password);
+		return new MemberLoginResponseDto(member);
+	}
+
 	@GetMapping(value = {"/member/{id}", "/member/{id}/"})
 	public MemberDto getMemberById(@PathVariable("id") int id) {
 		Member member = memberService.getMemberById(id);
@@ -74,8 +80,9 @@ public class MemberController {
 	@PutMapping(value = {"/member/{id}" ,"/member/{id}/"})
 	public MemberDto updateMember(@RequestParam String address, @RequestParam String fullName, @PathVariable Integer id){
 		return MemberDto.fromMember(memberService.updateMember
-			(id, address, fullName));
+				(id, address, fullName));
 	}
+
 	@PutMapping(value = {"/member/{id}/applyPenalty", "/member/{id}/applyPenalty/"})
 	public MemberDto applyPenalty(@PathVariable("id") int id) {
 		Member member = memberService.getMemberById(id);
@@ -92,7 +99,7 @@ public class MemberController {
 
 	@GetMapping(value = {"/member/{id}/loans", "/member/{id}/loans/"})
 	public List<LoanDto> getLoansByMemberId(@PathVariable("id") int id) {
-        Member member = memberService.getMemberById(id);
-        return member.getLoans().stream().map(LoanDto::fromLoan).collect(Collectors.toList());
-    }
+		Member member = memberService.getMemberById(id);
+		return member.getLoans().stream().map(LoanDto::fromLoan).collect(Collectors.toList());
+	}
 }

@@ -77,6 +77,23 @@ public class MemberService {
 		return createdOnlineAccount;
 	}
 
+	public Member logIn(String username, String password) {
+		// Find by username
+		OnlineAccount account = onlineAccountRepository.findOnlineAccountByUsername(username);
+		if (account == null) {
+			throw new IllegalArgumentException("Invalid username.");
+		}
+
+		// Validate password
+		// TODO Implement password hashing
+		if (account.getPasswordHash().equals(password)) {
+			return account.getAccountOwner();
+		}
+		else {
+			throw new IllegalArgumentException("Invalid password.");
+		}
+	}
+
 	@Transactional
 	public Member getMemberById(int id) {
 		Member member = memberRepository.findMemberById(id);
@@ -119,9 +136,9 @@ public class MemberService {
 		member.setAddress(newAddress);
 		member.setFullName(newFullName);
 		return member;
-  }
-  
-  @Transactional
+	}
+
+	@Transactional
 	public Member removeStatusPenalty(Member member) {
 		member.removeStatusPenalty();
 		member = memberRepository.save(member);

@@ -8,4 +8,6 @@ public interface OnlineAccountRepository extends CrudRepository<OnlineAccount, I
 	public OnlineAccount findOnlineAccountById(int id);
 
 	public boolean existsOnlineAccountByUsername(String username);
+
+	public OnlineAccount findOnlineAccountByUsername(String username);
 }
