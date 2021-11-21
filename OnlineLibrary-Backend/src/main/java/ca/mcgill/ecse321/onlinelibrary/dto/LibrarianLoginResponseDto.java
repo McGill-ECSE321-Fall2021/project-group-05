@@ -7,6 +7,8 @@ import ca.mcgill.ecse321.onlinelibrary.model.LibrarianShift;
 
 public class LibrarianLoginResponseDto {
 
+	// TODO Add JWT token
+
 	private LibrarianDto librarian;
 
 	public LibrarianLoginResponseDto(Librarian librarian) {
