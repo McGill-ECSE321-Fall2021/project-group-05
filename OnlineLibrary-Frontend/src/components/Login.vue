@@ -18,14 +18,24 @@
           <b-row>
             <!-- Disallow spaces in password -->
             <input
-              type="text"
+              type="password"
               @keydown.space.prevent
               placeholder="Password"
               v-model="memberPassword"
             />
           </b-row>
           <b-row>
-            <button v-bind:disabled="!memberUsername.trim() || !memberPassword.trim()">Log in</button>
+            <button
+              v-bind:disabled="!memberUsername.trim() || !memberPassword.trim()"
+              v-on:click="doLogInMember(memberUsername, memberPassword)"
+            >
+              Log in
+            </button>
+          </b-row>
+          <b-row>
+            <span v-if="memberErrorMsg" class="errorMsg">
+              Error: {{ memberErrorMsg }}
+            </span>
           </b-row>
         </b-col>
         <b-col>
@@ -33,7 +43,7 @@
           <b-row>
             <!-- Disallow spaces in username -->
             <input
-              type="text"
+              type="username"
               @keydown.space.prevent
               placeholder="Username"
               v-model="librarianUsername"
@@ -42,21 +52,35 @@
           <b-row>
             <!-- Disallow spaces in password -->
             <input
-              type="text"
+              type="password"
               @keydown.space.prevent
               placeholder="Password"
               v-model="librarianPassword"
             />
           </b-row>
           <b-row>
-            <button v-bind:disabled="!librarianUsername.trim() || !librarianPassword.trim()">Log in</button>
+            <button
+              v-bind:disabled="
+                !librarianUsername.trim() || !librarianPassword.trim()
+              "
+              v-on:click="
+                doLogInLibrarian(librarianUsername, librarianPassword)
+              "
+            >
+              Log in
+            </button>
+          </b-row>
+          <b-row>
+            <span v-if="librarianErrorMsg" class="errorMsg">
+              Error: {{ librarianErrorMsg }}
+            </span>
           </b-row>
         </b-col>
       </b-row>
     </b-container>
-    <h2>
+    <p>
       Don't have an account? <router-link to="/signup">Sign up</router-link>
-    </h2>
+    </p>
   </div>
 </template>
 
@@ -67,5 +91,12 @@
 <style scoped>
 h1 {
   font-weight: bold;
+}
+h2 {
+  font-size: 150%;
+}
+.errorMsg {
+  color: red;
+  text-align: left;
 }
 </style>
