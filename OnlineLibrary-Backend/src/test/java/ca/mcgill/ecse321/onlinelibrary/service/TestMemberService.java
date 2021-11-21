@@ -62,6 +62,7 @@ public class TestMemberService {
 
 	// Invalid credentials
 	private static final int INVALID_MEMBER_ID = 999999;
+	private static final String INVALID_USERNAME = "invalid-username";
 	private static final String INVALID_EMAIL_ADDRESS = "blah.blah";
 	private final String SHORT_PASSWD = "p".repeat(MIN_PASSWD_LENGTH - 1);
 
@@ -116,6 +117,15 @@ public class TestMemberService {
 				return true;
 			} else {
 				return false;
+			}
+		});
+
+		lenient().when(onlineAccountDao.findOnlineAccountByUsername(any(String.class)))
+		.thenAnswer((InvocationOnMock invocation) -> {
+			if (OLD_MEMBER_USERNAME.equals(invocation.getArgument(0))) {
+				return oldOnlineAccount;
+			} else {
+				return null;
 			}
 		});
 
@@ -485,6 +495,42 @@ public class TestMemberService {
 	// ========================================================================
 	// Get methods
 	// ========================================================================
+
+	@Test
+	public void testLogInSuccessful() {
+		Member member = memberService.logIn(OLD_MEMBER_USERNAME, OLD_MEMBER_PASSWD);
+
+		assertNotNull(member);
+		assertEquals(OLD_MEMBER_ID, member.getId());
+	}
+
+	@Test
+	public void testLogInInvalidUsername() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> memberService.logIn(INVALID_USERNAME, OLD_MEMBER_PASSWD));
+		assertEquals("Invalid username.", error.getMessage());
+	}
+
+	@Test
+	public void testLogInNullUsername() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> memberService.logIn(null, OLD_MEMBER_PASSWD));
+		assertEquals("Invalid username.", error.getMessage());
+	}
+
+	@Test
+	public void testLogInInvalidPassword() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> memberService.logIn(OLD_MEMBER_USERNAME, SHORT_PASSWD));
+		assertEquals("Invalid password.", error.getMessage());
+	}
+
+	@Test
+	public void testLogInNullPassword() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> memberService.logIn(OLD_MEMBER_USERNAME, null));
+		assertEquals("Invalid password.", error.getMessage());
+	}
 
 	@Test
 	public void testGetMemberByIdSuccessful() {

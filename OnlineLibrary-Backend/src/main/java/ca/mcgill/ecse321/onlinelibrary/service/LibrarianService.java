@@ -20,7 +20,7 @@ public class LibrarianService {
 	@Transactional
 	public void deleteLibrarianById(int id) {
 		Librarian librarianToDelete = getNonNullLibrarianFromRepo(id);
-		
+
 		if (librarianToDelete.isHead()) {
 			throw new IllegalArgumentException("Cannot delete head librarian.");
 		}
@@ -62,6 +62,22 @@ public class LibrarianService {
 		return librarian;
 	}
 
+	public Librarian logIn(String username, String password) {
+		// Get librarian by username
+		Librarian librarian = librarianRepository.findLibrarianByUsername(username);
+		if (librarian == null) {
+			throw new IllegalArgumentException("Invalid username.");
+		}
+
+		// Check password
+		if (librarian.getPasswordHash().equals(password)) {
+			return librarian;
+		}
+		else {
+			throw new IllegalArgumentException("Invalid password.");
+		}
+	}
+
 	@Transactional
 	public Librarian getLibrarianByUsername(String username) {
 		Librarian librarian = librarianRepository.findLibrarianByUsername(username);
@@ -98,7 +114,7 @@ public class LibrarianService {
 		librarian.setUsername(newUsername);
 		librarian.setPasswordHash(newPasswordHash);
 		librarianRepository.save(librarian);
-		
+
 		return librarian;
 	}
 

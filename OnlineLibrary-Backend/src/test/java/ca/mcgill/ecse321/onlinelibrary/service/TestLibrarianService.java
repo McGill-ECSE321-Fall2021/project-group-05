@@ -207,6 +207,42 @@ public class TestLibrarianService {
 		assertContains("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.", error.getMessage());
 	}
 
+	@Test
+	public void testLogInSuccessful() {
+		Librarian librarian = librarianService.logIn(HEAD_USERNAME, HEAD_PASSWD);
+
+		assertNotNull(librarian);
+		assertEquals(HEAD_USERNAME, librarian.getUsername());
+	}
+
+	@Test
+	public void testLogInInvalidUsername() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> librarianService.logIn(INVALID_USERNAME, HEAD_PASSWD));
+		assertEquals("Invalid username.", error.getMessage());
+	}
+
+	@Test
+	public void testLogInNullUsername() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> librarianService.logIn(null, HEAD_PASSWD));
+		assertEquals("Invalid username.", error.getMessage());
+	}
+
+	@Test
+	public void testLogInInvalidPassword() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> librarianService.logIn(HEAD_USERNAME, SHORT_PASSWD));
+		assertEquals("Invalid password.", error.getMessage());
+	}
+
+	@Test
+	public void testLogInNullPassword() {
+		Exception error = assertThrows(IllegalArgumentException.class,
+				() -> librarianService.logIn(HEAD_USERNAME, null));
+		assertEquals("Invalid password.", error.getMessage());
+	}
+
 	/**
 	 * Successfully get librarian by ID.
 	 */

@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.controller;
 
 import ca.mcgill.ecse321.onlinelibrary.dto.LibrarianDto;
+import ca.mcgill.ecse321.onlinelibrary.dto.LibrarianLoginResponseDto;
 import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
 import ca.mcgill.ecse321.onlinelibrary.model.LibrarianShift;
 import ca.mcgill.ecse321.onlinelibrary.service.LibrarianService;
@@ -26,6 +27,12 @@ public class LibrarianController {
 			@RequestParam String password) throws IllegalArgumentException {
 		Librarian librarian = librarianService.createLibrarian(fullName, username, password);
 		return LibrarianDto.fromLibrarian(librarian, new ArrayList<LibrarianShift>());
+	}
+
+	@GetMapping(value = {"/librarian/login", "/librarian/login/"})
+	public LibrarianLoginResponseDto logIn(@RequestParam String username, @RequestParam String password) {
+		Librarian librarian = librarianService.logIn(username, password);
+		return new LibrarianLoginResponseDto(librarian);
 	}
 
 	@GetMapping(value = {"/librarian", "/librarian/"})
