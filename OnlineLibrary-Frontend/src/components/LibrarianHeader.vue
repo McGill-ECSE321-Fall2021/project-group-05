@@ -2,9 +2,11 @@
   <header>
     <nav>
       <ul>
+        <li><router-link :to="{ name: 'LibrarianHome' }">Home</router-link></li>
         <li><router-link :to="{ name: 'Rooms' }">Browse rooms</router-link></li>
-        <li><router-link :to="{ name: 'Hello' }">Welcome page</router-link></li>
-        <li><a>Log out</a></li>
+        <li>
+          <router-link :to="{ name: 'LibrarianLogout' }">Logout</router-link>
+        </li>
       </ul>
     </nav>
   </header>

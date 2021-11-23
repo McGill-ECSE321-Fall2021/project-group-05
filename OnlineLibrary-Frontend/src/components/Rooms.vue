@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import Header from "./Header.vue";
+import Header from "./MemberHeader.vue";
 import axios from "axios";
 const config = require("../../config");
 
