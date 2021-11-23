@@ -22,9 +22,14 @@ import Header from "./Header.vue";
 import axios from "axios";
 const config = require("../../config");
 
-const frontendUrl = "http://" + config.build.host + ":" + config.build.port;
 const backendUrl =
-  "http://" + config.build.backendHost + ":" + config.build.backendPort;
+  process.env.NODE_ENV === "production"
+    ? `http://${config.build.backendHost}:${config.build.backendPort}`
+    : `http://${config.dev.backendHost}:${config.dev.backendPort}`;
+const frontendUrl =
+  process.env.NODE_ENV === "production"
+    ? `http://${config.build.host}:${config.build.port}`
+    : `http://${config.dev.host}:${config.dev.port}`;
 
 const axios_instance = axios.create({
   baseURL: backendUrl,
