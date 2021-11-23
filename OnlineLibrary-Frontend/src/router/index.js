@@ -1,16 +1,16 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Hello from '@/components/Hello'
-import Rooms from '@/components/Rooms'
+import Vue from "vue";
+import Router from "vue-router";
+import Home from "@/components/Home.vue";
+import Rooms from "@/components/Rooms.vue";
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'Hello',
-      component: Hello
+      path: "/",
+      name: "Home",
+      component: Home
     },
     {
       path: '/rooms/',
@@ -18,4 +18,4 @@ export default new Router({
       component: Rooms
     }
   ]
-})
+});
