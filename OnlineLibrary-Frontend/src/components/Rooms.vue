@@ -1,20 +1,26 @@
 <template>
-  <main>
+  <body>
     <Header />
-    <h2>Rooms</h2>
-    <table>
-      <tr>
-        <th>Room ID</th>
-        <th>Room Name</th>
-        <th>Room Capacity</th>
-      </tr>
-      <tr v-for="room in rooms" :key="room.id">
-        <td>{{ room.id }}</td>
-        <td>{{ room.name }}</td>
-        <td>{{ room.capacity }}</td>
-      </tr>
-    </table>
-  </main>
+    <main>
+      <h1>Rooms</h1>
+      <table>
+        <tr>
+          <th>Room ID</th>
+          <th>Room Name</th>
+          <th>Room Capacity</th>
+        </tr>
+        <tr v-for="room in rooms" :key="room.id">
+          <td>{{ room.id }}</td>
+          <td>
+            <router-link :to="{ name: 'Room', params: { roomId: room.id } }">{{
+              room.name
+            }}</router-link>
+          </td>
+          <td>{{ room.capacity }}</td>
+        </tr>
+      </table>
+    </main>
+  </body>
 </template>
 
 <script>
