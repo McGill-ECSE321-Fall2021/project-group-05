@@ -582,30 +582,50 @@ public class TestLibraryItemInfoService {
 
 	@Test
 	public void testCreateMovieInfo() {
+		String title = "Title";
 		String genre = "Horror";
 		String director = "Author";
 		int length = 100;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
 		assertNotNull(movieInfo);
+		assertNotNull(movieInfo.getTitle());
 		assertEquals(movieInfo.getGenre(), genre);
 		assertEquals(movieInfo.getDirector(), director);
 		assertEquals(movieInfo.getLength(), length);
+	}
+	
+	@Test
+	public void testCreateMovieInfoTitleNull() {
+		String error="";
+		String title = null;
+		String genre = "aGenre";
+		String director = "Author";
+		int length = 100;
+		MovieInfo movieInfo = null;
+		try {
+			movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
+		} catch (IllegalArgumentException e) {
+			error=e.getMessage();
+		}
+		assertNull(movieInfo);
+		assertTrue(error.contains("Title can't be empty."));
 	}
 
 	@Test
 	public void testCreateMovieInfoGenreNull() {
 		String error="";
+		String title = "aTitle";
 		String genre = null;
 		String director = "Author";
 		int length = 100;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -616,12 +636,13 @@ public class TestLibraryItemInfoService {
 	@Test
 	public void testCreateMovieInfoGenreEmpty() {
 		String error="";
+		String title = "aTitle";
 		String genre = "   ";
 		String director = "Author";
 		int length = 100;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -632,12 +653,13 @@ public class TestLibraryItemInfoService {
 	@Test
 	public void testCreateMovieInfoDirectorNull() {
 		String error="";
+		String title = "aTitle";
 		String genre = "aGenre";
 		String director = null;
 		int length = 100;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -648,12 +670,13 @@ public class TestLibraryItemInfoService {
 	@Test
 	public void testCreateMovieInfoDirectorEmpty() {
 		String error="";
+		String title = "aTitle";
 		String genre = "aGenre";
 		String director = "  ";
 		int length = 100;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -664,12 +687,13 @@ public class TestLibraryItemInfoService {
 	@Test
 	public void testCreateMovieInfoLength0() {
 		String error="";
+		String title = "aTitle";
 		String genre = "aGenre";
 		String director = "Director";
 		int length = 0;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -680,12 +704,13 @@ public class TestLibraryItemInfoService {
 	@Test
 	public void testCreateMovieAllEmpty() {
 		String error="";
+		String title = "";
 		String genre = "";
 		String director = "";
 		int length = 0;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -721,16 +746,18 @@ public class TestLibraryItemInfoService {
 	
 	@Test
 	public void testUpdateMovienfo() {
-		MovieInfo movieInfo = libraryItemInfoService.createMovieInfo("AGenre", "aDirector", 123);
+		MovieInfo movieInfo = libraryItemInfoService.createMovieInfo("aTitle","AGenre", "aDirector", 123);
+		String newTitle = "Title2";
 		String newGenre = "Genre2";
 		String newDirector = "Director2";
 		int length = 321;
 		try {
-			movieInfo = libraryItemInfoService.updateMovieInfo(movieInfo, newGenre, newDirector, length);
+			movieInfo = libraryItemInfoService.updateMovieInfo(movieInfo, newTitle, newGenre, newDirector, length);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
 		assertNotNull(movieInfo);
+		assertEquals(movieInfo.getTitle(), newTitle);
 		assertEquals(movieInfo.getGenre(), newGenre);
 		assertEquals(movieInfo.getDirector(), newDirector);
 		assertEquals(movieInfo.getLength(), length);

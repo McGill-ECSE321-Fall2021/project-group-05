@@ -261,10 +261,11 @@ public class TestLibraryItemService {
 	@Test
 	public void testCreateMovie() {
 		MovieInfo movieInfo = null;
+		String title = "aTitle";
 		String genre = "aGenre";
 		String director = "aDirector";
 		int length = 50;
-		movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
+		movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
 		Movie movie = null;
 		try {
 			movie = libraryItemService.createMovie(movieInfo);
@@ -272,6 +273,7 @@ public class TestLibraryItemService {
 			fail();
 		}
 		assertNotNull(movie);
+		assertEquals(movie.getMovieInfo().getTitle(), title);
 		assertEquals(movie.getMovieInfo().getGenre(), genre);
 		assertEquals(movie.getMovieInfo().getDirector(), director);
 		assertEquals(movie.getMovieInfo().getLength(), length);
