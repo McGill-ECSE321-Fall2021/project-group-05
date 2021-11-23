@@ -184,6 +184,7 @@ public class LibraryItemInfoService {
 	@Transactional
 	public MovieInfo updateMovieInfo(MovieInfo movieInfo, String title,String genre, String director, int length) {
 		checkArgumentsMovie(title, genre, director, length);
+		movieInfo.setTitle(title);
 		movieInfo.setGenre(genre);
 		movieInfo.setDirector(director);
 		movieInfo.setLength(length);
