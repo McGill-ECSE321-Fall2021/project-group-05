@@ -50,6 +50,8 @@ export default {
           // Store stringified member info in session storage and redirect to member home page
           if (response.status === 200) {
             sessionStorage.setItem("loggedInMember", JSON.stringify(response.data))
+            // Prevent 2 users from being logged in at once
+            sessionStorage.removeItem("loggedInLibrarian")
             // TODO: Get url of member home page
             window.location.href = "/member-home/"
           }
@@ -73,6 +75,8 @@ export default {
           // Store stringified member info in session storage and redirect to member home page
           if (response.status === 200) {
             sessionStorage.setItem("loggedInLibrarian", JSON.stringify(response.data))
+            // Prevent 2 users from being logged in at once
+            sessionStorage.removeItem("loggedInMember")
             // TODO: Get url of librarian home page
             window.location.href = "/librarian-home/"
           }
