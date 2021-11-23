@@ -215,14 +215,17 @@ public class TestOnlineLibraryPersistence {
 	@Test
 	public void testPersistMovieInfo(){
 		MovieInfo movieInfo = new MovieInfo();
+		String title = "title";
 		String director = "Kiro";
 		movieInfo.setDirector(director);
+		movieInfo.setTitle(title);
 		movieInfoRepository.save(movieInfo);
 		int id = movieInfo.getId();
 		movieInfo = null;
 		movieInfo = movieInfoRepository.findMovieInfoById(id);
 		assertNotNull(movieInfo);
 		assertEquals(id, movieInfo.getId());
+		assertEquals(title, movieInfo.getTitle());
 		assertEquals(director, movieInfo.getDirector());
 	}
 

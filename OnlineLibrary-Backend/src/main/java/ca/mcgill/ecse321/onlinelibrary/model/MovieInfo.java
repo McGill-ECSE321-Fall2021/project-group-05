@@ -6,10 +6,19 @@ import javax.persistence.Entity;
 
 @Entity
 public class MovieInfo extends ReservableItemInfo {
+	private String title;
 	private String genre;
 	private String director;
 	private int length;
 
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	public String getTitle() {
+		return this.title;
+	}
+	
 	public void setGenre(String aGenre) {
 		genre = aGenre;
 	}
@@ -35,7 +44,7 @@ public class MovieInfo extends ReservableItemInfo {
 	}
 
 	public MovieInfoDto convertToDto() {
-		return new MovieInfoDto(this.getId(), director, director, length);
+		return new MovieInfoDto(this.getId(), this.title, this.director, this.director, this.length);
 	}
 
 }

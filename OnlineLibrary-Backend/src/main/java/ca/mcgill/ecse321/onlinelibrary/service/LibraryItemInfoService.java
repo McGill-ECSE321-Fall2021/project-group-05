@@ -149,9 +149,10 @@ public class LibraryItemInfoService {
 	}
 
 	@Transactional
-	public MovieInfo createMovieInfo(String genre, String director, int length) {
-		checkArgumentsMovie(genre, director, length);
+	public MovieInfo createMovieInfo(String title, String genre, String director, int length) {
+		checkArgumentsMovie(title, genre, director, length);
 		MovieInfo movieInfo = new MovieInfo();
+		movieInfo.setTitle(title);
 		movieInfo.setGenre(genre);
 		movieInfo.setDirector(director);
 		movieInfo.setLength(length);
@@ -181,8 +182,8 @@ public class LibraryItemInfoService {
 	}
 
 	@Transactional
-	public MovieInfo updateMovieInfo(MovieInfo movieInfo, String genre, String director, int length) {
-		checkArgumentsMovie(genre,director,length);
+	public MovieInfo updateMovieInfo(MovieInfo movieInfo, String title,String genre, String director, int length) {
+		checkArgumentsMovie(title, genre, director, length);
 		movieInfo.setGenre(genre);
 		movieInfo.setDirector(director);
 		movieInfo.setLength(length);
@@ -299,8 +300,12 @@ public class LibraryItemInfoService {
 		}
 	}
 
-	private void checkArgumentsMovie(String genre, String director, int length) {
+	private void checkArgumentsMovie(String title, String genre, String director, int length) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
+		if (title == null || title.trim().length()== 0) {
+			errorMessage.add("Title can't be empty.");
+		}
+		
 		if (genre == null || genre.trim().length() == 0) {
 			errorMessage.add("Genre can't be empty.");
 		}

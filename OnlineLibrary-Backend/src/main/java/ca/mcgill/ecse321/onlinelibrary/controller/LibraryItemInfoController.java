@@ -78,18 +78,18 @@ public class LibraryItemInfoController {
 				.fromBookInfo(libraryItemInfoService.updateBookInfo(bookInfo, title, numberOfPage, author, isbn));
 	}
 
-	@PostMapping(value = {"/movieInfo", "/movieInfo/"})
-	public MovieInfoDto createMovieInfo(@RequestParam String genre, @RequestParam String director,
+	@PostMapping(value = {"/movieInfo/{title}/", "/movieInfo/{title}"})
+	public MovieInfoDto createMovieInfo(@PathVariable("title") String title, @RequestParam String genre, @RequestParam String director,
 			@RequestParam int length) throws IllegalArgumentException {
-		MovieInfo movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
+		MovieInfo movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
 		return MovieInfoDto.fromMovieInfo(movieInfo);
 	}
 
 	@PutMapping(value = {"/movieInfo/{id}", "/movieInfo/{id}/"})
-	public MovieInfoDto updateMovieInfo(@PathVariable int id, @RequestParam String genre, @RequestParam String director,
+	public MovieInfoDto updateMovieInfo(@PathVariable int id, @RequestParam String title, @RequestParam String genre, @RequestParam String director,
 			@RequestParam int length) throws IllegalArgumentException {
 		MovieInfo movieInfo = libraryItemInfoService.getMovieInfo(id);
-		return MovieInfoDto.fromMovieInfo(libraryItemInfoService.updateMovieInfo(movieInfo, genre, director, length));
+		return MovieInfoDto.fromMovieInfo(libraryItemInfoService.updateMovieInfo(movieInfo, title, genre, director, length));
 	}
 
 	@PostMapping(value = {"/archiveInfo/{title}", "/archiveInfo/{title}/"})
