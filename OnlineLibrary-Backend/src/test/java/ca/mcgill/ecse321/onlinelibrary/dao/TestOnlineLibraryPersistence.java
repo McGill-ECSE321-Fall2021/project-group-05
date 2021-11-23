@@ -767,6 +767,34 @@ public class TestOnlineLibraryPersistence {
 	}
 
 	@Test
+	public void testPersistAndLoadOnlineAccountByUsername() {
+		// Create and persist member with online account
+		Member originalMember = new Member("501 McGill Street", "Anakin Skywalker");
+		OnlineAccount originalAccount = new OnlineAccount("501", "chosen1", "anakin.skywalker@mail.mcgill.ca",
+				originalMember);
+		originalMember.setOnlineAccount(originalAccount);
+		originalMember = memberRepository.save(originalMember);
+
+		// Get username and drop reference
+		int memberId = originalMember.getId();
+		String username = originalAccount.getUsername();
+		originalAccount = null;
+
+		OnlineAccount retrievedAccount = onlineAccountRepository.findOnlineAccountByUsername(username);
+		assertNotNull(retrievedAccount);
+
+		// Check attributes
+		assertEquals("501", retrievedAccount.getPasswordHash());
+		assertEquals("chosen1", retrievedAccount.getUsername());
+		assertEquals("anakin.skywalker@mail.mcgill.ca", retrievedAccount.getEmailAddress());
+
+		// Check association
+		Member retrievedMember = retrievedAccount.getAccountOwner();
+		assertNotNull(retrievedMember);
+		assertEquals(memberId, retrievedMember.getId());
+	}
+
+	@Test
 	@Transactional
 	public void testPersistAndLoadLibrarianById() {
 		// Create and persist librarian with shift
