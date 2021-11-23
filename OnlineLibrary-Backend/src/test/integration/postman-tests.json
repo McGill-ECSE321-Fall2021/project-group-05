@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "618a0d9a-5a2b-4bf5-8785-4c2e00355c65",
+		"_postman_id": "67d00a49-1feb-4b8b-aebb-3a699d8398bb",
 		"name": "Integration tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -829,13 +829,13 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/bookInfo/title/?numberOfPage=134&author=anAuthor&isbn={{$randomInt}}",
+									"raw": "{{BASE_URL}}/bookInfo/aTitle/?numberOfPage=134&author=anAuthor&isbn={{$randomInt}}",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
 										"bookInfo",
-										"title",
+										"aTitle",
 										""
 									],
 									"query": [
@@ -925,12 +925,13 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/movieInfo/?genre=aGenre&description=aDescritption&director=Adirector&length=67",
+									"raw": "{{BASE_URL}}/movieInfo/aTitle/?genre=aGenre&description=aDescritption&director=Adirector&length=67",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
 										"movieInfo",
+										"aTitle",
 										""
 									],
 									"query": [
@@ -974,12 +975,13 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/movieInfo/?description=aDescritption&director=Adirector&length=67",
+									"raw": "{{BASE_URL}}/movieInfo/aTitle/?description=aDescritption&director=Adirector&length=67",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
 										"movieInfo",
+										"aTitle",
 										""
 									],
 									"query": [
@@ -3645,7 +3647,7 @@
 								"method": "PUT",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/movieInfo/{{movieInfo_id}}?genre=Updated genre&director=Updated Director&length=120",
+									"raw": "{{BASE_URL}}/movieInfo/{{movieInfo_id}}?title=\"aTitle\"&genre=Updated genre&director=Updated Director&length=120",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -3654,6 +3656,10 @@
 										"{{movieInfo_id}}"
 									],
 									"query": [
+										{
+											"key": "title",
+											"value": "\"aTitle\""
+										},
 										{
 											"key": "genre",
 											"value": "Updated genre"
@@ -3690,7 +3696,7 @@
 								"method": "PUT",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/movieInfo/9999999?genre=Updated genre&director=Updated Director&length=120",
+									"raw": "{{BASE_URL}}/movieInfo/9999999?title=\"aTitle\"&genre=Updated genre&director=Updated Director&length=120",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -3699,6 +3705,10 @@
 										"9999999"
 									],
 									"query": [
+										{
+											"key": "title",
+											"value": "\"aTitle\""
+										},
 										{
 											"key": "genre",
 											"value": "Updated genre"
