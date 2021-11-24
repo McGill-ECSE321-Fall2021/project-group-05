@@ -66,9 +66,12 @@
     <main v-else-if="this.item.type === 'Newspaper'">
       <h1>Newspaper</h1>
       <hr />
+      <h2>{{ this.item.periodicalTitle }}</h2>
       <dl>
         <dt>Id</dt>
         <dd>{{ this.item.id }}</dd>
+        <dt>Title of the periodical</dt>
+        <dd>{{ this.item.periodicalTitle }}</dd>
         <dt>Date</dt>
         <dd>{{ this.item.date }}</dd>
         <dt>Frequency</dt>
