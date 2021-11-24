@@ -2,11 +2,11 @@
   <header>
     <nav>
       <ul>
+        <li><router-link :to="{ name: 'Home' }">Home</router-link></li>
         <li>
           <router-link :to="{ name: 'Browse' }">Browse items</router-link>
         </li>
         <li><router-link :to="{ name: 'Rooms' }">Browse rooms</router-link></li>
-        <li><router-link :to="{ name: 'Hello' }">Welcome page</router-link></li>
         <li><a>Log out</a></li>
       </ul>
     </nav>
