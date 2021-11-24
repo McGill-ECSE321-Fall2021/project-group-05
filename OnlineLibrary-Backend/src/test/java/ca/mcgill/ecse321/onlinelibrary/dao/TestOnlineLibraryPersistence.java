@@ -46,7 +46,7 @@ public class TestOnlineLibraryPersistence {
 	@Autowired
 	private AlbumInfoRepository albumInfoRepository;
 	@Autowired
-	private NewsPaperInfoRepository newsPaperInfoRepository;
+	private NewspaperInfoRepository newspaperInfoRepository;
 	@Autowired
 	private ArchiveInfoRepository archiveInfoRepository;
 	@Autowired
@@ -86,7 +86,7 @@ public class TestOnlineLibraryPersistence {
 		bookinfoRepository.deleteAll();
 		movieInfoRepository.deleteAll();
 		albumInfoRepository.deleteAll();
-		newsPaperInfoRepository.deleteAll();
+		newspaperInfoRepository.deleteAll();
 		archiveInfoRepository.deleteAll();
 		libraryOpeningHoursRepository.deleteAll();
 		holidayRepository.deleteAll();
@@ -179,12 +179,12 @@ public class TestOnlineLibraryPersistence {
 	}
 
 	@Test
-	public void testPersistAndLoadNewsPaper() {
-		NewsPaperInfo newsPaperInfo = new NewsPaperInfo();
-		newsPaperInfoRepository.save(newsPaperInfo);
-		int newsPaperInfoId = newsPaperInfo.getId();
+	public void testPersistAndLoadNewspaper() {
+		NewspaperInfo newspaperInfo = new NewspaperInfo();
+		newspaperInfoRepository.save(newspaperInfo);
+		int newspaperInfoId = newspaperInfo.getId();
 
-		Newspaper newspaper = new Newspaper(newsPaperInfo);
+		Newspaper newspaper = new Newspaper(newspaperInfo);
 		newspaperRepository.save(newspaper);
 		int id = newspaper.getId();
 
@@ -194,8 +194,8 @@ public class TestOnlineLibraryPersistence {
 		assertNotNull(newspaper);
 		assertEquals(id, newspaper.getId());
 
-		int retrievedNewsPaperInfoId = newspaper.getNewsPaperInfo().getId();
-		assertEquals(newsPaperInfoId, retrievedNewsPaperInfoId);
+		int retrievedNewspaperInfoId = newspaper.getNewspaperInfo().getId();
+		assertEquals(newspaperInfoId, retrievedNewspaperInfoId);
 	}
 
 	@Test
@@ -244,17 +244,17 @@ public class TestOnlineLibraryPersistence {
 	}
 
 	@Test
-	public void testPersistNewsPaperInfo(){
-		NewsPaperInfo newsPaperInfo = new NewsPaperInfo();
+	public void testPersistNewspaperInfo(){
+		NewspaperInfo newspaperInfo = new NewspaperInfo();
 		int number = 5673;
-		newsPaperInfo.setNumber(number);
-		newsPaperInfoRepository.save(newsPaperInfo);
-		int id = newsPaperInfo.getId();
-		newsPaperInfo = null;
-		newsPaperInfo = newsPaperInfoRepository.findNewsPaperInfoById(id);
-		assertNotNull(newsPaperInfo);
-		assertEquals(id, newsPaperInfo.getId());
-		assertEquals(number, newsPaperInfo.getNumber());
+		newspaperInfo.setNumber(number);
+		newspaperInfoRepository.save(newspaperInfo);
+		int id = newspaperInfo.getId();
+		newspaperInfo = null;
+		newspaperInfo = newspaperInfoRepository.findNewspaperInfoById(id);
+		assertNotNull(newspaperInfo);
+		assertEquals(id, newspaperInfo.getId());
+		assertEquals(number, newspaperInfo.getNumber());
 	}
 
 	@Test

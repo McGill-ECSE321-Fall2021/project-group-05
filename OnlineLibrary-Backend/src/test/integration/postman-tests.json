@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "67d00a49-1feb-4b8b-aebb-3a699d8398bb",
+		"_postman_id": "f2f7b3b7-25ee-4526-96e4-8d6c6f1b7b3f",
 		"name": "Integration tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -1173,12 +1173,12 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/newsPaperInfo/?publication=2021-12-12&frequency=aFrequency&number=0",
+									"raw": "{{BASE_URL}}/newspaperInfo/?publication=2021-12-12&frequency=aFrequency&number=0",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"newsPaperInfo",
+										"newspaperInfo",
 										""
 									],
 									"query": [
@@ -1218,12 +1218,12 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/newsPaperInfo/?publication=2021-12-12&frequency=aFrequency&number=",
+									"raw": "{{BASE_URL}}/newspaperInfo/?publication=2021-12-12&frequency=aFrequency&number=",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"newsPaperInfo",
+										"newspaperInfo",
 										""
 									],
 									"query": [

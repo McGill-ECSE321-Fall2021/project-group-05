@@ -1,12 +1,12 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
-import ca.mcgill.ecse321.onlinelibrary.dto.NewsPaperInfoDto;
+import ca.mcgill.ecse321.onlinelibrary.dto.NewspaperInfoDto;
 
 import javax.persistence.Entity;
 import java.sql.Date;
 
 @Entity
-public class NewsPaperInfo extends LibraryItemInfo {
+public class NewspaperInfo extends LibraryItemInfo {
 	private Date publication;
 	private String frequency;
 	private int number;
@@ -36,8 +36,8 @@ public class NewsPaperInfo extends LibraryItemInfo {
 	}
 
 
-	public NewsPaperInfoDto convertToDto() {
-		return new NewsPaperInfoDto(this.getId(), publication, frequency, number);
+	public NewspaperInfoDto convertToDto() {
+		return new NewspaperInfoDto(this.getId(), publication, frequency, number);
 	}
 
 }

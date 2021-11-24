@@ -107,18 +107,18 @@ public class LibraryItemInfoController {
 				libraryItemInfoService.updateArchiveInfo(archiveInfo, title, description, publicationDate));
 	}
 
-	@PostMapping(value = {"/newsPaperInfo", "/newsPaperInfo/"})
-	public NewsPaperInfoDto createNewsPaperInfo(@RequestParam Date publication, @RequestParam String frequency,
+	@PostMapping(value = {"/newspaperInfo", "/newspaperInfo/"})
+	public NewspaperInfoDto createNewspaperInfo(@RequestParam Date publication, @RequestParam String frequency,
 			@RequestParam int number) throws IllegalArgumentException {
-		NewsPaperInfo newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
-		return NewsPaperInfoDto.fromNewsPaperInfo(newsPaperInfo);
+		NewspaperInfo newspaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
+		return NewspaperInfoDto.fromNewspaperInfo(newspaperInfo);
 	}
 
 	@PutMapping(value = {"/newspaperInfo/{id}", "/newspaperInfo/{id}/"})
-	public NewsPaperInfoDto updateNewspaperInfo(@PathVariable("id") int id, @RequestParam Date publicationDate,
+	public NewspaperInfoDto updateNewspaperInfo(@PathVariable("id") int id, @RequestParam Date publicationDate,
 			@RequestParam String frequency, @RequestParam int number) throws IllegalArgumentException {
-		NewsPaperInfo newspaperInfo = libraryItemInfoService.getNewspaperInfo(id);
-		return NewsPaperInfoDto.fromNewsPaperInfo(
+		NewspaperInfo newspaperInfo = libraryItemInfoService.getNewspaperInfo(id);
+		return NewspaperInfoDto.fromNewspaperInfo(
 				libraryItemInfoService.updateNewspaperInfo(newspaperInfo, publicationDate, frequency, number));
 	}
 

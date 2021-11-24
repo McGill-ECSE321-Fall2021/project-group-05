@@ -1,7 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.model;
 
 import ca.mcgill.ecse321.onlinelibrary.dto.LibraryItemDto;
-import ca.mcgill.ecse321.onlinelibrary.dto.NewsPaperDto;
+import ca.mcgill.ecse321.onlinelibrary.dto.NewspaperDto;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -12,27 +12,27 @@ import javax.persistence.ManyToOne;
 public class Newspaper extends LibraryItem{
 	@ManyToOne(optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private NewsPaperInfo newsPaperInfo;
+    private NewspaperInfo newspaperInfo;
 
-    public Newspaper(NewsPaperInfo newsPaperInfo) {
-        this.newsPaperInfo = newsPaperInfo;
+    public Newspaper(NewspaperInfo newspaperInfo) {
+        this.newspaperInfo = newspaperInfo;
     }
 
     protected Newspaper() {
 
     }
 
-    public NewsPaperInfo getNewsPaperInfo() {
-        return newsPaperInfo;
+    public NewspaperInfo getNewspaperInfo() {
+        return newspaperInfo;
     }
 
     @Override
     public LibraryItemDto convertToDto() {
-        return NewsPaperDto.fromNewsPaper(this);
+        return NewspaperDto.fromNewspaper(this);
     }
 
     @Override
     public LibraryItemInfo getItemInfo() {
-        return this.getNewsPaperInfo();
+        return this.getNewspaperInfo();
     }
 }

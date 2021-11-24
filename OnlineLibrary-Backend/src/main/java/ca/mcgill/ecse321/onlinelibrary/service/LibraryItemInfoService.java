@@ -26,7 +26,7 @@ public class LibraryItemInfoService {
 	private ArchiveInfoRepository archiveInfoRepository;
 
 	@Autowired
-	private NewsPaperInfoRepository newsPaperInfoRepository;
+	private NewspaperInfoRepository newspaperInfoRepository;
 
 	@Autowired
 	private LibraryItemInfoRepository libraryItemInfoRespository;
@@ -193,32 +193,32 @@ public class LibraryItemInfoService {
 	}
 
 	@Transactional
-	public NewsPaperInfo createNewspaperInfo(Date publicationDate, String frequency, int number) {
+	public NewspaperInfo createNewspaperInfo(Date publicationDate, String frequency, int number) {
 		checkArgumentsNewspaperInfo(publicationDate, frequency, number);
-		NewsPaperInfo newsPaperInfo = new NewsPaperInfo();
-		newsPaperInfo.setPublication(publicationDate);
-		newsPaperInfo.setFrequency(frequency);
-		newsPaperInfo.setNumber(number);
-		newsPaperInfoRepository.save(newsPaperInfo);
-		return newsPaperInfo;
+		NewspaperInfo newspaperInfo = new NewspaperInfo();
+		newspaperInfo.setPublication(publicationDate);
+		newspaperInfo.setFrequency(frequency);
+		newspaperInfo.setNumber(number);
+		newspaperInfoRepository.save(newspaperInfo);
+		return newspaperInfo;
 	}
 
 	@Transactional
-	public NewsPaperInfo getNewspaperInfo(int id) {
-		NewsPaperInfo newsPaperInfo = newsPaperInfoRepository.findNewsPaperInfoById(id);
-		if (newsPaperInfo == null) {
-			throw new IllegalArgumentException("The newsPaperInfo with id " + id + " was not found in the database.");
+	public NewspaperInfo getNewspaperInfo(int id) {
+		NewspaperInfo newspaperInfo = newspaperInfoRepository.findNewspaperInfoById(id);
+		if (newspaperInfo == null) {
+			throw new IllegalArgumentException("The newspaperInfo with id " + id + " was not found in the database.");
 		}
-		return newsPaperInfo;
+		return newspaperInfo;
 	}
 
 	@Transactional
-	public NewsPaperInfo updateNewspaperInfo(NewsPaperInfo newspaperInfo, Date publicationDate, String frequency, int number) {
+	public NewspaperInfo updateNewspaperInfo(NewspaperInfo newspaperInfo, Date publicationDate, String frequency, int number) {
 		checkArgumentsNewspaperInfo(publicationDate, frequency, number);
 		newspaperInfo.setPublication(publicationDate);
 		newspaperInfo.setFrequency(frequency);
 		newspaperInfo.setNumber(number);
-		newsPaperInfoRepository.save(newspaperInfo);
+		newspaperInfoRepository.save(newspaperInfo);
 		return newspaperInfo;
 	}
 

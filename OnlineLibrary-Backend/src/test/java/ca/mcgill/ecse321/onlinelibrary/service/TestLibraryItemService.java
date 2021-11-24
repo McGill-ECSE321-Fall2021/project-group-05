@@ -40,7 +40,7 @@ public class TestLibraryItemService {
 	@Mock
 	private NewspaperRepository newspaperDao;
 	@Mock
-	private NewsPaperInfoRepository newspaperInfoDao;
+	private NewspaperInfoRepository newspaperInfoDao;
 	@Mock
 	private ArchiveRepository archiveDao;
 	@Mock
@@ -142,14 +142,14 @@ public class TestLibraryItemService {
 		});
 		lenient().when(newspaperDao.findNewspaperById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
 			if (invocation.getArgument(0).equals(NEWSPAPER_KEY)) {
-				Newspaper newspaper = new Newspaper(new NewsPaperInfo());
+				Newspaper newspaper = new Newspaper(new NewspaperInfo());
 				newspaper.setId(NEWSPAPER_KEY);
 				return newspaper;
 			} else {
 				return null;
 			}
 		});
-		lenient().when(newspaperInfoDao.save(any(NewsPaperInfo.class))).then(returnParameterAsAnswer);
+		lenient().when(newspaperInfoDao.save(any(NewspaperInfo.class))).then(returnParameterAsAnswer);
 		lenient().when(archiveDao.save(any(Archive.class))).then((InvocationOnMock invocation) -> {
 			Archive archive = invocation.getArgument(0);
 			archive.setId(ARCHIVE_KEY);
@@ -370,7 +370,7 @@ public class TestLibraryItemService {
 
 	@Test
 	public void testCreateNewspaper() {
-		NewsPaperInfo newspaperInfo = null;
+		NewspaperInfo newspaperInfo = null;
 		Date publicationDate = Date.valueOf("2020-12-12");
 		String frequency = "aFrequency";
 		int number = 50;
@@ -382,15 +382,15 @@ public class TestLibraryItemService {
 			fail();
 		}
 		assertNotNull(newspaper);
-		assertEquals(newspaper.getNewsPaperInfo().getPublication(), publicationDate);
-		assertEquals(newspaper.getNewsPaperInfo().getFrequency(), frequency);
-		assertEquals(newspaper.getNewsPaperInfo().getNumber(), number);
+		assertEquals(newspaper.getNewspaperInfo().getPublication(), publicationDate);
+		assertEquals(newspaper.getNewspaperInfo().getFrequency(), frequency);
+		assertEquals(newspaper.getNewspaperInfo().getNumber(), number);
 	}
 
 	@Test
-	public void testCreateNewspaperNullNewsPaperInfo() {
+	public void testCreateNewspaperNullNewspaperInfo() {
 		String error = "";
-		NewsPaperInfo newspaperInfo = null;
+		NewspaperInfo newspaperInfo = null;
 		Newspaper newspaper = null;
 		try {
 			newspaper = libraryItemService.createNewspaper(newspaperInfo);
@@ -402,7 +402,7 @@ public class TestLibraryItemService {
 	}
 
 	@Test
-	public void testDeleteNewsPaper() {
+	public void testDeleteNewspaper() {
 		try {
 			libraryItemService.deleteNewspaper(NEWSPAPER_KEY);
 		} catch (IllegalArgumentException e) {
