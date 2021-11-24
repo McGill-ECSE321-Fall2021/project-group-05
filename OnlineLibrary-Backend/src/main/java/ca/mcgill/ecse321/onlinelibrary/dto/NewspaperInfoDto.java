@@ -36,4 +36,9 @@ public class NewspaperInfoDto extends LibraryItemInfoDto {
 	public int getNumber() {
 		return this.number;
 	}
+
+	@Override
+	public String getType() {
+		return "Newspaper";
+	}
 }
