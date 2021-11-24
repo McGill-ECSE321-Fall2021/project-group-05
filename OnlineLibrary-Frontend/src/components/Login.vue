@@ -6,32 +6,36 @@
       <b-row>
         <b-col>
           <h2>Member</h2>
-          <b-row>
-            <!-- Disallow spaces in username -->
-            <input
-              type="text"
-              @keydown.space.prevent
-              placeholder="Username"
-              v-model="memberUsername"
-            />
-          </b-row>
-          <b-row>
-            <!-- Disallow spaces in password -->
-            <input
-              type="password"
-              @keydown.space.prevent
-              placeholder="Password"
-              v-model="memberPassword"
-            />
-          </b-row>
-          <b-row>
-            <button
-              v-bind:disabled="!memberUsername.trim() || !memberPassword.trim()"
-              v-on:click="doLogInMember(memberUsername, memberPassword)"
-            >
-              Log in
-            </button>
-          </b-row>
+          <b-form>
+            <b-row>
+              <!-- Disallow spaces in username -->
+              <input
+                type="text"
+                @keydown.space.prevent
+                placeholder="Username"
+                v-model="memberUsername"
+              />
+            </b-row>
+            <b-row>
+              <!-- Disallow spaces in password -->
+              <input
+                type="password"
+                @keydown.space.prevent
+                placeholder="Password"
+                v-model="memberPassword"
+              />
+            </b-row>
+            <b-row>
+              <button
+                v-bind:disabled="
+                  !memberUsername.trim() || !memberPassword.trim()
+                "
+                v-on:click="doLogInMember(memberUsername, memberPassword)"
+              >
+                Log in
+              </button>
+            </b-row>
+          </b-form>
           <b-row>
             <span v-if="memberErrorMsg" class="errorMsg">
               Error: {{ memberErrorMsg }}
@@ -40,36 +44,38 @@
         </b-col>
         <b-col>
           <h2>Employee</h2>
-          <b-row>
-            <!-- Disallow spaces in username -->
-            <input
-              type="username"
-              @keydown.space.prevent
-              placeholder="Username"
-              v-model="librarianUsername"
-            />
-          </b-row>
-          <b-row>
-            <!-- Disallow spaces in password -->
-            <input
-              type="password"
-              @keydown.space.prevent
-              placeholder="Password"
-              v-model="librarianPassword"
-            />
-          </b-row>
-          <b-row>
-            <button
-              v-bind:disabled="
-                !librarianUsername.trim() || !librarianPassword.trim()
-              "
-              v-on:click="
-                doLogInLibrarian(librarianUsername, librarianPassword)
-              "
-            >
-              Log in
-            </button>
-          </b-row>
+          <b-form>
+            <b-row>
+              <!-- Disallow spaces in username -->
+              <input
+                type="username"
+                @keydown.space.prevent
+                placeholder="Username"
+                v-model="librarianUsername"
+              />
+            </b-row>
+            <b-row>
+              <!-- Disallow spaces in password -->
+              <input
+                type="password"
+                @keydown.space.prevent
+                placeholder="Password"
+                v-model="librarianPassword"
+              />
+            </b-row>
+            <b-row>
+              <button
+                v-bind:disabled="
+                  !librarianUsername.trim() || !librarianPassword.trim()
+                "
+                v-on:click="
+                  doLogInLibrarian(librarianUsername, librarianPassword)
+                "
+              >
+                Log in
+              </button>
+            </b-row>
+          </b-form>
           <b-row>
             <span v-if="librarianErrorMsg" class="errorMsg">
               Error: {{ librarianErrorMsg }}
