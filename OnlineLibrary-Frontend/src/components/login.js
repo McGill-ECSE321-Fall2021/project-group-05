@@ -2,24 +2,12 @@ import axios from 'axios';
 
 var config = require('../../config')
 
-var backendConfigurer = function () {
-  switch (process.env.NODE_ENV) {
-    case 'development':
-      return 'http://' + config.dev.backendHost + ':' + config.dev.backendPort
-    case 'production':
-      return 'https://' + config.build.backendHost + ':' + config.build.backendPort
-  }
-}
-var frontendConfigurer = function () {
-  switch (process.env.NODE_ENV) {
-    case 'development':
-      return 'http://' + config.dev.host + ':' + config.dev.port
-    case 'production':
-      return 'https://' + config.build.host + ':' + config.build.port
-  }
-}
-var backendUrl = backendConfigurer()
-var frontendUrl = frontendConfigurer()
+const backendUrl = (process.env.NODE_ENV === "production")
+  ? `http://${config.build.backendHost}:${config.build.backendPort}`
+  : `http://${config.dev.backendHost}:${config.dev.backendPort}`;
+const frontendUrl = (process.env.NODE_ENV === "production")
+  ? `http://${config.build.host}:${config.build.port}`
+  : `http://${config.dev.host}:${config.dev.port}`;
 var AXIOS = axios.create({
   baseURL: backendUrl,
   headers: { 'Access-Control-Allow-Origin': frontendUrl }
