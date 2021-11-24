@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import Header from "../components/Header.vue";
+import Header from "../components/MemberHeader.vue";
 import axios from "axios";
 const config = require("../../config");
 
@@ -37,7 +37,7 @@ const axios_instance = axios.create({
 });
 
 export default {
-  name: "Room",
+  name: "MemberRoom",
   data() {
     return {
       room: {

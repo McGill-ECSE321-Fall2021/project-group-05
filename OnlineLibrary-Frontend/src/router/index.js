@@ -2,12 +2,11 @@ import Vue from "vue";
 import Router from "vue-router";
 import MemberHome from "@/components/MemberHome.vue";
 import LibrarianHome from "@/components/LibrarianHome.vue";
-import Rooms from "@/components/Rooms.vue";
 import Login from "@/components/Login.vue";
 import MemberLogout from "@/components/MemberLogout.vue";
 import LibrarianLogout from "@/components/LibrarianLogout.vue";
-import Rooms from "@/components/Rooms.vue";
-import Room from "@/components/Room.vue";
+import MemberRooms from "@/components/MemberRooms.vue";
+import MemberRoom from "@/components/MemberRoom.vue";
 import NotFound from "@/components/NotFound.vue";
 
 Vue.use(Router);
@@ -51,12 +50,12 @@ export default new Router({
     {
       path: "/rooms",
       name: "Rooms",
-      component: Rooms
+      component: MemberRooms
     },
     {
       path: "/rooms/:roomId",
       name: "Room",
-      component: Room
+      component: MemberRoom
     },
     {
       path: "*",
