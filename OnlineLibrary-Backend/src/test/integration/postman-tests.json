@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f2f7b3b7-25ee-4526-96e4-8d6c6f1b7b3f",
+		"_postman_id": "96c6b214-4374-40ca-87b5-ac5a06eb947a",
 		"name": "Integration tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -1173,7 +1173,7 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/newspaperInfo/?publication=2021-12-12&frequency=aFrequency&number=0",
+									"raw": "{{BASE_URL}}/newspaperInfo/?periodicalTitle=The New Yorker&publication=2021-12-12&frequency=aFrequency&number=0",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -1182,6 +1182,10 @@
 										""
 									],
 									"query": [
+										{
+											"key": "periodicalTitle",
+											"value": "The New Yorker"
+										},
 										{
 											"key": "publication",
 											"value": "2021-12-12"
@@ -1218,7 +1222,7 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/newspaperInfo/?publication=2021-12-12&frequency=aFrequency&number=",
+									"raw": "{{BASE_URL}}/newspaperInfo/?periodicalTitle=The New Yorker&publication=2021-12-12&frequency=aFrequency&number=",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -1227,6 +1231,10 @@
 										""
 									],
 									"query": [
+										{
+											"key": "periodicalTitle",
+											"value": "The New Yorker"
+										},
 										{
 											"key": "publication",
 											"value": "2021-12-12"
@@ -3835,7 +3843,7 @@
 								"method": "PUT",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/newspaperInfo/{{newspaperInfo_id}}?publicationDate=2021-11-11&frequency=Updated frequency&number=42",
+									"raw": "{{BASE_URL}}/newspaperInfo/{{newspaperInfo_id}}?periodicalTitle=The New York Times&publicationDate=2021-11-11&frequency=Updated frequency&number=42",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -3844,6 +3852,10 @@
 										"{{newspaperInfo_id}}"
 									],
 									"query": [
+										{
+											"key": "periodicalTitle",
+											"value": "The New York Times"
+										},
 										{
 											"key": "publicationDate",
 											"value": "2021-11-11"
@@ -3880,7 +3892,7 @@
 								"method": "PUT",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/newspaperInfo/9999999?publicationDate=2021-11-11&frequency=Updated frequency&number=42",
+									"raw": "{{BASE_URL}}/newspaperInfo/9999999?periodicalTitle=The New York Times&publicationDate=2021-11-11&frequency=Updated frequency&number=42",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -3889,6 +3901,10 @@
 										"9999999"
 									],
 									"query": [
+										{
+											"key": "periodicalTitle",
+											"value": "The New York Times"
+										},
 										{
 											"key": "publicationDate",
 											"value": "2021-11-11"
