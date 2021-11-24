@@ -56,10 +56,10 @@ public class LibraryItemController {
 	}
 
 	@PostMapping(value = {"/newspaper/{newspaperInfoId}", "/newspaper/{newspaperInfoId}/"})
-	public NewsPaperDto createNewspaperDto(@PathVariable("newspaperInfoId") int newspaperInfoId) throws IllegalArgumentException {
-		NewsPaperInfo newspaperInfo = libraryItemInfoService.getNewspaperInfo(newspaperInfoId);
+	public NewspaperDto createNewspaperDto(@PathVariable("newspaperInfoId") int newspaperInfoId) throws IllegalArgumentException {
+		NewspaperInfo newspaperInfo = libraryItemInfoService.getNewspaperInfo(newspaperInfoId);
 		Newspaper newspaper = libraryItemService.createNewspaper(newspaperInfo);
-		return NewsPaperDto.fromNewsPaper(newspaper);
+		return NewspaperDto.fromNewspaper(newspaper);
 	}
 
 	@DeleteMapping(value = {"/newspaper/{newspaperId}", "/newspaper/{newspaperId}/"})
