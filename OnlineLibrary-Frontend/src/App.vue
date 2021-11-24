@@ -22,8 +22,6 @@ export default {
 }
 
 table {
-  max-width: 800px;
-  margin: auto;
   border-collapse: collapse;
   width: 100%;
 }
