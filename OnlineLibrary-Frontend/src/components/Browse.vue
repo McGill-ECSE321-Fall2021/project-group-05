@@ -13,62 +13,77 @@
           <td>{{ item.id }}</td>
           <td v-if="item.type === 'Book'">
             <h3>Book</h3>
-            <dl>
-              <dt>Title</dt>
-              <dd>{{ item.title }}</dd>
-              <dt>Author</dt>
-              <dd>{{ item.author }}</dd>
-              <dt>Number of pages</dt>
-              <dd>{{ item.numberOfPage }}</dd>
-              <dt>ISBN</dt>
-              <dd>{{ item.isbn }}</dd>
-            </dl>
+            <div class="item-description-container">
+              <img src="../assets/book.svg" alt="Book cover" />
+              <dl>
+                <dt>Title</dt>
+                <dd>{{ item.title }}</dd>
+                <dt>Author</dt>
+                <dd>{{ item.author }}</dd>
+                <dt>Number of pages</dt>
+                <dd>{{ item.numberOfPage }}</dd>
+                <dt>ISBN</dt>
+                <dd>{{ item.isbn }}</dd>
+              </dl>
+            </div>
           </td>
           <td v-else-if="item.type === 'Album'">
             <h3>Album</h3>
-            <dl>
-              <dt>Title</dt>
-              <dd>{{ item.title }}</dd>
-              <dt>Composer/performer</dt>
-              <dd>{{ item.composerPerformer }}</dd>
-              <dt>Genre</dt>
-              <dd>{{ item.genre }}</dd>
-            </dl>
+            <div class="item-description-container">
+              <img src="../assets/album.svg" alt="Album cover" />
+              <dl>
+                <dt>Title</dt>
+                <dd>{{ item.title }}</dd>
+                <dt>Composer/performer</dt>
+                <dd>{{ item.composerPerformer }}</dd>
+                <dt>Genre</dt>
+                <dd>{{ item.genre }}</dd>
+              </dl>
+            </div>
           </td>
           <td v-else-if="item.type === 'Archive'">
             <h3>Archive</h3>
-            <dl>
-              <dt>Title</dt>
-              <dd>{{ item.title }}</dd>
-              <dt>Description</dt>
-              <dd>{{ item.description }}</dd>
-            </dl>
+            <div class="item-description-container">
+              <img src="../assets/archive.svg" alt="Archive box" />
+              <dl>
+                <dt>Title</dt>
+                <dd>{{ item.title }}</dd>
+                <dt>Description</dt>
+                <dd>{{ item.description }}</dd>
+              </dl>
+            </div>
           </td>
           <td v-else-if="item.type === 'Movie'">
             <h3>Movie</h3>
-            <dl>
-              <dt>Title</dt>
-              <dd>{{ item.title }}</dd>
-              <dt>Director</dt>
-              <dd>{{ item.director }}</dd>
-              <dt>Genre</dt>
-              <dd>{{ item.genre }}</dd>
-              <dt>Duration</dt>
-              <dd>{{ item.length }}</dd>
-            </dl>
+            <div class="item-description-container">
+              <img src="../assets/movie.svg" alt="Movie icon" />
+              <dl>
+                <dt>Title</dt>
+                <dd>{{ item.title }}</dd>
+                <dt>Director</dt>
+                <dd>{{ item.director }}</dd>
+                <dt>Genre</dt>
+                <dd>{{ item.genre }}</dd>
+                <dt>Duration</dt>
+                <dd>{{ item.length }}</dd>
+              </dl>
+            </div>
           </td>
           <td v-else-if="item.type === 'Newspaper'">
             <h3>Newspaper</h3>
-            <dl>
-              <dt>Title</dt>
-              <dd>{{ item.periodicalTitle }}</dd>
-              <dt>Date</dt>
-              <dd>{{ item.date }}</dd>
-              <dt>Frequency</dt>
-              <dd>{{ item.frequency }}</dd>
-              <dt>Publication number</dt>
-              <dd>{{ item.number }}</dd>
-            </dl>
+            <div class="item-description-container">
+              <img src="../assets/newspaper.svg" alt="Newspaper" />
+              <dl>
+                <dt>Title</dt>
+                <dd>{{ item.periodicalTitle }}</dd>
+                <dt>Date</dt>
+                <dd>{{ item.date }}</dd>
+                <dt>Frequency</dt>
+                <dd>{{ item.frequency }}</dd>
+                <dt>Publication number</dt>
+                <dd>{{ item.number }}</dd>
+              </dl>
+            </div>
           </td>
           <td v-else>Could not find item description</td>
           <td>
@@ -131,9 +146,15 @@ export default {
 </script>
 
 <style scoped>
-.error-message {
-  margin: 20px;
-  text-align: center;
-  color: red;
-}
+  .error-message {
+    margin: 20px;
+    text-align: center;
+    color: red;
+  }
+  .item-description-container {
+    display: flex;
+  }
+  .item-description-container img {
+    padding: 20px;
+  }
 </style>
