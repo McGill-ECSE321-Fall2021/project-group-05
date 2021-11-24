@@ -33,4 +33,9 @@ public class AlbumInfoDto extends ReservableItemInfoDto{
 	public String getGenre() {
 		return this.genre;
 	}
+
+	@Override
+	public String getType() {
+		return "Album";
+	}
 }

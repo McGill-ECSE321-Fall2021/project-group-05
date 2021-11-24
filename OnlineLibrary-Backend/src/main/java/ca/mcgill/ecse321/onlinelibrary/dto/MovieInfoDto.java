@@ -40,4 +40,8 @@ public class MovieInfoDto extends ReservableItemInfoDto{
 		return this.length;
 	}
 
+	@Override
+	public String getType() {
+		return "Movie";
+	}
 }
