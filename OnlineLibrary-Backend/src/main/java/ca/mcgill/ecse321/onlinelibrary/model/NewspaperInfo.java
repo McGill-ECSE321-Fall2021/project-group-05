@@ -7,9 +7,14 @@ import java.sql.Date;
 
 @Entity
 public class NewspaperInfo extends LibraryItemInfo {
+	private String periodicalTitle;
 	private Date publication;
 	private String frequency;
 	private int number;
+
+	public void setPeriodicalTitle(String periodicalTitle) {
+		this.periodicalTitle = periodicalTitle;
+	}
 
 	public void setPublication(Date aPublication) {
 		publication = aPublication;
@@ -21,6 +26,10 @@ public class NewspaperInfo extends LibraryItemInfo {
 
 	public void setNumber(int aNumber) {
 		number = aNumber;
+	}
+
+	public String getPeriodicalTitle() {
+		return periodicalTitle;
 	}
 
 	public Date getPublication() {
@@ -37,7 +46,7 @@ public class NewspaperInfo extends LibraryItemInfo {
 
 
 	public NewspaperInfoDto convertToDto() {
-		return new NewspaperInfoDto(this.getId(), publication, frequency, number);
+		return new NewspaperInfoDto(this.getId(), periodicalTitle, publication, frequency, number);
 	}
 
 }
