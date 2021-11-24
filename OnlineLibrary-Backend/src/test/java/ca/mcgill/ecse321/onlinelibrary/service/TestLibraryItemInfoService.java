@@ -28,7 +28,7 @@ public class TestLibraryItemInfoService {
 	@Mock
 	private AlbumInfoRepository albumInfoDao;
 	@Mock
-	private NewsPaperInfoRepository newspaperInfoDao;
+	private NewspaperInfoRepository newspaperInfoDao;
 	@Mock
 	private ArchiveInfoRepository archiveInfoDao;
 	@Mock
@@ -120,9 +120,9 @@ public class TestLibraryItemInfoService {
 				return null;
 			}
 		});
-		lenient().when(newspaperInfoDao.findNewsPaperInfoById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
+		lenient().when(newspaperInfoDao.findNewspaperInfoById(any(Integer.class))).thenAnswer( (InvocationOnMock invocation) -> {
 			if (invocation.getArgument(0).equals(NEWSPAPER_INFO_KEY)) {
-				NewsPaperInfo newspaperInfo = new NewsPaperInfo();
+				NewspaperInfo newspaperInfo = new NewspaperInfo();
 				newspaperInfo.setId(NEWSPAPER_INFO_KEY);
 				return newspaperInfo;
 			} else {
@@ -142,7 +142,7 @@ public class TestLibraryItemInfoService {
 			List<LibraryItemInfo> listInfo = new ArrayList<LibraryItemInfo>();
 			ArchiveInfo archiveInfo = new ArchiveInfo();
 			archiveInfo.setId(ARCHIVE_INFO_KEY);
-			NewsPaperInfo newspaperInfo = new NewsPaperInfo();
+			NewspaperInfo newspaperInfo = new NewspaperInfo();
 			newspaperInfo.setId(NEWSPAPER_INFO_KEY);
 			AlbumInfo albumInfo = new AlbumInfo();
 			albumInfo.setId(ALBUM_INFO_KEY);
@@ -166,7 +166,7 @@ public class TestLibraryItemInfoService {
 		lenient().when(bookInfoDao.save(any(BookInfo.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(movieInfoDao.save(any(MovieInfo.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(albumInfoDao.save(any(AlbumInfo.class))).then(returnParameterAsAnswer);
-		lenient().when(newspaperInfoDao.save(any(NewsPaperInfo.class))).then(returnParameterAsAnswer);
+		lenient().when(newspaperInfoDao.save(any(NewspaperInfo.class))).then(returnParameterAsAnswer);
 		lenient().when(archiveInfoDao.save(any(ArchiveInfo.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(reservationDao.save(any(Reservation.class))).thenAnswer(returnParameterAsAnswer);
 	}
@@ -582,30 +582,50 @@ public class TestLibraryItemInfoService {
 
 	@Test
 	public void testCreateMovieInfo() {
+		String title = "Title";
 		String genre = "Horror";
 		String director = "Author";
 		int length = 100;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
 		assertNotNull(movieInfo);
+		assertNotNull(movieInfo.getTitle());
 		assertEquals(movieInfo.getGenre(), genre);
 		assertEquals(movieInfo.getDirector(), director);
 		assertEquals(movieInfo.getLength(), length);
+	}
+	
+	@Test
+	public void testCreateMovieInfoTitleNull() {
+		String error="";
+		String title = null;
+		String genre = "aGenre";
+		String director = "Author";
+		int length = 100;
+		MovieInfo movieInfo = null;
+		try {
+			movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
+		} catch (IllegalArgumentException e) {
+			error=e.getMessage();
+		}
+		assertNull(movieInfo);
+		assertTrue(error.contains("Title can't be empty."));
 	}
 
 	@Test
 	public void testCreateMovieInfoGenreNull() {
 		String error="";
+		String title = "aTitle";
 		String genre = null;
 		String director = "Author";
 		int length = 100;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -616,12 +636,13 @@ public class TestLibraryItemInfoService {
 	@Test
 	public void testCreateMovieInfoGenreEmpty() {
 		String error="";
+		String title = "aTitle";
 		String genre = "   ";
 		String director = "Author";
 		int length = 100;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -632,12 +653,13 @@ public class TestLibraryItemInfoService {
 	@Test
 	public void testCreateMovieInfoDirectorNull() {
 		String error="";
+		String title = "aTitle";
 		String genre = "aGenre";
 		String director = null;
 		int length = 100;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -648,12 +670,13 @@ public class TestLibraryItemInfoService {
 	@Test
 	public void testCreateMovieInfoDirectorEmpty() {
 		String error="";
+		String title = "aTitle";
 		String genre = "aGenre";
 		String director = "  ";
 		int length = 100;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -664,12 +687,13 @@ public class TestLibraryItemInfoService {
 	@Test
 	public void testCreateMovieInfoLength0() {
 		String error="";
+		String title = "aTitle";
 		String genre = "aGenre";
 		String director = "Director";
 		int length = 0;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -680,12 +704,13 @@ public class TestLibraryItemInfoService {
 	@Test
 	public void testCreateMovieAllEmpty() {
 		String error="";
+		String title = "";
 		String genre = "";
 		String director = "";
 		int length = 0;
 		MovieInfo movieInfo = null;
 		try {
-			movieInfo = libraryItemInfoService.createMovieInfo(genre, director, length);
+			movieInfo = libraryItemInfoService.createMovieInfo(title, genre, director, length);
 		} catch (IllegalArgumentException e) {
 			error=e.getMessage();
 		}
@@ -721,16 +746,18 @@ public class TestLibraryItemInfoService {
 	
 	@Test
 	public void testUpdateMovienfo() {
-		MovieInfo movieInfo = libraryItemInfoService.createMovieInfo("AGenre", "aDirector", 123);
+		MovieInfo movieInfo = libraryItemInfoService.createMovieInfo("aTitle","AGenre", "aDirector", 123);
+		String newTitle = "Title2";
 		String newGenre = "Genre2";
 		String newDirector = "Director2";
 		int length = 321;
 		try {
-			movieInfo = libraryItemInfoService.updateMovieInfo(movieInfo, newGenre, newDirector, length);
+			movieInfo = libraryItemInfoService.updateMovieInfo(movieInfo, newTitle, newGenre, newDirector, length);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
 		assertNotNull(movieInfo);
+		assertEquals(movieInfo.getTitle(), newTitle);
 		assertEquals(movieInfo.getGenre(), newGenre);
 		assertEquals(movieInfo.getDirector(), newDirector);
 		assertEquals(movieInfo.getLength(), length);
@@ -910,107 +937,107 @@ public class TestLibraryItemInfoService {
 	}
 
 	@Test
-	public void testCreateNewsPaperInfo() {
+	public void testCreateNewspaperInfo() {
 		Date publication = Date.valueOf("2021-10-31");
 		String frequency = "Frequency";
 		int number = 123;
-		NewsPaperInfo newsPaperInfo = null;
+		NewspaperInfo newspaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
+			newspaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
-		assertNotNull(newsPaperInfo);
-		assertEquals(newsPaperInfo.getPublication().getTime(), publication.getTime());
-		assertEquals(newsPaperInfo.getFrequency(), frequency);
-		assertEquals(newsPaperInfo.getNumber(), number);
+		assertNotNull(newspaperInfo);
+		assertEquals(newspaperInfo.getPublication().getTime(), publication.getTime());
+		assertEquals(newspaperInfo.getFrequency(), frequency);
+		assertEquals(newspaperInfo.getNumber(), number);
 	}
 
 	@Test
-	public void testCreateNewsPaperInfoPublicationIsNull() {
+	public void testCreateNewspaperInfoPublicationIsNull() {
 		String error="";
 		Date publication = null;
 		String frequency = "Frequency";
 		int number = 5;
-		NewsPaperInfo newsPaperInfo = null;
+		NewspaperInfo newspaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
+			newspaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-		assertNull(newsPaperInfo);
+		assertNull(newspaperInfo);
 		assertTrue(error.contains("Date can't be empty."));
 	}
 
 	@Test
-	public void testCreateNewsPaperInfoFrequencyIsNull() {
+	public void testCreateNewspaperInfoFrequencyIsNull() {
 		String error="";
 		Date publication = Date.valueOf("2021-10-31");
 		String frequency = null;
 		int number = 5;
-		NewsPaperInfo newsPaperInfo = null;
+		NewspaperInfo newspaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
+			newspaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-		assertNull(newsPaperInfo);
+		assertNull(newspaperInfo);
 		assertTrue(error.contains("Frequency can't be empty."));
 	}
 
 	@Test
-	public void testCreateNewsPaperInfoFrequencyIsEmpty() {
+	public void testCreateNewspaperInfoFrequencyIsEmpty() {
 		String error="";
 		Date publication = Date.valueOf("2021-10-31");
 		String frequency = " ";
 		int number = 5;
-		NewsPaperInfo newsPaperInfo = null;
+		NewspaperInfo newspaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
+			newspaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-		assertNull(newsPaperInfo);
+		assertNull(newspaperInfo);
 		assertTrue(error.contains("Frequency can't be empty."));
 	}
 
 	@Test
-	public void testCreateNewsPaperInfoNumberIsNegative() {
+	public void testCreateNewspaperInfoNumberIsNegative() {
 		String error="";
 		Date publication = Date.valueOf("2021-10-31");
 		String frequency = "Everyday";
 		int number = -1;
-		NewsPaperInfo newsPaperInfo = null;
+		NewspaperInfo newspaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
+			newspaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-		assertNull(newsPaperInfo);
+		assertNull(newspaperInfo);
 		assertTrue(error.contains("Number can't be negative."));
 	}
 
 	@Test
-	public void testCreateNewsPaperInfoAllEmpty() {
+	public void testCreateNewspaperInfoAllEmpty() {
 		String error="";
 		Date publication = null;
 		String frequency = " ";
 		int number = -1;
-		NewsPaperInfo newsPaperInfo = null;
+		NewspaperInfo newspaperInfo = null;
 		try {
-			newsPaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
+			newspaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-		assertNull(newsPaperInfo);
+		assertNull(newspaperInfo);
 		assertTrue(error.contains("Number can't be negative."));
 		assertTrue(error.contains("Frequency can't be empty."));
 		assertTrue(error.contains("Date can't be empty."));
 	}
 	
 	@Test
-	public void testGetNewsPaperInfo() {
-		NewsPaperInfo newspaperInfo = null;
+	public void testGetNewspaperInfo() {
+		NewspaperInfo newspaperInfo = null;
 		try {
 			newspaperInfo = libraryItemInfoService.getNewspaperInfo(NEWSPAPER_INFO_KEY);
 		} catch (IllegalArgumentException e){
@@ -1023,23 +1050,23 @@ public class TestLibraryItemInfoService {
 	@Test
 	public void testGetNewspaperInfoBadId() {
 		String error = "";
-		NewsPaperInfo newspaperInfo = null;
+		NewspaperInfo newspaperInfo = null;
 		try {
 			newspaperInfo = libraryItemInfoService.getNewspaperInfo(NEWSPAPER_INFO_BAD_KEY);
 		} catch (IllegalArgumentException e) {
 			error += e.getMessage();
 		}
 		assertNull(newspaperInfo);
-		assertTrue(error.contains("The newsPaperInfo with id " + NEWSPAPER_INFO_BAD_KEY + " was not found in the database."));
+		assertTrue(error.contains("The newspaperInfo with id " + NEWSPAPER_INFO_BAD_KEY + " was not found in the database."));
 	}
 	
 	@Test
 	public void testUpdateNewspaperInfo() {
-		NewsPaperInfo newspaper = libraryItemInfoService.createNewspaperInfo(Date.valueOf("2020-11-11"), "AFrequency", 123);
+		NewspaperInfo newspaper = libraryItemInfoService.createNewspaperInfo(Date.valueOf("2020-11-11"), "AFrequency", 123);
 		Date newPublicationDate = Date.valueOf("2021-11-11");
 		String newFrequency = "Frequency2";
 		int newNumber = 321;
-		NewsPaperInfo newspaperInfo = null;
+		NewspaperInfo newspaperInfo = null;
 		try {
 			newspaperInfo = libraryItemInfoService.updateNewspaperInfo(newspaper, newPublicationDate, newFrequency, newNumber);
 		} catch (IllegalArgumentException e) {

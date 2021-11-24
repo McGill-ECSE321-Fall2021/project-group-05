@@ -6,6 +6,9 @@ import Rooms from "@/components/Rooms.vue";
 import Login from "@/components/Login.vue";
 import MemberLogout from "@/components/MemberLogout.vue";
 import LibrarianLogout from "@/components/LibrarianLogout.vue";
+import Rooms from "@/components/Rooms.vue";
+import Room from "@/components/Room.vue";
+import NotFound from "@/components/NotFound.vue";
 
 Vue.use(Router);
 
@@ -26,7 +29,7 @@ export default new Router({
       component: LibrarianHome
     },
     {
-      path: "/login/",
+      path: "/login",
       name: "Login",
       component: Login
     },
@@ -41,9 +44,23 @@ export default new Router({
       component: LibrarianLogout
     },
     {
-      path: "/rooms/",
+      path: "/404",
+      name: "NotFound",
+      component: NotFound
+    },
+    {
+      path: "/rooms",
       name: "Rooms",
       component: Rooms
+    },
+    {
+      path: "/rooms/:roomId",
+      name: "Room",
+      component: Room
+    },
+    {
+      path: "*",
+      redirect: "/404"
     }
   ]
 });

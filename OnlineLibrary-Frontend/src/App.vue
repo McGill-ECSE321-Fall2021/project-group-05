@@ -20,4 +20,45 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+
+table {
+  max-width: 800px;
+  margin: auto;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table td,
+table th {
+  border: 1px solid #ddd;
+  padding: 6px;
+}
+
+table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+table tr:hover {
+  background-color: #ddd;
+}
+
+table th {
+  color: #fff;
+  background-color: #000;
+}
+
+h1 {
+  text-align: center;
+}
+
+main {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+  text-align: left;
+}
+
+h2 {
+  font-size: 1.5em;
+}
 </style>

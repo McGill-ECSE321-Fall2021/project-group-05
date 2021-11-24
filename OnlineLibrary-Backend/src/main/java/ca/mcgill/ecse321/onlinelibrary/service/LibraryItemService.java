@@ -145,7 +145,7 @@ public class LibraryItemService {
 	}
 
 	@Transactional
-	public Newspaper createNewspaper(NewsPaperInfo newspaperInfo) {
+	public Newspaper createNewspaper(NewspaperInfo newspaperInfo) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		int errorCount = 0;
 		if (newspaperInfo == null) {
