@@ -76,6 +76,7 @@
           </td>
         </tr>
       </table>
+      <p class="error-message" v-if="errorMessage">{{ errorMessage }}</p>
     </main>
   </body>
 </template>
@@ -109,14 +110,28 @@ export default {
       .get("/browse/")
       .then(response => {
         this.items = response.data;
+        this.errorMessage = "";
         console.log(response.data);
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        console.error(error);
+        this.errorMessage =
+          "Oops! 🙁 Something bad happened on our side. Try again later";
+      });
   },
   data() {
     return {
-      items: []
+      items: [],
+      errorMessage: "",
     };
   }
 };
 </script>
+
+<style scoped>
+.error-message {
+  margin: 20px;
+  text-align: center;
+  color: red;
+}
+</style>
