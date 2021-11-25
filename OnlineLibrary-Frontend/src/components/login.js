@@ -25,6 +25,23 @@ export default {
       librarianErrorMsg: ''
     };
   },
+  created() {
+    // If a librarian and member are both logged in, log both out
+    const loggedInMember = sessionStorage.getItem("loggedInMember");
+    const loggedInLibrarian = sessionStorage.getItem("loggedInLibrarian");
+    if (loggedInMember && loggedInLibrarian) {
+      sessionStorage.removeItem("loggedInMember");
+      sessionStorage.removeItem("loggedInLibrarian");
+    }
+    // Member already logged in
+    else if (loggedInMember) {
+      this.$router.push({ name: "MemberHome" });
+    }
+    // Librarian already logged in
+    else if (loggedInLibrarian) {
+      this.$router.push({ name: "LibrarianHome" });
+    }
+  },
   methods: {
     doLogInMember(username, password) {
       const self = this;
