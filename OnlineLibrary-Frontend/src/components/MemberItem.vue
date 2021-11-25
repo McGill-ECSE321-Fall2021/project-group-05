@@ -34,18 +34,29 @@
     <main v-else-if="this.item.type === 'Album'">
       <h1>{{ this.item.title }}</h1>
       <hr />
-      <div class="item-description-container">
-        <img src="../assets/album.svg" alt="Album cover" />
-        <dl>
-          <dt>Id</dt>
-          <dd>{{ this.item.id }}</dd>
-          <dt>Title</dt>
-          <dd>{{ this.item.title }}</dd>
-          <dt>Composer/performer</dt>
-          <dd>{{ this.item.composerPerformer }}</dd>
-          <dt>Genre</dt>
-          <dd>{{ this.item.genre }}</dd>
-        </dl>
+      <div class="main-container">
+        <div class="item-description-container">
+          <img src="../assets/album.svg" alt="Album cover" />
+          <dl>
+            <dt>Id</dt>
+            <dd>{{ this.item.id }}</dd>
+            <dt>Title</dt>
+            <dd>{{ this.item.title }}</dd>
+            <dt>Composer/performer</dt>
+            <dd>{{ this.item.composerPerformer }}</dd>
+            <dt>Genre</dt>
+            <dd>{{ this.item.genre }}</dd>
+          </dl>
+        </div>
+        <div class="item-actions-container">
+          <b-button variant="primary" @click="reserve">Reserve</b-button>
+          <p class="success-message" v-if="reservationSuccessMessage">
+            {{ reservationSuccessMessage }}
+          </p>
+          <p class="error-message" v-if="reservationErrorMessage">
+            {{ reservationErrorMessage }}
+          </p>
+        </div>
       </div>
     </main>
     <main v-else-if="this.item.type === 'Archive'">
@@ -66,20 +77,31 @@
     <main v-else-if="this.item.type === 'Movie'">
       <h1>{{ this.item.title }}</h1>
       <hr />
-      <div class="item-description-container">
-        <img src="../assets/movie.svg" alt="Movie icon" />
-        <dl>
-          <dt>Id</dt>
-          <dd>{{ this.item.id }}</dd>
-          <dt>Title</dt>
-          <dd>{{ this.item.title }}</dd>
-          <dt>Director</dt>
-          <dd>{{ this.item.director }}</dd>
-          <dt>Genre</dt>
-          <dd>{{ this.item.genre }}</dd>
-          <dt>Duration</dt>
-          <dd>{{ this.item.length }}</dd>
-        </dl>
+      <div class="main-container">
+        <div class="item-description-container">
+          <img src="../assets/movie.svg" alt="Movie icon" />
+          <dl>
+            <dt>Id</dt>
+            <dd>{{ this.item.id }}</dd>
+            <dt>Title</dt>
+            <dd>{{ this.item.title }}</dd>
+            <dt>Director</dt>
+            <dd>{{ this.item.director }}</dd>
+            <dt>Genre</dt>
+            <dd>{{ this.item.genre }}</dd>
+            <dt>Duration</dt>
+            <dd>{{ this.item.length }}</dd>
+          </dl>
+        </div>
+        <div class="item-actions-container">
+          <b-button variant="primary" @click="reserve">Reserve</b-button>
+          <p class="success-message" v-if="reservationSuccessMessage">
+            {{ reservationSuccessMessage }}
+          </p>
+          <p class="error-message" v-if="reservationErrorMessage">
+            {{ reservationErrorMessage }}
+          </p>
+        </div>
       </div>
     </main>
     <main v-else-if="this.item.type === 'Newspaper'">
