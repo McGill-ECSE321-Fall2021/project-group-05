@@ -21,6 +21,7 @@
     <main v-else-if="this.item.type === 'Album'">
       <h1>Album</h1>
       <h2>{{ this.item.title }}</h2>
+      <hr />
       <dl>
         <dt>Id</dt>
         <dd>{{ this.item.id }}</dd>
@@ -35,6 +36,7 @@
     <main v-else-if="this.item.type === 'Archive'">
       <h1>Archive</h1>
       <h2>{{ this.item.title }}</h2>
+      <hr />
       <dl>
         <dt>Id</dt>
         <dd>{{ this.item.id }}</dd>
@@ -47,6 +49,7 @@
     <main v-else-if="this.item.type === 'Movie'">
       <h1>Movie</h1>
       <h2>{{ this.item.title }}</h2>
+      <hr />
       <dl>
         <dt>Id</dt>
         <dd>{{ this.item.id }}</dd>
@@ -62,6 +65,7 @@
     </main>
     <main v-else-if="this.item.type === 'Newspaper'">
       <h1>Newspaper</h1>
+      <hr />
       <dl>
         <dt>Id</dt>
         <dd>{{ this.item.id }}</dd>
