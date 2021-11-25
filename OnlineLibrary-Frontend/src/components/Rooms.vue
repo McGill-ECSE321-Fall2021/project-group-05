@@ -47,7 +47,7 @@ export default {
   components: {
     Header
   },
-  created: function() {
+  created() {
     axios_instance
       .get("/room/")
       .then(response => {
