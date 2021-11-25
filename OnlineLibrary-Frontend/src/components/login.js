@@ -68,7 +68,7 @@ export default {
             sessionStorage.setItem("loggedInLibrarian", JSON.stringify(response.data));
             // Prevent 2 users from being logged in at once
             sessionStorage.removeItem("loggedInMember");
-            self.$router.push("/home/librarian");
+            self.$router.push({ name: "LibrarianHome" });
           }
           // TODO: Do actual error handling
           else {
