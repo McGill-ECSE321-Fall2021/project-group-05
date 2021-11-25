@@ -13,7 +13,7 @@ export default {
   name: "MemberLogout",
   created() {
     sessionStorage.removeItem("loggedInMember");
-    window.location.replace("/#/login/");
+    window.location.replace("/login");
   }
 };
 </script>

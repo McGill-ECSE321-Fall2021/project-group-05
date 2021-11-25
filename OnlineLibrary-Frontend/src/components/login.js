@@ -14,7 +14,7 @@ const AXIOS = axios.create({
 });
 
 export default {
-  name: 'login',
+  name: 'Login',
   data() {
     return {
       memberUsername: '',

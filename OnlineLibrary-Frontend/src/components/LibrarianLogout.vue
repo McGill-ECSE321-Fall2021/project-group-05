@@ -13,7 +13,7 @@ export default {
   name: "LibrarianLogout",
   created() {
     sessionStorage.removeItem("loggedInLibrarian");
-    window.location.replace("/#/login/");
+    window.location.replace("/login");
   }
 };
 </script>
