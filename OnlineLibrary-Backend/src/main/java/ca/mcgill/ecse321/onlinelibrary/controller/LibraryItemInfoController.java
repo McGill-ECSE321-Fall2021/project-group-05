@@ -33,11 +33,10 @@ public class LibraryItemInfoController {
 	}
 
 	@PostMapping(value = {"/reservation", "/reservation/"})
-	public ReservationDto reserveItem(@RequestParam int memberId, @RequestParam int reservableItemId,
-			@RequestParam Date date) throws IllegalArgumentException {
+	public ReservationDto reserveItem(@RequestParam int memberId, @RequestParam int reservableItemId) throws IllegalArgumentException {
 		Member member = memberService.getMemberById(memberId);
 		ReservableItemInfo reservableItem = libraryItemInfoService.getReservableItemInfo(reservableItemId);
-		Reservation reservation = libraryItemInfoService.reserveItem(member, reservableItem, date);
+		Reservation reservation = libraryItemInfoService.reserveItem(member, reservableItem);
 		return ReservationDto.fromReservation(reservation);
 	}
 

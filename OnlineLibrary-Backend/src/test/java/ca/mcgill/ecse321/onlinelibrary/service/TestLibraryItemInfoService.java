@@ -177,16 +177,14 @@ public class TestLibraryItemInfoService {
 		Member member = new Member("123 Main Street", "Seb");
 		member.activate();
 		BookInfo bookInfo = new BookInfo();
-		Date date = new Date(200);
 		try {
-			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo);
 		} catch (IllegalArgumentException e){
 			fail();
 		}
 		assertNotNull(reservation);
 		assertEquals(reservation.getMember(), member);
 		assertEquals(reservation.getReservableItemInfo(), bookInfo);
-		assertEquals(reservation.getDate(), date);
 	}
 
 	@Test
@@ -195,9 +193,8 @@ public class TestLibraryItemInfoService {
 		Reservation reservation = null;
 		Member member = null;
 		BookInfo bookInfo = new BookInfo();
-		Date date = new Date(200);
 		try {
-			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo);
 		} catch (IllegalArgumentException e){
 			error += e.getMessage();
 		}
@@ -212,9 +209,8 @@ public class TestLibraryItemInfoService {
 		Member member = new Member("123 Main Street", "Seb");
 		//member.activate();
 		BookInfo bookInfo = new BookInfo();
-		Date date = new Date(200);
 		try {
-			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo);
 		} catch (IllegalArgumentException e){
 			error += e.getMessage();
 		}
@@ -232,9 +228,8 @@ public class TestLibraryItemInfoService {
 		member.applyStatusPenalty(); //red
 		member.applyStatusPenalty(); //blacklisted
 		BookInfo bookInfo = new BookInfo();
-		Date date = new Date(200);
 		try {
-			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo);
 		} catch (IllegalArgumentException e){
 			error += e.getMessage();
 		}
@@ -249,31 +244,13 @@ public class TestLibraryItemInfoService {
 		Member member = new Member("123 Main Street", "Seb");
 		member.activate();
 		BookInfo bookInfo = null;
-		Date date = new Date(200);
 		try {
-			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo);
 		} catch (IllegalArgumentException e){
 			error += e.getMessage();
 		}
 		assertNull(reservation);
 		assertTrue(error.contains("An item needs to be assigned to a reservation"));
-	}
-
-	@Test
-	public void testReserveItemDateNull(){
-		String error = "";
-		Reservation reservation = null;
-		Member member = new Member("123 Main Street", "Seb");
-		member.activate();
-		BookInfo bookInfo = new BookInfo();
-		Date date = null;
-		try {
-			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
-		} catch (IllegalArgumentException e){
-			error += e.getMessage();
-		}
-		assertNull(reservation);
-		assertTrue(error.contains("Date cannot be null"));
 	}
 
 	@Test
@@ -283,16 +260,14 @@ public class TestLibraryItemInfoService {
 		Member member = null;
 		//member.activate();
 		BookInfo bookInfo = null;
-		Date date = null;
 		try {
-			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo);
 		} catch (IllegalArgumentException e){
 			error += e.getMessage();
 		}
 		assertNull(reservation);
 		assertTrue(error.contains("A member needs to be assigned to a reservation."));
 		assertTrue(error.contains("An item needs to be assigned to a reservation"));
-		assertTrue(error.contains("Date cannot be null"));
 	}
 
 	@Test
@@ -384,8 +359,7 @@ public class TestLibraryItemInfoService {
 		Member member = new Member("123 Main Street", "Seb");
 		member.activate();
 		BookInfo bookInfo = new BookInfo();
-		Date date = new Date(200);
-		reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+		reservation = libraryItemInfoService.reserveItem(member, bookInfo);
 		reservation.setId(RESERVATION_KEY);
 		try {
 			libraryItemInfoService.deleteReservationbyId(RESERVATION_KEY);
@@ -401,8 +375,7 @@ public class TestLibraryItemInfoService {
 		Member member = new Member("123 Main Street", "Seb");
 		member.activate();
 		BookInfo bookInfo = new BookInfo();
-		Date date = new Date(200);
-		reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+		reservation = libraryItemInfoService.reserveItem(member, bookInfo);
 		reservation.setId(RESERVATION_KEY);
 		try {
 			libraryItemInfoService.deleteReservationbyId(RESERVATION_BAD_KEY);
