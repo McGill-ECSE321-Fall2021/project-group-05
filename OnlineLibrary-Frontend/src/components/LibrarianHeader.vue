@@ -7,6 +7,12 @@
         <li>
           <router-link :to="{ name: 'LibrarianLogout' }">Logout</router-link>
         </li>
+        <li><router-link :to="{ name: 'Home' }">Home</router-link></li>
+        <li>
+          <router-link :to="{ name: 'Browse' }">Browse items</router-link>
+        </li>
+        <li><router-link :to="{ name: 'Rooms' }">Browse rooms</router-link></li>
+        <li><a>Log out</a></li>
       </ul>
     </nav>
   </header>
@@ -21,7 +27,7 @@ nav ul {
   display: flex;
 }
 nav ul li {
-  font-size: 20px;
+  font-size: 1.3em;
   text-align: center;
   padding: 20px 50px;
   justify-content: center;

@@ -938,12 +938,13 @@ public class TestLibraryItemInfoService {
 
 	@Test
 	public void testCreateNewspaperInfo() {
+		String periodicalTitle = "The New Yorker";
 		Date publication = Date.valueOf("2021-10-31");
 		String frequency = "Frequency";
 		int number = 123;
 		NewspaperInfo newspaperInfo = null;
 		try {
-			newspaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
+			newspaperInfo = libraryItemInfoService.createNewspaperInfo(periodicalTitle, publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
@@ -954,14 +955,32 @@ public class TestLibraryItemInfoService {
 	}
 
 	@Test
+	public void testCreateNewspaperInfoPeriodicalTitleIsNull() {
+		String error = "";
+		String periodicalTitle = null;
+		Date publication = Date.valueOf("2021-10-31");
+		String frequency = "Frequency";
+		int number = 123;
+		NewspaperInfo newspaperInfo = null;
+		try {
+			newspaperInfo = libraryItemInfoService.createNewspaperInfo(periodicalTitle, publication, frequency, number);
+		} catch (IllegalArgumentException e) {
+			error = e.getMessage();
+		}
+		assertNull(newspaperInfo);
+		assertTrue(error.contains("Periodical title can't be empty."));
+	}
+
+	@Test
 	public void testCreateNewspaperInfoPublicationIsNull() {
 		String error="";
+		String periodicalTitle = "The New Yorker";
 		Date publication = null;
 		String frequency = "Frequency";
 		int number = 5;
 		NewspaperInfo newspaperInfo = null;
 		try {
-			newspaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
+			newspaperInfo = libraryItemInfoService.createNewspaperInfo(periodicalTitle, publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -971,13 +990,14 @@ public class TestLibraryItemInfoService {
 
 	@Test
 	public void testCreateNewspaperInfoFrequencyIsNull() {
-		String error="";
+		String error = "";
+		String periodicalTitle = "The New Yorker";
 		Date publication = Date.valueOf("2021-10-31");
 		String frequency = null;
 		int number = 5;
 		NewspaperInfo newspaperInfo = null;
 		try {
-			newspaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
+			newspaperInfo = libraryItemInfoService.createNewspaperInfo(periodicalTitle, publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -987,13 +1007,14 @@ public class TestLibraryItemInfoService {
 
 	@Test
 	public void testCreateNewspaperInfoFrequencyIsEmpty() {
-		String error="";
+		String error = "";
+		String periodicalTitle = "The New Yorker";
 		Date publication = Date.valueOf("2021-10-31");
 		String frequency = " ";
 		int number = 5;
 		NewspaperInfo newspaperInfo = null;
 		try {
-			newspaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
+			newspaperInfo = libraryItemInfoService.createNewspaperInfo(periodicalTitle, publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -1004,12 +1025,13 @@ public class TestLibraryItemInfoService {
 	@Test
 	public void testCreateNewspaperInfoNumberIsNegative() {
 		String error="";
+		String periodicalTitle = "The New Yorker";
 		Date publication = Date.valueOf("2021-10-31");
 		String frequency = "Everyday";
 		int number = -1;
 		NewspaperInfo newspaperInfo = null;
 		try {
-			newspaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
+			newspaperInfo = libraryItemInfoService.createNewspaperInfo(periodicalTitle, publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
@@ -1020,16 +1042,18 @@ public class TestLibraryItemInfoService {
 	@Test
 	public void testCreateNewspaperInfoAllEmpty() {
 		String error="";
+		String periodicalTitle = "";
 		Date publication = null;
 		String frequency = " ";
 		int number = -1;
 		NewspaperInfo newspaperInfo = null;
 		try {
-			newspaperInfo = libraryItemInfoService.createNewspaperInfo(publication, frequency, number);
+			newspaperInfo = libraryItemInfoService.createNewspaperInfo(periodicalTitle, publication, frequency, number);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
 		assertNull(newspaperInfo);
+		assertTrue(error.contains("Periodical title can't be empty."));
 		assertTrue(error.contains("Number can't be negative."));
 		assertTrue(error.contains("Frequency can't be empty."));
 		assertTrue(error.contains("Date can't be empty."));
@@ -1062,13 +1086,13 @@ public class TestLibraryItemInfoService {
 	
 	@Test
 	public void testUpdateNewspaperInfo() {
-		NewspaperInfo newspaper = libraryItemInfoService.createNewspaperInfo(Date.valueOf("2020-11-11"), "AFrequency", 123);
+		NewspaperInfo newspaper = libraryItemInfoService.createNewspaperInfo("The New Yorker", Date.valueOf("2020-11-11"), "AFrequency", 123);
 		Date newPublicationDate = Date.valueOf("2021-11-11");
 		String newFrequency = "Frequency2";
 		int newNumber = 321;
 		NewspaperInfo newspaperInfo = null;
 		try {
-			newspaperInfo = libraryItemInfoService.updateNewspaperInfo(newspaper, newPublicationDate, newFrequency, newNumber);
+			newspaperInfo = libraryItemInfoService.updateNewspaperInfo(newspaper, "The New Yorker",  newPublicationDate, newFrequency, newNumber);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}

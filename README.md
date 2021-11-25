@@ -2,7 +2,7 @@
 [![Main CI push](https://github.com/McGill-ECSE321-Fall2021/project-group-05/actions/workflows/main-push-backend.yml/badge.svg?branch=main)](https://github.com/McGill-ECSE321-Fall2021/project-group-05/actions/workflows/main-push-backend.yml)
 
 ## Overview
-This online library system serves a library in a small town. It assists librarians in day-to-day operations like managing the library catalog, checking items in and out, and registering new users. It also provides access to the library catalog and reservation system for online users. The web app is available [here](https://onlinelibrary-backend-05a.herokuapp.com/test).
+This online library system serves a library in a small town. It assists librarians in day-to-day operations like managing the library catalog, checking items in and out, and registering new users. It also provides access to the library catalog and reservation system for online users. The backend is deployed [here](https://onlinelibrary-backend-05a.herokuapp.com/test) and the web frontend is deployed [here](https://onlinelibrary-frontend-05a.herokuapp.com).
 
 Further documentation may be accessed via the [wiki](https://github.com/McGill-ECSE321-Fall2021/project-group-05/wiki).
 

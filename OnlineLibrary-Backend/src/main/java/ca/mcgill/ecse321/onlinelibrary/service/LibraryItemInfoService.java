@@ -38,6 +38,16 @@ public class LibraryItemInfoService {
 	private ReservableItemInfoRepository reservableItemInfoRepository;
 
 	@Transactional
+	public LibraryItemInfo getLibraryItemInfoById(int id) {
+		LibraryItemInfo libraryItemInfo = libraryItemInfoRespository.findLibraryItemInfoById(id);
+		if (libraryItemInfo == null) {
+			throw new IllegalArgumentException(
+					"The library item info with id " + id + " was not found in the database.");
+		}
+		return libraryItemInfo;
+	}
+
+	@Transactional
 	public ReservableItemInfo getReservableItemInfo(int id){
 		ReservableItemInfo reservableItemInfo = reservableItemInfoRepository.findReservableItemInfoById(id);
 		if (reservableItemInfo == null){
@@ -193,9 +203,10 @@ public class LibraryItemInfoService {
 	}
 
 	@Transactional
-	public NewspaperInfo createNewspaperInfo(Date publicationDate, String frequency, int number) {
-		checkArgumentsNewspaperInfo(publicationDate, frequency, number);
+	public NewspaperInfo createNewspaperInfo(String periodicalTitle, Date publicationDate, String frequency, int number) {
+		checkArgumentsNewspaperInfo(periodicalTitle, publicationDate, frequency, number);
 		NewspaperInfo newspaperInfo = new NewspaperInfo();
+		newspaperInfo.setPeriodicalTitle(periodicalTitle);
 		newspaperInfo.setPublication(publicationDate);
 		newspaperInfo.setFrequency(frequency);
 		newspaperInfo.setNumber(number);
@@ -213,8 +224,9 @@ public class LibraryItemInfoService {
 	}
 
 	@Transactional
-	public NewspaperInfo updateNewspaperInfo(NewspaperInfo newspaperInfo, Date publicationDate, String frequency, int number) {
-		checkArgumentsNewspaperInfo(publicationDate, frequency, number);
+	public NewspaperInfo updateNewspaperInfo(NewspaperInfo newspaperInfo, String periodicalTitle, Date publicationDate, String frequency, int number) {
+		checkArgumentsNewspaperInfo(periodicalTitle, publicationDate, frequency, number);
+		newspaperInfo.setPeriodicalTitle(periodicalTitle);
 		newspaperInfo.setPublication(publicationDate);
 		newspaperInfo.setFrequency(frequency);
 		newspaperInfo.setNumber(number);
@@ -343,8 +355,12 @@ public class LibraryItemInfoService {
 		}
 	}
 
-	private void checkArgumentsNewspaperInfo(Date publicationDate, String frequency, int number) {
+	private void checkArgumentsNewspaperInfo(String periodicalTitle, Date publicationDate, String frequency, int number) {
 		ArrayList<String> errorMessage = new ArrayList<String>();
+
+		if (periodicalTitle == null || periodicalTitle.trim().length() == 0) {
+			errorMessage.add("Periodical title can't be empty.");
+		}
 
 		if (publicationDate == null) {
 			errorMessage.add("Date can't be empty.");

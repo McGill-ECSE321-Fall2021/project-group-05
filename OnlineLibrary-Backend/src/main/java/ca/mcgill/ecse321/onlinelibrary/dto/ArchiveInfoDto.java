@@ -35,4 +35,9 @@ public class ArchiveInfoDto extends LibraryItemInfoDto{
 		return new ArchiveInfoDto(archiveInfo.getId(), archiveInfo.getTitle(), archiveInfo.getDescription(),
 				archiveInfo.getPublicationDate());
 	}
+
+	@Override
+	public String getType() {
+		return "Archive";
+	}
 }

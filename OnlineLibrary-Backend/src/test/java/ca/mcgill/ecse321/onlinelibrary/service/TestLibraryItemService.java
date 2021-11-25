@@ -374,7 +374,7 @@ public class TestLibraryItemService {
 		Date publicationDate = Date.valueOf("2020-12-12");
 		String frequency = "aFrequency";
 		int number = 50;
-		newspaperInfo = libraryItemInfoService.createNewspaperInfo(publicationDate,frequency,number);
+		newspaperInfo = libraryItemInfoService.createNewspaperInfo("The New Yorker",publicationDate,frequency,number);
 		Newspaper newspaper = null;
 		try {
 			newspaper = libraryItemService.createNewspaper(newspaperInfo);

@@ -7,7 +7,13 @@ import MemberLogout from "@/components/MemberLogout.vue";
 import LibrarianLogout from "@/components/LibrarianLogout.vue";
 import MemberRooms from "@/components/MemberRooms.vue";
 import MemberRoom from "@/components/MemberRoom.vue";
+import MemberBrowse from "@/components/MemberBrowse.vue";
+import LibrarianBrowse from "@/components/LibrarianBrowse.vue";
+import MemberItem from "@/components/MemberItem.vue";
+import LibrarianItem from "@/components/LibrarianItem.vue";
 import NotFound from "@/components/NotFound.vue";
+import LibrarianRooms from "@/components/LibrarianRooms.vue";
+import LibrarianRoom from "@/components/LibrarianRoom.vue";
 
 Vue.use(Router);
 
@@ -19,12 +25,12 @@ export default new Router({
       redirect: "/login"
     },
     {
-      path: "/home/member",
+      path: "/member/home",
       name: "MemberHome",
       component: MemberHome
     },
     {
-      path: "/home/librarian",
+      path: "/librarian/home",
       name: "LibrarianHome",
       component: LibrarianHome
     },
@@ -34,14 +40,34 @@ export default new Router({
       component: Login
     },
     {
-      path: "/logout/member",
+      path: "/member/logout",
       name: "MemberLogout",
       component: MemberLogout
     },
     {
-      path: "/logout/librarian",
+      path: "/librarian/logout",
       name: "LibrarianLogout",
       component: LibrarianLogout
+    },
+    {
+      path: "/member/browse/",
+      name: "MemberBrowse",
+      component: MemberBrowse
+    },
+    {
+      path: "/librarian/browse",
+      name: "LibrarianBrowse",
+      component: LibrarianBrowse
+    },
+    {
+      path: "/member/item/:itemId/",
+      name: "MemberItem",
+      component: MemberItem
+    },
+    {
+      path: "/librarian/item/:itemId/",
+      name: "LibrarianItem",
+      component: LibrarianItem
     },
     {
       path: "/404",
@@ -49,14 +75,24 @@ export default new Router({
       component: NotFound
     },
     {
-      path: "/rooms",
-      name: "Rooms",
+      path: "/member/rooms",
+      name: "MemberRooms",
       component: MemberRooms
     },
     {
-      path: "/rooms/:roomId",
-      name: "Room",
+      path: "/member/rooms/:roomId",
+      name: "MemberRoom",
       component: MemberRoom
+    },
+    {
+      path: "/librarian/rooms",
+      name: "LibrarianRooms",
+      component: LibrarianRooms
+    },
+    {
+      path: "/librarian/rooms/:roomId",
+      name: "LibrarianRoom",
+      component: LibrarianRoom
     },
     {
       path: "*",

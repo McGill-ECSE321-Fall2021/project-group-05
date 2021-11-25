@@ -36,7 +36,12 @@ public class BookInfoDto extends ReservableItemInfoDto{
 		return this.numberOfPage;
 	}
 
-	public long getIsbn () {
+	public long getIsbn() {
 		return this.isbn;
+	}
+	
+	@Override
+	public String getType() {
+		return "Book";
 	}
 }
