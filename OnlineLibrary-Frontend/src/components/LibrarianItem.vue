@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import Header from "./Header.vue";
+import Header from "./LibrarianHeader.vue";
 import axios from "axios";
 const config = require("../../config");
 
@@ -113,7 +113,7 @@ const axios_instance = axios.create({
 });
 
 export default {
-  name: "Item",
+  name: "LibrarianItem",
   data() {
     return {
       item: {}

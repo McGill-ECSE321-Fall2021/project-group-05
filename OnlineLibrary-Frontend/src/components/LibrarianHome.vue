@@ -15,17 +15,25 @@
 </template>
 
 <script>
-import Header from "./Header.vue";
+import Header from "./LibrarianHeader.vue";
 export default {
   components: { Header },
-  name: "Home"
+  name: "LibrarianHome"
 };
 </script>
 
 <style scoped>
+h1,
+h2 {
+  font-weight: normal;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
 .item-picture-container {
   display: flex;
   justify-content: space-evenly;
 }
-
 </style>

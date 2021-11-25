@@ -2,12 +2,10 @@
   <header>
     <nav>
       <ul>
-        <li><router-link :to="{ name: 'Home' }">Home</router-link></li>
-        <li>
-          <router-link :to="{ name: 'Browse' }">Browse items</router-link>
-        </li>
-        <li><router-link :to="{ name: 'Rooms' }">Browse rooms</router-link></li>
-        <li><a>Log out</a></li>
+        <li><router-link :to="{ name: 'LibrarianHome' }">Home</router-link></li>
+        <li><router-link :to="{ name: 'LibrarianBrowse' }">Browse items</router-link></li>
+        <li><router-link :to="{ name: 'LibrarianRooms' }">Browse rooms</router-link></li>
+        <li><router-link :to="{ name: 'LibrarianLogout' }">Log out</router-link></li>
       </ul>
     </nav>
   </header>

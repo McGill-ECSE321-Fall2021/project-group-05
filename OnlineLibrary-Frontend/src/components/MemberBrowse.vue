@@ -97,7 +97,7 @@
           </td>
           <td v-else>Could not find item description</td>
           <td>
-            <router-link :to="{ name: 'Item', params: { itemId: item.id } }">
+            <router-link :to="{ name: 'MemberItem', params: { itemId: item.id } }">
               View item details
             </router-link>
           </td>
@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import Header from "./Header.vue";
+import Header from "./MemberHeader.vue";
 import axios from "axios";
 const config = require("../../config");
 
@@ -128,7 +128,7 @@ const axios_instance = axios.create({
 });
 
 export default {
-  name: "Browse",
+  name: "MemberBrowse",
   components: {
     Header
   },
