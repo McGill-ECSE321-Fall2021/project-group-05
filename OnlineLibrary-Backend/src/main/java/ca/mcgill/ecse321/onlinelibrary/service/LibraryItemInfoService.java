@@ -38,6 +38,16 @@ public class LibraryItemInfoService {
 	private ReservableItemInfoRepository reservableItemInfoRepository;
 
 	@Transactional
+	public LibraryItemInfo getLibraryItemInfoById(int id) {
+		LibraryItemInfo libraryItemInfo = libraryItemInfoRespository.findLibraryItemInfoById(id);
+		if (libraryItemInfo == null) {
+			throw new IllegalArgumentException(
+					"The library item info with id " + id + " was not found in the database.");
+		}
+		return libraryItemInfo;
+	}
+
+	@Transactional
 	public ReservableItemInfo getReservableItemInfo(int id){
 		ReservableItemInfo reservableItemInfo = reservableItemInfoRepository.findReservableItemInfoById(id);
 		if (reservableItemInfo == null){

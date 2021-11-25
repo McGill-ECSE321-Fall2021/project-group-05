@@ -10,4 +10,6 @@ public abstract class LibraryItemInfoDto {
 	public Integer getId() {
 		return id;
 	}
+
+	public abstract String getType();
 }

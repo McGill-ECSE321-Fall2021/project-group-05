@@ -27,6 +27,11 @@ public class LibraryItemInfoController {
 				.collect(Collectors.toList());
 	}
 
+	@GetMapping(value = { "/libraryItemInfo/{libraryItemInfoId}", "/libraryItemInfo/{libraryItemInfoId}/" })
+	public LibraryItemInfoDto getLibraryItemInfoById(@PathVariable int libraryItemInfoId) {
+		return libraryItemInfoService.getLibraryItemInfoById(libraryItemInfoId).convertToDto();
+	}
+
 	@PostMapping(value = {"/reservation", "/reservation/"})
 	public ReservationDto reserveItem(@RequestParam int memberId, @RequestParam int reservableItemId,
 			@RequestParam Date date) throws IllegalArgumentException {
