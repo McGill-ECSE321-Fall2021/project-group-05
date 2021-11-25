@@ -2,8 +2,7 @@
   <body>
     <Header />
     <main v-if="this.item.type === 'Book'">
-      <h1>Book</h1>
-      <h2>{{ this.item.title }}</h2>
+      <h1>{{ this.item.title }}</h1>
       <hr />
       <div class="item-description-container">
         <img src="../assets/book.svg" alt="Book cover" />
@@ -22,8 +21,7 @@
       </div>
     </main>
     <main v-else-if="this.item.type === 'Album'">
-      <h1>Album</h1>
-      <h2>{{ this.item.title }}</h2>
+      <h1>{{ this.item.title }}</h1>
       <hr />
       <div class="item-description-container">
         <img src="../assets/album.svg" alt="Album cover" />
@@ -40,8 +38,7 @@
       </div>
     </main>
     <main v-else-if="this.item.type === 'Archive'">
-      <h1>Archive</h1>
-      <h2>{{ this.item.title }}</h2>
+      <h1>{{ this.item.title }}</h1>
       <hr />
       <div class="item-description-container">
         <img src="../assets/archive.svg" alt="Archive box" />
@@ -56,8 +53,7 @@
       </div>
     </main>
     <main v-else-if="this.item.type === 'Movie'">
-      <h1>Movie</h1>
-      <h2>{{ this.item.title }}</h2>
+      <h1>{{ this.item.title }}</h1>
       <hr />
       <div class="item-description-container">
         <img src="../assets/movie.svg" alt="Movie icon" />
@@ -76,8 +72,7 @@
       </div>
     </main>
     <main v-else-if="this.item.type === 'Newspaper'">
-      <h1>Newspaper</h1>
-      <h2>{{ this.item.periodicalTitle }}</h2>
+      <h1>{{ this.item.periodicalTitle }}</h1>
       <hr />
       <div class="item-description-container">
         <img src="../assets/newspaper.svg" alt="Newspaper" />

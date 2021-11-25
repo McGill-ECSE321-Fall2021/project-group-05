@@ -12,7 +12,6 @@
         <tr v-for="item in items" :key="item.id">
           <td>{{ item.id }}</td>
           <td v-if="item.type === 'Book'">
-            <h3>Book</h3>
             <div class="item-description-container">
               <img src="../assets/book.svg" alt="Book cover" />
               <dl>
@@ -28,7 +27,6 @@
             </div>
           </td>
           <td v-else-if="item.type === 'Album'">
-            <h3>Album</h3>
             <div class="item-description-container">
               <img src="../assets/album.svg" alt="Album cover" />
               <dl>
@@ -42,7 +40,6 @@
             </div>
           </td>
           <td v-else-if="item.type === 'Archive'">
-            <h3>Archive</h3>
             <div class="item-description-container">
               <img src="../assets/archive.svg" alt="Archive box" />
               <dl>
@@ -54,7 +51,6 @@
             </div>
           </td>
           <td v-else-if="item.type === 'Movie'">
-            <h3>Movie</h3>
             <div class="item-description-container">
               <img src="../assets/movie.svg" alt="Movie icon" />
               <dl>
@@ -70,7 +66,6 @@
             </div>
           </td>
           <td v-else-if="item.type === 'Newspaper'">
-            <h3>Newspaper</h3>
             <div class="item-description-container">
               <img src="../assets/newspaper.svg" alt="Newspaper" />
               <dl>
