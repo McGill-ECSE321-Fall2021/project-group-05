@@ -9,11 +9,13 @@
 </template>
 
 <script>
+import Login from "@/components/Login.vue";
+
 export default {
   name: "MemberLogout",
   created() {
     sessionStorage.removeItem("loggedInMember");
-    window.location.replace("/login");
+    this.$router.replace(Login);
   }
 };
 </script>
