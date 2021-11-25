@@ -6,12 +6,14 @@ import java.sql.Date;
 
 public class NewspaperInfoDto extends LibraryItemInfoDto {
 
+	private String periodicalTitle;
 	private Date publication;
 	private String frequency;
 	private int number;
 
-	public NewspaperInfoDto(int id, Date publication, String frequency, int number) {
+	public NewspaperInfoDto(int id, String periodicalTitle, Date publication, String frequency, int number) {
 		super(id);
+		this.periodicalTitle = periodicalTitle;
 		this.publication = publication;
 		this.frequency = frequency;
 		this.number = number;
@@ -21,8 +23,12 @@ public class NewspaperInfoDto extends LibraryItemInfoDto {
 		if (newspaperInfo == null) {
 			throw new IllegalArgumentException("There is no such newspaperInfo");
 		}
-		return new NewspaperInfoDto(newspaperInfo.getId(), newspaperInfo.getPublication(), newspaperInfo.getFrequency(),
+		return new NewspaperInfoDto(newspaperInfo.getId(), newspaperInfo.getPeriodicalTitle(), newspaperInfo.getPublication(), newspaperInfo.getFrequency(),
 				newspaperInfo.getNumber());
+	}
+
+	public String getPeriodicalTitle() {
+		return periodicalTitle;
 	}
 
 	public Date getDate() {

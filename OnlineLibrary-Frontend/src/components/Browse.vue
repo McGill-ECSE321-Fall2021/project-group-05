@@ -60,6 +60,8 @@
           <td v-else-if="item.type === 'Newspaper'">
             <h3>Newspaper</h3>
             <dl>
+              <dt>Title</dt>
+              <dd>{{ item.periodicalTitle }}</dd>
               <dt>Date</dt>
               <dd>{{ item.date }}</dd>
               <dt>Frequency</dt>
