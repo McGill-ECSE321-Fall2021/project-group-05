@@ -22,7 +22,7 @@ nav ul {
   display: flex;
 }
 nav ul li {
-  font-size: 20px;
+  font-size: 1.3em;
   text-align: center;
   padding: 20px 50px;
   justify-content: center;
