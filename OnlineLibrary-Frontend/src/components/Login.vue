@@ -7,7 +7,7 @@
         <b-row>
           <b-col>
             <h2>Member</h2>
-            <b-form>
+            <b-form @submit="submitMemberForm">
               <b-row>
                 <!-- Disallow spaces in username -->
                 <input
@@ -31,7 +31,6 @@
                   v-bind:disabled="
                     !memberUsername.trim() || !memberPassword.trim()
                   "
-                  v-on:click="doLogInMember(memberUsername, memberPassword)"
                 >
                   Log in
                 </button>
@@ -45,7 +44,7 @@
           </b-col>
           <b-col>
             <h2>Employee</h2>
-            <b-form>
+            <b-form @submit="submitLibrarianForm">
               <b-row>
                 <!-- Disallow spaces in username -->
                 <input
@@ -68,9 +67,6 @@
                 <button
                   v-bind:disabled="
                     !librarianUsername.trim() || !librarianPassword.trim()
-                  "
-                  v-on:click="
-                    doLogInLibrarian(librarianUsername, librarianPassword)
                   "
                 >
                   Log in

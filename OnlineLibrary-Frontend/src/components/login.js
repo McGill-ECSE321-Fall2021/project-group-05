@@ -43,6 +43,10 @@ export default {
     }
   },
   methods: {
+    submitMemberForm(event) {
+      event.preventDefault();
+      this.doLogInMember(this.memberUsername, this.memberPassword);
+    },
     doLogInMember(username, password) {
       const self = this;
       AXIOS.get('/member/login', {
@@ -70,6 +74,10 @@ export default {
           console.log(error);
           self.memberErrorMsg = "Invalid username or password.";
         })
+    },
+    submitLibrarianForm(event) {
+      event.preventDefault();
+      this.doLogInLibrarian(this.librarianUsername, this.librarianPassword);
     },
     doLogInLibrarian(username, password) {
       const self = this;
