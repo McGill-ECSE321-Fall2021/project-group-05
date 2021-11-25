@@ -58,3 +58,5 @@ jobs:
         heroku_api_key: 64118b4c-0551-49a2-8fa2-45cee48f24b0
         heroku_app_name: "onlinelibrary-backend-05a"
         heroku_email: "louis.t.hildebrand@gmail.com"
+      env:
+        HD_SPRING_PROFILES_ACTIVE: "production"
