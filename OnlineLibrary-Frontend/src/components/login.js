@@ -34,11 +34,11 @@ export default {
     }
     // Member already logged in
     else if (loggedInMember) {
-      this.$router.push({ name: "MemberHome" });
+      this.$router.replace({ name: "MemberHome" });
     }
     // Librarian already logged in
     else if (loggedInLibrarian) {
-      this.$router.push({ name: "LibrarianHome" });
+      this.$router.replace({ name: "LibrarianHome" });
     }
   },
   methods: {
