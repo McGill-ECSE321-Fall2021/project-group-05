@@ -3,13 +3,28 @@
     <Header />
     <main>
       <h1>Browse all library items</h1>
+      <b-form inline class="search-form" @submit="search">
+        <b-form-input
+          id="search-bar"
+          type="search"
+          placeholder="Search"
+          list="item-list"
+          v-model="searchQuery"
+        ></b-form-input>
+        <datalist id="item-list">
+          <option v-for="item in items" :key="item.id">
+            {{ item.title || item.periodicalTitle }}
+          </option>
+        </datalist>
+        <b-button variant="primary" type="submit">Search</b-button>
+      </b-form>
       <table>
         <tr>
           <th>Item ID</th>
           <th>Item description</th>
           <th>Item details</th>
         </tr>
-        <tr v-for="item in items" :key="item.id">
+        <tr v-for="item in filteredItems" :key="item.id">
           <td>{{ item.id }}</td>
           <td v-if="item.type === 'Book'">
             <div class="item-description-container">
@@ -122,6 +137,7 @@ export default {
       .get("/browse/")
       .then(response => {
         this.items = response.data;
+        this.filteredItems = this.items;
         this.errorMessage = "";
         console.log(response.data);
       })
@@ -134,22 +150,54 @@ export default {
   data() {
     return {
       items: [],
-      errorMessage: "",
+      filteredItems: [],
+      searchQuery: "",
+      errorMessage: ""
     };
+  },
+  methods: {
+    search(event) {
+      event.preventDefault();
+      this.filteredItems = this.items.filter(item => {
+        if (item.title) {
+          return item.title
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase());
+        } else if (item.periodicalTitle) {
+          return item.periodicalTitle
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase());
+        } else {
+          return false;
+        }
+      });
+    }
   }
 };
 </script>
 
 <style scoped>
-  .error-message {
-    margin: 20px;
-    text-align: center;
-    color: red;
-  }
-  .item-description-container {
-    display: flex;
-  }
-  .item-description-container img {
-    padding: 20px;
-  }
+.search-form {
+  margin: 20px 0;
+  justify-content: stretch;
+  justify-content: space-evenly;
+}
+.search-form input {
+  margin: 0 10px;
+  flex-grow: 1;
+}
+.search-form button {
+  flex-grow: 0.1;
+}
+.error-message {
+  margin: 20px;
+  text-align: center;
+  color: red;
+}
+.item-description-container {
+  display: flex;
+}
+.item-description-container img {
+  padding: 20px;
+}
 </style>
