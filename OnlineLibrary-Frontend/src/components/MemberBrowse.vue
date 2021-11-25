@@ -97,7 +97,7 @@
           </td>
           <td v-else>Could not find item description</td>
           <td>
-            <router-link :to="{ name: 'Item', params: { itemId: item.id } }">
+            <router-link :to="{ name: 'MemberItem', params: { itemId: item.id } }">
               View item details
             </router-link>
           </td>
@@ -115,11 +115,11 @@ const config = require("../../config");
 
 const backendUrl =
   process.env.NODE_ENV === "production"
-    ? `http://${config.build.backendHost}:${config.build.backendPort}`
+    ? `http://${config.build.backendHost}`
     : `http://${config.dev.backendHost}:${config.dev.backendPort}`;
 const frontendUrl =
   process.env.NODE_ENV === "production"
-    ? `http://${config.build.host}:${config.build.port}`
+    ? `http://${config.build.host}`
     : `http://${config.dev.host}:${config.dev.port}`;
 
 const axios_instance = axios.create({

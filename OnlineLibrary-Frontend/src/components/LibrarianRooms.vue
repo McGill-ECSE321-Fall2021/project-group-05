@@ -12,7 +12,7 @@
         <tr v-for="room in rooms" :key="room.id">
           <td>{{ room.id }}</td>
           <td>
-            <router-link :to="{ name: 'Room', params: { roomId: room.id } }">{{
+            <router-link :to="{ name: 'LibrarianRoom', params: { roomId: room.id } }">{{
               room.name
             }}</router-link>
           </td>
@@ -31,11 +31,11 @@ const config = require("../../config");
 
 const backendUrl =
   process.env.NODE_ENV === "production"
-    ? `http://${config.build.backendHost}:${config.build.backendPort}`
+    ? `http://${config.build.backendHost}`
     : `http://${config.dev.backendHost}:${config.dev.backendPort}`;
 const frontendUrl =
   process.env.NODE_ENV === "production"
-    ? `http://${config.build.host}:${config.build.port}`
+    ? `http://${config.build.host}`
     : `http://${config.dev.host}:${config.dev.port}`;
 
 const axios_instance = axios.create({

@@ -3,10 +3,10 @@ import axios from 'axios';
 const config = require('../../config');
 
 const backendUrl = (process.env.NODE_ENV === "production")
-  ? `http://${config.build.backendHost}:${config.build.backendPort}`
+  ? `http://${config.build.backendHost}`
   : `http://${config.dev.backendHost}:${config.dev.backendPort}`;
 const frontendUrl = (process.env.NODE_ENV === "production")
-  ? `http://${config.build.host}:${config.build.port}`
+  ? `http://${config.build.host}`
   : `http://${config.dev.host}:${config.dev.port}`;
 const AXIOS = axios.create({
   baseURL: backendUrl,
@@ -26,12 +26,11 @@ export default {
     };
   },
   created() {
-    // If a librarian and member are both logged in, log both out
     const loggedInMember = sessionStorage.getItem("loggedInMember");
     const loggedInLibrarian = sessionStorage.getItem("loggedInLibrarian");
+    // Both logged in
     if (loggedInMember && loggedInLibrarian) {
-      sessionStorage.removeItem("loggedInMember");
-      sessionStorage.removeItem("loggedInLibrarian");
+      // Do nothing
     }
     // Member already logged in
     else if (loggedInMember) {

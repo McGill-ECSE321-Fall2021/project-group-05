@@ -18,7 +18,7 @@
 import Header from "./LibrarianHeader.vue";
 export default {
   components: { Header },
-  name: "Home"
+  name: "LibrarianHome"
 };
 </script>
 

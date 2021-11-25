@@ -3,10 +3,9 @@
     <nav>
       <ul>
         <li><router-link :to="{ name: 'MemberHome' }">Home</router-link></li>
-        <li><router-link :to="{ name: 'Rooms' }">Browse rooms</router-link></li>
-        <li>
-          <router-link :to="{ name: 'MemberLogout' }">Logout</router-link>
-        </li>
+        <li><router-link :to="{ name: 'MemberBrowse' }">Browse items</router-link></li>
+        <li><router-link :to="{ name: 'MemberRooms' }">Browse rooms</router-link></li>
+        <li><router-link :to="{ name: 'MemberLogout' }">Log out</router-link></li>
       </ul>
     </nav>
   </header>
