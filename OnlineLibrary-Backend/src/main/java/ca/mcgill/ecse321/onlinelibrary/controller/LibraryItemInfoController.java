@@ -3,6 +3,7 @@ package ca.mcgill.ecse321.onlinelibrary.controller;
 import ca.mcgill.ecse321.onlinelibrary.dto.*;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.service.LibraryItemInfoService;
+import ca.mcgill.ecse321.onlinelibrary.service.LibraryItemService;
 import ca.mcgill.ecse321.onlinelibrary.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,9 @@ public class LibraryItemInfoController {
 
 	@Autowired
 	private LibraryItemInfoService libraryItemInfoService;
+
+	@Autowired
+	private LibraryItemService libraryItemService;
 
 	@Autowired
 	private MemberService memberService;
@@ -139,5 +143,11 @@ public class LibraryItemInfoController {
 		AlbumInfo albumInfo = libraryItemInfoService.getAlbumInfo(id);
 		return AlbumInfoDto
 				.fromAlbumInfo(libraryItemInfoService.updateAlbumInfo(albumInfo, title, composerPerformer, genre));
+	}
+
+	@GetMapping(value = {"/libraryItemInfo/{libraryItemInfoId}/libraryItem", "/libraryItemInfo/{libraryItemInfoId}/libraryItem"})
+	public List<LibraryItemDto> getAssociatedLibraryItems(@PathVariable int libraryItemInfoId) {
+		LibraryItemInfo libraryItemInfo = libraryItemInfoService.getLibraryItemInfoById(libraryItemInfoId);
+		return libraryItemService.getAssociatedCopies(libraryItemInfo).stream().map(item -> item.convertToDto()).collect(Collectors.toList());
 	}
 }
