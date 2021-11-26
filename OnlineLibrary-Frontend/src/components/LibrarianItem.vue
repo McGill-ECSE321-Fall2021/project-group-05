@@ -200,6 +200,17 @@
           </b-form>
         </div>
       </div>
+      <h2>Item copies</h2>
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Status</th>
+        </tr>
+        <tr v-for="copy in copiesWithStatus" :key="copy.id">
+          <td>{{ copy.id }}</td>
+          <td>{{ copy.status }}</td>
+        </tr>
+      </table>
     </main>
     <main v-else-if="this.item.type === 'Movie'">
       <h1>{{ this.item.title }}</h1>
