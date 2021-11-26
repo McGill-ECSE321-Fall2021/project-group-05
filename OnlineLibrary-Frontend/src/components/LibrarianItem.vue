@@ -391,6 +391,13 @@
           <td>{{ copy.status }}</td>
         </tr>
       </table>
+      <b-button @click="addCopy">Add copy</b-button>
+      <p class="success-message" v-if="addCopySuccessMessage">
+        {{ addCopySuccessMessage }}
+      </p>
+      <p class="error-message" v-if="addCopyErrorMessage">
+        {{ addCopyErrorMessage }}
+      </p>
     </main>
   </body>
 </template>
