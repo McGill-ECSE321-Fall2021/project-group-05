@@ -19,6 +19,24 @@ public class LibraryItemController {
 	@Autowired
 	private MemberService memberService;
 
+	@PostMapping(value = { "/libraryItem/{libraryItemInfoId}", "/libraryItem/{libraryItemInfoId}/" })
+	public LibraryItemDto createLibraryItem(@PathVariable int libraryItemInfoId) {
+		LibraryItemInfo libraryItemInfo = libraryItemInfoService.getLibraryItemInfoById(libraryItemInfoId);
+		if (libraryItemInfo instanceof BookInfo) {
+			return libraryItemService.createBook((BookInfo) libraryItemInfo).convertToDto();
+		} else if (libraryItemInfo instanceof AlbumInfo) {
+			return libraryItemService.createAlbum((AlbumInfo) libraryItemInfo).convertToDto();
+		} else if (libraryItemInfo instanceof MovieInfo) {
+			return libraryItemService.createMovie((MovieInfo) libraryItemInfo).convertToDto();
+		} else if (libraryItemInfo instanceof ArchiveInfo) {
+			return libraryItemService.createArchive((ArchiveInfo) libraryItemInfo).convertToDto();
+		} else if (libraryItemInfo instanceof NewspaperInfo) {
+			return libraryItemService.createNewspaper((NewspaperInfo) libraryItemInfo).convertToDto();
+		} else {
+			throw new IllegalArgumentException("Library item has an unknown type");
+		}
+	}
+
 	@PostMapping(value = {"/book/{bookInfoId}", "/book/{bookInfoId}/"})
 	public BookDto createBookDto(@PathVariable("bookInfoId") int bookInfoId) throws IllegalArgumentException {
 		BookInfo bookInfo = libraryItemInfoService.getBookInfo(bookInfoId);
