@@ -55,6 +55,7 @@ public class TestLibraryItemInfoService {
 	private static final int RESERVATION_BAD_KEY = 12;
 	private static final int MEMBER_KEY = 13;
 	private static final int MEMBER_BAD_KEY = 14;
+	private static final BookInfo ALREADY_RESERVED_BOOK_INFO = new BookInfo();
 	
 
 	@BeforeEach
@@ -75,6 +76,7 @@ public class TestLibraryItemInfoService {
 				member.setId(MEMBER_KEY);
 				List<Reservation> reservation = new ArrayList<Reservation>();
 				reservation.add(new Reservation(member, new BookInfo(), new Date(200)));
+				reservation.add(new Reservation(member, ALREADY_RESERVED_BOOK_INFO, new Date(300)));
 				return reservation;
 			} else {
 				return null;
@@ -251,6 +253,17 @@ public class TestLibraryItemInfoService {
 		}
 		assertNull(reservation);
 		assertTrue(error.contains("An item needs to be assigned to a reservation"));
+	}
+
+	@Test
+	public void testReserveItemDuplicateReservation() {
+		Member member = new Member("123 Main Street", "Seb");
+		member.setId(MEMBER_KEY);
+		member.activate();
+		Exception e = assertThrows(IllegalArgumentException.class, () -> {
+			libraryItemInfoService.reserveItem(member, ALREADY_RESERVED_BOOK_INFO);
+		});
+		assertEquals("Member already has a reservation for this item.", e.getMessage());
 	}
 
 	@Test
