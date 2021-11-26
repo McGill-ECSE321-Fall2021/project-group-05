@@ -470,6 +470,17 @@ export default {
     Promise.all([promiseToFetchItem, promisetoFetchCopies]).then(
       this.fetchCopiesWithStatus
     );
+
+    axios_instance
+      .get(`/member/all`)
+      .then(response => {
+        console.log(response.data);
+        this.members = response.data;
+      })
+      .catch(error => {
+        console.error(error);
+        this.$router.replace({ name: "NotFound" });
+      });
   },
   beforeRouteUpdate(to, from, next) {
     console.log("Updating route...");
