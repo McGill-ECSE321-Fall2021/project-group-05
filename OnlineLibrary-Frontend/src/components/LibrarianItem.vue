@@ -580,4 +580,7 @@ export default {
 table {
   margin-top: 20px;
 }
+main > button {
+  margin: 20px 0;
+}
 </style>
