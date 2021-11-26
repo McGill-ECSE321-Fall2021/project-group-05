@@ -127,16 +127,56 @@
     <main v-else-if="this.item.type === 'Archive'">
       <h1>{{ this.item.title }}</h1>
       <hr />
-      <div class="item-description-container">
-        <img src="../assets/archive.svg" alt="Archive box" />
-        <dl>
-          <dt>Id</dt>
-          <dd>{{ this.item.id }}</dd>
-          <dt>Title</dt>
-          <dd>{{ this.item.title }}</dd>
-          <dt>Description</dt>
-          <dd>{{ this.item.description }}</dd>
-        </dl>
+      <div class="main-container">
+        <div class="item-description-container">
+          <img src="../assets/archive.svg" alt="Archive box" />
+          <dl>
+            <dt>Id</dt>
+            <dd>{{ this.item.id }}</dd>
+            <dt>Title</dt>
+            <dd>{{ this.item.title }}</dd>
+            <dt>Description</dt>
+            <dd>{{ this.item.description }}</dd>
+            <dt>Publication date</dt>
+            <dd>{{ this.item.publicationDate }}</dd>
+          </dl>
+        </div>
+        <div class="item-actions-container">
+          <h2>Update item details</h2>
+          <b-form @submit="updateArchive">
+            <b-form-group label="Title" label-for="title">
+              <b-form-input
+                id="title"
+                type="text"
+                v-model="newItem.title"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Description" label-for="description">
+              <b-form-input
+                id="description"
+                type="text"
+                v-model="newItem.description"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Publication date" label-for="publication-date">
+              <b-form-input
+                id="publication-date"
+                type="date"
+                v-model="newItem.publicationDate"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-button type="submit">Update</b-button>
+            <p class="success-message" v-if="updateItemSuccessMessage">
+              {{ updateItemSuccessMessage }}
+            </p>
+            <p class="error-message" v-if="updateItemErrorMessage">
+              {{ updateItemErrorMessage }}
+            </p>
+          </b-form>
+        </div>
       </div>
     </main>
     <main v-else-if="this.item.type === 'Movie'">
