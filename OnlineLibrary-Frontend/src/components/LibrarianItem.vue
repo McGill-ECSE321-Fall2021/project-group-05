@@ -395,7 +395,9 @@ export default {
       copies: [],
       copiesWithStatus: [],
       updateItemSuccessMessage: "",
-      updateItemErrorMessage: ""
+      updateItemErrorMessage: "",
+      addCopySuccessMessage: "",
+      addCopyErrorMessage: ""
     };
   },
   components: {
