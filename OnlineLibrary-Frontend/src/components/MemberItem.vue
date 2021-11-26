@@ -71,6 +71,8 @@
           <dd>{{ this.item.title }}</dd>
           <dt>Description</dt>
           <dd>{{ this.item.description }}</dd>
+          <dt>Publication date</dt>
+          <dd>{{ this.item.publicationDate }}</dd>
         </dl>
       </div>
     </main>
