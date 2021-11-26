@@ -4,90 +4,309 @@
     <main v-if="this.item.type === 'Book'">
       <h1>{{ this.item.title }}</h1>
       <hr />
-      <div class="item-description-container">
-        <img src="../assets/book.svg" alt="Book cover" />
-        <dl>
-          <dt>Id</dt>
-          <dd>{{ this.item.id }}</dd>
-          <dt>Title</dt>
-          <dd>{{ this.item.title }}</dd>
-          <dt>Author</dt>
-          <dd>{{ this.item.author }}</dd>
-          <dt>Number of pages</dt>
-          <dd>{{ this.item.numberOfPage }}</dd>
-          <dt>ISBN</dt>
-          <dd>{{ this.item.isbn }}</dd>
-        </dl>
+      <div class="main-container">
+        <div class="item-description-container">
+          <img src="../assets/book.svg" alt="Book cover" />
+          <dl>
+            <dt>Id</dt>
+            <dd>{{ this.item.id }}</dd>
+            <dt>Title</dt>
+            <dd>{{ this.item.title }}</dd>
+            <dt>Author</dt>
+            <dd>{{ this.item.author }}</dd>
+            <dt>Number of pages</dt>
+            <dd>{{ this.item.numberOfPage }}</dd>
+            <dt>ISBN</dt>
+            <dd>{{ this.item.isbn }}</dd>
+          </dl>
+        </div>
+        <div class="item-actions-container">
+          <h2>Update item details</h2>
+          <b-form @submit="updateBook">
+            <b-form-group label="Title" label-for="title">
+              <b-form-input
+                id="title"
+                type="text"
+                v-model="newItem.title"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Author" label-for="author">
+              <b-form-input
+                id="author"
+                type="text"
+                v-model="newItem.author"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Number of pages" label-for="number-of-pages">
+              <b-form-input
+                id="number-of-pages"
+                type="number"
+                v-model="newItem.numberOfPage"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="ISBN" label-for="isbn">
+              <b-form-input
+                id="isbn"
+                type="number"
+                v-model="newItem.isbn"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-button type="submit">Update</b-button>
+            <p class="success-message" v-if="updateItemSuccessMessage">
+              {{ updateItemSuccessMessage }}
+            </p>
+            <p class="error-message" v-if="updateItemErrorMessage">
+              {{ updateItemErrorMessage }}
+            </p>
+          </b-form>
+        </div>
       </div>
     </main>
     <main v-else-if="this.item.type === 'Album'">
       <h1>{{ this.item.title }}</h1>
       <hr />
-      <div class="item-description-container">
-        <img src="../assets/album.svg" alt="Album cover" />
-        <dl>
-          <dt>Id</dt>
-          <dd>{{ this.item.id }}</dd>
-          <dt>Title</dt>
-          <dd>{{ this.item.title }}</dd>
-          <dt>Composer/performer</dt>
-          <dd>{{ this.item.composerPerformer }}</dd>
-          <dt>Genre</dt>
-          <dd>{{ this.item.genre }}</dd>
-        </dl>
+      <div class="main-container">
+        <div class="item-description-container">
+          <img src="../assets/album.svg" alt="Album cover" />
+          <dl>
+            <dt>Id</dt>
+            <dd>{{ this.item.id }}</dd>
+            <dt>Title</dt>
+            <dd>{{ this.item.title }}</dd>
+            <dt>Composer / Performer</dt>
+            <dd>{{ this.item.composerPerformer }}</dd>
+            <dt>Genre</dt>
+            <dd>{{ this.item.genre }}</dd>
+          </dl>
+        </div>
+        <div class="item-actions-container">
+          <h2>Update item details</h2>
+          <b-form @submit="updateAlbum">
+            <b-form-group label="Title" label-for="title">
+              <b-form-input
+                id="title"
+                type="text"
+                v-model="newItem.title"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group
+              label="Composer / Performer"
+              label-for="composer-performer"
+            >
+              <b-form-input
+                id="composer-performer"
+                type="text"
+                v-model="newItem.composerPerformer"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Genre" label-for="genre">
+              <b-form-input
+                id="genre"
+                type="text"
+                v-model="newItem.genre"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-button type="submit">Update</b-button>
+            <p class="success-message" v-if="updateItemSuccessMessage">
+              {{ updateItemSuccessMessage }}
+            </p>
+            <p class="error-message" v-if="updateItemErrorMessage">
+              {{ updateItemErrorMessage }}
+            </p>
+          </b-form>
+        </div>
       </div>
     </main>
     <main v-else-if="this.item.type === 'Archive'">
       <h1>{{ this.item.title }}</h1>
       <hr />
-      <div class="item-description-container">
-        <img src="../assets/archive.svg" alt="Archive box" />
-        <dl>
-          <dt>Id</dt>
-          <dd>{{ this.item.id }}</dd>
-          <dt>Title</dt>
-          <dd>{{ this.item.title }}</dd>
-          <dt>Description</dt>
-          <dd>{{ this.item.description }}</dd>
-        </dl>
+      <div class="main-container">
+        <div class="item-description-container">
+          <img src="../assets/archive.svg" alt="Archive box" />
+          <dl>
+            <dt>Id</dt>
+            <dd>{{ this.item.id }}</dd>
+            <dt>Title</dt>
+            <dd>{{ this.item.title }}</dd>
+            <dt>Description</dt>
+            <dd>{{ this.item.description }}</dd>
+            <dt>Publication date</dt>
+            <dd>{{ this.item.publicationDate }}</dd>
+          </dl>
+        </div>
+        <div class="item-actions-container">
+          <h2>Update item details</h2>
+          <b-form @submit="updateArchive">
+            <b-form-group label="Title" label-for="title">
+              <b-form-input
+                id="title"
+                type="text"
+                v-model="newItem.title"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Description" label-for="description">
+              <b-form-input
+                id="description"
+                type="text"
+                v-model="newItem.description"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Publication date" label-for="publication-date">
+              <b-form-input
+                id="publication-date"
+                type="date"
+                v-model="newItem.publicationDate"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-button type="submit">Update</b-button>
+            <p class="success-message" v-if="updateItemSuccessMessage">
+              {{ updateItemSuccessMessage }}
+            </p>
+            <p class="error-message" v-if="updateItemErrorMessage">
+              {{ updateItemErrorMessage }}
+            </p>
+          </b-form>
+        </div>
       </div>
     </main>
     <main v-else-if="this.item.type === 'Movie'">
       <h1>{{ this.item.title }}</h1>
       <hr />
-      <div class="item-description-container">
-        <img src="../assets/movie.svg" alt="Movie icon" />
-        <dl>
-          <dt>Id</dt>
-          <dd>{{ this.item.id }}</dd>
-          <dt>Title</dt>
-          <dd>{{ this.item.title }}</dd>
-          <dt>Director</dt>
-          <dd>{{ this.item.director }}</dd>
-          <dt>Genre</dt>
-          <dd>{{ this.item.genre }}</dd>
-          <dt>Duration</dt>
-          <dd>{{ this.item.length }}</dd>
-        </dl>
+      <div class="main-container">
+        <div class="item-description-container">
+          <img src="../assets/movie.svg" alt="Movie icon" />
+          <dl>
+            <dt>Id</dt>
+            <dd>{{ this.item.id }}</dd>
+            <dt>Title</dt>
+            <dd>{{ this.item.title }}</dd>
+            <dt>Director</dt>
+            <dd>{{ this.item.director }}</dd>
+            <dt>Genre</dt>
+            <dd>{{ this.item.genre }}</dd>
+            <dt>Duration</dt>
+            <dd>{{ this.item.length }}</dd>
+          </dl>
+        </div>
+        <div class="item-actions-container">
+          <h2>Update item details</h2>
+          <b-form @submit="updateMovie">
+            <b-form-group label="Title" label-for="title">
+              <b-form-input
+                id="title"
+                type="text"
+                v-model="newItem.title"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Director" label-for="director">
+              <b-form-input
+                id="director"
+                type="text"
+                v-model="newItem.director"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Genre" label-for="genre">
+              <b-form-input
+                id="genre"
+                type="text"
+                v-model="newItem.genre"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Duration" label-for="length">
+              <b-form-input
+                id="length"
+                type="number"
+                v-model="newItem.length"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-button type="submit">Update</b-button>
+            <p class="success-message" v-if="updateItemSuccessMessage">
+              {{ updateItemSuccessMessage }}
+            </p>
+            <p class="error-message" v-if="updateItemErrorMessage">
+              {{ updateItemErrorMessage }}
+            </p>
+          </b-form>
+        </div>
       </div>
     </main>
     <main v-else-if="this.item.type === 'Newspaper'">
       <h1>{{ this.item.periodicalTitle }}</h1>
       <hr />
-      <div class="item-description-container">
-        <img src="../assets/newspaper.svg" alt="Newspaper" />
-        <dl>
-          <dt>Id</dt>
-          <dd>{{ this.item.id }}</dd>
-          <dt>Title of the periodical</dt>
-          <dd>{{ this.item.periodicalTitle }}</dd>
-          <dt>Date</dt>
-          <dd>{{ this.item.date }}</dd>
-          <dt>Frequency</dt>
-          <dd>{{ this.item.frequency }}</dd>
-          <dt>Publication number</dt>
-          <dd>{{ this.item.number }}</dd>
-        </dl>
+      <div class="main-container">
+        <div class="item-description-container">
+          <img src="../assets/newspaper.svg" alt="Newspaper" />
+          <dl>
+            <dt>Id</dt>
+            <dd>{{ this.item.id }}</dd>
+            <dt>Title of the periodical</dt>
+            <dd>{{ this.item.periodicalTitle }}</dd>
+            <dt>Date</dt>
+            <dd>{{ this.item.date }}</dd>
+            <dt>Frequency</dt>
+            <dd>{{ this.item.frequency }}</dd>
+            <dt>Publication number</dt>
+            <dd>{{ this.item.number }}</dd>
+          </dl>
+        </div>
+        <div class="item-actions-container">
+          <h2>Update item details</h2>
+          <b-form @submit="updateBook">
+            <b-form-group label="Title of the periodical" label-for="title">
+              <b-form-input
+                id="title"
+                type="text"
+                v-model="newItem.periodicalTitle"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Date" label-for="date">
+              <b-form-input
+                id="date"
+                type="date"
+                v-model="newItem.date"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Frequency" label-for="frequency">
+              <b-form-input
+                id="frequency"
+                type="text"
+                v-model="newItem.frequency"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Number" label-for="number">
+              <b-form-input
+                id="number"
+                type="number"
+                v-model="newItem.number"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-button type="submit">Update</b-button>
+            <p class="success-message" v-if="updateItemSuccessMessage">
+              {{ updateItemSuccessMessage }}
+            </p>
+            <p class="error-message" v-if="updateItemErrorMessage">
+              {{ updateItemErrorMessage }}
+            </p>
+          </b-form>
+        </div>
       </div>
     </main>
   </body>
@@ -116,7 +335,10 @@ export default {
   name: "LibrarianItem",
   data() {
     return {
-      item: {}
+      item: {},
+      newItem: {},
+      updateItemSuccessMessage: "",
+      updateItemErrorMessage: ""
     };
   },
   components: {
@@ -128,6 +350,7 @@ export default {
       .then(response => {
         console.log(response.data);
         this.item = response.data;
+        this.newItem = { ...this.item };
       })
       .catch(error => {
         console.log(error);
@@ -140,22 +363,73 @@ export default {
       .get(`/libraryItemInfo/${to.params.itemId}`)
       .then(response => {
         this.item = response.data;
+        this.newItem = { ...this.item };
         next();
       })
       .catch(error => {
         console.log(error);
         next({ name: "NotFound" });
       });
+  },
+  methods: {
+    updateItem(event, endpoint) {
+      event.preventDefault();
+      axios_instance
+        .put(
+          `/${endpoint}/${this.item.id}`,
+          {},
+          { params: { ...this.newItem } }
+        )
+        .then(response => {
+          this.updateItemSuccessMessage = "Item details updated successfully";
+          this.updateItemErrorMessage = "";
+          this.item = response.data;
+        })
+        .catch(error => {
+          this.updateItemSuccessMessage = "";
+          this.updateItemErrorMessage = "Could not update item details";
+          console.error(error);
+        });
+    },
+    updateBook(event) {
+      this.updateItem(event, "bookInfo");
+    },
+    updateAlbum(event) {
+      this.updateItem(event, "albumInfo");
+    },
+    updateArchive(event) {
+      this.updateItem(event, "archiveInfo");
+    },
+    updateMovie(event) {
+      this.updateItem(event, "movieInfo");
+    },
+    updateNewspaper(event) {
+      this.updateItem(event, "newspaperInfo");
+    }
   }
 };
 </script>
 
 <style scoped>
+.main-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
 .item-description-container {
   display: flex;
 }
 .item-description-container img {
   padding: 20px;
   width: 200px;
+}
+.item-actions-container {
+  flex-grow: 0.5;
+}
+.success-message {
+  color: green;
+}
+.error-message {
+  color: red;
 }
 </style>

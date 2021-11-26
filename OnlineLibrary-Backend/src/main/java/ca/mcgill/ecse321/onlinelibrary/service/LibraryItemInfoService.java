@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class LibraryItemInfoService {
 	}
 
 	@Transactional
-	public Reservation reserveItem(Member member, ReservableItemInfo reservableItem, Date date){
+	public Reservation reserveItem(Member member, ReservableItemInfo reservableItem){
 		ArrayList<String> errorMessage = new ArrayList<String>();
 
 		if (member == null){
@@ -76,14 +77,20 @@ public class LibraryItemInfoService {
 			errorMessage.add("An item needs to be assigned to a reservation");
 		}
 
-		if (date == null){
-			errorMessage.add("Date cannot be null");
+		if (errorMessage.size() > 0) {
+			throw new IllegalArgumentException(String.join(" ", errorMessage));
+		}
+
+		if (reservationRepository.findReservationByMember(member).stream()
+				.anyMatch(reservation -> reservation.getReservableItemInfo().equals(reservableItem))) {
+			errorMessage.add("Member already has a reservation for this item.");
 		}
 
 		if (errorMessage.size() > 0) {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
-		Reservation reservation = new Reservation(member, reservableItem, date);
+
+		Reservation reservation = new Reservation(member, reservableItem, Date.valueOf(LocalDate.now()));
 		reservationRepository.save(reservation);
 		return reservation;
 	}
