@@ -184,6 +184,31 @@
       <p class="error-message" v-if="addCopyErrorMessage">
         {{ addCopyErrorMessage }}
       </p>
+      <b-form @submit="checkOut">
+        <b-form-group label="Copy id" label-for="checkout-copy-id">
+          <b-form-select
+            id="checkout-copy-id"
+            v-model="checkOutCopyId"
+            :options="availableCopies.map((copy) => copy.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-form-group label="Member id" label-for="checkout-member-id">
+          <b-form-select
+            id="checkout-member-id"
+            v-model="checkOutMemberId"
+            :options="members.map((member) => member.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Check out</b-button>
+        <p class="success-message" v-if="checkOutSuccessMessage">
+          {{ checkOutSuccessMessage }}
+        </p>
+        <p class="error-message" v-if="checkOutErrorMessage">
+          {{ checkOutErrorMessage }}
+        </p>
+      </b-form>
     </main>
     <main v-else-if="this.item.type === 'Archive'">
       <h1>{{ this.item.title }}</h1>
