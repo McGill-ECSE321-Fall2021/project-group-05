@@ -509,6 +509,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  margin: 20px 0;
 }
 .item-description-container {
   display: flex;
@@ -525,5 +526,8 @@ export default {
 }
 .error-message {
   color: red;
+}
+table {
+  margin-top: 20px;
 }
 </style>
