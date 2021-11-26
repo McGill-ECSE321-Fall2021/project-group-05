@@ -10,15 +10,101 @@
         <img class="green" src="../assets/movie.svg" alt="Movie icon" />
         <img class="purple" src="../assets/newspaper.svg" alt="Newspaper" />
       </div>
+      <h4>My reservation</h4>
+      <!--Todo: make this table conditional on the presence of Reservation else show: no reservation-->
+      <table>
+        <tr>
+          <th>Item ID</th>
+          <th>Item title</th>
+          <th>Item details</th>
+        </tr>
+        <tr v-for="reservation in reservations" :key="reservation.id">
+          <td>
+            {{ reservation.reservableItemInfo.id }}
+          </td>
+          <td>
+            {{ reservation.reservableItemInfo.title }}
+          </td>
+          <td>
+            <router-link :to="{ name: 'MemberItem', params: { itemId: reservation.reservableItemInfo.id } }">
+              View item details
+            </router-link>
+          </td>
+        </tr>
+        <p class="error-message" v-if="errorMessage">{{ errorMessage }}</p>
+      </table>
+      <h4>My loans</h4>
+      <!--Todo: make this table conditional on the presence of Loans else show: no loans-->
+      <table>
+        <tr>
+          <th>Item ID</th>
+          <th>Item title</th>
+          <th>Return date</th>
+          <th>Number of renewals </th>
+        </tr>
+      </table>
+
+      <h4>My room bookings</h4>
+      <!--Todo: make this div conditional on the presence of Room bookings else show: no room booked-->
+      <table>
+        <tr>
+          <th>Room</th>
+          <th>Capacity</th>
+          <th>Date</th>
+          <th>Start time</th>
+          <th>End time</th>
+        </tr>
+      </table>
     </main>
   </body>
 </template>
 
 <script>
 import Header from "./MemberHeader.vue";
+import axios from "axios";
+const config = require("../../config");
+
+const backendUrl =
+  process.env.NODE_ENV === "production"
+    ? `http://${config.build.backendHost}`
+    : `http://${config.dev.backendHost}:${config.dev.backendPort}`;
+const frontendUrl =
+  process.env.NODE_ENV === "production"
+    ? `http://${config.build.host}`
+    : `http://${config.dev.host}:${config.dev.port}`;
+
+const axios_instance = axios.create({
+  baseURL: backendUrl,
+  headers: { "Access-Control-Allow-Origin": frontendUrl }
+});
+
 export default {
   components: { Header },
-  name: "MemberHome"
+  name: "MemberHome",
+  data() {
+    return {
+      reservations: [],
+      loans: [],
+      roomBookings: []
+    };
+  },
+  created: function () {
+    const storedCredentials = window.sessionStorage.getItem("loggedInMember");
+    if (storedCredentials == null) {
+      this.$router.push({ name: "Login" });
+    }
+    const loggedInMember = JSON.parse(storedCredentials);
+    axios_instance
+    .get(`/member/${loggedInMember.member.id}/reservation`)
+    .then(response => {
+      this.reservations = response.data;
+      this.errorMessage = "";
+      console.log(response.data);
+    }).catch(error => {
+      console.error(error);
+      this.errorMessage = "Oops! 🙁 Something bad happened on our side. Try again later";
+    });
+  },
 };
 </script>
 
@@ -35,5 +121,11 @@ ul {
 .item-picture-container {
   display: flex;
   justify-content: space-evenly;
+}
+
+.error-message {
+  margin: 20px;
+  text-align: center;
+  color: red;
 }
 </style>
