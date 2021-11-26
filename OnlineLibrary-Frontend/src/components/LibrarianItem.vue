@@ -308,6 +308,13 @@
           <td>{{ copy.status }}</td>
         </tr>
       </table>
+      <b-button @click="addCopy">Add copy</b-button>
+      <p class="success-message" v-if="addCopySuccessMessage">
+        {{ addCopySuccessMessage }}
+      </p>
+      <p class="error-message" v-if="addCopyErrorMessage">
+        {{ addCopyErrorMessage }}
+      </p>
     </main>
     <main v-else-if="this.item.type === 'Newspaper'">
       <h1>{{ this.item.periodicalTitle }}</h1>
