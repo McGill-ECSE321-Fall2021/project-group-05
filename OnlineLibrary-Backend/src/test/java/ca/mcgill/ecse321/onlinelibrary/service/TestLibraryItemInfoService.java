@@ -370,6 +370,7 @@ public class TestLibraryItemInfoService {
 	public void testDeleteReservation(){
 		Reservation reservation = null;
 		Member member = new Member("123 Main Street", "Seb");
+		member.setId(MEMBER_KEY);
 		member.activate();
 		BookInfo bookInfo = new BookInfo();
 		reservation = libraryItemInfoService.reserveItem(member, bookInfo);
@@ -386,6 +387,7 @@ public class TestLibraryItemInfoService {
 		String error = "";
 		Reservation reservation = null;
 		Member member = new Member("123 Main Street", "Seb");
+		member.setId(MEMBER_KEY);
 		member.activate();
 		BookInfo bookInfo = new BookInfo();
 		reservation = libraryItemInfoService.reserveItem(member, bookInfo);
