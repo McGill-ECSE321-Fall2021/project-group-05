@@ -69,18 +69,59 @@
     <main v-else-if="this.item.type === 'Album'">
       <h1>{{ this.item.title }}</h1>
       <hr />
-      <div class="item-description-container">
-        <img src="../assets/album.svg" alt="Album cover" />
-        <dl>
-          <dt>Id</dt>
-          <dd>{{ this.item.id }}</dd>
-          <dt>Title</dt>
-          <dd>{{ this.item.title }}</dd>
-          <dt>Composer/performer</dt>
-          <dd>{{ this.item.composerPerformer }}</dd>
-          <dt>Genre</dt>
-          <dd>{{ this.item.genre }}</dd>
-        </dl>
+      <div class="main-container">
+        <div class="item-description-container">
+          <img src="../assets/album.svg" alt="Album cover" />
+          <dl>
+            <dt>Id</dt>
+            <dd>{{ this.item.id }}</dd>
+            <dt>Title</dt>
+            <dd>{{ this.item.title }}</dd>
+            <dt>Composer / Performer</dt>
+            <dd>{{ this.item.composerPerformer }}</dd>
+            <dt>Genre</dt>
+            <dd>{{ this.item.genre }}</dd>
+          </dl>
+        </div>
+        <div class="item-actions-container">
+          <h2>Update item details</h2>
+          <b-form @submit="updateAlbum">
+            <b-form-group label="Title" label-for="title">
+              <b-form-input
+                id="title"
+                type="text"
+                v-model="newItem.title"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group
+              label="Composer / Performer"
+              label-for="composer-performer"
+            >
+              <b-form-input
+                id="composer-performer"
+                type="text"
+                v-model="newItem.composerPerformer"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Genre" label-for="genre">
+              <b-form-input
+                id="genre"
+                type="text"
+                v-model="newItem.genre"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-button type="submit">Update</b-button>
+            <p class="success-message" v-if="updateItemSuccessMessage">
+              {{ updateItemSuccessMessage }}
+            </p>
+            <p class="error-message" v-if="updateItemErrorMessage">
+              {{ updateItemErrorMessage }}
+            </p>
+          </b-form>
+        </div>
       </div>
     </main>
     <main v-else-if="this.item.type === 'Archive'">
