@@ -116,7 +116,10 @@ export default {
   name: "LibrarianItem",
   data() {
     return {
-      item: {}
+      item: {},
+      newItem: {},
+      updateItemSuccessMessage: "",
+      updateItemErrorMessage: ""
     };
   },
   components: {
@@ -128,6 +131,7 @@ export default {
       .then(response => {
         console.log(response.data);
         this.item = response.data;
+        this.newItem = { ...this.item };
       })
       .catch(error => {
         console.log(error);
@@ -140,12 +144,49 @@ export default {
       .get(`/libraryItemInfo/${to.params.itemId}`)
       .then(response => {
         this.item = response.data;
+        this.newItem = { ...this.item };
         next();
       })
       .catch(error => {
         console.log(error);
         next({ name: "NotFound" });
       });
+  },
+  methods: {
+    updateItem(event, endpoint) {
+      event.preventDefault();
+      axios_instance
+        .put(
+          `/${endpoint}/${this.item.id}`,
+          {},
+          { params: { ...this.newItem } }
+        )
+        .then(response => {
+          this.updateItemSuccessMessage = "Item details updated successfully";
+          this.updateItemErrorMessage = "";
+          this.item = response.data;
+        })
+        .catch(error => {
+          this.updateItemSuccessMessage = "";
+          this.updateItemErrorMessage = "Could not update item details";
+          console.error(error);
+        });
+    },
+    updateBook(event) {
+      this.updateItem(event, "bookInfo");
+    },
+    updateAlbum(event) {
+      this.updateItem(event, "albumInfo");
+    },
+    updateArchive(event) {
+      this.updateItem(event, "archiveInfo");
+    },
+    updateMovie(event) {
+      this.updateItem(event, "movieInfo");
+    },
+    updateNewspaper(event) {
+      this.updateItem(event, "newspaperInfo");
+    }
   }
 };
 </script>
