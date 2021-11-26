@@ -411,11 +411,25 @@ export default {
 </script>
 
 <style scoped>
+.main-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
 .item-description-container {
   display: flex;
 }
 .item-description-container img {
   padding: 20px;
   width: 200px;
+}
+.item-actions-container {
+  flex-grow: 0.5;
+}
+.success-message {
+  color: green;
+}
+.error-message {
+  color: red;
 }
 </style>
