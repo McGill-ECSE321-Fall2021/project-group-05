@@ -22,7 +22,20 @@
                 Update personal info
               </router-link>
             </li>
-
+            <li>
+              <router-link
+                :to="{ name: 'Scheduler', params: {variant: 'RoomBooking'}}"
+              >
+                Room Booking
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'Scheduler', params: {variant: 'Schedule'}}"
+              >
+                Schedule
+              </router-link>
+            </li>
           </ul>
         </div>
         <div class="nav-right">
@@ -43,7 +56,9 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 75px;
+  min-height: 5rem;
+  padding-top: 1rem;
+  padding-bottom: 0rem;
 }
 nav ul {
   display: flex;
@@ -57,11 +72,11 @@ nav ul li {
   align-self: center;
 }
 nav ul li a {
-  color: #fff;
+  color: #f2ebeb;
   text-decoration: none;
 }
 nav ul li a:hover {
-  color: #fff;
+  color: #f2ebeb;
   text-decoration-style: dotted;
 }
 .nav-left {

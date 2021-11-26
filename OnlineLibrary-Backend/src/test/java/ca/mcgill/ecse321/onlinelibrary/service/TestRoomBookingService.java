@@ -16,6 +16,9 @@ import org.mockito.stubbing.Answer;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Month;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
@@ -103,28 +106,28 @@ public class TestRoomBookingService {
 
     @Test
     public void testCreateRoomBookingSuccessful() {
-        Date date = Date.valueOf("2021-12-25");
-        Time startTime = Time.valueOf("12:00:00");
-        Time endTime = Time.valueOf("23:59:59");
+        LocalDate date = LocalDate.of(2021, Month.DECEMBER, 25);
+        LocalTime startTime = LocalTime.of(12, 00, 00);
+        LocalTime endTime = LocalTime.of(23, 59, 59);
         Member member = new Member("123 Main Street", "John Doe");
         Room room = new Room(10, "Room" + ROOM_ID);
         RoomBooking roomBooking = null;
 
         roomBooking = roomBookingService.createRoomBooking(date,startTime, endTime, member, room);
-
+        
         assertNotNull(roomBooking);
-        assertEquals(date, roomBooking.getDate());
-        assertEquals(startTime, roomBooking.getStartTime());
-        assertEquals(endTime, roomBooking.getEndTime());
+        assertEquals(date, roomBooking.getDate().toLocalDate());
+        assertEquals(startTime, roomBooking.getStartTime().toLocalTime());
+        assertEquals(endTime, roomBooking.getEndTime().toLocalTime());
         assertEquals(member, roomBooking.getMember());
         assertEquals(room, roomBooking.getRoom());
     }
 
     @Test
     public void testCreateRoomBookingNullDate() {
-        Date date = null;
-        Time startTime = Time.valueOf("12:00:00");
-        Time endTime = Time.valueOf("23:59:59");
+        LocalDate date = null;
+        LocalTime startTime = LocalTime.of(12, 00, 00);
+        LocalTime endTime = LocalTime.of(23, 59, 59);
         Member member = new Member("123 Main Street", "John Doe");
         Room room = new Room(10, "Room" + ROOM_ID);
 
@@ -134,9 +137,9 @@ public class TestRoomBookingService {
 
     @Test
     public void testCreateRoomBookingNullStartTime() {
-        Date date = Date.valueOf("2021-12-25");
-        Time startTime = null;
-        Time endTime = Time.valueOf("23:59:59");
+        LocalDate date = LocalDate.of(2021, Month.DECEMBER, 25);
+        LocalTime startTime = null;
+        LocalTime endTime = LocalTime.of(23, 59, 59);
         Member member = new Member("123 Main Street", "John Doe");
         Room room = new Room(10, "Room" + ROOM_ID);
 
@@ -146,9 +149,9 @@ public class TestRoomBookingService {
 
     @Test
     public void testCreateRoomBookingNullEndTime() {
-        Date date = Date.valueOf("2021-12-25");
-        Time startTime = Time.valueOf("12:00:00");
-        Time endTime = null;
+        LocalDate date = LocalDate.of(2021, Month.DECEMBER, 25);
+        LocalTime startTime = LocalTime.of(12, 00, 00);
+        LocalTime endTime = null;
         Member member = new Member("123 Main Street", "John Doe");
         Room room = new Room(10, "Room" + ROOM_ID);
 
@@ -158,9 +161,9 @@ public class TestRoomBookingService {
 
     @Test
     public void testCreateRoomBookingNullMember() {
-        Date date = Date.valueOf("2021-12-25");
-        Time startTime = Time.valueOf("12:00:00");
-        Time endTime = Time.valueOf("23:59:59");
+        LocalDate date = LocalDate.of(2021, Month.DECEMBER, 25);
+        LocalTime startTime = LocalTime.of(12, 00, 00);
+        LocalTime endTime = LocalTime.of(23, 59, 59);
         Member member = null;
         Room room = new Room(10, "Room" + ROOM_ID);
 
@@ -170,9 +173,9 @@ public class TestRoomBookingService {
 
     @Test
     public void testCreateRoomBookingNullRoom() {
-        Date date = Date.valueOf("2021-12-25");
-        Time startTime = Time.valueOf("12:00:00");
-        Time endTime = Time.valueOf("23:59:59");
+        LocalDate date = LocalDate.of(2021, Month.DECEMBER, 25);
+        LocalTime startTime = LocalTime.of(12, 00, 00);
+        LocalTime endTime = LocalTime.of(23, 59, 59);
         Member member = new Member("123 Main Street", "John Doe");
         Room room = null;
 
@@ -182,9 +185,9 @@ public class TestRoomBookingService {
 
     @Test
     public void testCreateRoomBookingAllNull() {
-        Date date = null;
-        Time startTime = null;
-        Time endTime = null;
+        LocalDate date = null;
+        LocalTime startTime = null;
+        LocalTime endTime = null;
         Member member = null;
         Room room = null;
 

@@ -1,0 +1,35 @@
+{
+  "scheduleTitle": "Room Booking",
+  "options": [
+    {
+      "res": "Max",
+      "role": "DurationSelector",
+      "selectedSubOpt": "1 hr",
+      "expands": false,
+      "canEdit": false,
+      "subOpt": []
+    },
+    {
+      "res": "Opening Hours",
+      "role": "OH",
+      "selected": "",
+      "canEdit": false
+    },
+    {
+      "res": "Holidays",
+      "role": "Holidays",
+      "selected": "",
+      "canEdit": false
+    },
+    {
+      "res": "Booking",
+      "role": "Misc",
+      "suffix": "'s Booking",
+      "expands": true,
+      "selected": "selected",
+      "canEdit": true,
+      "selectedSubOpt": "",
+      "subOpt": []
+    }
+  ]
+}

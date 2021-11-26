@@ -1,0 +1,27 @@
+{
+  "scheduleTitle": "Scheduling",
+  "options": [
+    {
+      "res": "Opening Hours",
+      "role": "OH",
+      "selected": "",
+      "canEdit": true
+    },
+    {
+      "res": "Holidays",
+      "role": "Holidays",
+      "selected": "",
+      "canEdit": true
+    },
+    {
+      "res": "Shift",
+      "role": "Misc",
+      "suffix": "'s Shift",
+      "expands": true,
+      "selected": "",
+      "canEdit": true,
+      "selectedSubOpt": "",
+      "subOpt": []
+    }
+  ]
+}

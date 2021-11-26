@@ -4,6 +4,7 @@ import ca.mcgill.ecse321.onlinelibrary.dao.LibrarianRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.LibrarianShiftRepository;
 import ca.mcgill.ecse321.onlinelibrary.model.Librarian;
 import ca.mcgill.ecse321.onlinelibrary.model.LibrarianShift;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +48,20 @@ public class LibrarianShiftService {
 			throw new IllegalArgumentException("A date parameter is required.");
 
 		return librarianShiftRepository.findLibrarianShiftByDateAndLibrarianId(Date.valueOf(date), librarianId);
+	}
+	
+	@Transactional
+	public ArrayList<LibrarianShift> getLibrarianShift(LocalDate startDate, LocalDate endDate) {
+		if(startDate == null || endDate == null) 
+			throw new IllegalArgumentException("Two date parameters are required.");
+		
+		if(startDate.compareTo(endDate) > 0) 
+			throw new IllegalArgumentException("The start date can't be after the end date.");
+		
+		ArrayList<LibrarianShift> librarianShifts = 
+				librarianShiftRepository.findLibrarianShiftByDateBetween(Date.valueOf(startDate), Date.valueOf(endDate));
+		
+		return librarianShifts;
 	}
 
 	@Transactional
