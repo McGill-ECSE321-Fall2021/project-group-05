@@ -429,10 +429,15 @@ export default {
       newItem: {},
       copies: [],
       copiesWithStatus: [],
+      members: [],
       updateItemSuccessMessage: "",
       updateItemErrorMessage: "",
       addCopySuccessMessage: "",
-      addCopyErrorMessage: ""
+      addCopyErrorMessage: "",
+      checkOutCopyId: "",
+      checkOutMemberId: "",
+      checkOutSuccessMessage: "",
+      checkOutErrorMessage: ""
     };
   },
   components: {
