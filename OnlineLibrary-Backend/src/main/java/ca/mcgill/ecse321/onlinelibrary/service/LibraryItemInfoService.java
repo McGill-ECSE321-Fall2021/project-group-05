@@ -80,6 +80,16 @@ public class LibraryItemInfoService {
 		if (errorMessage.size() > 0) {
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
 		}
+
+		if (reservationRepository.findReservationByMember(member).stream()
+				.anyMatch(reservation -> reservation.getReservableItemInfo().equals(reservableItem))) {
+			errorMessage.add("Member already has a reservation for this item.");
+		}
+
+		if (errorMessage.size() > 0) {
+			throw new IllegalArgumentException(String.join(" ", errorMessage));
+		}
+
 		Reservation reservation = new Reservation(member, reservableItem, Date.valueOf(LocalDate.now()));
 		reservationRepository.save(reservation);
 		return reservation;
