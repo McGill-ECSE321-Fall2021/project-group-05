@@ -177,6 +177,7 @@ public class TestLibraryItemInfoService {
 	public void testReserveItem(){
 		Reservation reservation = null;
 		Member member = new Member("123 Main Street", "Seb");
+		member.setId(MEMBER_KEY);
 		member.activate();
 		BookInfo bookInfo = new BookInfo();
 		try {
@@ -209,6 +210,7 @@ public class TestLibraryItemInfoService {
 		String error = "";
 		Reservation reservation = null;
 		Member member = new Member("123 Main Street", "Seb");
+		member.setId(MEMBER_KEY);
 		//member.activate();
 		BookInfo bookInfo = new BookInfo();
 		try {
@@ -225,6 +227,7 @@ public class TestLibraryItemInfoService {
 		String error = "";
 		Reservation reservation = null;
 		Member member = new Member("123 Main Street", "Seb");
+		member.setId(MEMBER_KEY);
 		member.activate();
 		member.applyStatusPenalty(); //yellow
 		member.applyStatusPenalty(); //red
@@ -244,6 +247,7 @@ public class TestLibraryItemInfoService {
 		String error = "";
 		Reservation reservation = null;
 		Member member = new Member("123 Main Street", "Seb");
+		member.setId(MEMBER_KEY);
 		member.activate();
 		BookInfo bookInfo = null;
 		try {
