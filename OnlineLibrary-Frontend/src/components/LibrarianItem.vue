@@ -547,6 +547,8 @@ export default {
         .then(response => {
           this.addCopySuccessMessage = "Copy added successfully";
           this.addCopyErrorMessage = "";
+          this.copies.push(response.data);
+          this.fetchCopiesWithStatus();
         })
         .catch(error => {
           this.addCopySuccessMessage = "";
