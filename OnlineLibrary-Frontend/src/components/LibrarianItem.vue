@@ -571,6 +571,28 @@ export default {
           this.addCopyErrorMessage = "Could not add copy";
           console.error(error);
         });
+    checkOut(event) {
+      event.preventDefault();
+      axios_instance
+        .post(
+          `/reservableItem/${this.checkOutCopyId}/loan`,
+          {},
+          { params: { memberId: this.checkOutMemberId } }
+        )
+        .then(response => {
+          this.checkOutSuccessMessage = `Copy checked out successfully. The loan is valid until ${response.data.returnDate}`;
+          this.checkOutErrorMessage = "";
+          this.checkOutCopyId = "";
+          this.checkOutMemberId = "";
+          this.fetchCopiesWithStatus();
+        })
+        .catch(error => {
+          this.checkOutSuccessMessage = "";
+          this.checkOutErrorMessage = "Could not check out copy";
+          console.error(error);
+        });
+    }
+  },
     }
   }
 };
