@@ -502,6 +502,19 @@ export default {
     updateNewspaper(event) {
       this.updateItem(event, "newspaperInfo");
     }
+    addCopy() {
+      axios_instance
+        .post(`/libraryItem/${this.item.id}`)
+        .then(response => {
+          this.addCopySuccessMessage = "Copy added successfully";
+          this.addCopyErrorMessage = "";
+        })
+        .catch(error => {
+          this.addCopySuccessMessage = "";
+          this.addCopyErrorMessage = "Could not add copy";
+          console.error(error);
+        });
+    },
   }
 };
 </script>
