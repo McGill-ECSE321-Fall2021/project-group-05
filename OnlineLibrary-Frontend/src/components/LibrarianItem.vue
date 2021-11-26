@@ -247,20 +247,66 @@
     <main v-else-if="this.item.type === 'Newspaper'">
       <h1>{{ this.item.periodicalTitle }}</h1>
       <hr />
-      <div class="item-description-container">
-        <img src="../assets/newspaper.svg" alt="Newspaper" />
-        <dl>
-          <dt>Id</dt>
-          <dd>{{ this.item.id }}</dd>
-          <dt>Title of the periodical</dt>
-          <dd>{{ this.item.periodicalTitle }}</dd>
-          <dt>Date</dt>
-          <dd>{{ this.item.date }}</dd>
-          <dt>Frequency</dt>
-          <dd>{{ this.item.frequency }}</dd>
-          <dt>Publication number</dt>
-          <dd>{{ this.item.number }}</dd>
-        </dl>
+      <div class="main-container">
+        <div class="item-description-container">
+          <img src="../assets/newspaper.svg" alt="Newspaper" />
+          <dl>
+            <dt>Id</dt>
+            <dd>{{ this.item.id }}</dd>
+            <dt>Title of the periodical</dt>
+            <dd>{{ this.item.periodicalTitle }}</dd>
+            <dt>Date</dt>
+            <dd>{{ this.item.date }}</dd>
+            <dt>Frequency</dt>
+            <dd>{{ this.item.frequency }}</dd>
+            <dt>Publication number</dt>
+            <dd>{{ this.item.number }}</dd>
+          </dl>
+        </div>
+        <div class="item-actions-container">
+          <h2>Update item details</h2>
+          <b-form @submit="updateBook">
+            <b-form-group label="Title of the periodical" label-for="title">
+              <b-form-input
+                id="title"
+                type="text"
+                v-model="newItem.periodicalTitle"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Date" label-for="date">
+              <b-form-input
+                id="date"
+                type="date"
+                v-model="newItem.date"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Frequency" label-for="frequency">
+              <b-form-input
+                id="frequency"
+                type="text"
+                v-model="newItem.frequency"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-form-group label="Number" label-for="number">
+              <b-form-input
+                id="number"
+                type="number"
+                v-model="newItem.number"
+                required
+              ></b-form-input>
+            </b-form-group>
+            <b-button type="submit">Update</b-button>
+            <p class="success-message" v-if="updateItemSuccessMessage">
+              {{ updateItemSuccessMessage }}
+            </p>
+            <p class="error-message" v-if="updateItemErrorMessage">
+              {{ updateItemErrorMessage }}
+            </p>
+          </b-form>
+        </div>
       </div>
     </main>
   </body>
