@@ -108,6 +108,11 @@ public class LibraryItemController {
 	public LoanDto getLoanFromReservableItemId(@PathVariable("reservableItemId") int reservableItemId) {
 		ReservableItem item = libraryItemService.getReservableItemById(reservableItemId);
 		Loan loan = libraryItemService.getLoanByReservableItem(item);
+		
+		if (loan == null) {
+			return null;
+		}
+
 		return LoanDto.fromLoan(loan);
 	}
 }
