@@ -337,6 +337,8 @@ export default {
     return {
       item: {},
       newItem: {},
+      copies: [],
+      copiesWithStatus: [],
       updateItemSuccessMessage: "",
       updateItemErrorMessage: ""
     };
