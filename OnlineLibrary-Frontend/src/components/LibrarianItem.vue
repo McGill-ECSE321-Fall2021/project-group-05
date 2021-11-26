@@ -571,6 +571,7 @@ export default {
           this.addCopyErrorMessage = "Could not add copy";
           console.error(error);
         });
+    },
     checkOut(event) {
       event.preventDefault();
       axios_instance
@@ -593,6 +594,14 @@ export default {
         });
     }
   },
+  computed: {
+    availableCopies() {
+      return this.copiesWithStatus.filter(copy => copy.status === "Available");
+    },
+    checkedOutCopies() {
+      return this.copiesWithStatus.filter(
+        copy => copy.status === "Checked out"
+      );
     }
   }
 };
