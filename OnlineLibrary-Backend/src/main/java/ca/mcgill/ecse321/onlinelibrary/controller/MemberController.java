@@ -99,7 +99,7 @@ public class MemberController {
 	}
 	
 	@GetMapping(value = {"/member/{id}/loans", "/member/{id}/loans/"})
-	public List<LoanDto> getLoansByMemberId1(@PathVariable("id") int id) {
+	public List<LoanDto> getLoansByMemberId(@PathVariable("id") int id) {
 		return StreamSupport.stream(memberService.getLoansByMemberId(id).spliterator(), true).map((Loan l) -> LoanDto.fromLoan(l))
 				.collect(Collectors.toList());
 	}
