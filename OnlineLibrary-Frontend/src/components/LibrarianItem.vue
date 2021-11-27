@@ -673,6 +673,22 @@ export default {
           this.checkOutErrorMessage = "Could not check out copy";
           console.error(error);
         });
+    },
+    returnItem(event) {
+      event.preventDefault();
+      axios_instance
+        .delete(`/reservableItem/${this.returnCopyId}/loan`)
+        .then(_ => {
+          this.returnItemSuccessMessage = "Copy returned successfully";
+          this.returnItemErrorMessage = "";
+          this.returnCopyId = "";
+          this.fetchCopiesWithStatus();
+        })
+        .catch(error => {
+          this.returnItemSuccessMessage = "";
+          this.returnItemErrorMessage = "Could not return copy";
+          console.error(error);
+        });
     }
   },
   computed: {
