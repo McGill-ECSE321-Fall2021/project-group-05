@@ -229,6 +229,24 @@
           {{ checkOutErrorMessage }}
         </p>
       </b-form>
+      <h2>Return copy</h2>
+      <b-form @submit="returnItem">
+        <b-form-group label="Copy id" label-for="return-copy-id">
+          <b-form-select
+            id="return-copy-id"
+            v-model="returnCopyId"
+            :options="checkedOutCopies.map((copy) => copy.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Return</b-button>
+        <p class="success-message" v-if="returnItemSuccessMessage">
+          {{ returnItemSuccessMessage }}
+        </p>
+        <p class="error-message" v-if="returnItemErrorMessage">
+          {{ returnItemErrorMessage }}
+        </p>
+      </b-form>
     </main>
     <main v-else-if="this.item.type === 'Archive'">
       <h1>{{ this.item.title }}</h1>
