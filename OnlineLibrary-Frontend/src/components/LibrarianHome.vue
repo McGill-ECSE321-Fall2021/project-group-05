@@ -14,6 +14,7 @@
       <AddAMovie />
       <AddAnAlbum />
       <AddANewspaper />
+      <AddAnArchive />
     </main>
   </body>
 </template>
@@ -24,9 +25,10 @@ import AddABook from "./AddBook.vue";
 import AddAMovie from "./AddMovie.vue";
 import AddAnAlbum from "./AddAlbum.vue";
 import AddANewspaper from "./AddNewspaper.vue";
+import AddAnArchive from "./AddArchive.vue";
 
 export default {
-  components: { Header, AddABook, AddAMovie, AddAnAlbum, AddANewspaper},
+  components: { Header, AddABook, AddAMovie, AddAnAlbum, AddANewspaper, AddAnArchive},
   name: "LibrarianHome",
 };
 </script>
