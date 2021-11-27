@@ -162,29 +162,41 @@ export default {
     Header
   },
   created() {
-    axios_instance
-      .get(`/libraryItemInfo/${this.$route.params.itemId}`)
-      .then(response => {
-        console.log(response.data);
-        this.item = response.data;
-      })
-      .catch(error => {
-        console.log(error);
-        this.$router.replace({ name: "NotFound" });
-      });
+    const promiseToFetchItem = this.fetchItemDetails(
+      this.$route.params.itemId
+    ).catch(error => {
+      console.error(error);
+      this.$router.replace({ name: "NotFound" });
+    });
+
+    const promisetoFetchCopies = this.fetchItemCopies(
+      this.$route.params.itemId
+    ).catch(error => {
+      console.error(error);
+      this.$router.replace({ name: "NotFound" });
+    });
+
+    Promise.all([promiseToFetchItem, promisetoFetchCopies]).then(
+      this.fetchCopiesWithStatus
+    );
   },
   beforeRouteUpdate(to, from, next) {
-    console.log("Updating route...");
-    axios_instance
-      .get(`/libraryItemInfo/${to.params.itemId}`)
-      .then(response => {
-        this.item = response.data;
-        next();
-      })
-      .catch(error => {
-        console.log(error);
+    const promiseToFetchItem = this.fetchItemDetails(to.params.itemId).catch(
+      error => {
+        console.error(error);
         next({ name: "NotFound" });
-      });
+      }
+    );
+    const promisetoFetchCopies = this.fetchItemDetails(to.params.itemId).catch(
+      error => {
+        console.error(error);
+        next({ name: "NotFound" });
+      }
+    );
+
+    Promise.all([promiseToFetchItem, promisetoFetchCopies]).then(
+      this.fetchCopiesWithStatus
+    );
   },
   methods: {
     reserve() {
