@@ -787,4 +787,7 @@ table {
 main > button {
   margin: 20px 0;
 }
+main > h2 {
+  margin-top: 20px;
+}
 </style>
