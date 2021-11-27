@@ -14,6 +14,7 @@ import LibrarianItem from "@/components/LibrarianItem.vue";
 import NotFound from "@/components/NotFound.vue";
 import LibrarianRooms from "@/components/LibrarianRooms.vue";
 import LibrarianRoom from "@/components/LibrarianRoom.vue";
+import Signup from "@/components/Signup.vue";
 
 Vue.use(Router);
 
@@ -23,6 +24,11 @@ export default new Router({
     {
       path: "/",
       redirect: "/login"
+    },
+    {
+      path: "/signup",
+      name: "Signup",
+      component: Signup
     },
     {
       path: "/member/home",
