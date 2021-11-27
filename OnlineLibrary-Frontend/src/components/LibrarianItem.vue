@@ -612,6 +612,15 @@ export default {
         console.error(error);
         next({ name: "NotFound" });
       });
+    const promiseToFetchCopies = this.fetchItemDetails(to.params.itemId)
+      .catch(error => {
+        console.error(error);
+        next({ name: "NotFound" });
+      });
+    
+    Promise.all([promiseToFetchItem, promiseToFetchCopies]).then(
+      this.fetchCopiesWithStatus
+    );
   },
   methods: {
     updateItem(event, endpoint) {
