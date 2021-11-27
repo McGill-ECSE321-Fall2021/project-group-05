@@ -145,6 +145,24 @@
           {{ returnItemErrorMessage }}
         </p>
       </b-form>
+      <h2>Reserve item</h2>
+      <b-form @submit="reserve">
+        <b-form-group label="Member id" label-for="reserve-member-id">
+          <b-form-select
+            id="reserve-member-id"
+            v-model="reserveMemberId"
+            :options="members.map((member) => member.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Reserve</b-button>
+        <p class="success-message" v-if="reserveSuccessMessage">
+          {{ reserveSuccessMessage }}
+        </p>
+        <p class="error-message" v-if="reserveErrorMessage">
+          {{ reserveErrorMessage }}
+        </p>
+      </b-form>
     </main>
     <main v-else-if="this.item.type === 'Album'">
       <h1>{{ this.item.title }}</h1>
@@ -281,6 +299,24 @@
         </p>
         <p class="error-message" v-if="returnItemErrorMessage">
           {{ returnItemErrorMessage }}
+        </p>
+      </b-form>
+      <h2>Reserve item</h2>
+      <b-form @submit="reserve">
+        <b-form-group label="Member id" label-for="reserve-member-id">
+          <b-form-select
+            id="reserve-member-id"
+            v-model="reserveMemberId"
+            :options="members.map((member) => member.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Reserve</b-button>
+        <p class="success-message" v-if="reserveSuccessMessage">
+          {{ reserveSuccessMessage }}
+        </p>
+        <p class="error-message" v-if="reserveErrorMessage">
+          {{ reserveErrorMessage }}
         </p>
       </b-form>
     </main>
@@ -517,6 +553,24 @@
         </p>
         <p class="error-message" v-if="returnItemErrorMessage">
           {{ returnItemErrorMessage }}
+        </p>
+      </b-form>
+      <h2>Reserve item</h2>
+      <b-form @submit="reserve">
+        <b-form-group label="Member id" label-for="reserve-member-id">
+          <b-form-select
+            id="reserve-member-id"
+            v-model="reserveMemberId"
+            :options="members.map((member) => member.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Reserve</b-button>
+        <p class="success-message" v-if="reserveSuccessMessage">
+          {{ reserveSuccessMessage }}
+        </p>
+        <p class="error-message" v-if="reserveErrorMessage">
+          {{ reserveErrorMessage }}
         </p>
       </b-form>
     </main>
