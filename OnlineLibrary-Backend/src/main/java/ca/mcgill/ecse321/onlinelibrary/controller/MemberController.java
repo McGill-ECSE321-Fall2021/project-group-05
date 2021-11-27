@@ -105,7 +105,7 @@ public class MemberController {
 				.collect(Collectors.toList());
 	}
 	
-	 @GetMapping(value = {"/member/{id}/roomBooking/", "/member/{id}/roomBooking"})
+	 @GetMapping(value = {"/member/{id}/roomBookings/", "/member/{id}/roomBookings"})
 	 public List<RoomBookingDto> getRoomBookingByMemberId(@PathVariable("id") int id) {
 		 return StreamSupport.stream(memberService.getRoomBookingsByMemberId(id).spliterator(), true)
 				 .map((RoomBooking r) -> RoomBookingDto.fromRoomBooking(r)).collect(Collectors.toList());
