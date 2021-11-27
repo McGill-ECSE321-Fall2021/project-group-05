@@ -11,6 +11,7 @@
         <img class="purple" src="../assets/newspaper.svg" alt="Newspaper" />
       </div>
       <AddABook />
+      <AddAMovie />
     </main>
   </body>
 </template>
@@ -18,9 +19,10 @@
 <script>
 import Header from "./LibrarianHeader.vue";
 import AddABook from "./AddBook.vue";
+import AddAMovie from "./AddMovie.vue";
 
 export default {
-  components: { Header, AddABook },
+  components: { Header, AddABook, AddAMovie},
   name: "LibrarianHome",
 };
 </script>

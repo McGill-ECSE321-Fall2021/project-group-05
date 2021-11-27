@@ -12,7 +12,41 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-button type="submit">Add book</b-button>
+      <b-form-group
+        id="input-group-2"
+        label="Genre"
+        label-for="input-2"
+      >
+        <b-form-input
+          id="movie-genre"
+          type="text"
+          placeholder="Genre"
+          v-model="movieGenre"
+          required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-form-group id="input-group-3" label="Director" label-for="input-3">
+        <b-form-input
+          id="movie-director"
+          type="text"
+          placeholder="Director"
+          v-model="movieDirector"
+          required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-form-group id="input-group-4" label="Length" label-for="input-4">
+        <b-form-input
+          id="movie-length"
+          type="number"
+          placeholder="Length"
+          v-model="movieLength"
+          required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-button type="submit">Add movie</b-button>
 
       <p class="error-message" v-if="errorMessage">{{ errorMessage }}</p>
     </b-form>
@@ -38,52 +72,13 @@ const axios_instance = axios.create({
   headers: { "Access-Control-Allow-Origin": frontendUrl },
 });
 
+//NOT DONE YET!!!!!!!!!!!!!!!!!!!!!!!!
 export default {
-  name: "AddBook",
+  name: "AddMovie",
   data() {
     return {
-      bookNumberOfPages: NaN,
-      bookAuthor: "",
-      bookIsbn: NaN,
-      bookTitle: "",
       errorMessage: "",
     };
-  },
-  methods: {
-    createBook(event) {
-      event.preventDefault();
-      console.log(
-        this.bookNumberOfPages,
-        this.bookAuthor,
-        this.bookIsbn,
-        this.bookTitle
-      );
-      axios_instance
-        .post(
-          `/bookInfo/${this.bookTitle}`,
-          {},
-          {
-            params: {
-              numberOfPage: Number.parseInt(this.bookNumberOfPages),
-              author: this.bookAuthor,
-              isbn: Number.parseInt(this.bookIsbn),
-            },
-          }
-        )
-        .then((response) => {
-          this.errorMessage = "";
-          const newBookId = response.data.id;
-          this.$router.push({
-            name: "LibrarianItem",
-            params: { itemId: newBookId },
-          });
-        })
-        .catch((error) => {
-          console.error(error);
-          this.errorMessage =
-            "Could not create this item";
-        });
-    },
   },
 };
 </script>
