@@ -10,7 +10,7 @@
             <b-form @submit="submitMemberForm">
               <b-row>
                 <!-- Disallow spaces in username -->
-                <input
+                <b-input
                   type="text"
                   @keydown.space.prevent
                   placeholder="Username"
@@ -19,7 +19,7 @@
               </b-row>
               <b-row>
                 <!-- Disallow spaces in password -->
-                <input
+                <b-input
                   type="password"
                   @keydown.space.prevent
                   placeholder="Password"
@@ -27,13 +27,14 @@
                 />
               </b-row>
               <b-row>
-                <button
+                <b-button
+                  type="submit"
                   v-bind:disabled="
                     !memberUsername.trim() || !memberPassword.trim()
                   "
                 >
                   Log in
-                </button>
+                </b-button>
               </b-row>
             </b-form>
             <b-row>
@@ -47,8 +48,8 @@
             <b-form @submit="submitLibrarianForm">
               <b-row>
                 <!-- Disallow spaces in username -->
-                <input
-                  type="username"
+                <b-input
+                  type="text"
                   @keydown.space.prevent
                   placeholder="Username"
                   v-model="librarianUsername"
@@ -56,7 +57,7 @@
               </b-row>
               <b-row>
                 <!-- Disallow spaces in password -->
-                <input
+                <b-input
                   type="password"
                   @keydown.space.prevent
                   placeholder="Password"
@@ -64,13 +65,14 @@
                 />
               </b-row>
               <b-row>
-                <button
+                <b-button
+                  type="submit"
                   v-bind:disabled="
                     !librarianUsername.trim() || !librarianPassword.trim()
                   "
                 >
                   Log in
-                </button>
+                </b-button>
               </b-row>
             </b-form>
             <b-row>
@@ -82,7 +84,7 @@
         </b-row>
       </b-container>
       <p>
-        Don't have an account? <router-link to="/signup">Sign up</router-link>
+        Don't have an account? <router-link :to="{ name: 'Signup' }">Sign up.</router-link>
       </p>
     </main>
   </body>
