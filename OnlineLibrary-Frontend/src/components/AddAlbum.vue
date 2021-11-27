@@ -62,13 +62,49 @@ const axios_instance = axios.create({
   headers: { "Access-Control-Allow-Origin": frontendUrl },
 });
 
-//NOT DONE YET!!!!!!!!!!!!!!!!!!!!!!!!
 export default {
   name: "AddAlbum",
   data() {
     return {
+      albumPerformer: "",
+      albumGenre: "",
+      albumTitle: "",
       errorMessage: "",
     };
+  },
+  methods: {
+    createAlbum(event) {
+      event.preventDefault();
+      console.log(
+        this.albumPerformer,
+        this.albumGenre,
+        this.albumTitle
+      );
+      axios_instance
+        .post(
+          `/albumInfo/${this.albumTitle}`,
+          {},
+          {
+            params: {
+              composerPerformer: this.albumPerformer,
+              genre: this.albumGenre,
+            },
+          }
+        )
+        .then((response) => {
+          this.errorMessage = "";
+          const newAlbumId = response.data.id;
+          this.$router.push({
+            name: "LibrarianItem",
+            params: { itemId: newAlbumId },
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+          this.errorMessage =
+            "Could not create this item";
+        });
+    },
   },
 };
 </script>
