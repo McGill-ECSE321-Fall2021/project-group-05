@@ -98,6 +98,17 @@
           <th>Date</th>
           <th>Start time</th>
           <th>End time</th>
+          <th>Room details</th>
+        </tr>
+        <tr v-for="roomBooking in roomBookings" :key=roomBooking.id>
+          <td> {{ roomBooking.room.name}} </td>
+          <td> {{ roomBooking.room.capacity }} </td>
+          <td> {{ roomBooking.date }} </td>
+          <td> {{ roomBooking.startTime }} </td>
+          <td> {{ roomBooking.endTime }} </td>
+          <router-link :to="{ name: 'MemberRoom', params: { roomId: roomBooking.room.id }}">
+              View room details
+          </router-link>
         </tr>
       </table>
     </main>
@@ -154,6 +165,16 @@ export default {
     .get(`/member/${loggedInMember.member.id}/loans`)
     .then(response => {
       this.loans = response.data; 
+      this.errorMessage = "";
+    }).catch(error =>{
+      console.error(error);
+      //TODO: do something with error message
+      this.errorMessage = "Oops! 🙁 Something bad happened on our side. Try again later";
+    });
+    axios_instance
+    .get(`/member/${loggedInMember.member.id}/roomBooking`)
+    .then(response => {
+      this.roomBookings = response.data; 
       this.errorMessage = "";
     }).catch(error =>{
       console.error(error);
