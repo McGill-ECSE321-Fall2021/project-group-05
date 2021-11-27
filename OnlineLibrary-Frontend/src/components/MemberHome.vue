@@ -11,7 +11,6 @@
         <img class="purple" src="../assets/newspaper.svg" alt="Newspaper" />
       </div>
       <h4>My reservation</h4>
-      <!--Todo: make this table conditional on the presence of Reservation else show: no reservation-->
       <table v-if="reservations.length !== 0">
         <tr>
           <th>Item ID</th>
