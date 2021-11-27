@@ -56,12 +56,12 @@ export default {
           }
           // TODO: Do real exception handling once the backend returns useful errors
           else {
-            self.memberErrorMsg = "Unable to sign up. Please double-check your library ID.";
+            self.errorMsg = "Unable to sign up. Please double-check your library ID.";
           }
         })
         // TODO: Do real exception handling once the backend returns useful errors
         .catch((error) => {
-          self.memberErrorMsg = "Unable to sign up. Please double-check your library ID.";
+          self.errorMsg = "Unable to sign up. Please double-check your library ID.";
         });
     },
     submitNewMemberForm(event) {
@@ -89,12 +89,12 @@ export default {
           }
           // TODO: Do real exception handling once the backend returns useful errors
           else {
-            self.memberErrorMsg = "Unable to sign up. Please try again in a few minutes.";
+            self.errorMsg = "Unable to sign up. Please try again in a few minutes.";
           }
         })
         // TODO: Do real exception handling once the backend returns useful errors
         .catch((error) => {
-          self.memberErrorMsg = "Unable to sign up. Please try again in a few minutes.";
+          self.errorMsg = "Unable to sign up. Please try again in a few minutes.";
         });
     }
   }
