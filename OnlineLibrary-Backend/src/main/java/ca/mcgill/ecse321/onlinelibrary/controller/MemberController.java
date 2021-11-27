@@ -4,6 +4,7 @@ import ca.mcgill.ecse321.onlinelibrary.dto.*;
 import ca.mcgill.ecse321.onlinelibrary.model.Loan;
 import ca.mcgill.ecse321.onlinelibrary.model.Member;
 import ca.mcgill.ecse321.onlinelibrary.model.OnlineAccount;
+import ca.mcgill.ecse321.onlinelibrary.model.RoomBooking;
 import ca.mcgill.ecse321.onlinelibrary.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -104,4 +105,9 @@ public class MemberController {
 				.collect(Collectors.toList());
 	}
 	
+	 @GetMapping(value = {"/member/{id}/roomBooking/", "/member/{id}/roomBooking"})
+	 public List<RoomBookingDto> getRoomBookingByMemberId(@PathVariable("id") int id) {
+		 return StreamSupport.stream(memberService.getRoomBookingsByMemberId(id).spliterator(), true)
+				 .map((RoomBooking r) -> RoomBookingDto.fromRoomBooking(r)).collect(Collectors.toList());
+	    }
 }

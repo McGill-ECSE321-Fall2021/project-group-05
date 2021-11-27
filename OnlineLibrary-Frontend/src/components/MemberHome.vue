@@ -31,17 +31,62 @@
             </router-link>
           </td>
         </tr>
-        <p class="error-message" v-if="errorMessage">{{ errorMessage }}</p>
+        <!--p class="error-message" v-if="errorMessage">{{ errorMessage }}</p-->
       </table>
       <h4>My loans</h4>
       <!--Todo: make this table conditional on the presence of Loans else show: no loans-->
       <table>
         <tr>
           <th>Item ID</th>
-          <th>Item title</th>
           <th>Return date</th>
           <th>Number of renewals </th>
+          <th>Item title</th>
+          <th>Item details</th>
         </tr>
+        <tr v-for="loan in loans" :key="loan.id">
+          <td>
+            {{ loan.reservableItem.id }}
+          </td> 
+          <td>
+            {{ loan.returnDate }}
+          </td>
+          <td>
+            {{ loan.numberOfRenewals}}
+          </td>
+
+          <td v-if="loan.reservableItem.bookInfo != null">
+            {{ loan.reservableItem.bookInfo.title}}
+          </td>
+          <td v-else-if="loan.reservableItem.movieInfo != null">
+            {{ loan.reservableItem.movieInfo.title }}
+          </td>
+          <td v-else-if="loan.reservableItem.albumInfo != null">
+            {{ loan.reservableItem.albumInfo.title }}
+          </td>
+          <td v-else>
+            Could not find item title
+          </td>
+
+          <td v-if="loan.reservableItem.bookInfo != null">
+            <router-link :to="{ name: 'MemberItem', params: { itemId: loan.reservableItem.bookInfo.id } }">
+              View item details
+            </router-link>
+          </td>
+          <td v-else-if="loan.reservableItem.movieInfo != null">
+            <router-link :to="{ name: 'MemberItem', params: { itemId: loan.reservableItem.movieInfo.id } }">
+              View item details
+            </router-link>
+          </td>
+          <td v-else-if="loan.reservableItem.albumInfo != null">
+            <router-link :to="{ name: 'MemberItem', params: { itemId: loan.reservableItem.albumInfo.id } }">
+              View item details
+            </router-link>
+          </td>
+          <td v-else>
+            Could not find item details
+          </td>
+        </tr>
+        <!--p class="error-message" v-if="errorMessage">{{ errorMessage }}</p-->
       </table>
 
       <h4>My room bookings</h4>
@@ -109,8 +154,10 @@ export default {
     .get(`/member/${loggedInMember.member.id}/loans`)
     .then(response => {
       this.loans = response.data; 
+      this.errorMessage = "";
     }).catch(error =>{
       console.error(error);
+      //TODO: do something with error message
       this.errorMessage = "Oops! 🙁 Something bad happened on our side. Try again later";
     });
   },
