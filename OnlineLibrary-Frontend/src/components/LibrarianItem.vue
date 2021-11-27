@@ -864,6 +864,30 @@ export default {
           this.returnItemErrorMessage = "Could not return copy";
           console.error(error);
         });
+    },
+    reserve(event) {
+      event.preventDefault();
+      axios_instance
+        .post(
+          `/reservation`,
+          {},
+          {
+            params: {
+              memberId: this.reserveMemberId,
+              reservableItemId: this.item.id
+            }
+          }
+        )
+        .then(_ => {
+          this.reserveSuccessMessage = "Reservation made successfully";
+          this.reserveErrorMessage = "";
+          this.reserveMemberId = "";
+        })
+        .catch(error => {
+          this.reserveSuccessMessage = "";
+          this.reserveErrorMessage = "Could not make reservation";
+          console.error(error);
+        });
     }
   },
   computed: {
