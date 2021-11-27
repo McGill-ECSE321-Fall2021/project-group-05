@@ -152,6 +152,8 @@ export default {
   data() {
     return {
       item: {},
+      copies: [],
+      copiesWithStatus: [],
       reservationSuccessMessage: "",
       reservationErrorMessage: ""
     };
