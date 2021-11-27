@@ -253,7 +253,7 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
           <li>Discuss project and help with problem solving</li>
         </ul>
       </td>
-      <td>43 hours</td>
+      <td>45 hours</td>
     </tr>
     <tr>
       <td>Guillaume Delmas-Frenette</td>
