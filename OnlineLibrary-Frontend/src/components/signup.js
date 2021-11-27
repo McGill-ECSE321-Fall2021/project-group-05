@@ -17,31 +17,21 @@ export default {
   name: 'Signup',
   data() {
     return {
-      inPersonMemberId: "",
-      inPersonMemberEmailAddress: "",
-      inPersonMemberUsername: "",
-      inPersonMemberPassword: "",
-      inPersonMemberPasswordConfirmation: "",
-      inPersonMemberErrorMsg: "",
-      newMemberFullName: "",
-      newMemberPhysicalAddress: "",
-      newMemberEmailAddress: "",
-      newMemberUsername: "",
-      newMemberPassword: "",
-      newMemberPasswordConfirmation: "",
-      newMemberErrorMsg: ""
+      hasInPersonAccount: false,
+      fullName: "",
+      physicalAddress: "",
+      memberId: "",
+      emailAddress: "",
+      username: "",
+      password: "",
+      passwordConfirmation: "",
+      errorMsg: ""
     };
   },
   methods: {
-    isInPersonMemberInfoValid() {
-      return true;
-    },
     submitInPersonMemberForm(event) {
       event.preventDefault();
-      console.log("Existing member");
-    },
-    isNewMemberInfoValid() {
-      return true;
+      console.log("In person member");
     },
     submitNewMemberForm(event) {
       event.preventDefault();

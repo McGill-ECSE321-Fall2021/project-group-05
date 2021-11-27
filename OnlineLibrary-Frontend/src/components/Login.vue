@@ -84,7 +84,7 @@
         </b-row>
       </b-container>
       <p>
-        Don't have an account? <router-link :to="{ name: 'Signup' }">Sign up.</router-link>
+        Don't have an account? <router-link :to="{ name: 'Signup' }">Sign up</router-link>.
       </p>
     </main>
   </body>
