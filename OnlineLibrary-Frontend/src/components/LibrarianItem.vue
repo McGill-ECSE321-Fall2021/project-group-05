@@ -83,6 +83,7 @@
       <p class="error-message" v-if="addCopyErrorMessage">
         {{ addCopyErrorMessage }}
       </p>
+      <h2>Checkout copy</h2>
       <b-form @submit="checkOut">
         <b-form-group label="Copy id" label-for="checkout-copy-id">
           <b-form-select
@@ -184,6 +185,7 @@
       <p class="error-message" v-if="addCopyErrorMessage">
         {{ addCopyErrorMessage }}
       </p>
+      <h2>Checkout copy</h2>
       <b-form @submit="checkOut">
         <b-form-group label="Copy id" label-for="checkout-copy-id">
           <b-form-select
@@ -365,6 +367,7 @@
       <p class="error-message" v-if="addCopyErrorMessage">
         {{ addCopyErrorMessage }}
       </p>
+      <h2>Checkout copy</h2>
       <b-form @submit="checkOut">
         <b-form-group label="Copy id" label-for="checkout-copy-id">
           <b-form-select
