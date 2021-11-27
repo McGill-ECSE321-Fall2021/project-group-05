@@ -710,6 +710,31 @@ export default {
           console.error(error);
         });
     },
+    deleteCopy(event) {
+      event.preventDefault();
+      const endpoint = ({
+        Book: "book",
+        Album: "album",
+        Archive: "archive",
+        Newspaper: "newspaper",
+        Movie: "movie"
+      })[this.item.type];
+      axios_instance
+        .delete(`/${endpoint}/${this.deleteCopyId}`)
+        .then(response => {
+          this.deleteCopySuccessMessage = "Copy deleted successfully";
+          this.deleteCopyErrorMessage = "";
+          this.copies = this.copies.filter(
+            copy => copy.id !== this.deleteCopyId
+          );
+          this.fetchCopiesWithStatus();
+        })
+        .catch(error => {
+          this.deleteCopySuccessMessage = "";
+          this.deleteCopyErrorMessage = "Could not delete copy";
+          console.error(error);
+        });
+    },
     checkOut(event) {
       event.preventDefault();
       axios_instance
