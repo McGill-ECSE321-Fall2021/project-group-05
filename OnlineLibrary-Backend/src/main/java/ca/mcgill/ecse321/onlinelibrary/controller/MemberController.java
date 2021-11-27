@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.controller;
 
 import ca.mcgill.ecse321.onlinelibrary.dto.*;
+import ca.mcgill.ecse321.onlinelibrary.model.Loan;
 import ca.mcgill.ecse321.onlinelibrary.model.Member;
 import ca.mcgill.ecse321.onlinelibrary.model.OnlineAccount;
 import ca.mcgill.ecse321.onlinelibrary.service.MemberService;
@@ -96,10 +97,11 @@ public class MemberController {
 		member = memberService.removeStatusPenalty(member);
 		return MemberDto.fromMember(member);
 	}
-
+	
 	@GetMapping(value = {"/member/{id}/loans", "/member/{id}/loans/"})
-	public List<LoanDto> getLoansByMemberId(@PathVariable("id") int id) {
-		Member member = memberService.getMemberById(id);
-		return member.getLoans().stream().map(LoanDto::fromLoan).collect(Collectors.toList());
+	public List<LoanDto> getLoansByMemberId1(@PathVariable("id") int id) {
+		return StreamSupport.stream(memberService.getLoansByMemberId(id).spliterator(), true).map((Loan l) -> LoanDto.fromLoan(l))
+				.collect(Collectors.toList());
 	}
+	
 }
