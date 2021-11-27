@@ -1,16 +1,20 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
+import java.util.ArrayList;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import ca.mcgill.ecse321.onlinelibrary.dao.LoanRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.MemberRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.OnlineAccountRepository;
 import ca.mcgill.ecse321.onlinelibrary.dto.CreateMemberRequestDto;
 import ca.mcgill.ecse321.onlinelibrary.dto.CreateOnlineAccountRequestDto;
+import ca.mcgill.ecse321.onlinelibrary.model.Loan;
 import ca.mcgill.ecse321.onlinelibrary.model.Member;
 import ca.mcgill.ecse321.onlinelibrary.model.OnlineAccount;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-import java.util.ArrayList;
 
 @Service
 public class MemberService {
@@ -23,6 +27,8 @@ public class MemberService {
 	private MemberRepository memberRepository;
 	@Autowired
 	private OnlineAccountRepository onlineAccountRepository;
+	@Autowired
+	private LoanRepository loanRepository;
 
 	@Transactional
 	public Member registerMember(CreateMemberRequestDto newMember) {
@@ -143,6 +149,12 @@ public class MemberService {
 		member.removeStatusPenalty();
 		member = memberRepository.save(member);
 		return member;
+	}
+	
+	@Transactional
+	public Iterable<Loan> getLoansByMemberId(int id) {
+		Member member = this.getMemberById(id);
+		return loanRepository.findLoanByMember(member);
 	}
 
 	// ========================================================================

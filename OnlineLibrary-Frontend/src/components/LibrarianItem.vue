@@ -65,6 +65,68 @@
           </b-form>
         </div>
       </div>
+      <h2>Item copies</h2>
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Status</th>
+        </tr>
+        <tr v-for="copy in copiesWithStatus" :key="copy.id">
+          <td>{{ copy.id }}</td>
+          <td>{{ copy.status }}</td>
+        </tr>
+      </table>
+      <b-button @click="addCopy">Add copy</b-button>
+      <p class="success-message" v-if="addCopySuccessMessage">
+        {{ addCopySuccessMessage }}
+      </p>
+      <p class="error-message" v-if="addCopyErrorMessage">
+        {{ addCopyErrorMessage }}
+      </p>
+      <h2>Checkout copy</h2>
+      <b-form @submit="checkOut">
+        <b-form-group label="Copy id" label-for="checkout-copy-id">
+          <b-form-select
+            id="checkout-copy-id"
+            v-model="checkOutCopyId"
+            :options="availableCopies.map((copy) => copy.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-form-group label="Member id" label-for="checkout-member-id">
+          <b-form-select
+            id="checkout-member-id"
+            v-model="checkOutMemberId"
+            :options="members.map((member) => member.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Check out</b-button>
+        <p class="success-message" v-if="checkOutSuccessMessage">
+          {{ checkOutSuccessMessage }}
+        </p>
+        <p class="error-message" v-if="checkOutErrorMessage">
+          {{ checkOutErrorMessage }}
+        </p>
+      </b-form>
+      <h2>Return copy</h2>
+      <b-form @submit="returnItem">
+        <b-form-group label="Copy id" label-for="return-copy-id">
+          <b-form-select
+            id="return-copy-id"
+            v-model="returnCopyId"
+            :options="checkedOutCopies.map((copy) => copy.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Return</b-button>
+        <p class="success-message" v-if="returnItemSuccessMessage">
+          {{ returnItemSuccessMessage }}
+        </p>
+        <p class="error-message" v-if="returnItemErrorMessage">
+          {{ returnItemErrorMessage }}
+        </p>
+      </b-form>
     </main>
     <main v-else-if="this.item.type === 'Album'">
       <h1>{{ this.item.title }}</h1>
@@ -123,6 +185,68 @@
           </b-form>
         </div>
       </div>
+      <h2>Item copies</h2>
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Status</th>
+        </tr>
+        <tr v-for="copy in copiesWithStatus" :key="copy.id">
+          <td>{{ copy.id }}</td>
+          <td>{{ copy.status }}</td>
+        </tr>
+      </table>
+      <b-button @click="addCopy">Add copy</b-button>
+      <p class="success-message" v-if="addCopySuccessMessage">
+        {{ addCopySuccessMessage }}
+      </p>
+      <p class="error-message" v-if="addCopyErrorMessage">
+        {{ addCopyErrorMessage }}
+      </p>
+      <h2>Checkout copy</h2>
+      <b-form @submit="checkOut">
+        <b-form-group label="Copy id" label-for="checkout-copy-id">
+          <b-form-select
+            id="checkout-copy-id"
+            v-model="checkOutCopyId"
+            :options="availableCopies.map((copy) => copy.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-form-group label="Member id" label-for="checkout-member-id">
+          <b-form-select
+            id="checkout-member-id"
+            v-model="checkOutMemberId"
+            :options="members.map((member) => member.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Check out</b-button>
+        <p class="success-message" v-if="checkOutSuccessMessage">
+          {{ checkOutSuccessMessage }}
+        </p>
+        <p class="error-message" v-if="checkOutErrorMessage">
+          {{ checkOutErrorMessage }}
+        </p>
+      </b-form>
+      <h2>Return copy</h2>
+      <b-form @submit="returnItem">
+        <b-form-group label="Copy id" label-for="return-copy-id">
+          <b-form-select
+            id="return-copy-id"
+            v-model="returnCopyId"
+            :options="checkedOutCopies.map((copy) => copy.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Return</b-button>
+        <p class="success-message" v-if="returnItemSuccessMessage">
+          {{ returnItemSuccessMessage }}
+        </p>
+        <p class="error-message" v-if="returnItemErrorMessage">
+          {{ returnItemErrorMessage }}
+        </p>
+      </b-form>
     </main>
     <main v-else-if="this.item.type === 'Archive'">
       <h1>{{ this.item.title }}</h1>
@@ -178,6 +302,24 @@
           </b-form>
         </div>
       </div>
+      <h2>Item copies</h2>
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Status</th>
+        </tr>
+        <tr v-for="copy in copiesWithStatus" :key="copy.id">
+          <td>{{ copy.id }}</td>
+          <td>{{ copy.status }}</td>
+        </tr>
+      </table>
+      <b-button @click="addCopy">Add copy</b-button>
+      <p class="success-message" v-if="addCopySuccessMessage">
+        {{ addCopySuccessMessage }}
+      </p>
+      <p class="error-message" v-if="addCopyErrorMessage">
+        {{ addCopyErrorMessage }}
+      </p>
     </main>
     <main v-else-if="this.item.type === 'Movie'">
       <h1>{{ this.item.title }}</h1>
@@ -243,6 +385,68 @@
           </b-form>
         </div>
       </div>
+      <h2>Item copies</h2>
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Status</th>
+        </tr>
+        <tr v-for="copy in copiesWithStatus" :key="copy.id">
+          <td>{{ copy.id }}</td>
+          <td>{{ copy.status }}</td>
+        </tr>
+      </table>
+      <b-button @click="addCopy">Add copy</b-button>
+      <p class="success-message" v-if="addCopySuccessMessage">
+        {{ addCopySuccessMessage }}
+      </p>
+      <p class="error-message" v-if="addCopyErrorMessage">
+        {{ addCopyErrorMessage }}
+      </p>
+      <h2>Checkout copy</h2>
+      <b-form @submit="checkOut">
+        <b-form-group label="Copy id" label-for="checkout-copy-id">
+          <b-form-select
+            id="checkout-copy-id"
+            v-model="checkOutCopyId"
+            :options="availableCopies.map((copy) => copy.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-form-group label="Member id" label-for="checkout-member-id">
+          <b-form-select
+            id="checkout-member-id"
+            v-model="checkOutMemberId"
+            :options="members.map((member) => member.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Check out</b-button>
+        <p class="success-message" v-if="checkOutSuccessMessage">
+          {{ checkOutSuccessMessage }}
+        </p>
+        <p class="error-message" v-if="checkOutErrorMessage">
+          {{ checkOutErrorMessage }}
+        </p>
+      </b-form>
+      <h2>Return copy</h2>
+      <b-form @submit="returnItem">
+        <b-form-group label="Copy id" label-for="return-copy-id">
+          <b-form-select
+            id="return-copy-id"
+            v-model="returnCopyId"
+            :options="checkedOutCopies.map((copy) => copy.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Return</b-button>
+        <p class="success-message" v-if="returnItemSuccessMessage">
+          {{ returnItemSuccessMessage }}
+        </p>
+        <p class="error-message" v-if="returnItemErrorMessage">
+          {{ returnItemErrorMessage }}
+        </p>
+      </b-form>
     </main>
     <main v-else-if="this.item.type === 'Newspaper'">
       <h1>{{ this.item.periodicalTitle }}</h1>
@@ -308,6 +512,24 @@
           </b-form>
         </div>
       </div>
+      <h2>Item copies</h2>
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Status</th>
+        </tr>
+        <tr v-for="copy in copiesWithStatus" :key="copy.id">
+          <td>{{ copy.id }}</td>
+          <td>{{ copy.status }}</td>
+        </tr>
+      </table>
+      <b-button @click="addCopy">Add copy</b-button>
+      <p class="success-message" v-if="addCopySuccessMessage">
+        {{ addCopySuccessMessage }}
+      </p>
+      <p class="error-message" v-if="addCopyErrorMessage">
+        {{ addCopyErrorMessage }}
+      </p>
     </main>
   </body>
 </template>
@@ -337,15 +559,27 @@ export default {
     return {
       item: {},
       newItem: {},
+      copies: [],
+      copiesWithStatus: [],
+      members: [],
       updateItemSuccessMessage: "",
-      updateItemErrorMessage: ""
+      updateItemErrorMessage: "",
+      addCopySuccessMessage: "",
+      addCopyErrorMessage: "",
+      checkOutCopyId: "",
+      checkOutMemberId: "",
+      checkOutSuccessMessage: "",
+      checkOutErrorMessage: "",
+      returnCopyId: "",
+      returnItemSuccessMessage: "",
+      returnItemErrorMessage: ""
     };
   },
   components: {
     Header
   },
   created() {
-    axios_instance
+    const promiseToFetchItem = axios_instance
       .get(`/libraryItemInfo/${this.$route.params.itemId}`)
       .then(response => {
         console.log(response.data);
@@ -354,6 +588,32 @@ export default {
       })
       .catch(error => {
         console.log(error);
+        this.$router.replace({ name: "NotFound" });
+      });
+
+    const promisetoFetchCopies = axios_instance
+      .get(`libraryItemInfo/${this.$route.params.itemId}/libraryItem`)
+      .then(response => {
+        console.log(response.data);
+        this.copies = response.data;
+      })
+      .catch(error => {
+        console.error(error);
+        this.$router.replace({ name: "NotFound" });
+      });
+
+    Promise.all([promiseToFetchItem, promisetoFetchCopies]).then(
+      this.fetchCopiesWithStatus
+    );
+
+    axios_instance
+      .get(`/member/all`)
+      .then(response => {
+        console.log(response.data);
+        this.members = response.data;
+      })
+      .catch(error => {
+        console.error(error);
         this.$router.replace({ name: "NotFound" });
       });
   },
@@ -405,6 +665,94 @@ export default {
     },
     updateNewspaper(event) {
       this.updateItem(event, "newspaperInfo");
+    },
+    fetchCopiesWithStatus() {
+      if (this.item.type === "Archive" || this.item.type === "Newspaper") {
+        this.copiesWithStatus = this.copies.map(copy => {
+          return {
+            ...copy,
+            status: "On-premise"
+          };
+        });
+      } else {
+        Promise.all(
+          this.copies.map(copy =>
+            axios_instance
+              .get(`/reservableItem/${copy.id}/loan`)
+              .then(response => {
+                if (response.data.length === 0) {
+                  return { ...copy, status: "Available" };
+                } else {
+                  return { ...copy, status: "Checked out" };
+                }
+              })
+          )
+        ).then(responses => {
+          this.copiesWithStatus = responses;
+        });
+      }
+    },
+    addCopy() {
+      axios_instance
+        .post(`/libraryItem/${this.item.id}`)
+        .then(response => {
+          this.addCopySuccessMessage = "Copy added successfully";
+          this.addCopyErrorMessage = "";
+          this.copies.push(response.data);
+          this.fetchCopiesWithStatus();
+        })
+        .catch(error => {
+          this.addCopySuccessMessage = "";
+          this.addCopyErrorMessage = "Could not add copy";
+          console.error(error);
+        });
+    },
+    checkOut(event) {
+      event.preventDefault();
+      axios_instance
+        .post(
+          `/reservableItem/${this.checkOutCopyId}/loan`,
+          {},
+          { params: { memberId: this.checkOutMemberId } }
+        )
+        .then(response => {
+          this.checkOutSuccessMessage = `Copy checked out successfully. The loan is valid until ${response.data.returnDate}`;
+          this.checkOutErrorMessage = "";
+          this.checkOutCopyId = "";
+          this.checkOutMemberId = "";
+          this.fetchCopiesWithStatus();
+        })
+        .catch(error => {
+          this.checkOutSuccessMessage = "";
+          this.checkOutErrorMessage = "Could not check out copy";
+          console.error(error);
+        });
+    },
+    returnItem(event) {
+      event.preventDefault();
+      axios_instance
+        .delete(`/reservableItem/${this.returnCopyId}/loan`)
+        .then(_ => {
+          this.returnItemSuccessMessage = "Copy returned successfully";
+          this.returnItemErrorMessage = "";
+          this.returnCopyId = "";
+          this.fetchCopiesWithStatus();
+        })
+        .catch(error => {
+          this.returnItemSuccessMessage = "";
+          this.returnItemErrorMessage = "Could not return copy";
+          console.error(error);
+        });
+    }
+  },
+  computed: {
+    availableCopies() {
+      return this.copiesWithStatus.filter(copy => copy.status === "Available");
+    },
+    checkedOutCopies() {
+      return this.copiesWithStatus.filter(
+        copy => copy.status === "Checked out"
+      );
     }
   }
 };
@@ -415,6 +763,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  margin: 20px 0;
 }
 .item-description-container {
   display: flex;
@@ -431,5 +780,14 @@ export default {
 }
 .error-message {
   color: red;
+}
+table {
+  margin-top: 20px;
+}
+main > button {
+  margin: 20px 0;
+}
+main > h2 {
+  margin-top: 20px;
 }
 </style>
