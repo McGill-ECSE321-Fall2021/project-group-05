@@ -64,13 +64,11 @@ export default {
           }
           // TODO: Do actual error handling
           else {
-            console.log("Response status: " + response.status.toString());
             self.memberErrorMsg = "Invalid username or password.";
           }
         })
         // TODO: Do actual error handling
         .catch((error) => {
-          console.log(error);
           self.memberErrorMsg = "Invalid username or password.";
         })
     },
