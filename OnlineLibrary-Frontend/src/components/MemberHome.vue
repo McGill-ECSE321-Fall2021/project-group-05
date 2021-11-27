@@ -102,6 +102,15 @@ export default {
       console.log(response.data);
     }).catch(error => {
       console.error(error);
+      //TODO: do something with error message
+      this.errorMessage = "Oops! 🙁 Something bad happened on our side. Try again later";
+    });
+    axios_instance
+    .get(`/member/${loggedInMember.member.id}/loans`)
+    .then(response => {
+      this.loans = response.data; 
+    }).catch(error =>{
+      console.error(error);
       this.errorMessage = "Oops! 🙁 Something bad happened on our side. Try again later";
     });
   },
