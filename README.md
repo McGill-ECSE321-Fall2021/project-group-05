@@ -246,6 +246,8 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
           <li>Add a form to allow a librarian to return an item</li>
           <li>Add a table listing all copies of an item and their status (on-premise only, available or checked out)</li>
           <li>Add a button to add a new item copy to the library</li>
+          <li>Add a form to delete an item copy</li>
+          <li>Add a form to reserve an item for a member as a librarian</li>
           <li>Participate in meetings</li>
           <li>Review pull requests</li>
           <li>Discuss project and help with problem solving</li>
