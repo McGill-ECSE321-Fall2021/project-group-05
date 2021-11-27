@@ -30,6 +30,17 @@
           </p>
         </div>
       </div>
+      <h2>Item copies</h2>
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Status</th>
+        </tr>
+        <tr v-for="copy in copiesWithStatus" :key="copy.id">
+          <td>{{ copy.id }}</td>
+          <td>{{ copy.status }}</td>
+        </tr>
+      </table>
     </main>
     <main v-else-if="this.item.type === 'Album'">
       <h1>{{ this.item.title }}</h1>
@@ -58,6 +69,17 @@
           </p>
         </div>
       </div>
+      <h2>Item copies</h2>
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Status</th>
+        </tr>
+        <tr v-for="copy in copiesWithStatus" :key="copy.id">
+          <td>{{ copy.id }}</td>
+          <td>{{ copy.status }}</td>
+        </tr>
+      </table>
     </main>
     <main v-else-if="this.item.type === 'Archive'">
       <h1>{{ this.item.title }}</h1>
@@ -75,6 +97,17 @@
           <dd>{{ this.item.publicationDate }}</dd>
         </dl>
       </div>
+      <h2>Item copies</h2>
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Status</th>
+        </tr>
+        <tr v-for="copy in copiesWithStatus" :key="copy.id">
+          <td>{{ copy.id }}</td>
+          <td>{{ copy.status }}</td>
+        </tr>
+      </table>
     </main>
     <main v-else-if="this.item.type === 'Movie'">
       <h1>{{ this.item.title }}</h1>
@@ -105,6 +138,17 @@
           </p>
         </div>
       </div>
+      <h2>Item copies</h2>
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Status</th>
+        </tr>
+        <tr v-for="copy in copiesWithStatus" :key="copy.id">
+          <td>{{ copy.id }}</td>
+          <td>{{ copy.status }}</td>
+        </tr>
+      </table>
     </main>
     <main v-else-if="this.item.type === 'Newspaper'">
       <h1>{{ this.item.periodicalTitle }}</h1>
@@ -124,6 +168,17 @@
           <dd>{{ this.item.number }}</dd>
         </dl>
       </div>
+      <h2>Item copies</h2>
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Status</th>
+        </tr>
+        <tr v-for="copy in copiesWithStatus" :key="copy.id">
+          <td>{{ copy.id }}</td>
+          <td>{{ copy.status }}</td>
+        </tr>
+      </table>
     </main>
   </body>
 </template>
