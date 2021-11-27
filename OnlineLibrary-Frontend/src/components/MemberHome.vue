@@ -10,7 +10,7 @@
         <img class="green" src="../assets/movie.svg" alt="Movie icon" />
         <img class="purple" src="../assets/newspaper.svg" alt="Newspaper" />
       </div>
-      <h4>My reservation</h4>
+      <h2>My reservation</h2>
       <table v-if="reservations.length !== 0">
         <tr>
           <th>Item ID</th>
@@ -38,7 +38,7 @@
       </table>
       <p v-else-if="errorMessageReservation.length === 0">You don't have any reservation</p>
       <p class="error-message" v-if="errorMessageReservation"> {{errorMessageReservation}} </p>
-      <h4>My loans</h4>
+      <h2>My loans</h2>
       <table v-if="loans.length !== 0">
         <tr>
           <th>Item ID</th>
@@ -104,8 +104,7 @@
       </table>
       <p v-else-if="errorMessageLoans.length ===0">You don't have any reservation</p>
       <p class="error-message" v-if="errorMessageLoans"> {{errorMessageLoans}} </p>
-      <h4>My room bookings</h4>
-      <!--Todo: make this div conditional on the presence of Room bookings else show: no room booked-->
+      <h2>My room bookings</h2>
       <table v-if="roomBookings.length !==0">
         <tr>
           <th>Room</th>
@@ -186,7 +185,7 @@ export default {
       })
       .catch((error) => {
         console.error(error);
-        this.errorMessageReservation ="Oops! 🙁 Something bad happened on our side while trying to load your reservation. Try again later";
+        this.errorMessageReservation ="Oops! 🙁 Something bad happened on our side while trying to load your reservations. Try again later";
       });
     axios_instance
       .get(`/member/${loggedInMember.member.id}/loans/`)
@@ -218,6 +217,10 @@ export default {
 h1,
 h2 {
   font-weight: normal;
+}
+
+h2 {
+  margin: 20px 0;
 }
 
 ul {
