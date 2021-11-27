@@ -665,7 +665,10 @@ export default {
       checkOutErrorMessage: "",
       returnCopyId: "",
       returnItemSuccessMessage: "",
-      returnItemErrorMessage: ""
+      returnItemErrorMessage: "",
+      reserveMemberId: "",
+      reserveSuccessMessage: "",
+      reserveErrorMessage: ""
     };
   },
   components: {
