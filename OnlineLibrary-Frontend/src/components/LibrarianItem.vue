@@ -89,7 +89,7 @@
           <b-form-select
             id="delete-copy-id"
             v-model="deleteCopyId"
-            :options="copies.map(copy => copy.id)"
+            :options="copies.map((copy) => copy.id)"
             required
           ></b-form-select>
         </b-form-group>
@@ -227,7 +227,7 @@
           <b-form-select
             id="delete-copy-id"
             v-model="deleteCopyId"
-            :options="copies.map(copy => copy.id)"
+            :options="copies.map((copy) => copy.id)"
             required
           ></b-form-select>
         </b-form-group>
@@ -362,7 +362,7 @@
           <b-form-select
             id="delete-copy-id"
             v-model="deleteCopyId"
-            :options="copies.map(copy => copy.id)"
+            :options="copies.map((copy) => copy.id)"
             required
           ></b-form-select>
         </b-form-group>
@@ -463,7 +463,7 @@
           <b-form-select
             id="delete-copy-id"
             v-model="deleteCopyId"
-            :options="copies.map(copy => copy.id)"
+            :options="copies.map((copy) => copy.id)"
             required
           ></b-form-select>
         </b-form-group>
@@ -608,7 +608,7 @@
           <b-form-select
             id="delete-copy-id"
             v-model="deleteCopyId"
-            :options="copies.map(copy => copy.id)"
+            :options="copies.map((copy) => copy.id)"
             required
           ></b-form-select>
         </b-form-group>
@@ -802,13 +802,13 @@ export default {
     },
     deleteCopy(event) {
       event.preventDefault();
-      const endpoint = ({
+      const endpoint = {
         Book: "book",
         Album: "album",
         Archive: "archive",
         Newspaper: "newspaper",
         Movie: "movie"
-      })[this.item.type];
+      }[this.item.type];
       axios_instance
         .delete(`/${endpoint}/${this.deleteCopyId}`)
         .then(response => {
