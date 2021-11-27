@@ -72,13 +72,52 @@ const axios_instance = axios.create({
   headers: { "Access-Control-Allow-Origin": frontendUrl },
 });
 
-//NOT DONE YET!!!!!!!!!!!!!!!!!!!!!!!!
 export default {
   name: "AddMovie",
   data() {
     return {
+      movieGenre: "",
+      movieDirector: "",
+      movieLength: NaN,
+      movieTitle: "",
       errorMessage: "",
     };
+  },
+  methods: {
+    createMovie(event) {
+      event.preventDefault();
+      console.log(
+        this.movieGenre,
+        this.movieDirector,
+        this.movieLength,
+        this.movieTitle
+      );
+      axios_instance
+        .post(
+          `/movieInfo/${this.movieTitle}`,
+          {},
+          {
+            params: {
+              genre: this.movieGenre,
+              director: this.movieDirector,
+              length: Number.parseInt(this.movieLength),
+            },
+          }
+        )
+        .then((response) => {
+          this.errorMessage = "";
+          const newMovieId = response.data.id;
+          this.$router.push({
+            name: "LibrarianItem",
+            params: { itemId: newMovieId },
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+          this.errorMessage =
+            "Could not create this item";
+        });
+    },
   },
 };
 </script>
