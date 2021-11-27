@@ -214,6 +214,47 @@ export default {
           this.reservationSuccessMessage = "";
           this.reservationErrorMessage = "You cannot reserve this item";
         });
+    },
+    fetchItemDetails(itemId) {
+      return axios_instance.get(`/libraryItemInfo/${itemId}`).then(response => {
+        console.log(response.data);
+        this.item = response.data;
+        this.newItem = { ...this.item };
+      });
+    },
+    fetchItemCopies(itemId) {
+      return axios_instance
+        .get(`libraryItemInfo/${itemId}/libraryItem`)
+        .then(response => {
+          console.log(response.data);
+          this.copies = response.data;
+        });
+    },
+    fetchCopiesWithStatus() {
+      if (this.item.type === "Archive" || this.item.type === "Newspaper") {
+        this.copiesWithStatus = this.copies.map(copy => {
+          return {
+            ...copy,
+            status: "On-premise"
+          };
+        });
+      } else {
+        Promise.all(
+          this.copies.map(copy =>
+            axios_instance
+              .get(`/reservableItem/${copy.id}/loan`)
+              .then(response => {
+                if (response.data.length === 0) {
+                  return { ...copy, status: "Available" };
+                } else {
+                  return { ...copy, status: "Checked out" };
+                }
+              })
+          )
+        ).then(responses => {
+          this.copiesWithStatus = responses;
+        });
+      }
     }
   }
 };
