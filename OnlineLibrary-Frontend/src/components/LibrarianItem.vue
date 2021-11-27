@@ -515,7 +515,10 @@ export default {
       checkOutCopyId: "",
       checkOutMemberId: "",
       checkOutSuccessMessage: "",
-      checkOutErrorMessage: ""
+      checkOutErrorMessage: "",
+      returnCopyId: "",
+      returnItemSuccessMessage: "",
+      returnItemErrorMessage: ""
     };
   },
   components: {
