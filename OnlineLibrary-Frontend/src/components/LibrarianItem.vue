@@ -579,24 +579,13 @@ export default {
     Header
   },
   created() {
-    const promiseToFetchItem = axios_instance
-      .get(`/libraryItemInfo/${this.$route.params.itemId}`)
-      .then(response => {
-        console.log(response.data);
-        this.item = response.data;
-        this.newItem = { ...this.item };
-      })
+    const promiseToFetchItem = this.fetchItemDetails(this.$route.params.itemId)
       .catch(error => {
-        console.log(error);
+        console.error(error);
         this.$router.replace({ name: "NotFound" });
       });
 
-    const promisetoFetchCopies = axios_instance
-      .get(`libraryItemInfo/${this.$route.params.itemId}/libraryItem`)
-      .then(response => {
-        console.log(response.data);
-        this.copies = response.data;
-      })
+    const promisetoFetchCopies = this.fetchItemCopies(this.$route.params.itemId)
       .catch(error => {
         console.error(error);
         this.$router.replace({ name: "NotFound" });
@@ -618,18 +607,20 @@ export default {
       });
   },
   beforeRouteUpdate(to, from, next) {
-    console.log("Updating route...");
-    axios_instance
-      .get(`/libraryItemInfo/${to.params.itemId}`)
-      .then(response => {
-        this.item = response.data;
-        this.newItem = { ...this.item };
-        next();
-      })
+    const promiseToFetchItem = this.fetchItemDetails(to.params.itemId)
       .catch(error => {
-        console.log(error);
+        console.error(error);
         next({ name: "NotFound" });
       });
+    const promiseToFetchCopies = this.fetchItemDetails(to.params.itemId)
+      .catch(error => {
+        console.error(error);
+        next({ name: "NotFound" });
+      });
+    
+    Promise.all([promiseToFetchItem, promiseToFetchCopies]).then(
+      this.fetchCopiesWithStatus
+    );
   },
   methods: {
     updateItem(event, endpoint) {
@@ -666,6 +657,23 @@ export default {
     updateNewspaper(event) {
       this.updateItem(event, "newspaperInfo");
     },
+    fetchItemDetails(itemId) {
+      return axios_instance
+      .get(`/libraryItemInfo/${itemId}`)
+      .then(response => {
+        console.log(response.data);
+        this.item = response.data;
+        this.newItem = { ...this.item };
+      });
+    },
+    fetchItemCopies(itemId) {
+      return axios_instance
+      .get(`libraryItemInfo/${itemId}/libraryItem`)
+      .then(response => {
+        console.log(response.data);
+        this.copies = response.data;
+      });
+    },
     fetchCopiesWithStatus() {
       if (this.item.type === "Archive" || this.item.type === "Newspaper") {
         this.copiesWithStatus = this.copies.map(copy => {
@@ -674,8 +682,9 @@ export default {
             status: "On-premise"
           };
         });
+        return Promise.resolve();
       } else {
-        Promise.all(
+        return Promise.all(
           this.copies.map(copy =>
             axios_instance
               .get(`/reservableItem/${copy.id}/loan`)
@@ -685,6 +694,9 @@ export default {
                 } else {
                   return { ...copy, status: "Checked out" };
                 }
+              }).catch(error => {
+                console.error(error);
+                return { ...copy, status: "Could not fetch copy status"};
               })
           )
         ).then(responses => {
