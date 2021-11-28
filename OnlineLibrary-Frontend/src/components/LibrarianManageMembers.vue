@@ -4,6 +4,53 @@
     <main>
       <h1>Manage members</h1>
       <p class="error-message" v-if="errorMsg">{{ errorMsg }}</p>
+
+      <!-- Popup to create a new member -->
+      <!-- https://bootstrap-vue.org/docs/components/modal#prevent-closing -->
+      <b-button v-b-modal.new-member-modal> New member </b-button>
+      <b-modal
+        id="new-member-modal"
+        title="Register new member"
+        @show="resetNewMemberModal"
+        @hidden="resetNewMemberModal"
+        @ok="handleOkNewMemberModal"
+      >
+        <b-form
+          ref="newMemberForm"
+          @submit.stop.prevent="handleSubmitNewMemberModal"
+        >
+          <b-form-group>
+            <b-input
+              type="text"
+              placeholder="Full name"
+              v-model="newMemberFullName"
+              :state="
+                submitAttempted ? newMemberFullName.trim().length > 0 : null
+              "
+              required
+            />
+            <b-form-invalid-feedback>
+              Full name is required.
+            </b-form-invalid-feedback>
+          </b-form-group>
+          <b-form-group>
+            <b-input
+              type="text"
+              placeholder="Physical address"
+              v-model="newMemberPhysicalAddress"
+              :state="submitAttempted ? newMemberPhysicalAddress.trim().length > 0 : null"
+              required
+            />
+            <b-form-invalid-feedback>
+              Address is required.
+            </b-form-invalid-feedback>
+          </b-form-group>
+          <b-checkbox v-model="newMemberIsCitizen">
+            Member is a citizen
+          </b-checkbox>
+        </b-form>
+      </b-modal>
+
       <table>
         <tr>
           <th>ID</th>
@@ -19,8 +66,14 @@
           <td>{{ member.id }}</td>
           <td>{{ member.fullName }}</td>
           <td>{{ member.address }}</td>
-          <td>{{ member.onlineAccount.emailAddress }}</td>
-          <td>{{ member.onlineAccount.username }}</td>
+          <td>
+            <p v-if="member.onlineAccount">{{ member.onlineAccount.emailAddress }}</p>
+            <p v-else> -- </p>
+          </td>
+          <td>
+            <p v-if="member.onlineAccount">{{ member.onlineAccount.username }}</p>
+            <p v-else> -- </p>
+          </td>
           <td>{{ centsToDollars(member.totalFee) }}</td>
           <td>{{ titleCase(member.status) }}</td>
           <td>
@@ -101,6 +154,10 @@ export default {
     return {
       members: [],
       errorMsg: "",
+      newMemberFullName: "",
+      newMemberPhysicalAddress: "",
+      newMemberIsCitizen: false,
+      submitAttempted: false
     };
   },
   methods: {
@@ -126,7 +183,6 @@ export default {
       const self = this;
       AXIOS.put(relativeUrl)
         .then((response) => {
-          console.log(response);
           if (response.status === 200) {
             const index = self.members.findIndex((member) => member.id === id);
             // Need to use self.$set to trigger update in reactivity system
@@ -139,7 +195,60 @@ export default {
         .catch((error) => {
           self.errorMsg = errorMsg;
         });
-    }
+    },
+
+    // Form in modal based on https://bootstrap-vue.org/docs/components/modal#prevent-closing
+    registerNewMember() {
+      const self = this;
+      AXIOS.post("/member/", {
+        fullName: self.newMemberFullName,
+        address: self.newMemberPhysicalAddress,
+        isCitizen: self.newMemberIsCitizen
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          const createdMember = response.data;
+          self.members.push(createdMember);
+          self.activateMember(createdMember.id);
+        }
+        else {
+          self.errorMsg = "Unable to create member. Try again later.";
+        }
+      })
+      .catch((error) => {
+        self.errorMsg = "Unable to create member. Try again later.";
+      });
+    },
+    checkNewMemberFormValidity() {
+      this.submitAttempted = true;
+      return this.newMemberFullName.trim().length > 0 &&
+             this.newMemberPhysicalAddress.trim().length > 0;
+      // this.$refs.newMemberForm.checkValidity() would be nicer, but it seems to allow invalid values (e.g. all whitespace)
+    },
+    resetNewMemberModal() {
+      this.submitAttempted = false;
+      this.newMemberFullName = "";
+      this.newMemberPhysicalAddress = "";
+      this.newMemberIsCitizen = false;
+    },
+    handleOkNewMemberModal(bvModalEvt) {
+      // Prevent modal from closing
+      bvModalEvt.preventDefault();
+      // Trigger submit handler
+      this.handleSubmitNewMemberModal();
+    },
+    handleSubmitNewMemberModal() {
+      // Exit when the form isn't valid
+      if (!this.checkNewMemberFormValidity()) {
+        return;
+      }
+      // Create the new member
+      this.registerNewMember();
+      // Hide the modal manually
+      this.$nextTick(() => {
+        this.$bvModal.hide("new-member-modal");
+      });
+    },
   },
 };
 </script>
