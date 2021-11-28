@@ -4,6 +4,7 @@ import ca.mcgill.ecse321.onlinelibrary.dto.*;
 import ca.mcgill.ecse321.onlinelibrary.model.Loan;
 import ca.mcgill.ecse321.onlinelibrary.model.Member;
 import ca.mcgill.ecse321.onlinelibrary.model.OnlineAccount;
+import ca.mcgill.ecse321.onlinelibrary.model.RoomBooking;
 import ca.mcgill.ecse321.onlinelibrary.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class MemberController {
 	public MemberDto registerMember(@RequestBody CreateMemberRequestDto newMemberDto) {
 		Member member = memberService.registerMember(newMemberDto);
 		return MemberDto.fromMember(member);
-	}
+	} 
 
 	/**
 	 * Adds an online account to an existing member that does not have an online
@@ -104,4 +105,9 @@ public class MemberController {
 				.collect(Collectors.toList());
 	}
 	
+	 @GetMapping(value = {"/member/{id}/roomBookings/", "/member/{id}/roomBookings"})
+	 public List<RoomBookingDto> getRoomBookingByMemberId(@PathVariable("id") int id) {
+		 return StreamSupport.stream(memberService.getRoomBookingsByMemberId(id).spliterator(), true)
+				 .map((RoomBooking r) -> RoomBookingDto.fromRoomBooking(r)).collect(Collectors.toList());
+	    }
 }
