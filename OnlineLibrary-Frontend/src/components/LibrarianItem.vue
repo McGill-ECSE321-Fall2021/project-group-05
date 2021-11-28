@@ -83,6 +83,24 @@
       <p class="error-message" v-if="addCopyErrorMessage">
         {{ addCopyErrorMessage }}
       </p>
+      <h2>Delete copy</h2>
+      <b-form @submit="deleteCopy">
+        <b-form-group label="Copy id" label-for="delete-copy-id">
+          <b-form-select
+            id="delete-copy-id"
+            v-model="deleteCopyId"
+            :options="copies.map((copy) => copy.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Delete copy</b-button>
+        <p class="success-message" v-if="deleteCopySuccessMessage">
+          {{ deleteCopySuccessMessage }}
+        </p>
+        <p class="error-message" v-if="deleteCopyErrorMessage">
+          {{ deleteCopyErrorMessage }}
+        </p>
+      </b-form>
       <h2>Checkout copy</h2>
       <b-form @submit="checkOut">
         <b-form-group label="Copy id" label-for="checkout-copy-id">
@@ -203,6 +221,24 @@
       <p class="error-message" v-if="addCopyErrorMessage">
         {{ addCopyErrorMessage }}
       </p>
+      <h2>Delete copy</h2>
+      <b-form @submit="deleteCopy">
+        <b-form-group label="Copy id" label-for="delete-copy-id">
+          <b-form-select
+            id="delete-copy-id"
+            v-model="deleteCopyId"
+            :options="copies.map((copy) => copy.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Delete copy</b-button>
+        <p class="success-message" v-if="deleteCopySuccessMessage">
+          {{ deleteCopySuccessMessage }}
+        </p>
+        <p class="error-message" v-if="deleteCopyErrorMessage">
+          {{ deleteCopyErrorMessage }}
+        </p>
+      </b-form>
       <h2>Checkout copy</h2>
       <b-form @submit="checkOut">
         <b-form-group label="Copy id" label-for="checkout-copy-id">
@@ -320,6 +356,24 @@
       <p class="error-message" v-if="addCopyErrorMessage">
         {{ addCopyErrorMessage }}
       </p>
+      <h2>Delete copy</h2>
+      <b-form @submit="deleteCopy">
+        <b-form-group label="Copy id" label-for="delete-copy-id">
+          <b-form-select
+            id="delete-copy-id"
+            v-model="deleteCopyId"
+            :options="copies.map((copy) => copy.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Delete copy</b-button>
+        <p class="success-message" v-if="deleteCopySuccessMessage">
+          {{ deleteCopySuccessMessage }}
+        </p>
+        <p class="error-message" v-if="deleteCopyErrorMessage">
+          {{ deleteCopyErrorMessage }}
+        </p>
+      </b-form>
     </main>
     <main v-else-if="this.item.type === 'Movie'">
       <h1>{{ this.item.title }}</h1>
@@ -403,6 +457,24 @@
       <p class="error-message" v-if="addCopyErrorMessage">
         {{ addCopyErrorMessage }}
       </p>
+      <h2>Delete copy</h2>
+      <b-form @submit="deleteCopy">
+        <b-form-group label="Copy id" label-for="delete-copy-id">
+          <b-form-select
+            id="delete-copy-id"
+            v-model="deleteCopyId"
+            :options="copies.map((copy) => copy.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Delete copy</b-button>
+        <p class="success-message" v-if="deleteCopySuccessMessage">
+          {{ deleteCopySuccessMessage }}
+        </p>
+        <p class="error-message" v-if="deleteCopyErrorMessage">
+          {{ deleteCopyErrorMessage }}
+        </p>
+      </b-form>
       <h2>Checkout copy</h2>
       <b-form @submit="checkOut">
         <b-form-group label="Copy id" label-for="checkout-copy-id">
@@ -530,6 +602,24 @@
       <p class="error-message" v-if="addCopyErrorMessage">
         {{ addCopyErrorMessage }}
       </p>
+      <h2>Delete copy</h2>
+      <b-form @submit="deleteCopy">
+        <b-form-group label="Copy id" label-for="delete-copy-id">
+          <b-form-select
+            id="delete-copy-id"
+            v-model="deleteCopyId"
+            :options="copies.map((copy) => copy.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Delete copy</b-button>
+        <p class="success-message" v-if="deleteCopySuccessMessage">
+          {{ deleteCopySuccessMessage }}
+        </p>
+        <p class="error-message" v-if="deleteCopyErrorMessage">
+          {{ deleteCopyErrorMessage }}
+        </p>
+      </b-form>
     </main>
   </body>
 </template>
@@ -566,6 +656,9 @@ export default {
       updateItemErrorMessage: "",
       addCopySuccessMessage: "",
       addCopyErrorMessage: "",
+      deleteCopyId: "",
+      deleteCopySuccessMessage: "",
+      deleteCopyErrorMessage: "",
       checkOutCopyId: "",
       checkOutMemberId: "",
       checkOutSuccessMessage: "",
@@ -579,24 +672,13 @@ export default {
     Header
   },
   created() {
-    const promiseToFetchItem = axios_instance
-      .get(`/libraryItemInfo/${this.$route.params.itemId}`)
-      .then(response => {
-        console.log(response.data);
-        this.item = response.data;
-        this.newItem = { ...this.item };
-      })
+    const promiseToFetchItem = this.fetchItemDetails(this.$route.params.itemId)
       .catch(error => {
-        console.log(error);
+        console.error(error);
         this.$router.replace({ name: "NotFound" });
       });
 
-    const promisetoFetchCopies = axios_instance
-      .get(`libraryItemInfo/${this.$route.params.itemId}/libraryItem`)
-      .then(response => {
-        console.log(response.data);
-        this.copies = response.data;
-      })
+    const promisetoFetchCopies = this.fetchItemCopies(this.$route.params.itemId)
       .catch(error => {
         console.error(error);
         this.$router.replace({ name: "NotFound" });
@@ -618,18 +700,20 @@ export default {
       });
   },
   beforeRouteUpdate(to, from, next) {
-    console.log("Updating route...");
-    axios_instance
-      .get(`/libraryItemInfo/${to.params.itemId}`)
-      .then(response => {
-        this.item = response.data;
-        this.newItem = { ...this.item };
-        next();
-      })
+    const promiseToFetchItem = this.fetchItemDetails(to.params.itemId)
       .catch(error => {
-        console.log(error);
+        console.error(error);
         next({ name: "NotFound" });
       });
+    const promiseToFetchCopies = this.fetchItemDetails(to.params.itemId)
+      .catch(error => {
+        console.error(error);
+        next({ name: "NotFound" });
+      });
+    
+    Promise.all([promiseToFetchItem, promiseToFetchCopies]).then(
+      this.fetchCopiesWithStatus
+    );
   },
   methods: {
     updateItem(event, endpoint) {
@@ -666,6 +750,23 @@ export default {
     updateNewspaper(event) {
       this.updateItem(event, "newspaperInfo");
     },
+    fetchItemDetails(itemId) {
+      return axios_instance
+      .get(`/libraryItemInfo/${itemId}`)
+      .then(response => {
+        console.log(response.data);
+        this.item = response.data;
+        this.newItem = { ...this.item };
+      });
+    },
+    fetchItemCopies(itemId) {
+      return axios_instance
+      .get(`libraryItemInfo/${itemId}/libraryItem`)
+      .then(response => {
+        console.log(response.data);
+        this.copies = response.data;
+      });
+    },
     fetchCopiesWithStatus() {
       if (this.item.type === "Archive" || this.item.type === "Newspaper") {
         this.copiesWithStatus = this.copies.map(copy => {
@@ -674,8 +775,9 @@ export default {
             status: "On-premise"
           };
         });
+        return Promise.resolve();
       } else {
-        Promise.all(
+        return Promise.all(
           this.copies.map(copy =>
             axios_instance
               .get(`/reservableItem/${copy.id}/loan`)
@@ -685,6 +787,9 @@ export default {
                 } else {
                   return { ...copy, status: "Checked out" };
                 }
+              }).catch(error => {
+                console.error(error);
+                return { ...copy, status: "Could not fetch copy status"};
               })
           )
         ).then(responses => {
@@ -704,6 +809,31 @@ export default {
         .catch(error => {
           this.addCopySuccessMessage = "";
           this.addCopyErrorMessage = "Could not add copy";
+          console.error(error);
+        });
+    },
+    deleteCopy(event) {
+      event.preventDefault();
+      const endpoint = {
+        Book: "book",
+        Album: "album",
+        Archive: "archive",
+        Newspaper: "newspaper",
+        Movie: "movie"
+      }[this.item.type];
+      axios_instance
+        .delete(`/${endpoint}/${this.deleteCopyId}`)
+        .then(response => {
+          this.deleteCopySuccessMessage = "Copy deleted successfully";
+          this.deleteCopyErrorMessage = "";
+          this.copies = this.copies.filter(
+            copy => copy.id !== this.deleteCopyId
+          );
+          this.fetchCopiesWithStatus();
+        })
+        .catch(error => {
+          this.deleteCopySuccessMessage = "";
+          this.deleteCopyErrorMessage = "Could not delete copy";
           console.error(error);
         });
     },

@@ -30,6 +30,17 @@
           </p>
         </div>
       </div>
+      <h2>Item copies</h2>
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Status</th>
+        </tr>
+        <tr v-for="copy in copiesWithStatus" :key="copy.id">
+          <td>{{ copy.id }}</td>
+          <td>{{ copy.status }}</td>
+        </tr>
+      </table>
     </main>
     <main v-else-if="this.item.type === 'Album'">
       <h1>{{ this.item.title }}</h1>
@@ -58,6 +69,17 @@
           </p>
         </div>
       </div>
+      <h2>Item copies</h2>
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Status</th>
+        </tr>
+        <tr v-for="copy in copiesWithStatus" :key="copy.id">
+          <td>{{ copy.id }}</td>
+          <td>{{ copy.status }}</td>
+        </tr>
+      </table>
     </main>
     <main v-else-if="this.item.type === 'Archive'">
       <h1>{{ this.item.title }}</h1>
@@ -75,6 +97,17 @@
           <dd>{{ this.item.publicationDate }}</dd>
         </dl>
       </div>
+      <h2>Item copies</h2>
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Status</th>
+        </tr>
+        <tr v-for="copy in copiesWithStatus" :key="copy.id">
+          <td>{{ copy.id }}</td>
+          <td>{{ copy.status }}</td>
+        </tr>
+      </table>
     </main>
     <main v-else-if="this.item.type === 'Movie'">
       <h1>{{ this.item.title }}</h1>
@@ -105,6 +138,17 @@
           </p>
         </div>
       </div>
+      <h2>Item copies</h2>
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Status</th>
+        </tr>
+        <tr v-for="copy in copiesWithStatus" :key="copy.id">
+          <td>{{ copy.id }}</td>
+          <td>{{ copy.status }}</td>
+        </tr>
+      </table>
     </main>
     <main v-else-if="this.item.type === 'Newspaper'">
       <h1>{{ this.item.periodicalTitle }}</h1>
@@ -124,6 +168,17 @@
           <dd>{{ this.item.number }}</dd>
         </dl>
       </div>
+      <h2>Item copies</h2>
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Status</th>
+        </tr>
+        <tr v-for="copy in copiesWithStatus" :key="copy.id">
+          <td>{{ copy.id }}</td>
+          <td>{{ copy.status }}</td>
+        </tr>
+      </table>
     </main>
   </body>
 </template>
@@ -152,6 +207,8 @@ export default {
   data() {
     return {
       item: {},
+      copies: [],
+      copiesWithStatus: [],
       reservationSuccessMessage: "",
       reservationErrorMessage: ""
     };
@@ -160,29 +217,41 @@ export default {
     Header
   },
   created() {
-    axios_instance
-      .get(`/libraryItemInfo/${this.$route.params.itemId}`)
-      .then(response => {
-        console.log(response.data);
-        this.item = response.data;
-      })
-      .catch(error => {
-        console.log(error);
-        this.$router.replace({ name: "NotFound" });
-      });
+    const promiseToFetchItem = this.fetchItemDetails(
+      this.$route.params.itemId
+    ).catch(error => {
+      console.error(error);
+      this.$router.replace({ name: "NotFound" });
+    });
+
+    const promisetoFetchCopies = this.fetchItemCopies(
+      this.$route.params.itemId
+    ).catch(error => {
+      console.error(error);
+      this.$router.replace({ name: "NotFound" });
+    });
+
+    Promise.all([promiseToFetchItem, promisetoFetchCopies]).then(
+      this.fetchCopiesWithStatus
+    );
   },
   beforeRouteUpdate(to, from, next) {
-    console.log("Updating route...");
-    axios_instance
-      .get(`/libraryItemInfo/${to.params.itemId}`)
-      .then(response => {
-        this.item = response.data;
-        next();
-      })
-      .catch(error => {
-        console.log(error);
+    const promiseToFetchItem = this.fetchItemDetails(to.params.itemId).catch(
+      error => {
+        console.error(error);
         next({ name: "NotFound" });
-      });
+      }
+    );
+    const promisetoFetchCopies = this.fetchItemDetails(to.params.itemId).catch(
+      error => {
+        console.error(error);
+        next({ name: "NotFound" });
+      }
+    );
+
+    Promise.all([promiseToFetchItem, promisetoFetchCopies]).then(
+      this.fetchCopiesWithStatus
+    );
   },
   methods: {
     reserve() {
@@ -212,6 +281,47 @@ export default {
           this.reservationSuccessMessage = "";
           this.reservationErrorMessage = "You cannot reserve this item";
         });
+    },
+    fetchItemDetails(itemId) {
+      return axios_instance.get(`/libraryItemInfo/${itemId}`).then(response => {
+        console.log(response.data);
+        this.item = response.data;
+        this.newItem = { ...this.item };
+      });
+    },
+    fetchItemCopies(itemId) {
+      return axios_instance
+        .get(`libraryItemInfo/${itemId}/libraryItem`)
+        .then(response => {
+          console.log(response.data);
+          this.copies = response.data;
+        });
+    },
+    fetchCopiesWithStatus() {
+      if (this.item.type === "Archive" || this.item.type === "Newspaper") {
+        this.copiesWithStatus = this.copies.map(copy => {
+          return {
+            ...copy,
+            status: "On-premise"
+          };
+        });
+      } else {
+        Promise.all(
+          this.copies.map(copy =>
+            axios_instance
+              .get(`/reservableItem/${copy.id}/loan`)
+              .then(response => {
+                if (response.data.length === 0) {
+                  return { ...copy, status: "Available" };
+                } else {
+                  return { ...copy, status: "Checked out" };
+                }
+              })
+          )
+        ).then(responses => {
+          this.copiesWithStatus = responses;
+        });
+      }
     }
   }
 };
