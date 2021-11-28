@@ -1,7 +1,6 @@
 package ca.mcgill.ecse321.onlinelibrary.service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -11,13 +10,11 @@ import org.springframework.stereotype.Service;
 import ca.mcgill.ecse321.onlinelibrary.dao.LoanRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.MemberRepository;
 import ca.mcgill.ecse321.onlinelibrary.dao.OnlineAccountRepository;
-import ca.mcgill.ecse321.onlinelibrary.dao.RoomBookingRepository;
 import ca.mcgill.ecse321.onlinelibrary.dto.CreateMemberRequestDto;
 import ca.mcgill.ecse321.onlinelibrary.dto.CreateOnlineAccountRequestDto;
 import ca.mcgill.ecse321.onlinelibrary.model.Loan;
 import ca.mcgill.ecse321.onlinelibrary.model.Member;
 import ca.mcgill.ecse321.onlinelibrary.model.OnlineAccount;
-import ca.mcgill.ecse321.onlinelibrary.model.RoomBooking;
 
 @Service
 public class MemberService {
@@ -32,9 +29,6 @@ public class MemberService {
 	private OnlineAccountRepository onlineAccountRepository;
 	@Autowired
 	private LoanRepository loanRepository;
-	
-	@Autowired
-	private RoomBookingRepository roomBookingRepository;
 
 	@Transactional
 	public Member registerMember(CreateMemberRequestDto newMember) {
@@ -161,12 +155,6 @@ public class MemberService {
 	public Iterable<Loan> getLoansByMemberId(int id) {
 		Member member = this.getMemberById(id);
 		return loanRepository.findLoanByMember(member);
-	}
-	
-	@Transactional
-	public List<RoomBooking> getRoomBookingsByMemberId(int memberId) {
-		Member member = this.getMemberById(memberId);
-		return roomBookingRepository.findRoomBookingByMember(member);
 	}
 
 	// ========================================================================
