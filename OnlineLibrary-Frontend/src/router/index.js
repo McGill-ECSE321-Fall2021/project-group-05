@@ -14,6 +14,7 @@ import LibrarianItem from "@/components/LibrarianItem.vue";
 import NotFound from "@/components/NotFound.vue";
 import LibrarianRooms from "@/components/LibrarianRooms.vue";
 import LibrarianRoom from "@/components/LibrarianRoom.vue";
+import LibrarianManageMembers from "@/components/LibrarianManageMembers.vue";
 
 Vue.use(Router);
 
@@ -93,6 +94,11 @@ export default new Router({
       path: "/librarian/rooms/:roomId",
       name: "LibrarianRoom",
       component: LibrarianRoom
+    },
+    {
+      path: "/librarian/manageMembers",
+      name: "LibrarianManageMembers",
+      component: LibrarianManageMembers
     },
     {
       path: "*",
