@@ -34,7 +34,7 @@ public class MemberController {
 	public MemberDto registerMember(@RequestBody CreateMemberRequestDto newMemberDto) {
 		Member member = memberService.registerMember(newMemberDto);
 		return MemberDto.fromMember(member);
-	}
+	} 
 
 	/**
 	 * Adds an online account to an existing member that does not have an online
