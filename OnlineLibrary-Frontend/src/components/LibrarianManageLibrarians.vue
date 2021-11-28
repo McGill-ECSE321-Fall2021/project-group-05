@@ -4,6 +4,28 @@
     <main>
       <h1>Manage librarians</h1>
       <p class="error-message" v-if="errorMsg">{{ errorMsg }}</p>
+      <b-modal
+        id="confirm-delete-modal"
+        v-model="showConfirmationModal"
+        title="Confirm deletion"
+      >
+        <p>
+          Are you sure you would like to delete librarian
+          {{ librarianToDelete.username }}?
+        </p>
+        <template #modal-footer>
+          <b-button v-on:click="closeModal()">Cancel</b-button>
+          <b-button
+            v-on:click="
+              deleteLibrarian();
+              closeModal();
+            "
+            variant="danger"
+          >
+            Confirm
+          </b-button>
+        </template>
+      </b-modal>
       <table>
         <tr>
           <th>Full name</th>
@@ -14,9 +36,14 @@
           <td>{{ librarian.fullName }}</td>
           <td>{{ librarian.username }}</td>
           <td>
-            <b-button v-on:click="deleteLibrarian(librarian.id)"
-              >Delete</b-button
+            <b-button
+              v-on:click="
+                librarianToDelete = librarian;
+                showConfirmationModal = !showConfirmationModal;
+              "
             >
+              Delete
+            </b-button>
           </td>
           <!-- TODO: Let head librarian delete librarians -->
         </tr>
@@ -65,11 +92,18 @@ export default {
   data() {
     return {
       librarians: [],
+      librarianToDelete: {},
       errorMsg: "",
+      showConfirmationModal: false,
     };
   },
   methods: {
-    deleteLibrarian(id) {
+    closeModal() {
+      this.$bvModal.hide('confirm-delete-modal')
+      this.librarianToDelete = {};
+    },
+    deleteLibrarian() {
+      const id = this.librarianToDelete.id;
       const relativeUrl = "/librarian/" + id;
       AXIOS.delete(relativeUrl)
         .then((response) => {
