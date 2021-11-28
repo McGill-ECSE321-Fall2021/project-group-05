@@ -46,7 +46,7 @@ function requireHeadLibrarian(from, to, next) {
   }
   else {
     // Not head
-    const librarianObj = JSON.parse(librarianStr);
+    const librarianObj = JSON.parse(librarianStr).librarian;
     if (!librarianObj.head) {
       next({ name: 'Login' });
     }
@@ -147,7 +147,8 @@ export default new Router({
     {
       path: "/librarian/manageLibrarians",
       name: "LibrarianManageLibrarians",
-      component: LibrarianManageLibrarians
+      component: LibrarianManageLibrarians,
+      beforeEnter: requireHeadLibrarian
     },
     {
       path: "*",
