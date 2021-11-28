@@ -147,7 +147,8 @@ export default new Router({
     {
       path: "/librarian/manageMembers",
       name: "LibrarianManageMembers",
-      component: LibrarianManageMembers
+      component: LibrarianManageMembers,
+      beforeEnter: requireLibrarian
     },
     {
       path: "*",
