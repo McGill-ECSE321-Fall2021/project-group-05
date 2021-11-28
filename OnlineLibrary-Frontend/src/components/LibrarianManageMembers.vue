@@ -2,7 +2,8 @@
   <body>
     <Header />
     <main>
-      <h1>View all members</h1>
+      <h1>Manage members</h1>
+      <p class="error-message" v-if="errorMsg">{{ errorMsg }}</p>
       <table>
         <tr>
           <th>ID</th>
@@ -12,6 +13,7 @@
           <th>Username</th>
           <th>Fee</th>
           <th>Status</th>
+          <th></th>
         </tr>
         <tr v-for="member in members" :key="member.id">
           <td>{{ member.id }}</td>
@@ -19,12 +21,43 @@
           <td>{{ member.address }}</td>
           <td>{{ member.onlineAccount.emailAddress }}</td>
           <td>{{ member.onlineAccount.username }}</td>
-          <td>{{ member.totalFee }}</td>
+          <td>{{ centsToDollars(member.totalFee) }}</td>
           <td>{{ titleCase(member.status) }}</td>
+          <td>
+            <button
+              v-if="member.status === 'INACTIVE'"
+              type="button"
+              class="btn btn-primary"
+              v-on:click="activateMember(member.id)"
+            >
+              Activate
+            </button>
+            <div v-else>
+              <button
+                type="button"
+                class="btn btn-danger"
+                v-bind:disabled="
+                  !['GREEN', 'YELLOW', 'RED'].includes(member.status)
+                "
+                v-on:click="applyPenalty(member.id)"
+              >
+                Penalty
+              </button>
+              <button
+                type="button"
+                class="btn btn-success"
+                v-bind:disabled="
+                  !['YELLOW', 'RED', 'BLACKLISTED'].includes(member.status)
+                "
+                v-on:click="removePenalty(member.id)"
+              >
+                Undo penalty
+              </button>
+            </div>
+          </td>
           <!-- TODO: Let librarian apply/remove status penalties and activate account -->
         </tr>
       </table>
-      <p class="error-message" v-if="errorMsg">{{ errorMsg }}</p>
     </main>
   </body>
 </template>
@@ -44,37 +77,70 @@ const frontendUrl =
     : `http://${config.dev.host}:${config.dev.port}`;
 const AXIOS = axios.create({
   baseURL: backendUrl,
-  headers: { "Access-Control-Allow-Origin": frontendUrl }
+  headers: { "Access-Control-Allow-Origin": frontendUrl },
 });
 
 export default {
   name: "LibrarianManageMembers",
   components: {
-    Header
+    Header,
   },
-  created: function() {
+  created: function () {
     console.log("Created");
     AXIOS.get("/member/all")
       .then((response) => {
         this.members = response.data;
-        this.errorMessage = "";
+        this.errorMsg = "";
       })
       .catch((error) => {
-        this.errorMessage =
+        this.errorMsg =
           "Oops! 🙁 Something bad happened on our side. Try again later";
       });
   },
   data() {
     return {
       members: [],
-      errorMsg: ""
+      errorMsg: "",
     };
   },
   methods: {
+    centsToDollars(cents) {
+      return "$" + (cents / 100).toFixed(2);
+    },
     titleCase(str) {
       return str.charAt(0).toUpperCase() + str.substring(1).toLowerCase();
+    },
+    activateMember(id) {
+      const relativeUrl = "/member/" + id + "/activate";
+      this.doPutRequest(relativeUrl, "Unable to activate member account. Try again later.", id);
+    },
+    applyPenalty(id) {
+      const relativeUrl = "/member/" + id + "/applyPenalty";
+      this.doPutRequest(relativeUrl, "Unable to apply penalty. Try again later.", id);
+    },
+    removePenalty(id) {
+      const relativeUrl = "/member/" + id + "/removePenalty";
+      this.doPutRequest(relativeUrl, "Unable to undo penalty. Try again later.", id);
+    },
+    doPutRequest(relativeUrl, errorMsg, id) {
+      const self = this;
+      AXIOS.put(relativeUrl)
+        .then((response) => {
+          console.log(response);
+          if (response.status === 200) {
+            const index = self.members.findIndex((member) => member.id === id);
+            // Need to use self.$set to trigger update in reactivity system
+            self.$set(self.members, index, response.data);
+            this.errorMsg = "";
+          } else {
+            self.errorMsg = errorMsg;
+          }
+        })
+        .catch((error) => {
+          self.errorMsg = errorMsg;
+        });
     }
-  }
+  },
 };
 </script>
 
