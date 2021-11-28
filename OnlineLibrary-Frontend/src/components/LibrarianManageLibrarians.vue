@@ -4,21 +4,18 @@
     <main>
       <h1>Manage librarians</h1>
       <p class="error-message" v-if="errorMsg">{{ errorMsg }}</p>
-      <b-modal
-        id="confirm-delete-modal"
-        v-model="showConfirmationModal"
-        title="Confirm deletion"
-      >
+      <!-- Popup to confirm deletion -->
+      <b-modal v-model="showConfirmationModal" title="Confirm deletion">
         <p>
           Are you sure you would like to delete librarian
           {{ librarianToDelete.username }}?
         </p>
         <template #modal-footer>
-          <b-button v-on:click="closeModal()">Cancel</b-button>
+          <b-button v-on:click="closeConfirmDeleteModal()">Cancel</b-button>
           <b-button
             v-on:click="
               deleteLibrarian();
-              closeModal();
+              closeConfirmDeleteModal();
             "
             variant="danger"
           >
@@ -26,6 +23,81 @@
           </b-button>
         </template>
       </b-modal>
+
+      <!-- Popup to create a new librarian -->
+      <!-- https://bootstrap-vue.org/docs/components/modal#prevent-closing -->
+      <b-button v-b-modal.new-librarian-modal> New librarian </b-button>
+      <b-modal
+        id="new-librarian-modal"
+        title="Register new librarian"
+        @show="resetNewLibrarianModal"
+        @hidden="resetNewLibrarianModal"
+        @ok="handleOkNewLibrarianModal"
+      >
+        <b-form
+          ref="newLibrarianForm"
+          @submit.stop.prevent="handleSubmitNewLibrarianModal"
+        >
+          <b-form-group>
+            <b-input
+              type="text"
+              placeholder="Full name"
+              v-model="newLibrarianFullName"
+              :state="
+                submitAttempted ? newLibrarianFullName.trim().length > 0 : null
+              "
+              required
+            />
+            <b-form-invalid-feedback>
+              Full name is required.
+            </b-form-invalid-feedback>
+          </b-form-group>
+          <b-form-group>
+            <b-input
+              type="text"
+              placeholder="Username"
+              v-model="newLibrarianUsername"
+              @keydown.space.prevent
+              :state="submitAttempted ? newLibrarianUsername.length > 0 : null"
+              required
+            />
+            <b-form-invalid-feedback>
+              Username is required.
+            </b-form-invalid-feedback>
+          </b-form-group>
+          <b-form-group>
+            <b-input
+              type="password"
+              placeholder="Password"
+              v-model="newLibrarianPassword"
+              @keydown.space.prevent
+              :state="submitAttempted ? newLibrarianPassword.length >= 8 : null"
+              required
+            />
+            <b-form-invalid-feedback>
+              Password must be at least 8 characters.
+            </b-form-invalid-feedback>
+          </b-form-group>
+          <b-form-group>
+            <b-input
+              type="password"
+              placeholder="Confirm password"
+              v-model="newLibrarianPasswordConfirmation"
+              @keydown.space.prevent
+              :state="
+                submitAttempted
+                  ? newLibrarianPasswordConfirmation === newLibrarianPassword
+                  : null
+              "
+              required
+            />
+            <b-form-invalid-feedback>
+              Passwords must match.
+            </b-form-invalid-feedback>
+          </b-form-group>
+        </b-form>
+      </b-modal>
+
       <table>
         <tr>
           <th>Full name</th>
@@ -96,11 +168,17 @@ export default {
       librarianToDelete: {},
       errorMsg: "",
       showConfirmationModal: false,
+      showNewLibrarianModal: false,
+      newLibrarianFullName: "",
+      newLibrarianUsername: "",
+      newLibrarianPassword: "",
+      newLibrarianPasswordConfirmation: "",
+      submitAttempted: false,
     };
   },
   methods: {
-    closeModal() {
-      this.$bvModal.hide('confirm-delete-modal')
+    closeConfirmDeleteModal() {
+      this.showConfirmationModal = false;
       this.librarianToDelete = {};
     },
     deleteLibrarian() {
@@ -119,6 +197,71 @@ export default {
         .catch((error) => {
           this.error = "Unable to delete librarian. Try again later.";
         });
+    },
+    // Form in modal based on https://bootstrap-vue.org/docs/components/modal#prevent-closing
+    registerLibrarian() {
+      console.log("Registering new librarian");
+      const self = this;
+      AXIOS.post(
+        "/librarian/",
+        {},
+        {
+          params: {
+            fullName: self.newLibrarianFullName,
+            username: self.newLibrarianUsername,
+            password: self.newLibrarianPassword,
+          },
+        }
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          self.librarians.push(response.data);
+        }
+        else {
+          self.errorMsg = "Unable to create librarian. Try again later.";
+        }
+      })
+      .catch((error) => {
+        self.errorMsg = "Unable to create librarian. Try again later.";
+      });
+    },
+    checkNewLibrarianFormValidity() {
+      console.log("Checking form validity.");
+      this.submitAttempted = true;
+      return this.newLibrarianFullName.trim().length > 0 &&
+             this.newLibrarianUsername.length > 0 &&
+             this.newLibrarianPassword.length >= 8 &&
+             this.newLibrarianPasswordConfirmation === this.newLibrarianPassword;
+      // this.$refs.newLibrarianForm.checkValidity() would be nicer, 
+      // but it's allowing invalid passwords in some cases (e.g. "pass")
+    },
+    resetNewLibrarianModal() {
+      console.log("Resetting modal.");
+      this.submitAttempted = false;
+      this.newLibrarianFullName = "";
+      this.newLibrarianUsername = "";
+      this.newLibrarianPassword = "";
+      this.newLibrarianPasswordConfirmation = "";
+    },
+    handleOkNewLibrarianModal(bvModalEvt) {
+      console.log("Handling ok");
+      // Prevent modal from closing
+      bvModalEvt.preventDefault();
+      // Trigger submit handler
+      this.handleSubmitNewLibrarianModal();
+    },
+    handleSubmitNewLibrarianModal() {
+      console.log("Handling submit.");
+      // Exit when the form isn't valid
+      if (!this.checkNewLibrarianFormValidity()) {
+        return;
+      }
+      // Create the new librarian
+      this.registerLibrarian();
+      // Hide the modal manually
+      this.$nextTick(() => {
+        this.$bvModal.hide("new-librarian-modal");
+      });
     },
   },
 };
