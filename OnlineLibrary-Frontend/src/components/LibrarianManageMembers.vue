@@ -139,7 +139,6 @@ export default {
     Header,
   },
   created: function () {
-    console.log("Created");
     AXIOS.get("/member/all")
       .then((response) => {
         this.members = response.data;
