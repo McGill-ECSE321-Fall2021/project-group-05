@@ -41,6 +41,7 @@
                 librarianToDelete = librarian;
                 showConfirmationModal = !showConfirmationModal;
               "
+              variant="danger"
             >
               Delete
             </b-button>
