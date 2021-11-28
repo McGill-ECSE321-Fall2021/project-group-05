@@ -149,7 +149,6 @@ export default {
     Header,
   },
   created: function () {
-    console.log("Created");
     AXIOS.get("/librarian/all")
       .then((response) => {
         this.librarians = response.data.filter(
@@ -200,7 +199,6 @@ export default {
     },
     // Form in modal based on https://bootstrap-vue.org/docs/components/modal#prevent-closing
     registerLibrarian() {
-      console.log("Registering new librarian");
       const self = this;
       AXIOS.post(
         "/librarian/",
@@ -226,7 +224,6 @@ export default {
       });
     },
     checkNewLibrarianFormValidity() {
-      console.log("Checking form validity.");
       this.submitAttempted = true;
       return this.newLibrarianFullName.trim().length > 0 &&
              this.newLibrarianUsername.length > 0 &&
@@ -236,7 +233,6 @@ export default {
       // but it's allowing invalid passwords in some cases (e.g. "pass")
     },
     resetNewLibrarianModal() {
-      console.log("Resetting modal.");
       this.submitAttempted = false;
       this.newLibrarianFullName = "";
       this.newLibrarianUsername = "";
@@ -244,14 +240,12 @@ export default {
       this.newLibrarianPasswordConfirmation = "";
     },
     handleOkNewLibrarianModal(bvModalEvt) {
-      console.log("Handling ok");
       // Prevent modal from closing
       bvModalEvt.preventDefault();
       // Trigger submit handler
       this.handleSubmitNewLibrarianModal();
     },
     handleSubmitNewLibrarianModal() {
-      console.log("Handling submit.");
       // Exit when the form isn't valid
       if (!this.checkNewLibrarianFormValidity()) {
         return;
