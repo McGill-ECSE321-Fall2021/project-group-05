@@ -45,7 +45,7 @@ function requireHeadLibrarian(from, to, next) {
   }
   else {
     // Not head
-    const librarianObj = JSON.parse(librarianStr);
+    const librarianObj = JSON.parse(librarianStr).librarian;
     if (!librarianObj.head) {
       next({ name: 'Login' });
     }
