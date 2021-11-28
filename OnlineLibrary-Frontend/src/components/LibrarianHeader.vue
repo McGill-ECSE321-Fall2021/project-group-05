@@ -3,13 +3,46 @@
     <nav>
       <ul>
         <li><router-link :to="{ name: 'LibrarianHome' }">Home</router-link></li>
-        <li><router-link :to="{ name: 'LibrarianBrowse' }">Browse items</router-link></li>
-        <li><router-link :to="{ name: 'LibrarianRooms' }">Browse rooms</router-link></li>
-        <li><router-link :to="{ name: 'LibrarianLogout' }">Log out</router-link></li>
+        <li>
+          <router-link :to="{ name: 'LibrarianBrowse' }">
+            Browse items
+          </router-link>
+        </li>
+        <li>
+          <router-link :to="{ name: 'LibrarianRooms' }">
+            Browse rooms
+          </router-link>
+        </li>
+        <li>
+          <router-link
+            v-if="isHeadLibrarian"
+            :to="{ name: 'LibrarianManageLibrarians' }"
+          >
+            Manage employees
+          </router-link>
+        </li>
+        <li>
+          <router-link :to="{ name: 'LibrarianLogout' }">Log out</router-link>
+        </li>
       </ul>
     </nav>
   </header>
 </template>
+
+<script>
+export default {
+  name: "LibrarianHeader",
+  created() {
+    const librarian = JSON.parse(sessionStorage.getItem("loggedInLibrarian")).librarian;
+    this.isHeadLibrarian = librarian.head;
+  },
+  data() {
+    return {
+      isHeadLibrarian: false,
+    };
+  },
+};
+</script>
 
 <style>
 header nav ul {
