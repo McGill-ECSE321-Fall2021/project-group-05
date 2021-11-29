@@ -56,21 +56,22 @@ export default {
       })
         .then((response) => {
           // Store stringified member info in session storage and redirect to member home page
-          if (response.status === 200) {
-            sessionStorage.setItem("loggedInMember", JSON.stringify(response.data));
+          const member = response.data.member;
+          if (member.status === 'INACTIVE') {
+            self.$router.replace({ name: "Inactive" });
+          }
+          else if (member.status === 'BLACKLISTED') {
+            self.$router.replace({ name: "Blacklisted" });
+          }
+          else {
+            sessionStorage.setItem("loggedInMember", JSON.stringify(member));
             // Prevent 2 users from being logged in at once
             sessionStorage.removeItem("loggedInLibrarian");
             self.$router.push({ name: "MemberHome" });
           }
-          // TODO: Do actual error handling
-          else {
-            console.log("Response status: " + response.status.toString());
-            self.memberErrorMsg = "Invalid username or password.";
-          }
         })
         // TODO: Do actual error handling
         .catch((error) => {
-          console.log(error);
           self.memberErrorMsg = "Invalid username or password.";
         })
     },
@@ -87,17 +88,10 @@ export default {
         }
       })
         .then((response) => {
-          // Store stringified member info in session storage and redirect to member home page
-          if (response.status === 200) {
-            sessionStorage.setItem("loggedInLibrarian", JSON.stringify(response.data));
-            // Prevent 2 users from being logged in at once
-            sessionStorage.removeItem("loggedInMember");
-            self.$router.push({ name: "LibrarianHome" });
-          }
-          // TODO: Do actual error handling
-          else {
-            self.librarianErrorMsg = "Invalid username or password.";
-          }
+          sessionStorage.setItem("loggedInLibrarian", JSON.stringify(response.data));
+          // Prevent 2 users from being logged in at once
+          sessionStorage.removeItem("loggedInMember");
+          self.$router.push({ name: "LibrarianHome" });
         })
         // TODO: Do actual error handling
         .catch((error) => self.librarianErrorMsg = "Invalid username or password.")

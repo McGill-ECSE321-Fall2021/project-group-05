@@ -14,6 +14,9 @@ import LibrarianItem from "@/components/LibrarianItem.vue";
 import NotFound from "@/components/NotFound.vue";
 import LibrarianRooms from "@/components/LibrarianRooms.vue";
 import LibrarianRoom from "@/components/LibrarianRoom.vue";
+import Signup from "@/components/Signup.vue";
+import Inactive from "@/components/Inactive.vue";
+import Blacklisted from "@/components/Blacklisted.vue";
 import LibrarianManageMembers from "@/components/LibrarianManageMembers.vue";
 
 Vue.use(Router);
@@ -63,6 +66,21 @@ export default new Router({
     {
       path: "/",
       redirect: "/login"
+    },
+    {
+      path: "/signup",
+      name: "Signup",
+      component: Signup
+    },
+    {
+      path: "/inactive",
+      name: "Inactive",
+      component: Inactive
+    },
+    {
+      path: "/blacklisted",
+      name: "Blacklisted",
+      component: Blacklisted
     },
     {
       path: "/member/home",
