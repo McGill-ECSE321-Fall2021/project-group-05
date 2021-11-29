@@ -5,6 +5,7 @@
         <li><router-link :to="{ name: 'LibrarianHome' }">Home</router-link></li>
         <li><router-link :to="{ name: 'LibrarianBrowse' }">Browse items</router-link></li>
         <li><router-link :to="{ name: 'LibrarianRooms' }">Browse rooms</router-link></li>
+        <li><router-link :to="{ name: 'LibrarianUpdateLoginInfo' }">Update Login info</router-link></li>
         <li><router-link :to="{ name: 'LibrarianLogout' }">Log out</router-link></li>
       </ul>
     </nav>
