@@ -4,23 +4,26 @@
     <div class="form">
       <h1>Update personal info</h1>
       <b-form @submit="onSubmit" v-if="show">
+        <p>Your current name: {{ currentName }}</p>
         <b-form-group id="input-group-1" label="Your new name:" label-for="input-1">
           <b-form-input
             id="input-1"
-            style="width: 25%"
+            style="width: 15%"
             v-model="name"
             placeholder="Enter name"
             required
           ></b-form-input>
         </b-form-group>
+        <p>Your current address: {{ member.address }} </p>
         <b-form-group
           id="input-group-3"
           label="Your new address:"
           label-for="input-3"
         >
+
           <b-form-input
             id="input-3"
-            style="width: 25%"
+            style="width: 15%"
             type="text"
             v-model="address"
             placeholder="New address"
@@ -62,6 +65,8 @@ export default {
       form: {
         name: "",
         address: "",
+        oldAddress: "",
+        currentName: "",
       },
       show: true,
     };
@@ -77,6 +82,8 @@ export default {
       .then((response) => {
         this.member = response.data;
         this.id = this.$route.params.id;
+        this.oldAddress = member.address;
+        this.currentName = member.fullName;
         console.log(response.data);
       })
       .catch((error) => console.log(error));
