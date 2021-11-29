@@ -56,7 +56,7 @@
           </td>
           <td>
             {{ loan.numberOfRenewals }}
-          </td>
+          </td> 
 
           <td v-if="loan.reservableItem.bookInfo != null">
             {{ loan.reservableItem.bookInfo.title }}
