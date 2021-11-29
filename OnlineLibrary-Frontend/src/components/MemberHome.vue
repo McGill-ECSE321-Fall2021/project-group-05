@@ -34,10 +34,16 @@
               View item details
             </router-link>
           </td>
+          <td class="deleteTD">
+            <b-button variant="danger" @click="deleteReservation(reservation.id)">
+              <i class="bi bi-x-square-fill"></i>
+            </b-button>
+          </td>
         </tr>
       </table>
       <p v-else-if="errorMessageReservation.length === 0">You don't have any reservation</p>
       <p class="error-message" v-if="errorMessageReservation"> {{errorMessageReservation}} </p>
+      <p class="error-message" v-if="errorMessageDelete"> {{errorMessageDelete}} </p>
       <h2>My loans</h2>
       <table v-if="loans.length !== 0">
         <tr>
@@ -68,7 +74,6 @@
             {{ loan.reservableItem.albumInfo.title }}
           </td>
           <td v-else>Could not find item title</td>
-
           <td v-if="loan.reservableItem.bookInfo != null">
             <router-link
               :to="{
@@ -78,7 +83,7 @@
             >
               View item details
             </router-link>
-          </td>
+          </td> 
           <td v-else-if="loan.reservableItem.movieInfo != null">
             <router-link
               :to="{
@@ -167,7 +172,8 @@ export default {
       roomBookings: [],
       errorMessageReservation: "",
       errorMessageLoans: "",
-      errorMessageRoomBookings: ""
+      errorMessageRoomBookings: "",
+      errorMessageDelete: "",
     };
   },
   created: function () {
@@ -210,10 +216,43 @@ export default {
         this.errorMessageRoomBookings ="Oops! 🙁 Something bad happened on our side while trying to load your room bookings. Try again later";
       });
   },
+  methods: {
+    deleteReservation(itemId) {
+      axios_instance
+      .delete(`/reservation/${itemId}/`)
+      .then(() =>{
+        this.errorMessageDelete= "";
+        this.fetchReservation();
+      })
+      .catch((error) => {
+        console.error(error);
+        this.errorMessageDelete = "Oops! 🙁 Something bad happened on our side while trying to delete your reservation. Try again later"
+      });
+    },
+    fetchReservation(){
+      const storedCredentials = window.sessionStorage.getItem("loggedInMember");
+      if (storedCredentials == null) {
+      this.$router.push({ name: "Login" });
+      }
+      const loggedInMember = JSON.parse(storedCredentials);
+      axios_instance
+      .get(`/member/${loggedInMember.member.id}/reservation`)
+      .then((response) => {
+        this.reservations = response.data;
+        this.errorMessageReservation = "";
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+        this.errorMessageReservation ="Oops! 🙁 Something bad happened on our side while trying to load your reservations. Try again later";
+      });
+    }
+  }
 };
 </script>
 
 <style scoped>
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css");
 h1,
 h2 {
   font-weight: normal;
@@ -221,6 +260,12 @@ h2 {
 
 h2 {
   margin: 20px 0;
+}
+
+.deleteTD {
+  border: 0px !important;
+  padding: 0 !important;
+  width: 8px !important;
 }
 
 ul {

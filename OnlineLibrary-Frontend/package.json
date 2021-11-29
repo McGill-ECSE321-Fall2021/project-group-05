@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "^0.24.0",
     "bootstrap": "^4.0.0-beta.2",
+    "bootstrap-icons": "^1.7.1",
     "bootstrap-vue": "latest",
     "express": "^4.17.1",
     "jquery": "^3.6.0",
