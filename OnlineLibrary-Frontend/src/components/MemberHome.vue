@@ -179,20 +179,11 @@ export default {
   created: function () {
     const storedCredentials = window.sessionStorage.getItem("loggedInMember");
     if (storedCredentials == null) {
-      this.$router.push({ name: "Login" });
+       this.$router.push({ name: "Login" });
     }
     const loggedInMember = JSON.parse(storedCredentials);
-    axios_instance
-      .get(`/member/${loggedInMember.member.id}/reservation`)
-      .then((response) => {
-        this.reservations = response.data;
-        this.errorMessageReservation = "";
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-        this.errorMessageReservation ="Oops! 🙁 Something bad happened on our side while trying to load your reservations. Try again later";
-      });
+    this.fetchReservation(loggedInMember.member.id); 
+
     axios_instance
       .get(`/member/${loggedInMember.member.id}/loans/`)
       .then((response) => {
@@ -222,21 +213,18 @@ export default {
       .delete(`/reservation/${itemId}/`)
       .then(() =>{
         this.errorMessageDelete= "";
-        this.fetchReservation();
-      })
-      .catch((error) => {
-        console.error(error);
-        this.errorMessageDelete = "Oops! 🙁 Something bad happened on our side while trying to delete your reservation. Try again later"
+        const storedCredentials = window.sessionStorage.getItem("loggedInMember");
+        if (storedCredentials == null) {
+        this.$router.push({ name: "Login" });
+        }
+        const loggedInMember = JSON.parse(storedCredentials);
+        this.fetchReservation(loggedInMember.member.id);
       });
     },
-    fetchReservation(){
-      const storedCredentials = window.sessionStorage.getItem("loggedInMember");
-      if (storedCredentials == null) {
-      this.$router.push({ name: "Login" });
-      }
-      const loggedInMember = JSON.parse(storedCredentials);
+    fetchReservation(memberId){
+      
       axios_instance
-      .get(`/member/${loggedInMember.member.id}/reservation`)
+      .get(`/member/${memberId}/reservation`)
       .then((response) => {
         this.reservations = response.data;
         this.errorMessageReservation = "";
