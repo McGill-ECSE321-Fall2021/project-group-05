@@ -257,8 +257,16 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
     </tr>
     <tr>
       <td>Guillaume Delmas-Frenette</td>
-      <td></td>
-      <td></td>
+      <td>
+        <ul>
+          <li> Created the member home page and added all of it's components</li>
+          <li> Added a few service in order to retrieve all the data necessary for the member home page </li>
+          <li> System architecture </li>
+          <li> Particate in meetings </li>
+          <li> Code review </li>
+        </ul>
+      </td>
+      <td> 20 hours </td>
     </tr>
     <tr>
       <td>Kirollos Roufail</td>
