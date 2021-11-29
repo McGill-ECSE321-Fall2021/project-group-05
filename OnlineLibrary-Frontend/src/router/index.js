@@ -15,7 +15,7 @@ import NotFound from "@/components/NotFound.vue";
 import LibrarianRooms from "@/components/LibrarianRooms.vue";
 import LibrarianRoom from "@/components/LibrarianRoom.vue";
 import LibrarianUpdateLoginInfo from "@/components/LibrarianUpdateLoginInfo.vue";
-
+import MemberUpdateInfo from "@/components/memberUpdateInfo.vue";
 Vue.use(Router);
 
 export default new Router({
@@ -99,6 +99,11 @@ export default new Router({
       path: "/librarian/librarianUpdateLoginInfo/",
       name: "LibrarianUpdateLoginInfo",
       component: LibrarianUpdateLoginInfo
+    },
+    {
+      path: "/member/memberUpdateInfo",
+      name: "MemberUpdateInfo",
+      component: MemberUpdateInfo
     },
     {
       path: "*",

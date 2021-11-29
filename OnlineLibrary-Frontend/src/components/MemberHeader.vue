@@ -5,6 +5,7 @@
         <li><router-link :to="{ name: 'MemberHome' }">Home</router-link></li>
         <li><router-link :to="{ name: 'MemberBrowse' }">Browse items</router-link></li>
         <li><router-link :to="{ name: 'MemberRooms' }">Browse rooms</router-link></li>
+        <li><router-link :to="{ name: 'MemberUpdateInfo' }">Update personal info</router-link></li>
         <li><router-link :to="{ name: 'MemberLogout' }">Log out</router-link></li>
       </ul>
     </nav>
