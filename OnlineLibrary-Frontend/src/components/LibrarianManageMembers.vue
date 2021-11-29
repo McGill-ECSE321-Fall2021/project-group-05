@@ -38,7 +38,11 @@
               type="text"
               placeholder="Physical address"
               v-model="newMemberPhysicalAddress"
-              :state="submitAttempted ? newMemberPhysicalAddress.trim().length > 0 : null"
+              :state="
+                submitAttempted
+                  ? newMemberPhysicalAddress.trim().length > 0
+                  : null
+              "
               required
             />
             <b-form-invalid-feedback>
@@ -67,12 +71,16 @@
           <td>{{ member.fullName }}</td>
           <td>{{ member.address }}</td>
           <td>
-            <p v-if="member.onlineAccount">{{ member.onlineAccount.emailAddress }}</p>
-            <p v-else> -- </p>
+            <p v-if="member.onlineAccount">
+              {{ member.onlineAccount.emailAddress }}
+            </p>
+            <p v-else>--</p>
           </td>
           <td>
-            <p v-if="member.onlineAccount">{{ member.onlineAccount.username }}</p>
-            <p v-else> -- </p>
+            <p v-if="member.onlineAccount">
+              {{ member.onlineAccount.username }}
+            </p>
+            <p v-else>--</p>
           </td>
           <td>{{ centsToDollars(member.totalFee) }}</td>
           <td>{{ titleCase(member.status) }}</td>
@@ -156,7 +164,7 @@ export default {
       newMemberFullName: "",
       newMemberPhysicalAddress: "",
       newMemberIsCitizen: false,
-      submitAttempted: false
+      submitAttempted: false,
     };
   },
   methods: {
@@ -168,28 +176,36 @@ export default {
     },
     activateMember(id) {
       const relativeUrl = "/member/" + id + "/activate";
-      this.doPutRequest(relativeUrl, "Unable to activate member account. Try again later.", id);
+      this.doPutRequest(
+        relativeUrl,
+        "Unable to activate member account. Try again later.",
+        id
+      );
     },
     applyPenalty(id) {
       const relativeUrl = "/member/" + id + "/applyPenalty";
-      this.doPutRequest(relativeUrl, "Unable to apply penalty. Try again later.", id);
+      this.doPutRequest(
+        relativeUrl,
+        "Unable to apply penalty. Try again later.",
+        id
+      );
     },
     removePenalty(id) {
       const relativeUrl = "/member/" + id + "/removePenalty";
-      this.doPutRequest(relativeUrl, "Unable to undo penalty. Try again later.", id);
+      this.doPutRequest(
+        relativeUrl,
+        "Unable to undo penalty. Try again later.",
+        id
+      );
     },
     doPutRequest(relativeUrl, errorMsg, id) {
       const self = this;
       AXIOS.put(relativeUrl)
         .then((response) => {
-          if (response.status === 200) {
-            const index = self.members.findIndex((member) => member.id === id);
-            // Need to use self.$set to trigger update in reactivity system
-            self.$set(self.members, index, response.data);
-            this.errorMsg = "";
-          } else {
-            self.errorMsg = errorMsg;
-          }
+          const index = self.members.findIndex((member) => member.id === id);
+          // Need to use self.$set to trigger update in reactivity system
+          self.$set(self.members, index, response.data);
+          this.errorMsg = "";
         })
         .catch((error) => {
           self.errorMsg = errorMsg;
@@ -202,26 +218,23 @@ export default {
       AXIOS.post("/member/", {
         fullName: self.newMemberFullName,
         address: self.newMemberPhysicalAddress,
-        isCitizen: self.newMemberIsCitizen
+        isCitizen: self.newMemberIsCitizen,
       })
-      .then((response) => {
-        if (response.status === 200) {
+        .then((response) => {
           const createdMember = response.data;
           self.members.push(createdMember);
           self.activateMember(createdMember.id);
-        }
-        else {
+        })
+        .catch((error) => {
           self.errorMsg = "Unable to create member. Try again later.";
-        }
-      })
-      .catch((error) => {
-        self.errorMsg = "Unable to create member. Try again later.";
-      });
+        });
     },
     checkNewMemberFormValidity() {
       this.submitAttempted = true;
-      return this.newMemberFullName.trim().length > 0 &&
-             this.newMemberPhysicalAddress.trim().length > 0;
+      return (
+        this.newMemberFullName.trim().length > 0 &&
+        this.newMemberPhysicalAddress.trim().length > 0
+      );
       // this.$refs.newMemberForm.checkValidity() would be nicer, but it seems to allow invalid values (e.g. all whitespace)
     },
     resetNewMemberModal() {
