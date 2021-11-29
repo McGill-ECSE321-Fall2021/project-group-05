@@ -179,7 +179,7 @@ export default {
   created: function () {
     const storedCredentials = window.sessionStorage.getItem("loggedInMember");
     if (storedCredentials == null) {
-       this.$router.push({ name: "Login" });
+      this.$router.push({ name: "Login" });
     }
     const loggedInMember = JSON.parse(storedCredentials);
     this.fetchReservation(loggedInMember.member.id); 
