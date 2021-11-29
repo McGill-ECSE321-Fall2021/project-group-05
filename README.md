@@ -257,8 +257,16 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
     </tr>
     <tr>
       <td>Guillaume Delmas-Frenette</td>
-      <td></td>
-      <td></td>
+      <td>
+        <ul>
+          <li> Created the member home page and added all of it's components</li>
+          <li> Added a few service in order to retrieve all the data necessary for the member home page </li>
+          <li> System architecture </li>
+          <li> Particate in meetings </li>
+          <li> Code review </li>
+        </ul>
+      </td>
+      <td> 20 hours </td>
     </tr>
     <tr>
       <td>Kirollos Roufail</td>
@@ -272,8 +280,24 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
     </tr>
     <tr>
       <td>Mircea Gosman</td>
-      <td></td>
-      <td></td>
+      <td>
+        <ul>
+            <li>Reviewed Pull Requests</li>
+            <li>Added Vuetify & Vue-Debounce libaries, solving dependency issues along the way.</li>
+            <li>Resolved some date libraries related bugs on the backend. (FYI: Spring controllers need @DateParam to accept specific date formats, and they also do not work with Java.SQL.date/time. They require Java.time.localdate/localtime instead. It would be a neat addition to the tutorials.)</li>
+            <li>Added Scheduler component & connected it to the backend. It can be accessed via the <i>Schedule</i> and <i>Room Booking</i> tabs in the header. This component is modular across different user roles, and is responsible for CRUD operations related to: 
+              <ul>
+                <li>Holidays</li>
+                <li>Opening Hours</li>
+                <li>Librarian Shifts</li>
+                <li>Room Bookings</li>
+                <li>[ It also makes use of member, librarian and room related endpoints. ]</li>
+              </ul
+            </li>
+          </ul>
+              * Time spent is not a typo. 
+      </td>
+      <td>74.5 hours*</td>
     </tr>
     <tr>
       <td>Sebastian Ionascu</td>

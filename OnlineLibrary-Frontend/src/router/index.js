@@ -17,6 +17,7 @@ import LibrarianRoom from "@/components/LibrarianRoom.vue";
 import Signup from "@/components/Signup.vue";
 import Inactive from "@/components/Inactive.vue";
 import Blacklisted from "@/components/Blacklisted.vue";
+import LibrarianManageMembers from "@/components/LibrarianManageMembers.vue";
 
 Vue.use(Router);
 
@@ -159,6 +160,12 @@ export default new Router({
       path: "/librarian/rooms/:roomId",
       name: "LibrarianRoom",
       component: LibrarianRoom,
+      beforeEnter: requireLibrarian
+    },
+    {
+      path: "/librarian/manageMembers",
+      name: "LibrarianManageMembers",
+      component: LibrarianManageMembers,
       beforeEnter: requireLibrarian
     },
     {
