@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "96c6b214-4374-40ca-87b5-ac5a06eb947a",
+		"_postman_id": "83e6260c-397b-42fc-a834-ab93745582b1",
 		"name": "Integration tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -1720,7 +1720,7 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/reservation?memberId={{member_id}}&reservableItemId={{bookInfo_id}}&date=2021-11-11",
+									"raw": "{{BASE_URL}}/reservation?memberId={{member_id}}&reservableItemId={{bookInfo_id}}",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -1735,10 +1735,6 @@
 										{
 											"key": "reservableItemId",
 											"value": "{{bookInfo_id}}"
-										},
-										{
-											"key": "date",
-											"value": "2021-11-11"
 										}
 									]
 								}
@@ -1764,7 +1760,7 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/reservation?memberId=9999999&reservableItemId=9999999&date=2021-11-11",
+									"raw": "{{BASE_URL}}/reservation?memberId=9999999&reservableItemId=9999999",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -1779,10 +1775,6 @@
 										{
 											"key": "reservableItemId",
 											"value": "9999999"
-										},
-										{
-											"key": "date",
-											"value": "2021-11-11"
 										}
 									]
 								}
@@ -4412,38 +4404,6 @@
 							],
 							"request": {
 								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "{{BASE_URL}}/reservableItem/{{book_id}}/loan",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"reservableItem",
-										"{{book_id}}",
-										"loan"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Fail to get deleted loan",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 500\", function () {\r",
-											"    pm.response.to.have.status(500);\r",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "GET",
 								"header": [],
 								"url": {
 									"raw": "{{BASE_URL}}/reservableItem/{{book_id}}/loan",

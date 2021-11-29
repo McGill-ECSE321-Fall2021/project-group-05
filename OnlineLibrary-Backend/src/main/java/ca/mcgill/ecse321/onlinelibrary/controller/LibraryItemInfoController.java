@@ -3,6 +3,7 @@ package ca.mcgill.ecse321.onlinelibrary.controller;
 import ca.mcgill.ecse321.onlinelibrary.dto.*;
 import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.service.LibraryItemInfoService;
+import ca.mcgill.ecse321.onlinelibrary.service.LibraryItemService;
 import ca.mcgill.ecse321.onlinelibrary.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,6 +22,9 @@ public class LibraryItemInfoController {
 	private LibraryItemInfoService libraryItemInfoService;
 
 	@Autowired
+	private LibraryItemService libraryItemService;
+
+	@Autowired
 	private MemberService memberService;
 
 	@GetMapping(value = {"/browse", "/browse/"})
@@ -35,11 +39,10 @@ public class LibraryItemInfoController {
 	}
 
 	@PostMapping(value = {"/reservation", "/reservation/"})
-	public ReservationDto reserveItem(@RequestParam int memberId, @RequestParam int reservableItemId,
-			@RequestParam Date date) throws IllegalArgumentException {
+	public ReservationDto reserveItem(@RequestParam int memberId, @RequestParam int reservableItemId) throws IllegalArgumentException {
 		Member member = memberService.getMemberById(memberId);
 		ReservableItemInfo reservableItem = libraryItemInfoService.getReservableItemInfo(reservableItemId);
-		Reservation reservation = libraryItemInfoService.reserveItem(member, reservableItem, date);
+		Reservation reservation = libraryItemInfoService.reserveItem(member, reservableItem);
 		return ReservationDto.fromReservation(reservation);
 	}
 
@@ -142,5 +145,11 @@ public class LibraryItemInfoController {
 		AlbumInfo albumInfo = libraryItemInfoService.getAlbumInfo(id);
 		return AlbumInfoDto
 				.fromAlbumInfo(libraryItemInfoService.updateAlbumInfo(albumInfo, title, composerPerformer, genre));
+	}
+
+	@GetMapping(value = {"/libraryItemInfo/{libraryItemInfoId}/libraryItem", "/libraryItemInfo/{libraryItemInfoId}/libraryItem"})
+	public List<LibraryItemDto> getAssociatedLibraryItems(@PathVariable int libraryItemInfoId) {
+		LibraryItemInfo libraryItemInfo = libraryItemInfoService.getLibraryItemInfoById(libraryItemInfoId);
+		return libraryItemService.getAssociatedCopies(libraryItemInfo).stream().map(item -> item.convertToDto()).collect(Collectors.toList());
 	}
 }

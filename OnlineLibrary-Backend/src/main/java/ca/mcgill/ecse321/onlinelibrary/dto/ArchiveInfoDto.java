@@ -24,7 +24,7 @@ public class ArchiveInfoDto extends LibraryItemInfoDto{
 		return this.description;
 	}
 
-	public Date publicationDate() {
+	public Date getPublicationDate() {
 		return this.publicationDate;
 	}
 	

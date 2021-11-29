@@ -56,6 +56,7 @@ public class TestLibraryItemInfoService {
 	private static final int RESERVATION_BAD_KEY = 12;
 	private static final int MEMBER_KEY = 13;
 	private static final int MEMBER_BAD_KEY = 14;
+	private static final BookInfo ALREADY_RESERVED_BOOK_INFO = new BookInfo();
 	
 
 	@BeforeEach
@@ -76,6 +77,7 @@ public class TestLibraryItemInfoService {
 				member.setId(MEMBER_KEY);
 				List<Reservation> reservation = new ArrayList<Reservation>();
 				reservation.add(new Reservation(member, new BookInfo(), new Date(200)));
+				reservation.add(new Reservation(member, ALREADY_RESERVED_BOOK_INFO, new Date(300)));
 				return reservation;
 			} else {
 				return null;
@@ -176,18 +178,17 @@ public class TestLibraryItemInfoService {
 	public void testReserveItem(){
 		Reservation reservation = null;
 		Member member = new Member("123 Main Street", "Seb");
+		member.setId(MEMBER_KEY);
 		member.activate();
 		BookInfo bookInfo = new BookInfo();
-		Date date = new Date(200);
 		try {
-			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo);
 		} catch (IllegalArgumentException e){
 			fail();
 		}
 		assertNotNull(reservation);
 		assertEquals(reservation.getMember(), member);
 		assertEquals(reservation.getReservableItemInfo(), bookInfo);
-		assertEquals(reservation.getDate(), date);
 	}
 
 	@Test
@@ -196,9 +197,8 @@ public class TestLibraryItemInfoService {
 		Reservation reservation = null;
 		Member member = null;
 		BookInfo bookInfo = new BookInfo();
-		Date date = new Date(200);
 		try {
-			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo);
 		} catch (IllegalArgumentException e){
 			error += e.getMessage();
 		}
@@ -211,11 +211,11 @@ public class TestLibraryItemInfoService {
 		String error = "";
 		Reservation reservation = null;
 		Member member = new Member("123 Main Street", "Seb");
+		member.setId(MEMBER_KEY);
 		//member.activate();
 		BookInfo bookInfo = new BookInfo();
-		Date date = new Date(200);
 		try {
-			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo);
 		} catch (IllegalArgumentException e){
 			error += e.getMessage();
 		}
@@ -228,14 +228,14 @@ public class TestLibraryItemInfoService {
 		String error = "";
 		Reservation reservation = null;
 		Member member = new Member("123 Main Street", "Seb");
+		member.setId(MEMBER_KEY);
 		member.activate();
 		member.applyStatusPenalty(); //yellow
 		member.applyStatusPenalty(); //red
 		member.applyStatusPenalty(); //blacklisted
 		BookInfo bookInfo = new BookInfo();
-		Date date = new Date(200);
 		try {
-			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo);
 		} catch (IllegalArgumentException e){
 			error += e.getMessage();
 		}
@@ -248,11 +248,11 @@ public class TestLibraryItemInfoService {
 		String error = "";
 		Reservation reservation = null;
 		Member member = new Member("123 Main Street", "Seb");
+		member.setId(MEMBER_KEY);
 		member.activate();
 		BookInfo bookInfo = null;
-		Date date = new Date(200);
 		try {
-			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo);
 		} catch (IllegalArgumentException e){
 			error += e.getMessage();
 		}
@@ -261,20 +261,14 @@ public class TestLibraryItemInfoService {
 	}
 
 	@Test
-	public void testReserveItemDateNull(){
-		String error = "";
-		Reservation reservation = null;
+	public void testReserveItemDuplicateReservation() {
 		Member member = new Member("123 Main Street", "Seb");
+		member.setId(MEMBER_KEY);
 		member.activate();
-		BookInfo bookInfo = new BookInfo();
-		Date date = null;
-		try {
-			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
-		} catch (IllegalArgumentException e){
-			error += e.getMessage();
-		}
-		assertNull(reservation);
-		assertTrue(error.contains("Date cannot be null"));
+		Exception e = assertThrows(IllegalArgumentException.class, () -> {
+			libraryItemInfoService.reserveItem(member, ALREADY_RESERVED_BOOK_INFO);
+		});
+		assertEquals("Member already has a reservation for this item.", e.getMessage());
 	}
 
 	@Test
@@ -284,16 +278,14 @@ public class TestLibraryItemInfoService {
 		Member member = null;
 		//member.activate();
 		BookInfo bookInfo = null;
-		Date date = null;
 		try {
-			reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+			reservation = libraryItemInfoService.reserveItem(member, bookInfo);
 		} catch (IllegalArgumentException e){
 			error += e.getMessage();
 		}
 		assertNull(reservation);
 		assertTrue(error.contains("A member needs to be assigned to a reservation."));
 		assertTrue(error.contains("An item needs to be assigned to a reservation"));
-		assertTrue(error.contains("Date cannot be null"));
 	}
 
 	@Test
@@ -383,10 +375,10 @@ public class TestLibraryItemInfoService {
 	public void testDeleteReservation(){
 		Reservation reservation = null;
 		Member member = new Member("123 Main Street", "Seb");
+		member.setId(MEMBER_KEY);
 		member.activate();
 		BookInfo bookInfo = new BookInfo();
-		Date date = new Date(200);
-		reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+		reservation = libraryItemInfoService.reserveItem(member, bookInfo);
 		reservation.setId(RESERVATION_KEY);
 		try {
 			libraryItemInfoService.deleteReservationbyId(RESERVATION_KEY);
@@ -400,10 +392,10 @@ public class TestLibraryItemInfoService {
 		String error = "";
 		Reservation reservation = null;
 		Member member = new Member("123 Main Street", "Seb");
+		member.setId(MEMBER_KEY);
 		member.activate();
 		BookInfo bookInfo = new BookInfo();
-		Date date = new Date(200);
-		reservation = libraryItemInfoService.reserveItem(member, bookInfo, date);
+		reservation = libraryItemInfoService.reserveItem(member, bookInfo);
 		reservation.setId(RESERVATION_KEY);
 		try {
 			libraryItemInfoService.deleteReservationbyId(RESERVATION_BAD_KEY);

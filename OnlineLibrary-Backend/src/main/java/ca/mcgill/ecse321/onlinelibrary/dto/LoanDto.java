@@ -8,19 +8,19 @@ public class LoanDto {
     private int id;
     private Date returnDate;
     private int numberOfRenewals;
-    private int reservableItemId;
+    private LibraryItemDto libraryItemDto;
     private MemberDto member;
 
-    public LoanDto(int id, Date returnDate, int numberOfRenewals, int reservableItemId, MemberDto member) {
+    public LoanDto(int id, Date returnDate, int numberOfRenewals, LibraryItemDto reservableItemDto, MemberDto member) {
         this.id = id;
         this.returnDate = returnDate;
         this.numberOfRenewals = numberOfRenewals;
-        this.reservableItemId = reservableItemId;
+        this.libraryItemDto = reservableItemDto;
         this.member = member;
     }
 
     public static LoanDto fromLoan(Loan loan) {
-        return new LoanDto(loan.getId(), loan.getReturnDate(), loan.getNumberOfRenewals(), loan.getReservableItem().getId(), MemberDto.fromMember(loan.getMember()));
+        return new LoanDto(loan.getId(), loan.getReturnDate(), loan.getNumberOfRenewals(), loan.getReservableItem().convertToDto(), MemberDto.fromMember(loan.getMember()));
     }
 
     public int getId() {
@@ -35,8 +35,8 @@ public class LoanDto {
         return numberOfRenewals;
     }
 
-    public int getReservableItemId() {
-        return reservableItemId;
+    public LibraryItemDto getReservableItem() {
+        return libraryItemDto;
     }
 
     public MemberDto getMember() {

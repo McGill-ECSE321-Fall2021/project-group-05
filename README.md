@@ -228,13 +228,45 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
     </tr>
     <tr>
       <td>Gabriel Lacroix</td>
-      <td></td>
-      <td></td>
+      <td>
+        <ul>
+          <li>Set up the frontend project and CI</li>
+          <li>Implement "Browse rooms" and individual room pages</li>
+          <li>Write a guide to start implementation and set coding conventions</li>
+          <li>Implement logout</li>
+          <li>Implement 404 Not Found page with redirection</li>
+          <li>Add page to browse all available library items</li>
+          <li>Implement pages to view individual item details</li>
+          <li>Implement global navigation header for all pages</li>
+          <li>Add global styling, make everything prettier, add images</li>
+          <li>Modify the newspaper and archive models and services</li>
+          <li>Add a reserve button for members</li>
+          <li>Add a search bar to search all library items</li>
+          <li>Add a form to allow a librarian to checkout an item for a member</li>
+          <li>Add a form to allow a librarian to return an item</li>
+          <li>Add a table listing all copies of an item and their status (on-premise only, available or checked out)</li>
+          <li>Add a button to add a new item copy to the library</li>
+          <li>Add a form to delete an item copy</li>
+          <li>Add a form to reserve an item for a member as a librarian</li>
+          <li>Participate in meetings</li>
+          <li>Review pull requests</li>
+          <li>Discuss project and help with problem solving</li>
+        </ul>
+      </td>
+      <td>45 hours</td>
     </tr>
     <tr>
       <td>Guillaume Delmas-Frenette</td>
-      <td></td>
-      <td></td>
+      <td>
+        <ul>
+          <li> Created the member home page and added all of it's components</li>
+          <li> Added a few service in order to retrieve all the data necessary for the member home page </li>
+          <li> System architecture </li>
+          <li> Particate in meetings </li>
+          <li> Code review </li>
+        </ul>
+      </td>
+      <td> 20 hours </td>
     </tr>
     <tr>
       <td>Kirollos Roufail</td>
@@ -248,8 +280,24 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
     </tr>
     <tr>
       <td>Mircea Gosman</td>
-      <td></td>
-      <td></td>
+      <td>
+        <ul>
+            <li>Reviewed Pull Requests</li>
+            <li>Added Vuetify & Vue-Debounce libaries, solving dependency issues along the way.</li>
+            <li>Resolved some date libraries related bugs on the backend. (FYI: Spring controllers need @DateParam to accept specific date formats, and they also do not work with Java.SQL.date/time. They require Java.time.localdate/localtime instead. It would be a neat addition to the tutorials.)</li>
+            <li>Added Scheduler component & connected it to the backend. It can be accessed via the <i>Schedule</i> and <i>Room Booking</i> tabs in the header. This component is modular across different user roles, and is responsible for CRUD operations related to: 
+              <ul>
+                <li>Holidays</li>
+                <li>Opening Hours</li>
+                <li>Librarian Shifts</li>
+                <li>Room Bookings</li>
+                <li>[ It also makes use of member, librarian and room related endpoints. ]</li>
+              </ul
+            </li>
+          </ul>
+              * Time spent is not a typo. 
+      </td>
+      <td>74.5 hours*</td>
     </tr>
     <tr>
       <td>Sebastian Ionascu</td>

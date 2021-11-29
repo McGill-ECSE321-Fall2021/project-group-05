@@ -62,6 +62,8 @@
                 <dd>{{ item.title }}</dd>
                 <dt>Description</dt>
                 <dd>{{ item.description }}</dd>
+                <dt>Publication date</dt>
+                <dd>{{ item.publicationDate }}</dd>
               </dl>
             </div>
           </td>
