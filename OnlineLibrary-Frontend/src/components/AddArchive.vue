@@ -62,13 +62,49 @@ const axios_instance = axios.create({
   headers: { "Access-Control-Allow-Origin": frontendUrl },
 });
 
-//NOT DONE YET!!!!!!!!!!!!!!!!!!!!!!!!
 export default {
   name: "AddArchive",
   data() {
     return {
+      archiveDate: null,
+      archiveDescription: "",
+      archiveTitle: "",
       errorMessage: "",
     };
+  },
+  methods: {
+    createArchive(event) {
+      event.preventDefault();
+      console.log(
+        this.archiveDate,
+        this.archiveDescription,
+        this.archiveTitle
+      );
+      axios_instance
+        .post(
+          `/archiveInfo/${this.archiveTitle}`,
+          {},
+          {
+            params: {
+              description: this.archiveDescription,
+              publicationDate: this.archiveDate,
+            },
+          }
+        )
+        .then((response) => {
+          this.errorMessage = "";
+          const newArchiveId = response.data.id;
+          this.$router.push({
+            name: "LibrarianItem",
+            params: { itemId: newArchiveId },
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+          this.errorMessage =
+            "Could not create this item";
+        });
+    },
   },
 };
 </script>

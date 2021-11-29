@@ -77,8 +77,49 @@ export default {
   name: "AddNewspaper",
   data() {
     return {
+      newspaperDate: null,
+      newspaperNumber: NaN,
+      newspaperFrequency: "",
+      newspaperTitle: "",
       errorMessage: "",
     };
+  },
+  methods: {
+    createNewspaper(event) {
+      event.preventDefault();
+      console.log(
+        this.newspaperDate,
+        this.newspaperNumber,
+        this.newspaperFrequency,
+        this.newspaperTitle
+      );
+      axios_instance
+        .post(
+          `/newspaperInfo`,
+          {},
+          {
+            params: {
+              periodicalTitle: this.newspaperTitle,
+              frequency: this.newspaperFrequency,
+              publication: this.newspaperDate,
+              number: Number.parseInt(this.newspaperNumber),
+            },
+          }
+        )
+        .then((response) => {
+          this.errorMessage = "";
+          const newNewspaperId = response.data.id;
+          this.$router.push({
+            name: "LibrarianItem",
+            params: { itemId: newNewspaperId },
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+          this.errorMessage =
+            "Could not create this item";
+        });
+    },
   },
 };
 </script>

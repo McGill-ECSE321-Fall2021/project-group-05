@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -203,11 +204,32 @@ public class LibraryItemInfoService {
 	}
 
 	@Transactional
-	public NewspaperInfo createNewspaperInfo(String periodicalTitle, Date publicationDate, String frequency, int number) {
-		checkArgumentsNewspaperInfo(periodicalTitle, publicationDate, frequency, number);
+	public NewspaperInfo createNewspaperInfo(String periodicalTitle, LocalDate publicationDate, String frequency, int number) {
+		//checkArgumentsNewspaperInfo(periodicalTitle, Date.valueOf(publicationDate), frequency, number);
+		ArrayList<String> errorMessage = new ArrayList<String>();
+
+		if (periodicalTitle == null || periodicalTitle.trim().length() == 0) {
+			errorMessage.add("Periodical title can't be empty.");
+		}
+
+		if (publicationDate == null) {
+			errorMessage.add("Date can't be empty.");
+		}
+
+		if (frequency == null || frequency.trim().length() == 0) {
+			errorMessage.add("Frequency can't be empty.");
+		}
+
+		if (number < 0) {
+			errorMessage.add("Number can't be negative.");
+		}
+
+		if (errorMessage.size() > 0) {
+			throw new IllegalArgumentException(String.join(" ", errorMessage));
+		}
 		NewspaperInfo newspaperInfo = new NewspaperInfo();
 		newspaperInfo.setPeriodicalTitle(periodicalTitle);
-		newspaperInfo.setPublication(publicationDate);
+		newspaperInfo.setPublication(Date.valueOf(publicationDate));
 		newspaperInfo.setFrequency(frequency);
 		newspaperInfo.setNumber(number);
 		newspaperInfoRepository.save(newspaperInfo);
@@ -224,10 +246,10 @@ public class LibraryItemInfoService {
 	}
 
 	@Transactional
-	public NewspaperInfo updateNewspaperInfo(NewspaperInfo newspaperInfo, String periodicalTitle, Date publicationDate, String frequency, int number) {
-		checkArgumentsNewspaperInfo(periodicalTitle, publicationDate, frequency, number);
+	public NewspaperInfo updateNewspaperInfo(NewspaperInfo newspaperInfo, String periodicalTitle, LocalDate publicationDate, String frequency, int number) {
+		checkArgumentsNewspaperInfo(periodicalTitle, Date.valueOf(publicationDate), frequency, number);
 		newspaperInfo.setPeriodicalTitle(periodicalTitle);
-		newspaperInfo.setPublication(publicationDate);
+		newspaperInfo.setPublication(Date.valueOf(publicationDate));
 		newspaperInfo.setFrequency(frequency);
 		newspaperInfo.setNumber(number);
 		newspaperInfoRepository.save(newspaperInfo);
@@ -265,12 +287,28 @@ public class LibraryItemInfoService {
 	}
 
 	@Transactional
-	public ArchiveInfo createArchiveInfo(String title, String description, Date publicationDate) {
-		checkArgumentsArchive(title,description,publicationDate);
+	public ArchiveInfo createArchiveInfo(String title, String description, LocalDate publicationDate) {
+		//checkArgumentsArchive(title,description,Date.valueOf(publicationDate));
+		ArrayList<String> errorMessage = new ArrayList<String>();
+		if (title == null || title.trim().length() == 0) {
+			errorMessage.add("Title can't be empty.");
+		}
+
+		if (description == null) {
+			errorMessage.add("Description can't be empty.");
+		}
+
+		if (publicationDate == null) {
+			errorMessage.add("Publication date can't be empty.");
+		}
+
+		if (errorMessage.size() > 0) {
+			throw new IllegalArgumentException(String.join(" ", errorMessage));
+		}
 		ArchiveInfo archiveInfo = new ArchiveInfo();
 		archiveInfo.setTitle(title);
 		archiveInfo.setDescription(description);
-		archiveInfo.setPublicationDate(publicationDate);
+		archiveInfo.setPublicationDate(Date.valueOf(publicationDate));
 		archiveInfoRepository.save(archiveInfo);
 		return archiveInfo;
 	}

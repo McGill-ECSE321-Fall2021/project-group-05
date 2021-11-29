@@ -5,9 +5,11 @@ import ca.mcgill.ecse321.onlinelibrary.model.*;
 import ca.mcgill.ecse321.onlinelibrary.service.LibraryItemInfoService;
 import ca.mcgill.ecse321.onlinelibrary.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -99,7 +101,7 @@ public class LibraryItemInfoController {
 
 	@PostMapping(value = {"/archiveInfo/{title}", "/archiveInfo/{title}/"})
 	public ArchiveInfoDto createArchiveInfo(@PathVariable("title") String title, @RequestParam String description,
-			@RequestParam Date publicationDate) throws IllegalArgumentException {
+			@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate publicationDate) throws IllegalArgumentException {
 		ArchiveInfo archiveInfo = libraryItemInfoService.createArchiveInfo(title, description, publicationDate);
 		return ArchiveInfoDto.fromArchiveInfo(archiveInfo);
 	}
@@ -113,14 +115,14 @@ public class LibraryItemInfoController {
 	}
 
 	@PostMapping(value = {"/newspaperInfo", "/newspaperInfo/"})
-	public NewspaperInfoDto createNewspaperInfo(@RequestParam String periodicalTitle, @RequestParam Date publication, @RequestParam String frequency,
+	public NewspaperInfoDto createNewspaperInfo(@RequestParam String periodicalTitle, @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate publication, @RequestParam String frequency,
 			@RequestParam int number) throws IllegalArgumentException {
 		NewspaperInfo newspaperInfo = libraryItemInfoService.createNewspaperInfo(periodicalTitle, publication, frequency, number);
 		return NewspaperInfoDto.fromNewspaperInfo(newspaperInfo);
 	}
 
 	@PutMapping(value = {"/newspaperInfo/{id}", "/newspaperInfo/{id}/"})
-	public NewspaperInfoDto updateNewspaperInfo(@PathVariable("id") int id, @RequestParam String periodicalTitle, @RequestParam Date publicationDate,
+	public NewspaperInfoDto updateNewspaperInfo(@PathVariable("id") int id, @RequestParam String periodicalTitle, @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate publicationDate,
 			@RequestParam String frequency, @RequestParam int number) throws IllegalArgumentException {
 		NewspaperInfo newspaperInfo = libraryItemInfoService.getNewspaperInfo(id);
 		return NewspaperInfoDto.fromNewspaperInfo(
