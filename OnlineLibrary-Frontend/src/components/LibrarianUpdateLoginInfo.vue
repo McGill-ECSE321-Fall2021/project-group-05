@@ -7,6 +7,7 @@
         <b-form-group id="input-group-1" label="Your Name:" label-for="input-1">
           <b-form-input
             id="input-1"
+            style="width: 15%"
             v-model="name"
             placeholder="Enter name"
             required
@@ -20,6 +21,7 @@
         >
           <b-form-input
             id="input-2"
+            style="width: 15%"
             v-model="username"
             placeholder="Enter new Username"
             required
@@ -33,6 +35,7 @@
         >
           <b-form-input
             id="input-3"
+            style="width: 15%"
             type="password"
             v-model="password"
             placeholder="Password"
