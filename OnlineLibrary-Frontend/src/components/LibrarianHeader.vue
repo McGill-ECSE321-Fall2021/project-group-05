@@ -14,6 +14,11 @@
           </router-link>
         </li>
         <li>
+          <router-link :to="{ name: 'LibrarianManageMembers' }">
+            Manage members
+          </router-link>
+        </li>
+        <li>
           <router-link
             v-if="isHeadLibrarian"
             :to="{ name: 'LibrarianManageLibrarians' }"
@@ -22,7 +27,7 @@
           </router-link>
         </li>
         <li>
-          <router-link :to="{ name: 'LibrarianLogout' }">Log out</router-link>
+          <router-link :to="{ name: 'LibrarianLogout' }"> Log out </router-link>
         </li>
       </ul>
     </nav>
@@ -33,7 +38,9 @@
 export default {
   name: "LibrarianHeader",
   created() {
-    const librarian = JSON.parse(sessionStorage.getItem("loggedInLibrarian")).librarian;
+    const librarian = JSON.parse(
+      sessionStorage.getItem("loggedInLibrarian")
+    ).librarian;
     this.isHeadLibrarian = librarian.head;
   },
   data() {
