@@ -74,14 +74,12 @@ export default new Router({
     {
       path: "/inactive",
       name: "Inactive",
-      component: Inactive,
-      beforeEnter: requireMember
+      component: Inactive
     },
     {
       path: "/blacklisted",
       name: "Blacklisted",
-      component: Blacklisted,
-      beforeEnter: requireMember
+      component: Blacklisted
     },
     {
       path: "/member/home",
