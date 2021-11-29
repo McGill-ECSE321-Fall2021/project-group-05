@@ -38,7 +38,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: akhileshns/heroku-deploy@v3.12.12
       with:
-        heroku_api_key: 64118b4c-0551-49a2-8fa2-45cee48f24b0
+        heroku_api_key: a260c785-d665-4273-a293-a30e402d187f
         heroku_app_name: "onlinelibrary-backend-ci-05a"
         heroku_email: "louis.t.hildebrand@gmail.com"
     - name: Run Postman tests with Newman
