@@ -185,13 +185,9 @@ export default {
       const relativeUrl = "/librarian/" + id;
       AXIOS.delete(relativeUrl)
         .then((response) => {
-          if (response.status === 200) {
-            this.librarians = this.librarians.filter(
-              (librarian) => librarian.id !== id
-            );
-          } else {
-            this.error = "Unable to delete librarian. Try again later.";
-          }
+          this.librarians = this.librarians.filter(
+            (librarian) => librarian.id !== id
+          );
         })
         .catch((error) => {
           this.error = "Unable to delete librarian. Try again later.";
@@ -211,25 +207,22 @@ export default {
           },
         }
       )
-      .then((response) => {
-        if (response.status === 200) {
+        .then((response) => {
           self.librarians.push(response.data);
-        }
-        else {
+        })
+        .catch((error) => {
           self.errorMsg = "Unable to create librarian. Try again later.";
-        }
-      })
-      .catch((error) => {
-        self.errorMsg = "Unable to create librarian. Try again later.";
-      });
+        });
     },
     checkNewLibrarianFormValidity() {
       this.submitAttempted = true;
-      return this.newLibrarianFullName.trim().length > 0 &&
-             this.newLibrarianUsername.length > 0 &&
-             this.newLibrarianPassword.length >= 8 &&
-             this.newLibrarianPasswordConfirmation === this.newLibrarianPassword;
-      // this.$refs.newLibrarianForm.checkValidity() would be nicer, 
+      return (
+        this.newLibrarianFullName.trim().length > 0 &&
+        this.newLibrarianUsername.length > 0 &&
+        this.newLibrarianPassword.length >= 8 &&
+        this.newLibrarianPasswordConfirmation === this.newLibrarianPassword
+      );
+      // this.$refs.newLibrarianForm.checkValidity() would be nicer,
       // but it's allowing invalid passwords in some cases (e.g. "pass")
     },
     resetNewLibrarianModal() {
