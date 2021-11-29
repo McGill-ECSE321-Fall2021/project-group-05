@@ -48,16 +48,10 @@ export default {
         password: self.password
       })
         .then((response) => {
-          if (response.status === 200) {
-            sessionStorage.setItem("loggedInMember", JSON.stringify(response.data));
-            // Prevent 2 users from being logged in at once
-            sessionStorage.removeItem("loggedInLibrarian");
-            self.$router.push({ name: "MemberHome" });
-          }
-          // TODO: Do real exception handling once the backend returns useful errors
-          else {
-            self.errorMsg = "Unable to sign up. Please double-check your library ID.";
-          }
+          sessionStorage.setItem("loggedInMember", JSON.stringify(response.data));
+          // Prevent 2 users from being logged in at once
+          sessionStorage.removeItem("loggedInLibrarian");
+          self.$router.push({ name: "MemberHome" });
         })
         // TODO: Do real exception handling once the backend returns useful errors
         .catch((error) => {
@@ -84,13 +78,7 @@ export default {
         }
       })
         .then((response) => {
-          if (response.status === 200) {
-            self.$router.push({ name: "Inactive" });
-          }
-          // TODO: Do real exception handling once the backend returns useful errors
-          else {
-            self.errorMsg = "Unable to sign up. Please try again in a few minutes.";
-          }
+          self.$router.push({ name: "Inactive" });
         })
         // TODO: Do real exception handling once the backend returns useful errors
         .catch((error) => {
