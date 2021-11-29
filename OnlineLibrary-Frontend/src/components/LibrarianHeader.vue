@@ -1,35 +1,47 @@
 <template>
   <header>
     <nav>
-      <ul>
-        <li><router-link :to="{ name: 'LibrarianHome' }">Home</router-link></li>
-        <li>
-          <router-link :to="{ name: 'LibrarianBrowse' }">
-            Browse items
-          </router-link>
-        </li>
-        <li>
-          <router-link :to="{ name: 'LibrarianRooms' }">
-            Browse rooms
-          </router-link>
-        </li>
-        <li>
-          <router-link :to="{ name: 'LibrarianManageMembers' }">
-            Manage members
-          </router-link>
-        </li>
-        <li>
-          <router-link
-            v-if="isHeadLibrarian"
-            :to="{ name: 'LibrarianManageLibrarians' }"
-          >
-            Manage employees
-          </router-link>
-        </li>
-        <li>
-          <router-link :to="{ name: 'LibrarianLogout' }"> Log out </router-link>
-        </li>
-      </ul>
+      <div class="wrapper">
+        <div class="nav-left">
+          <ul>
+            <li>
+              <router-link :to="{ name: 'LibrarianHome' }">Home</router-link>
+            </li>
+            <li>
+              <router-link :to="{ name: 'LibrarianBrowse' }">
+                Browse items
+              </router-link>
+            </li>
+            <li>
+              <router-link :to="{ name: 'LibrarianRooms' }">
+                Browse rooms
+              </router-link>
+            </li>
+            <li>
+              <router-link :to="{ name: 'LibrarianManageMembers' }">
+                Manage members
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                v-if="isHeadLibrarian"
+                :to="{ name: 'LibrarianManageLibrarians' }"
+              >
+                Manage employees
+              </router-link>
+            </li>
+          </ul>
+        </div>
+        <div class="nav-right">
+          <ul>
+            <li>
+              <router-link :to="{ name: 'LibrarianLogout' }">
+                Log out
+              </router-link>
+            </li>
+          </ul>
+        </div>
+      </div>
     </nav>
   </header>
 </template>
@@ -52,8 +64,11 @@ export default {
 </script>
 
 <style>
-header nav ul {
+.wrapper {
   background-color: #000;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
   height: 75px;
 }
 nav ul {
@@ -74,5 +89,17 @@ nav ul li a {
 nav ul li a:hover {
   color: #fff;
   text-decoration-style: dotted;
+}
+.nav-left {
+  float: left;
+}
+.nav-left ul li {
+  float: left;
+}
+.nav-right {
+  float: right;
+}
+.nav-right ul li {
+  float: right;
 }
 </style>
