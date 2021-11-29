@@ -145,6 +145,24 @@
           {{ returnItemErrorMessage }}
         </p>
       </b-form>
+      <h2>Reserve item</h2>
+      <b-form @submit="reserve">
+        <b-form-group label="Member id" label-for="reserve-member-id">
+          <b-form-select
+            id="reserve-member-id"
+            v-model="reserveMemberId"
+            :options="members.map((member) => member.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Reserve</b-button>
+        <p class="success-message" v-if="reserveSuccessMessage">
+          {{ reserveSuccessMessage }}
+        </p>
+        <p class="error-message" v-if="reserveErrorMessage">
+          {{ reserveErrorMessage }}
+        </p>
+      </b-form>
     </main>
     <main v-else-if="this.item.type === 'Album'">
       <h1>{{ this.item.title }}</h1>
@@ -281,6 +299,24 @@
         </p>
         <p class="error-message" v-if="returnItemErrorMessage">
           {{ returnItemErrorMessage }}
+        </p>
+      </b-form>
+      <h2>Reserve item</h2>
+      <b-form @submit="reserve">
+        <b-form-group label="Member id" label-for="reserve-member-id">
+          <b-form-select
+            id="reserve-member-id"
+            v-model="reserveMemberId"
+            :options="members.map((member) => member.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Reserve</b-button>
+        <p class="success-message" v-if="reserveSuccessMessage">
+          {{ reserveSuccessMessage }}
+        </p>
+        <p class="error-message" v-if="reserveErrorMessage">
+          {{ reserveErrorMessage }}
         </p>
       </b-form>
     </main>
@@ -519,6 +555,24 @@
           {{ returnItemErrorMessage }}
         </p>
       </b-form>
+      <h2>Reserve item</h2>
+      <b-form @submit="reserve">
+        <b-form-group label="Member id" label-for="reserve-member-id">
+          <b-form-select
+            id="reserve-member-id"
+            v-model="reserveMemberId"
+            :options="members.map((member) => member.id)"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-button type="submit">Reserve</b-button>
+        <p class="success-message" v-if="reserveSuccessMessage">
+          {{ reserveSuccessMessage }}
+        </p>
+        <p class="error-message" v-if="reserveErrorMessage">
+          {{ reserveErrorMessage }}
+        </p>
+      </b-form>
     </main>
     <main v-else-if="this.item.type === 'Newspaper'">
       <h1>{{ this.item.periodicalTitle }}</h1>
@@ -665,7 +719,10 @@ export default {
       checkOutErrorMessage: "",
       returnCopyId: "",
       returnItemSuccessMessage: "",
-      returnItemErrorMessage: ""
+      returnItemErrorMessage: "",
+      reserveMemberId: "",
+      reserveSuccessMessage: "",
+      reserveErrorMessage: ""
     };
   },
   components: {
@@ -871,6 +928,30 @@ export default {
         .catch(error => {
           this.returnItemSuccessMessage = "";
           this.returnItemErrorMessage = "Could not return copy";
+          console.error(error);
+        });
+    },
+    reserve(event) {
+      event.preventDefault();
+      axios_instance
+        .post(
+          `/reservation`,
+          {},
+          {
+            params: {
+              memberId: this.reserveMemberId,
+              reservableItemId: this.item.id
+            }
+          }
+        )
+        .then(_ => {
+          this.reserveSuccessMessage = "Reservation made successfully";
+          this.reserveErrorMessage = "";
+          this.reserveMemberId = "";
+        })
+        .catch(error => {
+          this.reserveSuccessMessage = "";
+          this.reserveErrorMessage = "Could not make reservation";
           console.error(error);
         });
     }
