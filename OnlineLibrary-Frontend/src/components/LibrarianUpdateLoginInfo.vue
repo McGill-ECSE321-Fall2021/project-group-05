@@ -4,6 +4,7 @@
     <div class="form">
       <h1>Update login info</h1>
       <b-form @submit="onSubmit" v-if="show">
+        <p>Current name: {{ this.librarian.name }}</p>
         <b-form-group id="input-group-1" label="Your Name:" label-for="input-1">
           <b-form-input
             id="input-1"
@@ -14,6 +15,7 @@
           ></b-form-input>
         </b-form-group>
 
+        <p>Your current username: {{ this.librarian.username }}</p>
         <b-form-group
           id="input-group-2"
           label="Your new Username:"
@@ -24,6 +26,7 @@
             style="width: 15%"
             v-model="form.username"
             placeholder="Enter new Username"
+            @keydown.space.prevent
             required
           ></b-form-input>
         </b-form-group>
@@ -40,7 +43,13 @@
             v-model="form.password"
             placeholder="Password"
             required
+            @keydown.space.prevent
+            :state="passwordState()"
+            aria-describedby="input-live-feedback"
           ></b-form-input>
+          <b-form-invalid-feedback id="input-live-feedback">
+            Enter at least 8 characters
+          </b-form-invalid-feedback>
         </b-form-group>
 
         <!-- <b-form-group id="input-group-4" v-slot="{ ariaDescribedby }">
@@ -55,8 +64,12 @@
 
         <b-button @click="onSubmit" variant="primary">Submit</b-button>
       </b-form>
-      <p v-if="errorMessage" class="error-message">ERROR: {{ this.errorMessage }}</p>
-      <p v-if="confirmationMsg" class="confirmation-message">{{this.confirmationMsg}}</p>
+      <p v-if="errorMessage" class="error-message">
+        ERROR: {{ this.errorMessage }}
+      </p>
+      <p v-if="confirmationMsg" class="confirmation-message">
+        {{ this.confirmationMsg }}
+      </p>
     </div>
   </body>
 </template>
@@ -92,6 +105,10 @@ export default {
         username: "",
         password: "",
       },
+      librarian: {
+        name: "",
+        username: "",
+      },
       show: true,
       errorMessage: "",
       confirmationMsg: "",
@@ -107,13 +124,17 @@ export default {
       .get(relativeURL)
       .then((response) => {
         this.librarian = response.data;
-        this.id = this.$route.params.id;
+        this.librarian.name = response.data.fullName;
+        this.librarian.username = response.data.username;
         console.log(response.data);
       })
       .catch((error) => console.log(error));
   },
 
   methods: {
+    passwordState() {
+      return this.form.password.length > 7 ? true : false;
+    },
     onSubmit() {
       const librarian = JSON.parse(
         sessionStorage.getItem("loggedInLibrarian")
@@ -133,7 +154,9 @@ export default {
         )
         .then((response) => {
           this.errorMessage = "";
-          this.confirmationMsg = "Your info has been updated :)"
+          this.confirmationMsg = "Your info has been updated :)";
+          this.librarian.name = this.form.name;
+          this.librarian.username = this.form.username;
           // const updateLibrarian = response.data.id;
           // this.$router.push({
           //   name: "librarian",
@@ -142,8 +165,8 @@ export default {
         })
         .catch((error) => {
           this.errorMessage =
-            "could not update your login info, please try again";
-            this.confirmationMsg = "";
+            "could not update your login info, please try again with a different username";
+          this.confirmationMsg = "";
           console.log(error);
         });
     },
@@ -153,7 +176,7 @@ export default {
 
 <style scoped>
 .confirmation-message {
-  color: greenyellow;
+  color: green;
 }
 .error-message {
   color: red;
