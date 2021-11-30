@@ -4,34 +4,40 @@
     <div class="form">
       <h1>Update personal info</h1>
       <b-form @submit="onSubmit" v-if="show">
-        <p>Your current name: {{ currentName }}</p>
-        <b-form-group id="input-group-1" label="Your new name:" label-for="input-1">
+        <p>Your current name: {{ name }}</p>
+        <b-form-group
+          id="input-group-1"
+          label="Your new name:"
+          label-for="input-1"
+        >
           <b-form-input
             id="input-1"
             style="width: 15%"
-            v-model="name"
+            v-model="formName"
             placeholder="Enter name"
             required
           ></b-form-input>
         </b-form-group>
-        <p>Your current address: {{ member.address }} </p>
+        <p>Your current address: {{ address }}</p>
         <b-form-group
           id="input-group-3"
           label="Your new address:"
           label-for="input-3"
         >
-
           <b-form-input
             id="input-3"
             style="width: 15%"
             type="text"
-            v-model="address"
+            v-model="formAddress"
             placeholder="New address"
             required
           ></b-form-input>
         </b-form-group>
         <b-button type="submit" variant="primary">Submit</b-button>
       </b-form>
+      <p v-if="errorMessage" class="error-message">
+        ERROR: {{ this.errorMessage }}
+      </p>
     </div>
   </body>
 </template>
@@ -62,28 +68,25 @@ export default {
   },
   data() {
     return {
-      form: {
-        name: "",
-        address: "",
-        oldAddress: "",
-        currentName: "",
-      },
+      name: "",
+      address: "",
+      member: "",
+      formName: "",
+      formAddress: "",
+      errorMessage: "",
       show: true,
     };
   },
   created: function () {
-    const member = JSON.parse(
-      sessionStorage.getItem("loggedInMember")
-    ).member;
+    const member = JSON.parse(sessionStorage.getItem("loggedInMember")).member;
     const id = member.id;
     const relativeURL = "/member/" + id + "/";
+    const self = this;
     axios_instance
       .get(relativeURL)
       .then((response) => {
-        this.member = response.data;
-        this.id = this.$route.params.id;
-        this.oldAddress = member.address;
-        this.currentName = member.fullName;
+        self.address = response.data.address;
+        self.name = response.data.fullName;
         console.log(response.data);
       })
       .catch((error) => console.log(error));
@@ -94,29 +97,31 @@ export default {
       const member = JSON.parse(
         sessionStorage.getItem("loggedInMember")
       ).member;
+      const self = this;
       axios_instance
         .put(
           `/member/${member.id}`,
           {},
           {
             params: {
-              address: this.address,
-              fullName: this.name,
+              address: self.formAddress,
+              fullName: self.formName,
               id: member.id,
             },
           }
         )
         .then((response) => {
-          this.errorMessage = "";
-          const updateMember = response.data.id;
-          this.$router.push({
-            name: "member",
-            params: { memberId: updateMember },
-          });
+          self.errorMessage = "";
+          const updateMember = response.data;
+          self.address= updateMember.address;
+          self.name= updateMember.fullName;
+          // this.$router.push({
+          //   name: "member",
+          //   params: { memberId: updateMember },
+          // });
         })
         .catch((error) => {
-          this.errorMessage =
-            "could not update your info, please try again";
+          this.errorMessage = "could not update your info, please try again";
         });
     },
   },
