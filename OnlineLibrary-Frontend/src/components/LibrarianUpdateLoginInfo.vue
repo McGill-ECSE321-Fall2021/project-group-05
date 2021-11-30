@@ -4,15 +4,18 @@
     <div class="form">
       <h1>Update login info</h1>
       <b-form @submit="onSubmit" v-if="show">
+        <p>Current name: {{ name }}</p>
         <b-form-group id="input-group-1" label="Your Name:" label-for="input-1">
           <b-form-input
             id="input-1"
-            v-model="name"
+            style="width: 15%"
+            v-model="form.name"
             placeholder="Enter name"
             required
           ></b-form-input>
         </b-form-group>
 
+        <p>Your current username: {{ username }}</p>
         <b-form-group
           id="input-group-2"
           label="Your new Username:"
@@ -20,8 +23,10 @@
         >
           <b-form-input
             id="input-2"
-            v-model="username"
+            style="width: 15%"
+            v-model="form.username"
             placeholder="Enter new Username"
+            @keydown.space.prevent
             required
           ></b-form-input>
         </b-form-group>
@@ -33,25 +38,27 @@
         >
           <b-form-input
             id="input-3"
+            style="width: 15%"
             type="password"
-            v-model="password"
+            v-model="form.password"
             placeholder="Password"
             required
+            @keydown.space.prevent
+            :state="passwordState()"
+            aria-describedby="input-live-feedback"
           ></b-form-input>
+          <b-form-invalid-feedback id="input-live-feedback">
+            Enter at least 8 characters
+          </b-form-invalid-feedback>
         </b-form-group>
-
-        <!-- <b-form-group id="input-group-4" v-slot="{ ariaDescribedby }">
-          <b-form-checkbox-group
-            v-model="form.checked"
-            id="checkboxes-4"
-            :aria-describedby="ariaDescribedby"
-          >
-            <b-form-checkbox value="me">Show Password</b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group> -->
-
-        <b-button type="submit" variant="primary">Submit</b-button>
+        <b-button @click="onSubmit" variant="primary">Submit</b-button>
       </b-form>
+      <p v-if="errorMessage" class="error-message">
+        ERROR: {{ this.errorMessage }}
+      </p>
+      <p v-if="confirmationMsg" class="confirmation-message">
+        {{ this.confirmationMsg }}
+      </p>
     </div>
   </body>
 </template>
@@ -87,7 +94,11 @@ export default {
         username: "",
         password: "",
       },
+      name: "",
+      username: "",
       show: true,
+      errorMessage: "",
+      confirmationMsg: "",
     };
   },
   created: function () {
@@ -96,45 +107,50 @@ export default {
     ).librarian;
     const id = librarian.id;
     const relativeURL = "/librarian/" + id + "/";
+    const self = this;
     axios_instance
       .get(relativeURL)
       .then((response) => {
-        this.librarian = response.data;
-        this.id = this.$route.params.id;
-        console.log(response.data);
+        self.librarian = response.data;
+        self.name = response.data.fullName;
+        self.username = response.data.username;
       })
       .catch((error) => console.log(error));
   },
 
   methods: {
+    passwordState() {
+      return this.form.password.length > 7 ? true : false;
+    },
     onSubmit() {
       const librarian = JSON.parse(
         sessionStorage.getItem("loggedInLibrarian")
       ).librarian;
+      const self = this;
       axios_instance
         .put(
           `/librarian/${librarian.id}`,
           {},
           {
             params: {
-              fullName: this.name,
-              username: this.username,
-              password: this.password,
+              fullName: self.form.name,
+              username: self.form.username,
+              password: self.form.password,
               id: librarian.id,
             },
           }
         )
         .then((response) => {
-          this.errorMessage = "";
-          const updateLibrarian = response.data.id;
-          this.$router.push({
-            name: "librarian",
-            params: { librarianId: updateLibrarian },
-          });
+          self.errorMessage = "";
+          self.confirmationMsg = "Your info has been updated :)";
+          self.name = response.data.fullName;
+          self.username = response.data.username;
         })
         .catch((error) => {
           this.errorMessage =
-            "could not update your login info, please try again";
+            "could not update your login info, please try again with a different username and/or password";
+          this.confirmationMsg = "";
+          console.log(error);
         });
     },
   },
@@ -142,6 +158,12 @@ export default {
 </script>
 
 <style scoped>
+.confirmation-message {
+  color: green;
+}
+.error-message {
+  color: red;
+}
 .form {
   margin: 20px;
 }
