@@ -4,7 +4,7 @@
     <div class="form">
       <h1>Update login info</h1>
       <b-form @submit="onSubmit" v-if="show">
-        <p>Current name: {{ this.librarian.name }}</p>
+        <p>Current name: {{ name }}</p>
         <b-form-group id="input-group-1" label="Your Name:" label-for="input-1">
           <b-form-input
             id="input-1"
@@ -15,7 +15,7 @@
           ></b-form-input>
         </b-form-group>
 
-        <p>Your current username: {{ this.librarian.username }}</p>
+        <p>Your current username: {{ username }}</p>
         <b-form-group
           id="input-group-2"
           label="Your new Username:"
@@ -51,17 +51,6 @@
             Enter at least 8 characters
           </b-form-invalid-feedback>
         </b-form-group>
-
-        <!-- <b-form-group id="input-group-4" v-slot="{ ariaDescribedby }">
-          <b-form-checkbox-group
-            v-model="form.checked"
-            id="checkboxes-4"
-            :aria-describedby="ariaDescribedby"
-          >
-            <b-form-checkbox value="me">Show Password</b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group> -->
-
         <b-button @click="onSubmit" variant="primary">Submit</b-button>
       </b-form>
       <p v-if="errorMessage" class="error-message">
@@ -105,10 +94,8 @@ export default {
         username: "",
         password: "",
       },
-      librarian: {
-        name: "",
-        username: "",
-      },
+      name: "",
+      username: "",
       show: true,
       errorMessage: "",
       confirmationMsg: "",
@@ -120,13 +107,13 @@ export default {
     ).librarian;
     const id = librarian.id;
     const relativeURL = "/librarian/" + id + "/";
+    const self = this;
     axios_instance
       .get(relativeURL)
       .then((response) => {
-        this.librarian = response.data;
-        this.librarian.name = response.data.fullName;
-        this.librarian.username = response.data.username;
-        console.log(response.data);
+        self.librarian = response.data;
+        self.name = response.data.fullName;
+        self.username = response.data.username;
       })
       .catch((error) => console.log(error));
   },
@@ -139,33 +126,29 @@ export default {
       const librarian = JSON.parse(
         sessionStorage.getItem("loggedInLibrarian")
       ).librarian;
+      const self = this;
       axios_instance
         .put(
           `/librarian/${librarian.id}`,
           {},
           {
             params: {
-              fullName: this.form.name,
-              username: this.form.username,
-              password: this.form.password,
+              fullName: self.form.name,
+              username: self.form.username,
+              password: self.form.password,
               id: librarian.id,
             },
           }
         )
         .then((response) => {
-          this.errorMessage = "";
-          this.confirmationMsg = "Your info has been updated :)";
-          this.librarian.name = this.form.name;
-          this.librarian.username = this.form.username;
-          // const updateLibrarian = response.data.id;
-          // this.$router.push({
-          //   name: "librarian",
-          //   params: { librarianId: updateLibrarian },
-          // });
+          self.errorMessage = "";
+          self.confirmationMsg = "Your info has been updated :)";
+          self.name = response.data.fullName;
+          self.username = response.data.username;
         })
         .catch((error) => {
           this.errorMessage =
-            "could not update your login info, please try again with a different username";
+            "could not update your login info, please try again with a different username and/or password";
           this.confirmationMsg = "";
           console.log(error);
         });
