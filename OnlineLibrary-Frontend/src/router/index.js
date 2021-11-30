@@ -16,7 +16,52 @@ import LibrarianRooms from "@/components/LibrarianRooms.vue";
 import LibrarianRoom from "@/components/LibrarianRoom.vue";
 import LibrarianUpdateLoginInfo from "@/components/LibrarianUpdateLoginInfo.vue";
 import MemberUpdateInfo from "@/components/memberUpdateInfo.vue";
+import Signup from "@/components/Signup.vue";
+import Inactive from "@/components/Inactive.vue";
+import Blacklisted from "@/components/Blacklisted.vue";
+import LibrarianManageMembers from "@/components/LibrarianManageMembers.vue";
+import LibrarianManageLibrarians from "@/components/LibrarianManageLibrarians.vue";
+
 Vue.use(Router);
+
+function requireMember(from, to, next) {
+  // Not logged in as member
+  if (!sessionStorage.getItem("loggedInMember")) {
+    next({ name: 'Login' });
+  }
+  // Continue to requested page
+  else {
+    next();
+  }
+}
+function requireLibrarian(from, to, next) {
+  // Not logged in as librarian
+  if (!sessionStorage.getItem("loggedInLibrarian")) {
+    next({ name: 'Login' });
+  }
+  // Continue to requested page
+  else {
+    next();
+  }
+}
+function requireHeadLibrarian(from, to, next) {
+  // Not logged in as librarian
+  const librarianStr = sessionStorage.getItem("loggedInLibrarian");
+  if (!librarianStr) {
+    next({ name: 'Login' });
+  }
+  else {
+    // Not head
+    const librarianObj = JSON.parse(librarianStr).librarian;
+    if (!librarianObj.head) {
+      next({ name: 'Login' });
+    }
+    // Continue to requested page
+    else {
+      next();
+    }
+  }
+}
 
 export default new Router({
   mode: 'history',
@@ -26,14 +71,31 @@ export default new Router({
       redirect: "/login"
     },
     {
+      path: "/signup",
+      name: "Signup",
+      component: Signup
+    },
+    {
+      path: "/inactive",
+      name: "Inactive",
+      component: Inactive
+    },
+    {
+      path: "/blacklisted",
+      name: "Blacklisted",
+      component: Blacklisted
+    },
+    {
       path: "/member/home",
       name: "MemberHome",
-      component: MemberHome
+      component: MemberHome,
+      beforeEnter: requireMember
     },
     {
       path: "/librarian/home",
       name: "LibrarianHome",
-      component: LibrarianHome
+      component: LibrarianHome,
+      beforeEnter: requireLibrarian
     },
     {
       path: "/login",
@@ -53,22 +115,26 @@ export default new Router({
     {
       path: "/member/browse/",
       name: "MemberBrowse",
-      component: MemberBrowse
+      component: MemberBrowse,
+      beforeEnter: requireMember
     },
     {
       path: "/librarian/browse",
       name: "LibrarianBrowse",
-      component: LibrarianBrowse
+      component: LibrarianBrowse,
+      beforeEnter: requireLibrarian
     },
     {
       path: "/member/item/:itemId/",
       name: "MemberItem",
-      component: MemberItem
+      component: MemberItem,
+      beforeEnter: requireMember
     },
     {
       path: "/librarian/item/:itemId/",
       name: "LibrarianItem",
-      component: LibrarianItem
+      component: LibrarianItem,
+      beforeEnter: requireLibrarian
     },
     {
       path: "/404",
@@ -78,22 +144,38 @@ export default new Router({
     {
       path: "/member/rooms",
       name: "MemberRooms",
-      component: MemberRooms
+      component: MemberRooms,
+      beforeEnter: requireMember
     },
     {
       path: "/member/rooms/:roomId",
       name: "MemberRoom",
-      component: MemberRoom
+      component: MemberRoom,
+      beforeEnter: requireMember
     },
     {
       path: "/librarian/rooms",
       name: "LibrarianRooms",
-      component: LibrarianRooms
+      component: LibrarianRooms,
+      beforeEnter: requireLibrarian
     },
     {
       path: "/librarian/rooms/:roomId",
       name: "LibrarianRoom",
-      component: LibrarianRoom
+      component: LibrarianRoom,
+      beforeEnter: requireLibrarian
+    },
+    {
+      path: "/librarian/manageMembers",
+      name: "LibrarianManageMembers",
+      component: LibrarianManageMembers,
+      beforeEnter: requireLibrarian
+    },
+    {
+      path: "/librarian/manageLibrarians",
+      name: "LibrarianManageLibrarians",
+      component: LibrarianManageLibrarians,
+      beforeEnter: requireHeadLibrarian
     },
     {
       path: "/librarian/librarianUpdateLoginInfo/",

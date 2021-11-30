@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -931,7 +932,7 @@ public class TestLibraryItemInfoService {
 	@Test
 	public void testCreateNewspaperInfo() {
 		String periodicalTitle = "The New Yorker";
-		Date publication = Date.valueOf("2021-10-31");
+		LocalDate publication = LocalDate.parse("2021-10-31");
 		String frequency = "Frequency";
 		int number = 123;
 		NewspaperInfo newspaperInfo = null;
@@ -941,7 +942,7 @@ public class TestLibraryItemInfoService {
 			fail();
 		}
 		assertNotNull(newspaperInfo);
-		assertEquals(newspaperInfo.getPublication().getTime(), publication.getTime());
+		assertEquals(newspaperInfo.getPublication().getTime(), Date.valueOf(publication).getTime());
 		assertEquals(newspaperInfo.getFrequency(), frequency);
 		assertEquals(newspaperInfo.getNumber(), number);
 	}
@@ -950,7 +951,7 @@ public class TestLibraryItemInfoService {
 	public void testCreateNewspaperInfoPeriodicalTitleIsNull() {
 		String error = "";
 		String periodicalTitle = null;
-		Date publication = Date.valueOf("2021-10-31");
+		LocalDate publication = LocalDate.parse("2021-10-31");
 		String frequency = "Frequency";
 		int number = 123;
 		NewspaperInfo newspaperInfo = null;
@@ -967,7 +968,7 @@ public class TestLibraryItemInfoService {
 	public void testCreateNewspaperInfoPublicationIsNull() {
 		String error="";
 		String periodicalTitle = "The New Yorker";
-		Date publication = null;
+		LocalDate publication = null;
 		String frequency = "Frequency";
 		int number = 5;
 		NewspaperInfo newspaperInfo = null;
@@ -984,7 +985,7 @@ public class TestLibraryItemInfoService {
 	public void testCreateNewspaperInfoFrequencyIsNull() {
 		String error = "";
 		String periodicalTitle = "The New Yorker";
-		Date publication = Date.valueOf("2021-10-31");
+		LocalDate publication = LocalDate.parse("2021-10-31");
 		String frequency = null;
 		int number = 5;
 		NewspaperInfo newspaperInfo = null;
@@ -1001,7 +1002,7 @@ public class TestLibraryItemInfoService {
 	public void testCreateNewspaperInfoFrequencyIsEmpty() {
 		String error = "";
 		String periodicalTitle = "The New Yorker";
-		Date publication = Date.valueOf("2021-10-31");
+		LocalDate publication = LocalDate.parse("2021-10-31");
 		String frequency = " ";
 		int number = 5;
 		NewspaperInfo newspaperInfo = null;
@@ -1018,7 +1019,7 @@ public class TestLibraryItemInfoService {
 	public void testCreateNewspaperInfoNumberIsNegative() {
 		String error="";
 		String periodicalTitle = "The New Yorker";
-		Date publication = Date.valueOf("2021-10-31");
+		LocalDate publication = LocalDate.parse("2021-10-31");
 		String frequency = "Everyday";
 		int number = -1;
 		NewspaperInfo newspaperInfo = null;
@@ -1035,7 +1036,7 @@ public class TestLibraryItemInfoService {
 	public void testCreateNewspaperInfoAllEmpty() {
 		String error="";
 		String periodicalTitle = "";
-		Date publication = null;
+		LocalDate publication = null;
 		String frequency = " ";
 		int number = -1;
 		NewspaperInfo newspaperInfo = null;
@@ -1078,8 +1079,8 @@ public class TestLibraryItemInfoService {
 	
 	@Test
 	public void testUpdateNewspaperInfo() {
-		NewspaperInfo newspaper = libraryItemInfoService.createNewspaperInfo("The New Yorker", Date.valueOf("2020-11-11"), "AFrequency", 123);
-		Date newPublicationDate = Date.valueOf("2021-11-11");
+		NewspaperInfo newspaper = libraryItemInfoService.createNewspaperInfo("The New Yorker", LocalDate.parse("2020-11-11"), "AFrequency", 123);
+		LocalDate newPublicationDate = LocalDate.parse("2021-11-11");
 		String newFrequency = "Frequency2";
 		int newNumber = 321;
 		NewspaperInfo newspaperInfo = null;
@@ -1089,7 +1090,7 @@ public class TestLibraryItemInfoService {
 			fail();
 		}
 		assertNotNull(newspaperInfo);
-		assertEquals(newspaperInfo.getPublication(), newPublicationDate);
+		assertEquals(newspaperInfo.getPublication(), Date.valueOf(newPublicationDate));
 		assertEquals(newspaperInfo.getFrequency(), newFrequency);
 		assertEquals(newspaperInfo.getNumber(), newNumber);
 	}
@@ -1098,7 +1099,7 @@ public class TestLibraryItemInfoService {
 	public void testCreateArchiveInfo() {
 		String title = "Title";
 		String description = "Description";
-		Date publicationDate = Date.valueOf("2021-10-31");
+		LocalDate publicationDate = LocalDate.parse("2021-10-31");
 		ArchiveInfo archiveInfo = null;
 		try {
 			archiveInfo = libraryItemInfoService.createArchiveInfo(title, description, publicationDate);
@@ -1108,7 +1109,7 @@ public class TestLibraryItemInfoService {
 		assertNotNull(archiveInfo);
 		assertEquals(archiveInfo.getTitle(), title);
 		assertEquals(archiveInfo.getDescription(), description);
-		assertEquals(archiveInfo.getPublicationDate(), publicationDate);
+		assertEquals(archiveInfo.getPublicationDate(), Date.valueOf(publicationDate));
 	}
 
 	@Test
@@ -1116,7 +1117,7 @@ public class TestLibraryItemInfoService {
 		String error="";
 		String title = null;
 		String description = "Description";
-		Date publicationDate = Date.valueOf("2021-10-31");
+		LocalDate publicationDate = LocalDate.parse("2021-10-31");
 		ArchiveInfo archiveInfo = null;
 		try {
 			archiveInfo = libraryItemInfoService.createArchiveInfo(title, description, publicationDate);
@@ -1132,7 +1133,7 @@ public class TestLibraryItemInfoService {
 		String error="";
 		String title = " ";
 		String description = "Description";
-		Date publicationDate = Date.valueOf("2021-10-31");
+		LocalDate publicationDate = LocalDate.parse("2021-10-31");
 		ArchiveInfo archiveInfo = null;
 		try {
 			archiveInfo = libraryItemInfoService.createArchiveInfo(title, description, publicationDate);
@@ -1148,7 +1149,7 @@ public class TestLibraryItemInfoService {
 		String error="";
 		String title = "Title";
 		String description = null;
-		Date publicationDate = Date.valueOf("2021-10-31");
+		LocalDate publicationDate = LocalDate.parse("2021-10-31");
 		ArchiveInfo archiveInfo = null;
 		try {
 			archiveInfo = libraryItemInfoService.createArchiveInfo(title, description, publicationDate);
@@ -1164,7 +1165,7 @@ public class TestLibraryItemInfoService {
 		String error="";
 		String title = "Title";
 		String description = "Description";
-		Date publicationDate = null;
+		LocalDate publicationDate = null;
 		ArchiveInfo archiveInfo = null;
 		try {
 			archiveInfo = libraryItemInfoService.createArchiveInfo(title, description, publicationDate);
@@ -1180,7 +1181,7 @@ public class TestLibraryItemInfoService {
 		String error="";
 		String title = " ";
 		String description = null;
-		Date publicationDate = null;
+		LocalDate publicationDate = null;
 		ArchiveInfo archiveInfo = null;
 		try {
 			archiveInfo = libraryItemInfoService.createArchiveInfo(title, description, publicationDate);
@@ -1220,7 +1221,7 @@ public class TestLibraryItemInfoService {
 	
 	@Test
 	public void testUpdateArchivenfo() {
-		ArchiveInfo archiveInfo = libraryItemInfoService.createArchiveInfo("ATitle", "aDescription", Date.valueOf("2020-11-11"));
+		ArchiveInfo archiveInfo = libraryItemInfoService.createArchiveInfo("ATitle", "aDescription", LocalDate.parse("2020-11-11"));
 		String newTitle = "Title2";
 		String newDescription = "Description2";
 		Date newPublicationDate = Date.valueOf("2021-11-11");

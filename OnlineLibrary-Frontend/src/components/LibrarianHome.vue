@@ -10,15 +10,26 @@
         <img class="green" src="../assets/movie.svg" alt="Movie icon" />
         <img class="purple" src="../assets/newspaper.svg" alt="Newspaper" />
       </div>
+      <AddABook />
+      <AddAMovie />
+      <AddAnAlbum />
+      <AddANewspaper />
+      <AddAnArchive />
     </main>
   </body>
 </template>
 
 <script>
 import Header from "./LibrarianHeader.vue";
+import AddABook from "./AddBook.vue";
+import AddAMovie from "./AddMovie.vue";
+import AddAnAlbum from "./AddAlbum.vue";
+import AddANewspaper from "./AddNewspaper.vue";
+import AddAnArchive from "./AddArchive.vue";
+
 export default {
-  components: { Header },
-  name: "LibrarianHome"
+  components: { Header, AddABook, AddAMovie, AddAnAlbum, AddANewspaper, AddAnArchive},
+  name: "LibrarianHome",
 };
 </script>
 

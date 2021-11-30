@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -371,10 +372,10 @@ public class TestLibraryItemService {
 	@Test
 	public void testCreateNewspaper() {
 		NewspaperInfo newspaperInfo = null;
-		Date publicationDate = Date.valueOf("2020-12-12");
+		LocalDate publicationDate = LocalDate.parse("2020-12-12");
 		String frequency = "aFrequency";
 		int number = 50;
-		newspaperInfo = libraryItemInfoService.createNewspaperInfo("The New Yorker",publicationDate,frequency,number);
+		newspaperInfo = libraryItemInfoService.createNewspaperInfo("The New Yorker", publicationDate, frequency, number);
 		Newspaper newspaper = null;
 		try {
 			newspaper = libraryItemService.createNewspaper(newspaperInfo);
@@ -382,7 +383,7 @@ public class TestLibraryItemService {
 			fail();
 		}
 		assertNotNull(newspaper);
-		assertEquals(newspaper.getNewspaperInfo().getPublication(), publicationDate);
+		assertEquals(newspaper.getNewspaperInfo().getPublication(), Date.valueOf(publicationDate));
 		assertEquals(newspaper.getNewspaperInfo().getFrequency(), frequency);
 		assertEquals(newspaper.getNewspaperInfo().getNumber(), number);
 	}
@@ -426,7 +427,7 @@ public class TestLibraryItemService {
 		ArchiveInfo archiveInfo = null;
 		String title = "aTitle";
 		String description = "aDescription";
-		Date publicationDate = Date.valueOf("2021-12-12");
+		LocalDate publicationDate = LocalDate.parse("2020-12-12");
 		archiveInfo = libraryItemInfoService.createArchiveInfo(title, description, publicationDate);
 		Archive archive = null;
 		try {
@@ -437,7 +438,7 @@ public class TestLibraryItemService {
 		assertNotNull(archive);
 		assertEquals(archive.getArchiveInfo().getTitle(), title);
 		assertEquals(archive.getArchiveInfo().getDescription(), description);
-		assertEquals(archive.getArchiveInfo().getPublicationDate(), publicationDate);
+		assertEquals(archive.getArchiveInfo().getPublicationDate(), Date.valueOf(publicationDate));
 	}
 
 	@Test

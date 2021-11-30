@@ -44,7 +44,7 @@ public class MovieInfo extends ReservableItemInfo {
 	}
 
 	public MovieInfoDto convertToDto() {
-		return new MovieInfoDto(this.getId(), this.title, this.director, this.director, this.length);
+		return new MovieInfoDto(this.getId(), this.title, this.genre, this.director, this.length);
 	}
 
 }

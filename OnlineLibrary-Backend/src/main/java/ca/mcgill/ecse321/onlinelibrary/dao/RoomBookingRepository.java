@@ -1,7 +1,11 @@
 package ca.mcgill.ecse321.onlinelibrary.dao;
 
-import ca.mcgill.ecse321.onlinelibrary.model.RoomBooking;
 import org.springframework.data.repository.CrudRepository;
+
+import ca.mcgill.ecse321.onlinelibrary.model.Member;
+import ca.mcgill.ecse321.onlinelibrary.model.RoomBooking;
+
+import java.util.List;
 
 public interface RoomBookingRepository extends CrudRepository<RoomBooking, Integer> {
 	/**
@@ -10,4 +14,6 @@ public interface RoomBookingRepository extends CrudRepository<RoomBooking, Integ
 	 * @return the room booking instance
 	 */
 	RoomBooking findRoomBookingById(int id);
+	
+	List <RoomBooking> findRoomBookingByMember(Member member);
 }
