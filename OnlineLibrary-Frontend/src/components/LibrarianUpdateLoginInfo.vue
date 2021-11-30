@@ -8,7 +8,7 @@
           <b-form-input
             id="input-1"
             style="width: 15%"
-            v-model="name"
+            v-model="form.name"
             placeholder="Enter name"
             required
           ></b-form-input>
@@ -22,7 +22,7 @@
           <b-form-input
             id="input-2"
             style="width: 15%"
-            v-model="username"
+            v-model="form.username"
             placeholder="Enter new Username"
             required
           ></b-form-input>
@@ -37,7 +37,7 @@
             id="input-3"
             style="width: 15%"
             type="password"
-            v-model="password"
+            v-model="form.password"
             placeholder="Password"
             required
           ></b-form-input>
@@ -53,8 +53,10 @@
           </b-form-checkbox-group>
         </b-form-group> -->
 
-        <b-button type="submit" variant="primary">Submit</b-button>
+        <b-button @click="onSubmit" variant="primary">Submit</b-button>
       </b-form>
+      <p v-if="errorMessage" class="error-message">ERROR: {{ this.errorMessage }}</p>
+      <p v-if="confirmationMsg" class="confirmation-message">{{this.confirmationMsg}}</p>
     </div>
   </body>
 </template>
@@ -91,6 +93,8 @@ export default {
         password: "",
       },
       show: true,
+      errorMessage: "",
+      confirmationMsg: "",
     };
   },
   created: function () {
@@ -120,24 +124,27 @@ export default {
           {},
           {
             params: {
-              fullName: this.name,
-              username: this.username,
-              password: this.password,
+              fullName: this.form.name,
+              username: this.form.username,
+              password: this.form.password,
               id: librarian.id,
             },
           }
         )
         .then((response) => {
           this.errorMessage = "";
-          const updateLibrarian = response.data.id;
-          this.$router.push({
-            name: "librarian",
-            params: { librarianId: updateLibrarian },
-          });
+          this.confirmationMsg = "Your info has been updated :)"
+          // const updateLibrarian = response.data.id;
+          // this.$router.push({
+          //   name: "librarian",
+          //   params: { librarianId: updateLibrarian },
+          // });
         })
         .catch((error) => {
           this.errorMessage =
             "could not update your login info, please try again";
+            this.confirmationMsg = "";
+          console.log(error);
         });
     },
   },
@@ -145,6 +152,12 @@ export default {
 </script>
 
 <style scoped>
+.confirmation-message {
+  color: greenyellow;
+}
+.error-message {
+  color: red;
+}
 .form {
   margin: 20px;
 }
