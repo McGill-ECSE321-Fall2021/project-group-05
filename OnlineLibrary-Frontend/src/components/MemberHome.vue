@@ -219,6 +219,10 @@ export default {
         }
         const loggedInMember = JSON.parse(storedCredentials);
         this.fetchReservation(loggedInMember.member.id);
+      })
+      .catch(error => {
+        console.error(error);
+        this.errorMessageDelete= "Oops! 🙁 Something bad happened on our side while trying to delete your reservation. Try again later"
       });
     },
     fetchReservation(memberId){
