@@ -14,6 +14,11 @@ module.exports = {
     assetsPublicPath: "/",
     productionSourceMap: true,
     historyApiFallback: true,
+    historyApiFallback: {
+      rewrites: [
+        { from: /.*/, to: path.join(this.assetsPublicPath, 'index.html') },
+      ],
+    },
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
