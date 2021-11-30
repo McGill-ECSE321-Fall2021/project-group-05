@@ -301,8 +301,23 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
     </tr>
     <tr>
       <td>Sebastian Ionascu</td>
-      <td></td>
-      <td></td>
+      <td>
+        <ul>
+          <li> Created and modified the librarian home page and arranged it with its services</li>
+          <li> Added the service where librarians can add book infos using a form with a button</li>
+          <li> Added the service where librarians can add movie infos using a form with a button</li>
+          <li> Added the service where librarians can add archive infos using a form with a button</li>
+          <li> Added the service where librarians can add album infos using a form with a button</li>
+          <li> Added the service where librarians can add newspaper infos using a form with a button</li>
+          <li>Resolved some date libraries related bugs on the backend. (FYI: Spring controllers need @DateParam to accept specific date formats, and they also do not work with Java.SQL.date/time. They require Java.time.localdate instead. It would be a neat addition to the tutorials.)</li>
+          <li> Modified service and controller methods for archive and newspaper info due to the change in date format forced by the frontend</li>
+          <li> Modified unit tests of the service and controller methods for archive and newspaper info due to the change in date format forced by the frontend</li>
+          <li> Help other teammates with their work and getting them started</li>
+          <li> Participating in meetings </li>
+          <li> Reviewed Pull Requests </li>
+        </ul>
+      </td>
+      <td>38 hours</td>
     </tr>
   </tbody>
 </table>
