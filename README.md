@@ -291,7 +291,7 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
                 <li>Opening Hours</li>
                 <li>Librarian Shifts</li>
                 <li>Room Bookings</li>
-                <li>[ It also makes use of member, librarian and room related endpoints. ]</li>
+                <li>[It also makes use of member, librarian and room related endpoints.]</li>
               </ul
             </li>
           </ul>
