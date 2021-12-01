@@ -115,7 +115,9 @@ export default {
         self.name = response.data.fullName;
         self.username = response.data.username;
       })
-      .catch((error) => console.log(error));
+      .catch((error) =>{
+        self.errorMessage = "There seems to be an error, please log out and log back in";
+        console.log(error)});
   },
 
   methods: {

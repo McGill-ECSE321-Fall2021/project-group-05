@@ -106,9 +106,9 @@ public class LibrarianService {
 		Librarian librarian = getNonNullLibrarianFromRepo(id);
 		List<String> errorMessage = new ArrayList<String>();
 		if(librarian.getUsername().equals(newUsername)){
-			String username = librarian.getUsername();
-			String fullName = librarian.getFullName();
-			String password = librarian.getPasswordHash();
+			String username = newUsername;
+			String fullName = newFullName;
+			String password = newPasswordHash;
 			if (fullName == null || fullName.trim().length() == 0) {
 				errorMessage.add("Full name cannot be empty.");
 			}

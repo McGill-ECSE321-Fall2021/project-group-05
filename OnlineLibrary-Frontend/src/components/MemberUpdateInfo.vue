@@ -89,7 +89,10 @@ export default {
         self.name = response.data.fullName;
         console.log(response.data);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        self.errorMessage = "There seems to be an error, please log out and log back in";
+        });
   },
 
   methods: {
@@ -115,10 +118,6 @@ export default {
           const updateMember = response.data;
           self.address= updateMember.address;
           self.name= updateMember.fullName;
-          // this.$router.push({
-          //   name: "member",
-          //   params: { memberId: updateMember },
-          // });
         })
         .catch((error) => {
           this.errorMessage = "could not update your info, please try again";
