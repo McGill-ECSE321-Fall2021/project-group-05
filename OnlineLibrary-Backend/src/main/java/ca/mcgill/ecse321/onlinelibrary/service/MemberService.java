@@ -145,6 +145,9 @@ public class MemberService {
 			throw new IllegalArgumentException("A member with the id " + id + "does not exist");
 		}
 
+		if(newAddress.isBlank() || newFullName.isBlank()){
+			throw new IllegalArgumentException("address or full name cannot be blank");
+		}
 		member.setAddress(newAddress);
 		member.setFullName(newFullName);
 		return member;

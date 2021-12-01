@@ -14,6 +14,8 @@ import LibrarianItem from "@/components/LibrarianItem.vue";
 import NotFound from "@/components/NotFound.vue";
 import LibrarianRooms from "@/components/LibrarianRooms.vue";
 import LibrarianRoom from "@/components/LibrarianRoom.vue";
+import LibrarianUpdateLoginInfo from "@/components/LibrarianUpdateLoginInfo.vue";
+import MemberUpdateInfo from "@/components/memberUpdateInfo.vue";
 import Signup from "@/components/Signup.vue";
 import Inactive from "@/components/Inactive.vue";
 import Blacklisted from "@/components/Blacklisted.vue";
@@ -174,6 +176,16 @@ export default new Router({
       name: "LibrarianManageLibrarians",
       component: LibrarianManageLibrarians,
       beforeEnter: requireHeadLibrarian
+    },
+    {
+      path: "/librarian/librarianUpdateLoginInfo/",
+      name: "LibrarianUpdateLoginInfo",
+      component: LibrarianUpdateLoginInfo
+    },
+    {
+      path: "/member/memberUpdateInfo",
+      name: "MemberUpdateInfo",
+      component: MemberUpdateInfo
     },
     {
       path: "*",

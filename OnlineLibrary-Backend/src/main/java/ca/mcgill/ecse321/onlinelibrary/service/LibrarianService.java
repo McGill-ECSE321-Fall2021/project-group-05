@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class LibrarianService {
@@ -103,8 +104,24 @@ public class LibrarianService {
 	@Transactional
 	public Librarian updateLibrarian(Integer id, String newFullName, String newUsername, String newPasswordHash) {
 		Librarian librarian = getNonNullLibrarianFromRepo(id);
-
-		ArrayList<String> errorMessage = checkValidInput(newFullName, newUsername, newPasswordHash);
+		List<String> errorMessage = new ArrayList<String>();
+		if(librarian.getUsername().equals(newUsername)){
+			if (newFullName == null || newFullName.isBlank()) {
+				errorMessage.add("Full name cannot be empty.");
+			}
+			// Password long enough
+			if (newPasswordHash == null) {
+				errorMessage.add("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.");
+			} else {
+				newPasswordHash = newPasswordHash.trim();
+				if (newPasswordHash.length() < MIN_PASSWD_LENGTH) {
+					errorMessage.add("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.");
+				}
+			}
+		}
+		else {
+			errorMessage = checkValidInput(id, newFullName, newUsername, newPasswordHash);
+		}
 
 		if (errorMessage.size()> 0 ){
 			throw new IllegalArgumentException(String.join(" ", errorMessage));
@@ -118,7 +135,40 @@ public class LibrarianService {
 		return librarian;
 	}
 
-	private ArrayList<String> checkValidInput(String fullName, String username, String password){
+	private ArrayList<String> checkValidInput(Integer id, String fullName, String username, String password){
+		ArrayList<String> errorMessage = new ArrayList<String>();
+		// Full name not empty
+		if (fullName == null || fullName.isBlank()) {
+			throw new IllegalArgumentException("Full name cannot be empty.");
+		}
+
+		// Password long enough
+		if (password == null) {
+			errorMessage.add("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.");
+		} else {
+			password = password.trim();
+			if (password.length() < MIN_PASSWD_LENGTH) {
+				errorMessage.add("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.");
+			}
+		}
+
+		// Username not empty and unique
+		if (username == null) {
+			errorMessage.add("Username cannot be empty.");
+		} else {
+			username = username.trim();
+			if (username.length() == 0) {
+				errorMessage.add("Username cannot be empty.");
+			}
+			Librarian librarianWithSameUsername = librarianRepository.findLibrarianByUsername(username);
+			if (librarianWithSameUsername != null && librarianWithSameUsername.getId() != id) {
+				errorMessage.add("Username already taken.");
+			}
+
+		}
+
+		return errorMessage;
+	}	private ArrayList<String> checkValidInput(String fullName, String username, String password){
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		// Full name not empty
 		if (fullName == null || fullName.trim().length() == 0) {

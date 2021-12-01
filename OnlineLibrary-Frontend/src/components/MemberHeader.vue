@@ -17,6 +17,12 @@
                 >Browse rooms</router-link
               >
             </li>
+            <li>
+              <router-link :to="{ name: 'MemberUpdateInfo' }">
+                Update personal info
+              </router-link>
+            </li>
+
           </ul>
         </div>
         <div class="nav-right">

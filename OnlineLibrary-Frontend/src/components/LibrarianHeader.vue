@@ -1,6 +1,7 @@
 <template>
   <header>
     <nav>
+
       <div class="wrapper">
         <div class="nav-left">
           <ul>
@@ -28,6 +29,11 @@
                 :to="{ name: 'LibrarianManageLibrarians' }"
               >
                 Manage employees
+              </router-link>
+            </li>
+            <li>
+              <router-link :to="{ name: 'LibrarianUpdateLoginInfo' }">
+                Update Login info
               </router-link>
             </li>
           </ul>
