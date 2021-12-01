@@ -39,6 +39,14 @@ public class LibrarianShiftController {
 				.map(LS -> LibrarianShiftDto.fromLibrarianShift(LS)).collect(Collectors.toList());
 	}
 	
+	@GetMapping(value = { "/librarianShift/between/{startDate}/{endDate}", "/librarianShift/between/{startDate}/{endDate}/" })
+	public List<LibrarianShiftDto> getLibraryOpeningHours(
+			@PathVariable("startDate") @DateTimeFormat(pattern="yyyy-MM-dd")  LocalDate startDate, 
+			@PathVariable("endDate") @DateTimeFormat(pattern="yyyy-MM-dd")  LocalDate endDate) throws IllegalArgumentException {
+		return service.getLibrarianShift(startDate, endDate).stream()
+				.map(LS -> LibrarianShiftDto.fromLibrarianShift(LS)).collect(Collectors.toList());
+	}
+	
 	@PostMapping(value = { "/librarianShift", "/librarianShift/"})
 	public LibrarianShiftDto createLibrarianShift(@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date, 
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime, 

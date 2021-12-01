@@ -1,0 +1,17 @@
+{
+  "scheduleTitle": "Schedule",
+  "options": [
+    {
+      "res": "Opening Hours",
+      "role": "OH",
+      "selected": "",
+      "canEdit": false
+    },
+    {
+      "res": "Holidays",
+      "role": "Holidays",
+      "selected": "",
+      "canEdit": false
+    }
+  ]
+}

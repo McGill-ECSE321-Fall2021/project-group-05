@@ -36,6 +36,20 @@
                 Update Login info
               </router-link>
             </li>
+            <li>
+              <router-link
+                :to="{ name: 'Scheduler', params: {variant: 'RoomBooking'}}"
+              >
+                Room Booking
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'Scheduler', params: {variant: 'Schedule'}}"
+              >
+                Schedule
+              </router-link>
+            </li>
           </ul>
         </div>
         <div class="nav-right">
@@ -75,7 +89,9 @@ export default {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 75px;
+  min-height: 5rem;
+  padding-top: 1rem;
+  padding-bottom: 0rem;
 }
 nav ul {
   display: flex;

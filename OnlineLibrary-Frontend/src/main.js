@@ -2,6 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import BootstrapVue from "bootstrap-vue"
+import Vuetify from "vuetify"
+import vueDebounce from 'vue-debounce'
 import App from './App'
 import router from './router'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -9,12 +11,16 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import './registerServiceWorker'
 
 Vue.use(BootstrapVue)
+Vue.use(Vuetify);
+Vue.use(vueDebounce)
 Vue.config.productionTip = false
+
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   template: '<App/>',
-  components: { App }
+  components: { App },
+  vuetify : new Vuetify()
 })

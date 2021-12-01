@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
@@ -55,7 +57,7 @@ public class RoomBookingService {
     }
 
     @Transactional
-    public RoomBooking createRoomBooking(Date date, Time startTime, Time endTime, Member member, Room room) {
+    public RoomBooking createRoomBooking(LocalDate date, LocalTime startTime, LocalTime endTime, Member member, Room room) {
         ArrayList<String> errorMessages = new ArrayList<>();
         if (date == null) {
             errorMessages.add("Date cannot be empty.");
@@ -72,7 +74,7 @@ public class RoomBookingService {
         if (errorMessages.size() > 0) {
             throw new IllegalArgumentException(String.join(" ", errorMessages));
         }
-        RoomBooking roomBooking = new RoomBooking(date, startTime, endTime, member, room);
+        RoomBooking roomBooking = new RoomBooking(Date.valueOf(date), Time.valueOf(startTime), Time.valueOf(endTime), member, room);
         roomBookingRepository.save(roomBooking);
         return roomBooking;
     }
@@ -87,6 +89,20 @@ public class RoomBookingService {
 
         return roomBooking;
     }
+    
+    @Transactional
+	public ArrayList<RoomBooking> getRoomBooking(LocalDate startDate, LocalDate endDate) {
+		if(startDate == null || endDate == null) 
+			throw new IllegalArgumentException("Two date parameters are required.");
+		
+		if(startDate.compareTo(endDate) > 0) 
+			throw new IllegalArgumentException("The start date can't be after the end date.");
+		
+		ArrayList<RoomBooking> roomBookings = 
+				roomBookingRepository.findRoomBookingtByDateBetween(Date.valueOf(startDate), Date.valueOf(endDate));
+		
+		return roomBookings;
+	}
 
     @Transactional
     public void deleteRoomBooking(RoomBooking roomBooking) {

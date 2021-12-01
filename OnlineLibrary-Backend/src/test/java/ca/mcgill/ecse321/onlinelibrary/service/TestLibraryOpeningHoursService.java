@@ -187,8 +187,7 @@ public class TestLibraryOpeningHoursService {
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
-		System.out.println(L_OPENING_DATE);
-		System.out.println(L_ENDING_DATE);
+
 		assertNull(openingHoursOfDate);
 		assertNotNull(error);
 		assertTrue(error.contains("The start date can't be after the end date."));

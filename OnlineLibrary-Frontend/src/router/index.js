@@ -11,6 +11,7 @@ import MemberBrowse from "@/components/MemberBrowse.vue";
 import LibrarianBrowse from "@/components/LibrarianBrowse.vue";
 import MemberItem from "@/components/MemberItem.vue";
 import LibrarianItem from "@/components/LibrarianItem.vue";
+import Scheduler from "@/components/Scheduler/Scheduler.vue";
 import NotFound from "@/components/NotFound.vue";
 import LibrarianRooms from "@/components/LibrarianRooms.vue";
 import LibrarianRoom from "@/components/LibrarianRoom.vue";
@@ -60,6 +61,15 @@ function requireHeadLibrarian(from, to, next) {
     else {
       next();
     }
+  }
+}
+function requireLoggedIn(from, to, next) {
+  // Not logged in at all
+  if (!sessionStorage.getItem("loggedInMember") &&
+    !sessionStorage.getItem("loggedInLibrarian")) {
+    next({ name: 'Login' });
+  } else {
+    next();
   }
 }
 
@@ -186,6 +196,13 @@ export default new Router({
       path: "/member/memberUpdateInfo",
       name: "MemberUpdateInfo",
       component: MemberUpdateInfo
+    },
+    {
+      path: "/scheduler/:variant",
+      name: "Scheduler",
+      component: Scheduler,
+      props: true,
+      beforeEnter: requireLoggedIn
     },
     {
       path: "*",

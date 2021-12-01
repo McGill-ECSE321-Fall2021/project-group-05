@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.onlinelibrary.dao;
 
 import ca.mcgill.ecse321.onlinelibrary.model.LibrarianShift;
+
 import org.springframework.data.repository.CrudRepository;
 
 import java.sql.Date;
@@ -15,6 +16,8 @@ public interface LibrarianShiftRepository extends CrudRepository<LibrarianShift,
 	public ArrayList<LibrarianShift> findLibrarianShiftByLibrarianId(int librarianId);
 
 	public ArrayList<LibrarianShift> findLibrarianShiftByDateAndLibrarianId(Date date, int librarianId);
+	
+	public ArrayList<LibrarianShift> findLibrarianShiftByDateBetween(Date startDate, Date endDate);
 	
 	public void deleteById(int id);
 }
