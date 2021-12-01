@@ -1,68 +1,61 @@
 <template>
   <header>
-    <nav>
+    <b-navbar toggleable="md" variant="dark" type="dark">
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-      <div class="wrapper">
-        <div class="nav-left">
-          <ul>
-            <li>
-              <router-link :to="{ name: 'LibrarianHome' }">Home</router-link>
-            </li>
-            <li>
-              <router-link :to="{ name: 'LibrarianBrowse' }">
-                Browse items
-              </router-link>
-            </li>
-            <li>
-              <router-link :to="{ name: 'LibrarianRooms' }">
-                Browse rooms
-              </router-link>
-            </li>
-            <li>
-              <router-link :to="{ name: 'LibrarianManageMembers' }">
-                Manage members
-              </router-link>
-            </li>
-            <li>
-              <router-link
-                v-if="isHeadLibrarian"
-                :to="{ name: 'LibrarianManageLibrarians' }"
-              >
-                Manage employees
-              </router-link>
-            </li>
-            <li>
-              <router-link :to="{ name: 'LibrarianUpdateLoginInfo' }">
-                Update Login info
-              </router-link>
-            </li>
-            <li>
-              <router-link
-                :to="{ name: 'Scheduler', params: {variant: 'RoomBooking'}}"
-              >
-                Room Booking
-              </router-link>
-            </li>
-            <li>
-              <router-link
-                :to="{ name: 'Scheduler', params: {variant: 'Schedule'}}"
-              >
-                Schedule
-              </router-link>
-            </li>
-          </ul>
-        </div>
-        <div class="nav-right">
-          <ul>
-            <li>
-              <router-link :to="{ name: 'LibrarianLogout' }">
-                Log out
-              </router-link>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav>
+          <b-nav-item :to="{ name: 'LibrarianHome' }">Home</b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav>
+          <b-nav-item :to="{ name: 'LibrarianBrowse' }">
+            Browse items
+          </b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav>
+          <b-nav-item :toggleable="lg" :to="{ name: 'LibrarianRooms' }">
+            Browse rooms
+          </b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav>
+          <b-nav-item :to="{ name: 'LibrarianManageMembers' }">
+            Manage members
+          </b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav>
+          <b-nav-item
+            v-if="isHeadLibrarian"
+            :to="{ name: 'LibrarianManageLibrarians' }"
+          >
+            Manage employees
+          </b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav>
+          <b-nav-item :to="{ name: 'LibrarianUpdateLoginInfo' }">
+            Update Login info
+          </b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav>
+          <b-nav-item
+            :to="{ name: 'Scheduler', params: { variant: 'RoomBooking' } }"
+          >
+            Room Booking
+          </b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav>
+          <b-nav-item
+            :to="{ name: 'Scheduler', params: { variant: 'Schedule' } }"
+          >
+            Schedule
+          </b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav>
+          <b-nav-item class="ml-auto" :to="{ name: 'LibrarianLogout' }">
+            Log out
+          </b-nav-item>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
   </header>
 </template>
 
@@ -70,58 +63,14 @@
 export default {
   name: "LibrarianHeader",
   created() {
-    const librarian = JSON.parse(
-      sessionStorage.getItem("loggedInLibrarian")
-    ).librarian;
+    const librarian = JSON.parse(sessionStorage.getItem("loggedInLibrarian"))
+      .librarian;
     this.isHeadLibrarian = librarian.head;
   },
   data() {
     return {
-      isHeadLibrarian: false,
+      isHeadLibrarian: false
     };
-  },
+  }
 };
 </script>
-
-<style>
-.wrapper {
-  background-color: #000;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  min-height: 5rem;
-  padding-top: 1rem;
-  padding-bottom: 0rem;
-}
-nav ul {
-  display: flex;
-}
-nav ul li {
-  font-size: 1.3em;
-  text-align: center;
-  padding: 20px 50px;
-  justify-content: center;
-  list-style-type: none;
-  align-self: center;
-}
-nav ul li a {
-  color: #fff;
-  text-decoration: none;
-}
-nav ul li a:hover {
-  color: #fff;
-  text-decoration-style: dotted;
-}
-.nav-left {
-  float: left;
-}
-.nav-left ul li {
-  float: left;
-}
-.nav-right {
-  float: right;
-}
-.nav-right ul li {
-  float: right;
-}
-</style>
