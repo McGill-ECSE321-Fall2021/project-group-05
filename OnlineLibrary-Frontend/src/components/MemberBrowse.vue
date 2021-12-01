@@ -99,7 +99,9 @@
           </td>
           <td v-else>Could not find item description</td>
           <td>
-            <router-link :to="{ name: 'MemberItem', params: { itemId: item.id } }">
+            <router-link
+              :to="{ name: 'MemberItem', params: { itemId: item.id } }"
+            >
               View item details
             </router-link>
           </td>
@@ -200,6 +202,12 @@ export default {
   display: flex;
 }
 .item-description-container img {
+  max-width: 50%;
   padding: 20px;
+}
+@media only screen and (max-width: 768px) {
+  .item-description-container img {
+    display: none;
+  }
 }
 </style>
