@@ -270,8 +270,15 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
     </tr>
     <tr>
       <td>Kirollos Roufail</td>
-      <td></td>
-      <td></td>
+      <td> 
+        <ul>
+          <li> Page for update librarian login info with validation form, submission messages and buttons</li>
+          <li> Page for update member personal info with data validation and error handling</li>
+          <li> Prepare presentation slides and practice for presentation</li>
+          <li>Participate in meetings</li>
+        </ul>
+      </td>
+      <td> 25 hours</td>
     </tr>
     <tr>
       <td>Louis Hildebrand</td>
