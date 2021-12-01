@@ -1,0 +1,62 @@
+name: Main CI push
+
+on:
+  push:
+    branches:
+    - main
+    paths:
+    - "OnlineLibrary-Backend/**"
+    - ".github/workflows/main-push-backend.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 15
+      uses: actions/setup-java@v2
+      with:
+        java-version: '15'
+        distribution: 'adopt'
+        cache: gradle
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      working-directory: OnlineLibrary-Backend
+    - name: Build with Gradle
+      run: ./gradlew build
+      working-directory: OnlineLibrary-Backend
+    - name: Check test coverage ratio
+      run: ./gradlew jacocoTestCoverageVerification
+      working-directory: OnlineLibrary-Backend
+  # Deploy to CI app and run integration tests against CI app
+  integration-tests:
+    needs: build
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: a260c785-d665-4273-a293-a30e402d187f
+        heroku_app_name: "onlinelibrary-backend-ci-05a"
+        heroku_email: "louis.t.hildebrand@gmail.com"
+    - name: Run Postman tests with Newman
+      id: run-newman
+      uses: anthonyvscode/newman-action@v1.1
+      with:
+        collection: OnlineLibrary-Backend/src/test/integration/postman-tests.json
+        reporters: cli
+  deploy:
+    needs: integration-tests
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: a260c785-d665-4273-a293-a30e402d187f
+        heroku_app_name: "onlinelibrary-backend-05a"
+        heroku_email: "louis.t.hildebrand@gmail.com"
+      env:
+        HD_SPRING_PROFILES_ACTIVE: "production"
