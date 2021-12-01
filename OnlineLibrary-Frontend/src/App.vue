@@ -30,6 +30,9 @@ table td,
 table th {
   border: 1px solid #ddd;
   padding: 6px;
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 table tr:nth-child(even) {
