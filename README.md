@@ -295,9 +295,8 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
               </ul
             </li>
           </ul>
-              * Time spent is not a typo. 
       </td>
-      <td>74.5 hours*</td>
+      <td>79 hours</td>
     </tr>
     <tr>
       <td>Sebastian Ionascu</td>
