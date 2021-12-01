@@ -15,7 +15,7 @@ import NotFound from "@/components/NotFound.vue";
 import LibrarianRooms from "@/components/LibrarianRooms.vue";
 import LibrarianRoom from "@/components/LibrarianRoom.vue";
 import LibrarianUpdateLoginInfo from "@/components/LibrarianUpdateLoginInfo.vue";
-import MemberUpdateInfo from "@/components/memberUpdateInfo.vue";
+import MemberUpdateInfo from "@/components/MemberUpdateInfo.vue";
 import Signup from "@/components/Signup.vue";
 import Inactive from "@/components/Inactive.vue";
 import Blacklisted from "@/components/Blacklisted.vue";

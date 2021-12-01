@@ -33,7 +33,7 @@
             required
           ></b-form-input>
         </b-form-group>
-        <b-button type="submit" variant="primary">Submit</b-button>
+        <b-button v-on:click="onSubmit" variant="primary">Submit</b-button>
       </b-form>
       <p v-if="errorMessage" class="error-message">
         ERROR: {{ this.errorMessage }}
@@ -120,7 +120,7 @@ export default {
           self.name= updateMember.fullName;
         })
         .catch((error) => {
-          this.errorMessage = "could not update your info, please try again";
+          self.errorMessage = "could not update your info, please try again. Make sure that your name and or address are not empty!";
         });
     },
   },
@@ -130,5 +130,8 @@ export default {
 <style scoped>
 .form {
   margin: 20px;
+}
+.error-message {
+  color: red;
 }
 </style>
