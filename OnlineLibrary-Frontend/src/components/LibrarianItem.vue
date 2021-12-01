@@ -986,6 +986,12 @@ export default {
 .item-actions-container {
   flex-grow: 0.5;
 }
+@media only screen and (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
 .success-message {
   color: green;
 }
