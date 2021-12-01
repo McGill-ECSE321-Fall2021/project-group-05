@@ -282,8 +282,19 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
     </tr>
     <tr>
       <td>Louis Hildebrand</td>
-      <td></td>
-      <td></td>
+      <td>
+        <ul>
+          <li>Create components:</li>
+          <ul>
+            <li>Login</li>
+            <li>Signup</li>
+            <li>LibrarianManageMembers</li>
+            <li>LibrarianManageLibrarians</li>
+          </ul>
+          <li>Write navigation guards to authorizing members, librarians, or the head librarian</li>
+        </ul>
+      </td>
+      <td>38 hours</td>
     </tr>
     <tr>
       <td>Mircea Gosman</td>
