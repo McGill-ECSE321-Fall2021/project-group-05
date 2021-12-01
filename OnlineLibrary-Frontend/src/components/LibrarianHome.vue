@@ -28,8 +28,15 @@ import AddANewspaper from "./AddNewspaper.vue";
 import AddAnArchive from "./AddArchive.vue";
 
 export default {
-  components: { Header, AddABook, AddAMovie, AddAnAlbum, AddANewspaper, AddAnArchive},
-  name: "LibrarianHome",
+  components: {
+    Header,
+    AddABook,
+    AddAMovie,
+    AddAnAlbum,
+    AddANewspaper,
+    AddAnArchive
+  },
+  name: "LibrarianHome"
 };
 </script>
 
