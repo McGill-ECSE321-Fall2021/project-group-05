@@ -47,4 +47,9 @@ ul {
   display: flex;
   justify-content: space-evenly;
 }
+.item-picture-container img {
+  max-width: 20%;
+  width: auto;
+  height: auto;
+}
 </style>
