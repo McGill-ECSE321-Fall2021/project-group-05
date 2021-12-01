@@ -291,6 +291,7 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
             <li>LibrarianManageMembers</li>
             <li>LibrarianManageLibrarians</li>
           </ul>
+          <li>Create login endpoint in backend</li>
           <li>Write navigation guards to authorizing members, librarians, or the head librarian</li>
         </ul>
       </td>
