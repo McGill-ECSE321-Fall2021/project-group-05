@@ -106,29 +106,16 @@ public class LibrarianService {
 		Librarian librarian = getNonNullLibrarianFromRepo(id);
 		List<String> errorMessage = new ArrayList<String>();
 		if(librarian.getUsername().equals(newUsername)){
-			String username = newUsername;
-			String fullName = newFullName;
-			String password = newPasswordHash;
-			if (fullName == null || fullName.trim().length() == 0) {
+			if (newFullName == null || newFullName.isBlank()) {
 				errorMessage.add("Full name cannot be empty.");
 			}
 			// Password long enough
-			if (password == null) {
+			if (newPasswordHash == null) {
 				errorMessage.add("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.");
 			} else {
-				password = password.trim();
-				if (password.length() < MIN_PASSWD_LENGTH) {
+				newPasswordHash = newPasswordHash.trim();
+				if (newPasswordHash.length() < MIN_PASSWD_LENGTH) {
 					errorMessage.add("Password must be at least " + MIN_PASSWD_LENGTH + " characters in length.");
-				}
-			}
-	
-			// Username not empty
-			if (username == null) {
-				errorMessage.add("Username cannot be empty.");
-			} else {
-				username = username.trim();
-				if (username.length() == 0) {
-					errorMessage.add("Username cannot be empty.");
 				}
 			}
 		}
@@ -151,8 +138,8 @@ public class LibrarianService {
 	private ArrayList<String> checkValidInput(Integer id, String fullName, String username, String password){
 		ArrayList<String> errorMessage = new ArrayList<String>();
 		// Full name not empty
-		if (fullName == null || fullName.trim().length() == 0) {
-			errorMessage.add("Full name cannot be empty.");
+		if (fullName == null || fullName.isBlank()) {
+			throw new IllegalArgumentException("Full name cannot be empty.");
 		}
 
 		// Password long enough
