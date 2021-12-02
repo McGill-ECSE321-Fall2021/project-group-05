@@ -339,3 +339,68 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
     </tr>
   </tbody>
 </table>
+
+## Deliverable 4
+<table>
+  <tbody>
+    <tr>
+      <th>Team Member</th>
+      <th>Responsibilities</th>
+      <th>Hours (incl. meetings)</th>
+    </tr>
+    <tr>
+      <td>Gabriel Lacroix</td>
+      <td>
+        <ul>
+          <li>?</li>
+        </ul>
+      </td>
+      <td>x hours</td>
+    </tr>
+    <tr>
+      <td>Guillaume Delmas-Frenette</td>
+      <td>
+        <ul>
+          <li>?</li>
+        </ul>
+      </td>
+      <td>x hours</td>
+    </tr>
+    <tr>
+      <td>Kirollos Roufail</td>
+      <td>
+        <ul>
+          <li>?</li>
+        </ul>
+      </td>
+      <td>x hours</td>
+    </tr>
+    <tr>
+      <td>Louis Hildebrand</td>
+      <td>
+        <ul>
+          <li>?</li>
+        </ul>
+      </td>
+      <td>x hours</td>
+    </tr>
+    <tr>
+      <td>Mircea Gosman</td>
+      <td>
+        <ul>
+          <li>?</li>
+        </ul>
+      </td>
+      <td>x hours</td>
+    </tr>
+    <tr>
+      <td>Sebastian Ionascu</td>
+      <td>
+        <ul>
+          <li>?</li>
+        </ul>
+      </td>
+      <td>x hours</td>
+    </tr>
+  </tbody>
+</table>
