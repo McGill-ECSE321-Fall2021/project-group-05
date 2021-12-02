@@ -47,20 +47,20 @@
       <h2>My loans</h2>
       <table v-if="loans.length !== 0">
         <tr>
-          <th>Item ID</th>
+          <th class="hidden-on-mobile">Item ID</th>
           <th>Return date</th>
-          <th>Number of renewals</th>
+          <th class="hidden-on-mobile">Number of renewals</th>
           <th>Item title</th>
           <th>Item details</th>
         </tr>
         <tr v-for="loan in loans" :key="loan.id">
-          <td>
+           <td class="hidden-on-mobile">
             {{ loan.reservableItem.id }}
           </td>
           <td>
             {{ loan.returnDate }}
           </td>
-          <td>
+           <td class="hidden-on-mobile">
             {{ loan.numberOfRenewals }}
           </td> 
 
@@ -113,18 +113,23 @@
       <table v-if="roomBookings.length !==0">
         <tr>
           <th>Room</th>
-          <th>Capacity</th>
+          <th class="hidden-on-mobile">Capacity</th>
           <th>Date</th>
           <th>Start time</th>
-          <th>End time</th>
-          <th>Room details</th>
+          <th class="hidden-on-mobile">End Time</th>
+          <th class="hidden-on-mobile">Room details</th>
         </tr>
         <tr v-for="roomBooking in roomBookings" :key="roomBooking.id">
           <td>{{ roomBooking.room.name }}</td>
-          <td>{{ roomBooking.room.capacity }}</td>
+          <td class="hidden-on-mobile">
+            {{ roomBooking.room.capacity }}
+            </td>
           <td>{{ roomBooking.date }}</td>
           <td>{{ roomBooking.startTime }}</td>
-          <td>{{ roomBooking.endTime }}</td>
+          <td class="hidden-on-mobile">
+            {{ roomBooking.endTime }}
+            </td>
+          <td class="hidden-on-mobile">
           <router-link
             :to="{
               name: 'MemberRoom',
@@ -133,6 +138,7 @@
           >
              View room details
           </router-link>
+          </td>
         </tr>
       </table>
       <p v-else-if="errorMessageRoomBookings.length ===0">You don't have any room bookings</p>
@@ -147,7 +153,6 @@
 import Header from "./MemberHeader.vue";
 import axios from "axios";
 const config = require("../../config");
-
 const backendUrl =
   process.env.NODE_ENV === "production"
     ? `http://${config.build.backendHost}`
@@ -156,12 +161,10 @@ const frontendUrl =
   process.env.NODE_ENV === "production"
     ? `http://${config.build.host}`
     : `http://${config.dev.host}:${config.dev.port}`;
-
 const axios_instance = axios.create({
   baseURL: backendUrl,
   headers: { "Access-Control-Allow-Origin": frontendUrl },
 });
-
 export default {
   components: { Header },
   name: "MemberHome",
@@ -183,7 +186,6 @@ export default {
     }
     const loggedInMember = JSON.parse(storedCredentials);
     this.fetchReservation(loggedInMember.member.id); 
-
     axios_instance
       .get(`/member/${loggedInMember.member.id}/loans/`)
       .then((response) => {
@@ -249,17 +251,14 @@ h1,
 h2 {
   font-weight: normal;
 }
-
 h2 {
   margin: 20px 0;
 }
-
 .deleteTD {
   border: 0px !important;
   padding: 0 !important;
   width: 8px !important;
 }
-
 ul {
   list-style-type: none;
   padding: 0;
@@ -268,16 +267,19 @@ ul {
   display: flex;
   justify-content: space-evenly;
 }
-
 .error-message {
   margin: 20px;
   text-align: center;
   color: red;
 }
-
 .item-picture-container img {
   max-width: 20%;
   width: auto;
   height: auto;
+}
+@media only screen and (max-width: 768px) {
+  .hidden-on-mobile {
+    display: none;
+  }
 }
 </style>
