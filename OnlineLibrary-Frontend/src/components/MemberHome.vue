@@ -274,4 +274,10 @@ ul {
   text-align: center;
   color: red;
 }
+
+.item-picture-container img {
+  max-width: 20%;
+  width: auto;
+  height: auto;
+}
 </style>

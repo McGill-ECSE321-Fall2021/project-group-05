@@ -28,8 +28,15 @@ import AddANewspaper from "./AddNewspaper.vue";
 import AddAnArchive from "./AddArchive.vue";
 
 export default {
-  components: { Header, AddABook, AddAMovie, AddAnAlbum, AddANewspaper, AddAnArchive},
-  name: "LibrarianHome",
+  components: {
+    Header,
+    AddABook,
+    AddAMovie,
+    AddAnAlbum,
+    AddANewspaper,
+    AddAnArchive
+  },
+  name: "LibrarianHome"
 };
 </script>
 
@@ -46,5 +53,10 @@ ul {
 .item-picture-container {
   display: flex;
   justify-content: space-evenly;
+}
+.item-picture-container img {
+  max-width: 20%;
+  width: auto;
+  height: auto;
 }
 </style>
