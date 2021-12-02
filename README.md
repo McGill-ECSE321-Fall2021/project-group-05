@@ -361,10 +361,14 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
       <td>Guillaume Delmas-Frenette</td>
       <td>
         <ul>
-          <li>?</li>
+          <li> Participated in meetings</li>
+          <li> Wrote the code to make our web page installable on a mobile app </li>
+          <li> Modified the member home page to conditionnaly render only some columns when on small devices </li>
+          <li> Created issue to make sure everything on the marking scheme is taking care of </li>
+          <li> Code review </li>
         </ul>
       </td>
-      <td>x hours</td>
+      <td>10 hours</td>
     </tr>
     <tr>
       <td>Kirollos Roufail</td>
