@@ -35,34 +35,43 @@
             </router-link>
           </td>
           <td class="deleteTD">
-            <b-button variant="danger" @click="deleteReservation(reservation.id)">
+            <b-button
+              variant="danger"
+              @click="deleteReservation(reservation.id)"
+            >
               <i class="bi bi-x-square-fill"></i>
             </b-button>
           </td>
         </tr>
       </table>
-      <p v-else-if="errorMessageReservation.length === 0">You don't have any reservation</p>
-      <p class="error-message" v-if="errorMessageReservation"> {{errorMessageReservation}} </p>
-      <p class="error-message" v-if="errorMessageDelete"> {{errorMessageDelete}} </p>
+      <p v-else-if="errorMessageReservation.length === 0">
+        You don't have any reservation
+      </p>
+      <p class="error-message" v-if="errorMessageReservation">
+        {{ errorMessageReservation }}
+      </p>
+      <p class="error-message" v-if="errorMessageDelete">
+        {{ errorMessageDelete }}
+      </p>
       <h2>My loans</h2>
       <table v-if="loans.length !== 0">
         <tr>
-          <th>Item ID</th>
+          <th class="hidden-on-mobile">Item ID</th>
           <th>Return date</th>
-          <th>Number of renewals</th>
+          <th class="hidden-on-mobile">Number of renewals</th>
           <th>Item title</th>
           <th>Item details</th>
         </tr>
         <tr v-for="loan in loans" :key="loan.id">
-          <td>
+          <td class="hidden-on-mobile">
             {{ loan.reservableItem.id }}
           </td>
           <td>
             {{ loan.returnDate }}
           </td>
-          <td>
+          <td class="hidden-on-mobile">
             {{ loan.numberOfRenewals }}
-          </td> 
+          </td>
 
           <td v-if="loan.reservableItem.bookInfo != null">
             {{ loan.reservableItem.bookInfo.title }}
@@ -83,7 +92,7 @@
             >
               View item details
             </router-link>
-          </td> 
+          </td>
           <td v-else-if="loan.reservableItem.movieInfo != null">
             <router-link
               :to="{
@@ -107,10 +116,14 @@
           <td v-else>Could not find item details</td>
         </tr>
       </table>
-      <p v-else-if="errorMessageLoans.length ===0">You don't have any reservation</p>
-      <p class="error-message" v-if="errorMessageLoans"> {{errorMessageLoans}} </p>
+      <p v-else-if="errorMessageLoans.length === 0">
+        You don't have any reservation
+      </p>
+      <p class="error-message" v-if="errorMessageLoans">
+        {{ errorMessageLoans }}
+      </p>
       <h2>My room bookings</h2>
-      <table v-if="roomBookings.length !==0">
+      <table v-if="roomBookings.length !== 0">
         <tr>
           <th>Room</th>
           <th>Capacity</th>
@@ -131,11 +144,13 @@
               params: { roomId: roomBooking.room.id },
             }"
           >
-             View room details
+            View room details
           </router-link>
         </tr>
       </table>
-      <p v-else-if="errorMessageRoomBookings.length ===0">You don't have any room bookings</p>
+      <p v-else-if="errorMessageRoomBookings.length === 0">
+        You don't have any room bookings
+      </p>
       <p class="error-message" v-if="errorMessageRoomBookings">
         {{ errorMessageRoomBookings }}
       </p>
@@ -159,7 +174,7 @@ const frontendUrl =
 
 const axios_instance = axios.create({
   baseURL: backendUrl,
-  headers: { "Access-Control-Allow-Origin": frontendUrl },
+  headers: { "Access-Control-Allow-Origin": frontendUrl }
 });
 
 export default {
@@ -173,71 +188,76 @@ export default {
       errorMessageReservation: "",
       errorMessageLoans: "",
       errorMessageRoomBookings: "",
-      errorMessageDelete: "",
+      errorMessageDelete: ""
     };
   },
-  created: function () {
+  created: function() {
     const storedCredentials = window.sessionStorage.getItem("loggedInMember");
     if (storedCredentials == null) {
       this.$router.push({ name: "Login" });
     }
     const loggedInMember = JSON.parse(storedCredentials);
-    this.fetchReservation(loggedInMember.member.id); 
+    this.fetchReservation(loggedInMember.member.id);
 
     axios_instance
       .get(`/member/${loggedInMember.member.id}/loans/`)
-      .then((response) => {
+      .then(response => {
         this.loans = response.data;
         this.errorMessageLoans = "";
         console.log(response.data);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
-        this.errorMessageLoans ="Oops! 🙁 Something bad happened on our side while trying to load your loans. Try again later";
+        this.errorMessageLoans =
+          "Oops! 🙁 Something bad happened on our side while trying to load your loans. Try again later";
       });
     axios_instance
       .get(`/member/${loggedInMember.member.id}/roomBookings`)
-      .then((response) => {
+      .then(response => {
         this.roomBookings = response.data;
         this.errorMessageRoomBookings = "";
         console.log(response.data);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
-        this.errorMessageRoomBookings ="Oops! 🙁 Something bad happened on our side while trying to load your room bookings. Try again later";
+        this.errorMessageRoomBookings =
+          "Oops! 🙁 Something bad happened on our side while trying to load your room bookings. Try again later";
       });
   },
   methods: {
     deleteReservation(itemId) {
       axios_instance
-      .delete(`/reservation/${itemId}/`)
-      .then(() =>{
-        this.errorMessageDelete= "";
-        const storedCredentials = window.sessionStorage.getItem("loggedInMember");
-        if (storedCredentials == null) {
-        this.$router.push({ name: "Login" });
-        }
-        const loggedInMember = JSON.parse(storedCredentials);
-        this.fetchReservation(loggedInMember.member.id);
-      })
-      .catch(error => {
-        console.error(error);
-        this.errorMessageDelete= "Oops! 🙁 Something bad happened on our side while trying to delete your reservation. Try again later"
-      });
+        .delete(`/reservation/${itemId}/`)
+        .then(() => {
+          this.errorMessageDelete = "";
+          const storedCredentials = window.sessionStorage.getItem(
+            "loggedInMember"
+          );
+          if (storedCredentials == null) {
+            this.$router.push({ name: "Login" });
+          }
+          const loggedInMember = JSON.parse(storedCredentials);
+          this.fetchReservation(loggedInMember.member.id);
+        })
+        .catch(error => {
+          console.error(error);
+          this.errorMessageDelete =
+            "Oops! 🙁 Something bad happened on our side while trying to delete your reservation. Try again later";
+        });
     },
-    fetchReservation(memberId){
-      
+    fetchReservation(memberId) {
       axios_instance
-      .get(`/member/${memberId}/reservation`)
-      .then((response) => {
-        this.reservations = response.data;
-        this.errorMessageReservation = "";
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-        this.errorMessageReservation ="Oops! 🙁 Something bad happened on our side while trying to load your reservations. Try again later";
-      });
+        .get(`/member/${memberId}/reservation`)
+        .then(response => {
+          this.reservations = response.data;
+          this.errorMessageReservation = "";
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.error(error);
+          this.errorMessageReservation =
+            "Oops! 🙁 Something bad happened on our side while trying to load your reservations. Try again later";
+        });
     }
   }
 };
@@ -279,5 +299,11 @@ ul {
   max-width: 20%;
   width: auto;
   height: auto;
+}
+
+@media only screen and (max-width: 768px) {
+  .hidden-on-mobile {
+    display: none;
+  }
 }
 </style>
