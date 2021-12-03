@@ -33,11 +33,9 @@
             >
               View item details
             </router-link>
-          </td>
-          <td class="deleteTD">
-            <b-button variant="danger" @click="deleteReservation(reservation.id)">
-              <i class="bi bi-x-square-fill"></i>
-            </b-button>
+              <b-button class="float-right" variant="danger" @click="deleteReservation(reservation.id)" >
+                <i class="bi bi-x-square-fill"></i>
+              </b-button>
           </td>
         </tr>
       </table>
@@ -253,11 +251,6 @@ h2 {
 }
 h2 {
   margin: 20px 0;
-}
-.deleteTD {
-  border: 0px !important;
-  padding: 0 !important;
-  width: 8px !important;
 }
 ul {
   list-style-type: none;
