@@ -18,14 +18,14 @@
             Update personal info
           </b-nav-item>
         </b-navbar-nav>
-        <b-navbar-nav>
+        <b-navbar-nav class="hidden-on-mobile">
           <b-nav-item
             :to="{ name: 'Scheduler', params: { variant: 'RoomBooking' } }"
           >
             Room Booking
           </b-nav-item>
         </b-navbar-nav>
-        <b-navbar-nav>
+        <b-navbar-nav class="hidden-on-mobile">
           <b-nav-item
             :to="{ name: 'Scheduler', params: { variant: 'Schedule' } }"
           >
@@ -40,3 +40,12 @@
     </b-navbar>
   </header>
 </template>
+
+<style>
+/* Hide headers for pages that are incompatible with mobile */
+@media only screen and (max-width: 768px) {
+  .hidden-on-mobile {
+    display: none;
+  }
+}
+</style>
