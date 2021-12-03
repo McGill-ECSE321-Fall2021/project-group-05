@@ -13,7 +13,7 @@
           </b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav>
-          <b-nav-item :toggleable="lg" :to="{ name: 'LibrarianRooms' }">
+          <b-nav-item :to="{ name: 'LibrarianRooms' }">
             Browse rooms
           </b-nav-item>
         </b-navbar-nav>
