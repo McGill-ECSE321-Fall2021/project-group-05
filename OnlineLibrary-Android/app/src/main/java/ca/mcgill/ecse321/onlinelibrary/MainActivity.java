@@ -17,6 +17,6 @@ public class MainActivity extends AppCompatActivity {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
-        webView.loadUrl("http://onlinelibrary-frontend-05a.herokuapp.com");
+        webView.loadUrl("https://onlinelibrary-frontend-05a.herokuapp.com");
     }
 }
