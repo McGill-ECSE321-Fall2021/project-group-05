@@ -24,11 +24,11 @@ const config = require("../../config");
 
 const backendUrl =
   process.env.NODE_ENV === "production"
-    ? `http://${config.build.backendHost}`
+    ? `https://${config.build.backendHost}`
     : `http://${config.dev.backendHost}:${config.dev.backendPort}`;
 const frontendUrl =
   process.env.NODE_ENV === "production"
-    ? `http://${config.build.host}`
+    ? `https://${config.build.host}`
     : `http://${config.dev.host}:${config.dev.port}`;
 
 const axios_instance = axios.create({
