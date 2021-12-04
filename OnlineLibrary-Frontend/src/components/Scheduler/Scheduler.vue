@@ -2,7 +2,8 @@
   <body>
     <v-app class="globalHeader">
       <div class="scheduler-container">
-        <Header class="globalHeader"/>
+        <LibrarianHeader v-if="store.user.isLibrarian" class="globalHeader"/>
+        <MemberHeader v-else class="globalHeader"/>
         <SchedulerHeader :title="scheduleTitle" :store="store"  />
         <v-date-picker
           v-if="store.showPicker"
@@ -47,7 +48,8 @@
 </template>
 
 <script>
-import Header from "../MemberHeader";
+import MemberHeader from "../MemberHeader";
+import LibrarianHeader from "../LibrarianHeader";
 import SchedulerHeader from "./Header";
 import OptionsBar from "./Options/OptionsBar";
 import { BIconX, BIconCloudArrowUpFill } from 'bootstrap-vue';
@@ -80,7 +82,7 @@ let store = {
 export default {
   name: "Scheduler",
   props: ['variant'],
-  components: {Header, SchedulerHeader, OptionsBar, BIconX, BIconCloudArrowUpFill},
+  components: {LibrarianHeader, MemberHeader,  SchedulerHeader, OptionsBar, BIconX, BIconCloudArrowUpFill},
   data: () => ({
     scheduleTitle: "Schedule",
     nowColor: "#31c9e0",
