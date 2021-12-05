@@ -53,7 +53,7 @@
             aria-describedby="input-live-feedback"
           ></b-form-input>
           <b-form-invalid-feedback id="input-live-feedback">
-            {{this.confirmPassword}}
+            {{ this.confirmPassword }}
           </b-form-invalid-feedback>
         </b-form-group>
         <b-button @click="onSubmit" variant="primary">Submit</b-button>
@@ -98,7 +98,7 @@ export default {
         name: "",
         username: "",
         password: "",
-      },        
+      },
       confirmPassword: "",
       name: "",
       username: "",
@@ -162,13 +162,11 @@ export default {
         )
         .then((response) => {
           self.errorMessage = "";
-          self.confirmationMsg = "Your info has been updated :)";
-          self.name = response.data.fullName;
-          self.username = response.data.username;
+          self.confirmationMsg = "Your info has been updated 😊";
         })
         .catch((error) => {
           this.errorMessage =
-            "could not update your login info, please try again with a different username";
+            "Could not update your login info, please try again with a different username";
           this.confirmationMsg = "";
           console.log(error);
         });
