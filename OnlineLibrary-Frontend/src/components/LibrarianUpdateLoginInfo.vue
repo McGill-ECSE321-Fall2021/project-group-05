@@ -37,26 +37,28 @@
             type="password"
             v-model="form.password"
             placeholder="Password"
-            required
+            aria-describedby="input-live-feedback"
             @keydown.space.prevent
             :state="passwordState()"
-            aria-describedby="input-live-feedback"
+            required
           ></b-form-input>
           <b-form-input
             id="input-4"
             type="password"
             v-model="form.confirmPassword"
             placeholder="Confirm password"
-            required
             @keydown.space.prevent
             :state="passwordState()"
             aria-describedby="input-live-feedback"
+            required
           ></b-form-input>
           <b-form-invalid-feedback id="input-live-feedback">
             {{ this.confirmPassword }}
           </b-form-invalid-feedback>
         </b-form-group>
-        <b-button @click="onSubmit" variant="primary">Submit</b-button>
+        <b-button @click="onSubmit" variant="primary" v-bind:disabled="!this.form.name || !this.form.username || !passwordState()"
+          >Submit</b-button
+        >
       </b-form>
       <p v-if="errorMessage" class="error-message">
         ERROR: {{ this.errorMessage }}
@@ -129,7 +131,16 @@ export default {
         console.log(error);
       });
   },
-
+  disableButton: function () {
+    if (
+      this.form.name.length > 0 &&
+      this.form.username.length > 0 &&
+      this.form.password.length > 7 &&
+      this.confirmPassword > 7
+    ) {
+      return false;
+    } else return true;
+  },
   methods: {
     passwordState() {
       let size = this.form.password.length > 7;

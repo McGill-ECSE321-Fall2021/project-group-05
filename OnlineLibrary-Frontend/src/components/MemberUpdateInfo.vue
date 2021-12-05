@@ -29,7 +29,7 @@
             required
           ></b-form-input>
         </b-form-group>
-        <b-button v-on:click="onSubmit" variant="primary">Submit</b-button>
+        <b-button v-on:click="onSubmit" variant="primary" v-bind:disabled="!this.formName.trim() || !this.formAddress.trim()">Submit</b-button>
       </b-form>
       <p v-if="errorMessage" class="error-message">
         ERROR: {{ this.errorMessage }}
