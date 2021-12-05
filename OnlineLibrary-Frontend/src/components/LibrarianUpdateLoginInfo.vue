@@ -117,7 +117,6 @@ export default {
       })
       .catch((error) =>{
         self.errorMessage = "There seems to be an error, please log out and log back in";
-        console.log(error)});
   },
 
   methods: {
@@ -152,7 +151,6 @@ export default {
           this.errorMessage =
             "could not update your login info, please try again with a different username and/or password";
           this.confirmationMsg = "";
-          console.log(error);
         });
     },
   },

@@ -87,10 +87,8 @@ export default {
       .then((response) => {
         self.address = response.data.address;
         self.name = response.data.fullName;
-        console.log(response.data);
       })
       .catch((error) => {
-        console.log(error);
         self.errorMessage = "There seems to be an error, please log out and log back in";
         });
   },

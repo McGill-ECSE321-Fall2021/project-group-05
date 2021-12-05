@@ -75,11 +75,6 @@ export default {
   methods: {
     createArchive(event) {
       event.preventDefault();
-      console.log(
-        this.archiveDate,
-        this.archiveDescription,
-        this.archiveTitle
-      );
       axios_instance
         .post(
           `/archiveInfo/${this.archiveTitle}`,
@@ -100,7 +95,6 @@ export default {
           });
         })
         .catch((error) => {
-          console.error(error);
           this.errorMessage =
             "Could not create this item";
         });

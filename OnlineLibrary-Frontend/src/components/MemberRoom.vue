@@ -57,12 +57,10 @@ export default {
         this.room = response.data;
       })
       .catch(error => {
-        console.log(error);
         this.$router.replace({ name: "NotFound" });
       });
   },
   beforeRouteUpdate(to, from, next) {
-    console.log("Updating route...");
     axios_instance
       .get(`/room/${to.params.roomId}`)
       .then(response => {
@@ -70,7 +68,6 @@ export default {
         next();
       })
       .catch(error => {
-        console.log(error);
         next({ name: "NotFound" });
       });
   }

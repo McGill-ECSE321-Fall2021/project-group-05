@@ -86,12 +86,6 @@ export default {
   methods: {
     createBook(event) {
       event.preventDefault();
-      console.log(
-        this.bookNumberOfPages,
-        this.bookAuthor,
-        this.bookIsbn,
-        this.bookTitle
-      );
       axios_instance
         .post(
           `/bookInfo/${this.bookTitle}`,
@@ -113,7 +107,6 @@ export default {
           });
         })
         .catch((error) => {
-          console.error(error);
           this.errorMessage =
             "Could not create this item";
         });

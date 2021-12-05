@@ -141,10 +141,8 @@ export default {
         this.items = response.data;
         this.filteredItems = this.items;
         this.errorMessage = "";
-        console.log(response.data);
       })
       .catch(error => {
-        console.error(error);
         this.errorMessage =
           "Oops! 🙁 Something bad happened on our side. Try again later";
       });

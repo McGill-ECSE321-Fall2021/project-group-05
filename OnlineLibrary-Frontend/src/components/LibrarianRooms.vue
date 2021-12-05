@@ -54,10 +54,8 @@ export default {
       .then(response => {
         this.rooms = response.data;
         this.errorMessage = "";
-        console.log(response.data);
       })
       .catch(error => {
-        console.error(error);
         this.errorMessage =
           "Oops! 🙁 Something bad happened on our side. Try again later";
       });

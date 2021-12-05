@@ -75,11 +75,6 @@ export default {
   methods: {
     createAlbum(event) {
       event.preventDefault();
-      console.log(
-        this.albumPerformer,
-        this.albumGenre,
-        this.albumTitle
-      );
       axios_instance
         .post(
           `/albumInfo/${this.albumTitle}`,
@@ -100,7 +95,6 @@ export default {
           });
         })
         .catch((error) => {
-          console.error(error);
           this.errorMessage =
             "Could not create this item";
         });
