@@ -229,22 +229,32 @@ public class MemberService {
 	 * Throws an IllegalArgumentException if there is no member with the given
 	 * ID or if the new address or new full name is empty.
 	 *
-	 * @param id Primary key of an existing member
-	 * @param newAddress New physical address for the member
-	 * @param newFullName New full name for the member
+	 * @param id
+	 *            Primary key of an existing member
+	 * @param newAddress
+	 *            New physical address for the member
+	 * @param newFullName
+	 *            New full name for the member
 	 * @return Updated member
 	 */
 	@Transactional
 	public Member updateMember(Integer id, String newAddress, String newFullName) {
 		Member member = memberRepository.findMemberById(id);
-
 		if (member == null) {
 			throw new IllegalArgumentException("A member with the id " + id + "does not exist");
 		}
 
-		if (newAddress.isBlank() || newFullName.isBlank()) {
-			throw new IllegalArgumentException("address or full name cannot be blank");
+		ArrayList<String> errors = new ArrayList<String>(2);
+		if (newAddress == null || newAddress.isBlank()) {
+			errors.add("Address cannot be blank.");
 		}
+		if (newFullName == null || newFullName.isBlank()) {
+			errors.add("Full name cannot be blank.");
+		}
+		if (!errors.isEmpty()) {
+			throw new IllegalArgumentException(String.join(" ", errors));
+		}
+
 		member.setAddress(newAddress);
 		member.setFullName(newFullName);
 		return member;
@@ -253,9 +263,11 @@ public class MemberService {
 	/**
 	 * Gets the list of loans for the given member.
 	 *
-	 * Throws an IllegalArgumentException if there is no member with the given ID.
+	 * Throws an IllegalArgumentException if there is no member with the given
+	 * ID.
 	 *
-	 * @param id Primary key of an existing member
+	 * @param id
+	 *            Primary key of an existing member
 	 * @return Loans for the given member
 	 */
 	@Transactional
@@ -267,9 +279,11 @@ public class MemberService {
 	/**
 	 * Gets the list of room bookings for the given member.
 	 *
-	 * Throws an IllegalArgumentException if there is no member with the given ID.
+	 * Throws an IllegalArgumentException if there is no member with the given
+	 * ID.
 	 *
-	 * @param memberId Primary key of an existing member
+	 * @param memberId
+	 *            Primary key of an existing member
 	 * @return All room bookings for the member
 	 */
 	@Transactional
