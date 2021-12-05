@@ -1,10 +1,9 @@
 <template>
   <body>
     <Header />
-    <div class="form">
+    <main class="form">
       <h1>Update personal info</h1>
       <b-form @submit="onSubmit" v-if="show">
-        <p>Your current name: {{ name }}</p>
         <b-form-group
           id="input-group-1"
           label="Your new name:"
@@ -12,13 +11,11 @@
         >
           <b-form-input
             id="input-1"
-            style="width: 15%"
             v-model="formName"
-            placeholder="Enter name"
+            :placeholder="name"
             required
           ></b-form-input>
         </b-form-group>
-        <p>Your current address: {{ address }}</p>
         <b-form-group
           id="input-group-3"
           label="Your new address:"
@@ -26,10 +23,9 @@
         >
           <b-form-input
             id="input-3"
-            style="width: 15%"
             type="text"
             v-model="formAddress"
-            placeholder="New address"
+            :placeholder="address"
             required
           ></b-form-input>
         </b-form-group>
@@ -38,7 +34,7 @@
       <p v-if="errorMessage" class="error-message">
         ERROR: {{ this.errorMessage }}
       </p>
-    </div>
+    </main>
   </body>
 </template>
 
@@ -128,9 +124,6 @@ export default {
 </script>
 
 <style scoped>
-.form {
-  margin: 20px;
-}
 .error-message {
   color: red;
 }
