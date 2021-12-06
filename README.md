@@ -401,10 +401,12 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
       <td>Mircea Gosman</td>
       <td>
         <ul>
-          <li>?</li>
+          <li>Looked at Vue's PWA integration with our project & its NPM conflicts.</li>
+          <li>Proposed Android Webview solution to simplify the port to mobile.</li>
+          <li>Resolved bugs with app header & logout behavior.</li>
         </ul>
       </td>
-      <td>x hours</td>
+      <td>3 hours</td>
     </tr>
     <tr>
       <td>Sebastian Ionascu</td>
