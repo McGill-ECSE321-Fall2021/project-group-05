@@ -34,6 +34,9 @@
       <p v-if="errorMessage" class="error-message">
         ERROR: {{ this.errorMessage }}
       </p>
+      <p v-if="confirmationMessage" class="confirmation-message">
+        {{ this.confirmationMessage }}
+      </p>
     </main>
   </body>
 </template>
@@ -70,6 +73,7 @@ export default {
       formName: "",
       formAddress: "",
       errorMessage: "",
+      confirmationMessage: "",
       show: true,
     };
   },
@@ -83,7 +87,8 @@ export default {
       .then((response) => {
         self.address = response.data.address;
         self.name = response.data.fullName;
-        console.log(response.data);
+        self.formName = response.data.fullName;
+        self.formAddress = response.data.address;
       })
       .catch((error) => {
         console.log(error);
@@ -114,9 +119,10 @@ export default {
           const updateMember = response.data;
           self.address= updateMember.address;
           self.name= updateMember.fullName;
+          self.confirmationMessage = "Your info has been updated 😊";
         })
         .catch((error) => {
-          self.errorMessage = "could not update your info, please try again. Make sure that your name and or address are not empty!";
+          self.errorMessage = "Could not update your info, please try again.";
         });
     },
   },
@@ -126,5 +132,8 @@ export default {
 <style scoped>
 .error-message {
   color: red;
+}
+.confirmation-message {
+  color: green;
 }
 </style>
