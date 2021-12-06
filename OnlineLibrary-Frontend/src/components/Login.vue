@@ -119,7 +119,7 @@ p {
   margin-bottom: 0.5rem;
 }
 .b-input {
-  width: 30vw;
+  width: 90%;
   max-width: 27rem;
 }
 .b-button {
