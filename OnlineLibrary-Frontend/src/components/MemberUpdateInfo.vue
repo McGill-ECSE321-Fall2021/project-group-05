@@ -1,10 +1,9 @@
 <template>
   <body>
     <Header />
-    <div class="form">
+    <main class="form">
       <h1>Update personal info</h1>
       <b-form @submit="onSubmit" v-if="show">
-        <p>Your current name: {{ name }}</p>
         <b-form-group
           id="input-group-1"
           label="Your new name:"
@@ -12,13 +11,11 @@
         >
           <b-form-input
             id="input-1"
-            style="width: 15%"
             v-model="formName"
-            placeholder="Enter name"
+            :placeholder="name"
             required
           ></b-form-input>
         </b-form-group>
-        <p>Your current address: {{ address }}</p>
         <b-form-group
           id="input-group-3"
           label="Your new address:"
@@ -26,19 +23,21 @@
         >
           <b-form-input
             id="input-3"
-            style="width: 15%"
             type="text"
             v-model="formAddress"
-            placeholder="New address"
+            :placeholder="address"
             required
           ></b-form-input>
         </b-form-group>
-        <b-button v-on:click="onSubmit" variant="primary">Submit</b-button>
+        <b-button v-on:click="onSubmit" variant="primary" v-bind:disabled="!this.formName.trim() || !this.formAddress.trim()">Submit</b-button>
       </b-form>
       <p v-if="errorMessage" class="error-message">
         ERROR: {{ this.errorMessage }}
       </p>
-    </div>
+      <p v-if="confirmationMessage" class="confirmation-message">
+        {{ this.confirmationMessage }}
+      </p>
+    </main>
   </body>
 </template>
 
@@ -74,6 +73,7 @@ export default {
       formName: "",
       formAddress: "",
       errorMessage: "",
+      confirmationMessage: "",
       show: true,
     };
   },
@@ -87,6 +87,8 @@ export default {
       .then((response) => {
         self.address = response.data.address;
         self.name = response.data.fullName;
+        self.formName = response.data.fullName;
+        self.formAddress = response.data.address;
       })
       .catch((error) => {
         self.errorMessage = "There seems to be an error, please log out and log back in";
@@ -116,9 +118,10 @@ export default {
           const updateMember = response.data;
           self.address= updateMember.address;
           self.name= updateMember.fullName;
+          self.confirmationMessage = "Your info has been updated 😊";
         })
         .catch((error) => {
-          self.errorMessage = "could not update your info, please try again. Make sure that your name and or address are not empty!";
+          self.errorMessage = "Could not update your info, please try again.";
         });
     },
   },
@@ -126,10 +129,10 @@ export default {
 </script>
 
 <style scoped>
-.form {
-  margin: 20px;
-}
 .error-message {
   color: red;
+}
+.confirmation-message {
+  color: green;
 }
 </style>

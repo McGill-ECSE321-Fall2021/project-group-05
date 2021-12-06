@@ -1,21 +1,18 @@
 <template>
   <body>
     <Header />
-    <div class="form">
-      <h1>Update login info</h1>
+    <h1>Update login info</h1>
+    <main>
       <b-form @submit="onSubmit" v-if="show">
-        <p>Current name: {{ name }}</p>
         <b-form-group id="input-group-1" label="Your Name:" label-for="input-1">
           <b-form-input
             id="input-1"
-            style="width: 15%"
             v-model="form.name"
-            placeholder="Enter name"
+            :placeholder="name"
             required
           ></b-form-input>
         </b-form-group>
 
-        <p>Your current username: {{ username }}</p>
         <b-form-group
           id="input-group-2"
           label="Your new Username:"
@@ -23,9 +20,8 @@
         >
           <b-form-input
             id="input-2"
-            style="width: 15%"
             v-model="form.username"
-            placeholder="Enter new Username"
+            :placeholder="username"
             @keydown.space.prevent
             required
           ></b-form-input>
@@ -38,20 +34,31 @@
         >
           <b-form-input
             id="input-3"
-            style="width: 15%"
             type="password"
             v-model="form.password"
             placeholder="Password"
+            aria-describedby="input-live-feedback"
+            @keydown.space.prevent
+            :state="passwordState()"
             required
+          ></b-form-input>
+          <b-form-input
+            id="input-4"
+            type="password"
+            v-model="form.confirmPassword"
+            placeholder="Confirm password"
             @keydown.space.prevent
             :state="passwordState()"
             aria-describedby="input-live-feedback"
+            required
           ></b-form-input>
           <b-form-invalid-feedback id="input-live-feedback">
-            Enter at least 8 characters
+            {{ this.confirmPassword }}
           </b-form-invalid-feedback>
         </b-form-group>
-        <b-button @click="onSubmit" variant="primary">Submit</b-button>
+        <b-button @click="onSubmit" variant="primary" v-bind:disabled="!this.form.name.trim() || !this.form.username || !passwordState()"
+          >Submit</b-button
+        >
       </b-form>
       <p v-if="errorMessage" class="error-message">
         ERROR: {{ this.errorMessage }}
@@ -59,7 +66,7 @@
       <p v-if="confirmationMsg" class="confirmation-message">
         {{ this.confirmationMsg }}
       </p>
-    </div>
+    </main>
   </body>
 </template>
 
@@ -94,6 +101,7 @@ export default {
         username: "",
         password: "",
       },
+      confirmPassword: "",
       name: "",
       username: "",
       show: true,
@@ -114,14 +122,25 @@ export default {
         self.librarian = response.data;
         self.name = response.data.fullName;
         self.username = response.data.username;
+        self.form.name = response.data.fullName;
+        self.form.username = response.data.username;
       })
-      .catch((error) =>{
-        self.errorMessage = "There seems to be an error, please log out and log back in";
+      .catch((error) => {
+        self.errorMessage =
+          "There seems to be an error, please log out and log back in";
       });
   },
   methods: {
     passwordState() {
-      return this.form.password.length > 7 ? true : false;
+      let size = this.form.password.length > 7;
+      let match = this.form.password === this.form.confirmPassword;
+      if (!match) {
+        this.confirmPassword = "Your passwords do not match";
+        return false;
+      } else if (!size) {
+        this.confirmPassword = "Enter at least 8 characters";
+        return false;
+      } else return true;
     },
     onSubmit() {
       const librarian = JSON.parse(
@@ -143,13 +162,11 @@ export default {
         )
         .then((response) => {
           self.errorMessage = "";
-          self.confirmationMsg = "Your info has been updated :)";
-          self.name = response.data.fullName;
-          self.username = response.data.username;
+          self.confirmationMsg = "Your info has been updated 😊";
         })
         .catch((error) => {
           this.errorMessage =
-            "could not update your login info, please try again with a different username and/or password";
+            "Could not update your login info, please try again with a different username";
           this.confirmationMsg = "";
         });
     },
@@ -163,8 +180,5 @@ export default {
 }
 .error-message {
   color: red;
-}
-.form {
-  margin: 20px;
 }
 </style>
