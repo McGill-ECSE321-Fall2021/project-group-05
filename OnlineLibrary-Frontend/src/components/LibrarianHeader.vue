@@ -77,7 +77,7 @@ export default {
 /* Hide headers for pages that are incompatible with mobile */
 @media only screen and (max-width: 768px) {
   .hidden-on-mobile {
-    display: none;
+    display: none !important;
   }
 }
 </style>

@@ -153,11 +153,11 @@ import axios from "axios";
 const config = require("../../config");
 const backendUrl =
   process.env.NODE_ENV === "production"
-    ? `http://${config.build.backendHost}`
+    ? `https://${config.build.backendHost}`
     : `http://${config.dev.backendHost}:${config.dev.backendPort}`;
 const frontendUrl =
   process.env.NODE_ENV === "production"
-    ? `http://${config.build.host}`
+    ? `https://${config.build.host}`
     : `http://${config.dev.host}:${config.dev.port}`;
 const axios_instance = axios.create({
   baseURL: backendUrl,
@@ -189,10 +189,8 @@ export default {
       .then((response) => {
         this.loans = response.data;
         this.errorMessageLoans = "";
-        console.log(response.data);
       })
       .catch((error) => {
-        console.error(error);
         this.errorMessageLoans ="Oops! 🙁 Something bad happened on our side while trying to load your loans. Try again later";
       });
     axios_instance
@@ -200,10 +198,8 @@ export default {
       .then((response) => {
         this.roomBookings = response.data;
         this.errorMessageRoomBookings = "";
-        console.log(response.data);
       })
       .catch((error) => {
-        console.error(error);
         this.errorMessageRoomBookings ="Oops! 🙁 Something bad happened on our side while trying to load your room bookings. Try again later";
       });
   },
@@ -221,7 +217,6 @@ export default {
         this.fetchReservation(loggedInMember.member.id);
       })
       .catch(error => {
-        console.error(error);
         this.errorMessageDelete= "Oops! 🙁 Something bad happened on our side while trying to delete your reservation. Try again later"
       });
     },
@@ -232,10 +227,8 @@ export default {
       .then((response) => {
         this.reservations = response.data;
         this.errorMessageReservation = "";
-        console.log(response.data);
       })
       .catch((error) => {
-        console.error(error);
         this.errorMessageReservation ="Oops! 🙁 Something bad happened on our side while trying to load your reservations. Try again later";
       });
     }

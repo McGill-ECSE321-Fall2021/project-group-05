@@ -2,7 +2,7 @@
 [![Main CI push](https://github.com/McGill-ECSE321-Fall2021/project-group-05/actions/workflows/main-push-backend.yml/badge.svg?branch=main)](https://github.com/McGill-ECSE321-Fall2021/project-group-05/actions/workflows/main-push-backend.yml)
 
 ## Overview
-This online library system serves a library in a small town. It assists librarians in day-to-day operations like managing the library catalog, checking items in and out, and registering new users. It also provides access to the library catalog and reservation system for online users. The backend is deployed [here](https://onlinelibrary-backend-05a.herokuapp.com/test) and the web frontend is deployed [here](https://onlinelibrary-frontend-05a.herokuapp.com).
+This online library system serves a library in a small town. It assists librarians in day-to-day operations like managing the library catalog, checking items in and out, and registering new users. It also provides access to the library catalog and reservation system for online users. The backend is deployed [here](https://onlinelibrary-backend-05a.herokuapp.com/test) and the web frontend is deployed [here](https://onlinelibrary-frontend-05a.herokuapp.com). Deployment instructions are available [here](https://github.com/McGill-ECSE321-Fall2021/project-group-05/wiki/Deployments).
 
 Further documentation may be accessed via the [wiki](https://github.com/McGill-ECSE321-Fall2021/project-group-05/wiki).
 
@@ -352,10 +352,15 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
       <td>Gabriel Lacroix</td>
       <td>
         <ul>
-          <li>?</li>
+          <li>Participated in meetings and discussions</li>
+          <li>Modified the following elements to make them responsive: the header bar, the item browsing, some home page elements, and a few other things.</li>
+          <li>Tried to add PWA functionality to the web app</li>
+          <li>Fix history mode</li>
+          <li>Documented next steps and created issues to make the entire website usable on mobile</li>
+          <li>Reviewed code</li>
         </ul>
       </td>
-      <td>x hours</td>
+      <td>16 hours</td>
     </tr>
     <tr>
       <td>Guillaume Delmas-Frenette</td>
@@ -383,10 +388,14 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
       <td>Louis Hildebrand</td>
       <td>
         <ul>
-          <li>?</li>
+          <li>Participate in meetings and discussions</li>
+          <li>Add comments and perform minor refactoring in member and librarian services</li>
+          <li>Document mobile app building and testing</li>
+          <li>Fix error when accessing frontend over HTTPS</li>
+          <li>Miscellaneous aesthetic improvements and cleanup in the frontend</li>
         </ul>
       </td>
-      <td>x hours</td>
+      <td>10 hours</td>
     </tr>
     <tr>
       <td>Mircea Gosman</td>

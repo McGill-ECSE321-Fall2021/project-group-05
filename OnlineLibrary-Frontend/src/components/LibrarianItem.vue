@@ -685,11 +685,11 @@ const config = require("../../config");
 
 const backendUrl =
   process.env.NODE_ENV === "production"
-    ? `http://${config.build.backendHost}`
+    ? `https://${config.build.backendHost}`
     : `http://${config.dev.backendHost}:${config.dev.backendPort}`;
 const frontendUrl =
   process.env.NODE_ENV === "production"
-    ? `http://${config.build.host}`
+    ? `https://${config.build.host}`
     : `http://${config.dev.host}:${config.dev.port}`;
 
 const axios_instance = axios.create({
@@ -731,13 +731,11 @@ export default {
   created() {
     const promiseToFetchItem = this.fetchItemDetails(this.$route.params.itemId)
       .catch(error => {
-        console.error(error);
         this.$router.replace({ name: "NotFound" });
       });
 
     const promisetoFetchCopies = this.fetchItemCopies(this.$route.params.itemId)
       .catch(error => {
-        console.error(error);
         this.$router.replace({ name: "NotFound" });
       });
 
@@ -748,23 +746,19 @@ export default {
     axios_instance
       .get(`/member/all`)
       .then(response => {
-        console.log(response.data);
         this.members = response.data;
       })
       .catch(error => {
-        console.error(error);
         this.$router.replace({ name: "NotFound" });
       });
   },
   beforeRouteUpdate(to, from, next) {
     const promiseToFetchItem = this.fetchItemDetails(to.params.itemId)
       .catch(error => {
-        console.error(error);
         next({ name: "NotFound" });
       });
     const promiseToFetchCopies = this.fetchItemDetails(to.params.itemId)
       .catch(error => {
-        console.error(error);
         next({ name: "NotFound" });
       });
     
@@ -789,7 +783,6 @@ export default {
         .catch(error => {
           this.updateItemSuccessMessage = "";
           this.updateItemErrorMessage = "Could not update item details";
-          console.error(error);
         });
     },
     updateBook(event) {
@@ -811,7 +804,6 @@ export default {
       return axios_instance
       .get(`/libraryItemInfo/${itemId}`)
       .then(response => {
-        console.log(response.data);
         this.item = response.data;
         this.newItem = { ...this.item };
       });
@@ -820,7 +812,6 @@ export default {
       return axios_instance
       .get(`libraryItemInfo/${itemId}/libraryItem`)
       .then(response => {
-        console.log(response.data);
         this.copies = response.data;
       });
     },
@@ -845,7 +836,6 @@ export default {
                   return { ...copy, status: "Checked out" };
                 }
               }).catch(error => {
-                console.error(error);
                 return { ...copy, status: "Could not fetch copy status"};
               })
           )
@@ -866,7 +856,6 @@ export default {
         .catch(error => {
           this.addCopySuccessMessage = "";
           this.addCopyErrorMessage = "Could not add copy";
-          console.error(error);
         });
     },
     deleteCopy(event) {
@@ -891,7 +880,6 @@ export default {
         .catch(error => {
           this.deleteCopySuccessMessage = "";
           this.deleteCopyErrorMessage = "Could not delete copy";
-          console.error(error);
         });
     },
     checkOut(event) {
@@ -912,7 +900,6 @@ export default {
         .catch(error => {
           this.checkOutSuccessMessage = "";
           this.checkOutErrorMessage = "Could not check out copy";
-          console.error(error);
         });
     },
     returnItem(event) {
@@ -928,7 +915,6 @@ export default {
         .catch(error => {
           this.returnItemSuccessMessage = "";
           this.returnItemErrorMessage = "Could not return copy";
-          console.error(error);
         });
     },
     reserve(event) {
@@ -952,7 +938,6 @@ export default {
         .catch(error => {
           this.reserveSuccessMessage = "";
           this.reserveErrorMessage = "Could not make reservation";
-          console.error(error);
         });
     }
   },

@@ -190,11 +190,11 @@ const config = require("../../config");
 
 const backendUrl =
   process.env.NODE_ENV === "production"
-    ? `http://${config.build.backendHost}`
+    ? `https://${config.build.backendHost}`
     : `http://${config.dev.backendHost}:${config.dev.backendPort}`;
 const frontendUrl =
   process.env.NODE_ENV === "production"
-    ? `http://${config.build.host}`
+    ? `https://${config.build.host}`
     : `http://${config.dev.host}:${config.dev.port}`;
 
 const axios_instance = axios.create({
@@ -220,14 +220,12 @@ export default {
     const promiseToFetchItem = this.fetchItemDetails(
       this.$route.params.itemId
     ).catch(error => {
-      console.error(error);
       this.$router.replace({ name: "NotFound" });
     });
 
     const promisetoFetchCopies = this.fetchItemCopies(
       this.$route.params.itemId
     ).catch(error => {
-      console.error(error);
       this.$router.replace({ name: "NotFound" });
     });
 
@@ -238,13 +236,11 @@ export default {
   beforeRouteUpdate(to, from, next) {
     const promiseToFetchItem = this.fetchItemDetails(to.params.itemId).catch(
       error => {
-        console.error(error);
         next({ name: "NotFound" });
       }
     );
     const promisetoFetchCopies = this.fetchItemDetails(to.params.itemId).catch(
       error => {
-        console.error(error);
         next({ name: "NotFound" });
       }
     );
@@ -277,14 +273,12 @@ export default {
           this.reservationErrorMessage = "";
         })
         .catch(error => {
-          console.error(error);
           this.reservationSuccessMessage = "";
           this.reservationErrorMessage = "You cannot reserve this item";
         });
     },
     fetchItemDetails(itemId) {
       return axios_instance.get(`/libraryItemInfo/${itemId}`).then(response => {
-        console.log(response.data);
         this.item = response.data;
         this.newItem = { ...this.item };
       });
@@ -293,7 +287,6 @@ export default {
       return axios_instance
         .get(`libraryItemInfo/${itemId}/libraryItem`)
         .then(response => {
-          console.log(response.data);
           this.copies = response.data;
         });
     },

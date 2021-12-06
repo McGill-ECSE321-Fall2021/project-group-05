@@ -13,6 +13,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+/**
+ * Controller to create, read, update, delete, or log in members. For detailed
+ * documentation for each endpoint, see the project wiki:
+ * https://github.com/McGill-ECSE321-Fall2021/project-group-05/wiki/RESTful-service-endpoints.
+ */
 @CrossOrigin(origins = "*")
 @RestController
 public class MemberController {
@@ -34,7 +39,7 @@ public class MemberController {
 	public MemberDto registerMember(@RequestBody CreateMemberRequestDto newMemberDto) {
 		Member member = memberService.registerMember(newMemberDto);
 		return MemberDto.fromMember(member);
-	} 
+	}
 
 	/**
 	 * Adds an online account to an existing member that does not have an online
@@ -42,8 +47,10 @@ public class MemberController {
 	 *
 	 * The username, password, and email address are all required.
 	 *
-	 * @param id Primary key of an existing member
-	 * @param newOnlineAccountDto Online account information
+	 * @param id
+	 *            Primary key of an existing member
+	 * @param newOnlineAccountDto
+	 *            Online account information
 	 * @return The created online account
 	 */
 	@PostMapping(value = {"/member/{id}/onlineAccount", "/member/{id}/onlineAccount/"})
@@ -79,10 +86,10 @@ public class MemberController {
 		return MemberDto.fromMember(member);
 	}
 
-	@PutMapping(value = {"/member/{id}" ,"/member/{id}/"})
-	public MemberDto updateMember(@RequestParam String address, @RequestParam String fullName, @PathVariable Integer id){
-		return MemberDto.fromMember(memberService.updateMember
-				(id, address, fullName));
+	@PutMapping(value = {"/member/{id}", "/member/{id}/"})
+	public MemberDto updateMember(@RequestParam String address, @RequestParam String fullName,
+			@PathVariable Integer id) {
+		return MemberDto.fromMember(memberService.updateMember(id, address, fullName));
 	}
 
 	@PutMapping(value = {"/member/{id}/applyPenalty", "/member/{id}/applyPenalty/"})
@@ -98,16 +105,16 @@ public class MemberController {
 		member = memberService.removeStatusPenalty(member);
 		return MemberDto.fromMember(member);
 	}
-	
+
 	@GetMapping(value = {"/member/{id}/loans", "/member/{id}/loans/"})
 	public List<LoanDto> getLoansByMemberId(@PathVariable("id") int id) {
-		return StreamSupport.stream(memberService.getLoansByMemberId(id).spliterator(), true).map((Loan l) -> LoanDto.fromLoan(l))
-				.collect(Collectors.toList());
+		return StreamSupport.stream(memberService.getLoansByMemberId(id).spliterator(), true)
+				.map((Loan l) -> LoanDto.fromLoan(l)).collect(Collectors.toList());
 	}
-	
-	 @GetMapping(value = {"/member/{id}/roomBookings/", "/member/{id}/roomBookings"})
-	 public List<RoomBookingDto> getRoomBookingByMemberId(@PathVariable("id") int id) {
-		 return StreamSupport.stream(memberService.getRoomBookingsByMemberId(id).spliterator(), true)
-				 .map((RoomBooking r) -> RoomBookingDto.fromRoomBooking(r)).collect(Collectors.toList());
-	    }
+
+	@GetMapping(value = {"/member/{id}/roomBookings/", "/member/{id}/roomBookings"})
+	public List<RoomBookingDto> getRoomBookingByMemberId(@PathVariable("id") int id) {
+		return StreamSupport.stream(memberService.getRoomBookingsByMemberId(id).spliterator(), true)
+				.map((RoomBooking r) -> RoomBookingDto.fromRoomBooking(r)).collect(Collectors.toList());
+	}
 }

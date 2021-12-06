@@ -20,6 +20,10 @@ const _findUser = (variant, router, imports) => {
     }
   } else if (sessionStorage['loggedInLibrarian']) {
     user = JSON.parse(sessionStorage.getItem("loggedInLibrarian")).librarian;
+    user = {
+      isLibrarian: true,
+      ... user
+    }
     options = user.head ? imports[0] : imports[1];
     const miscOpt = options.options.filter((opt) => opt.role === "Misc")[0];
     if(miscOpt && variant === "booking") {

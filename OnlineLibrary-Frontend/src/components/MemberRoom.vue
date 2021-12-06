@@ -24,11 +24,11 @@ const config = require("../../config");
 
 const backendUrl =
   process.env.NODE_ENV === "production"
-    ? `http://${config.build.backendHost}`
+    ? `https://${config.build.backendHost}`
     : `http://${config.dev.backendHost}:${config.dev.backendPort}`;
 const frontendUrl =
   process.env.NODE_ENV === "production"
-    ? `http://${config.build.host}`
+    ? `https://${config.build.host}`
     : `http://${config.dev.host}:${config.dev.port}`;
 
 const axios_instance = axios.create({
@@ -57,12 +57,10 @@ export default {
         this.room = response.data;
       })
       .catch(error => {
-        console.log(error);
         this.$router.replace({ name: "NotFound" });
       });
   },
   beforeRouteUpdate(to, from, next) {
-    console.log("Updating route...");
     axios_instance
       .get(`/room/${to.params.roomId}`)
       .then(response => {
@@ -70,7 +68,6 @@ export default {
         next();
       })
       .catch(error => {
-        console.log(error);
         next({ name: "NotFound" });
       });
   }

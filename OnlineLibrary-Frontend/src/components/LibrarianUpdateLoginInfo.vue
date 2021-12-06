@@ -77,11 +77,11 @@ const config = require("../../config");
 
 const backendUrl =
   process.env.NODE_ENV === "production"
-    ? `http://${config.build.backendHost}:${config.build.backendPort}`
+    ? `https://${config.build.backendHost}:${config.build.backendPort}`
     : `http://${config.dev.backendHost}:${config.dev.backendPort}`;
 const frontendUrl =
   process.env.NODE_ENV === "production"
-    ? `http://${config.build.host}:${config.build.port}`
+    ? `https://${config.build.host}:${config.build.port}`
     : `http://${config.dev.host}:${config.dev.port}`;
 
 const axios_instance = axios.create({
@@ -128,7 +128,6 @@ export default {
       .catch((error) => {
         self.errorMessage =
           "There seems to be an error, please log out and log back in";
-        console.log(error);
       });
   },
   methods: {
