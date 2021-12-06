@@ -352,10 +352,15 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
       <td>Gabriel Lacroix</td>
       <td>
         <ul>
-          <li>?</li>
+          <li>Participated in meetings and discussions</li>
+          <li>Modified the following elements to make them responsive: the header bar, the item browsing, some home page elements, and a few other things.</li>
+          <li>Tried to add PWA functionality to the web app</li>
+          <li>Fix history mode</li>
+          <li>Documented next steps and created issues to make the entire website usable on mobile</li>
+          <li>Reviewed code</li>
         </ul>
       </td>
-      <td>x hours</td>
+      <td>16 hours</td>
     </tr>
     <tr>
       <td>Guillaume Delmas-Frenette</td>
