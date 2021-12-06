@@ -117,8 +117,8 @@ export default {
       })
       .catch((error) =>{
         self.errorMessage = "There seems to be an error, please log out and log back in";
+      });
   },
-
   methods: {
     passwordState() {
       return this.form.password.length > 7 ? true : false;
