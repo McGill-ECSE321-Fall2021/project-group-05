@@ -87,12 +87,6 @@ export default {
   methods: {
     createNewspaper(event) {
       event.preventDefault();
-      console.log(
-        this.newspaperDate,
-        this.newspaperNumber,
-        this.newspaperFrequency,
-        this.newspaperTitle
-      );
       axios_instance
         .post(
           `/newspaperInfo`,
@@ -115,7 +109,6 @@ export default {
           });
         })
         .catch((error) => {
-          console.error(error);
           this.errorMessage =
             "Could not create this item";
         });

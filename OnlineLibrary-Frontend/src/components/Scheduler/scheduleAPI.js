@@ -155,7 +155,6 @@ const _createBookingDTO = (event) => {
 }
 
 const _createShiftDTO = (event) => {
-  console.log(JSON.stringify(event))
   return {
     id: event.id,
     userId: event.librarianId,

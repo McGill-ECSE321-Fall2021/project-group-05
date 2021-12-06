@@ -86,12 +86,6 @@ export default {
   methods: {
     createMovie(event) {
       event.preventDefault();
-      console.log(
-        this.movieGenre,
-        this.movieDirector,
-        this.movieLength,
-        this.movieTitle
-      );
       axios_instance
         .post(
           `/movieInfo/${this.movieTitle}`,
@@ -113,7 +107,6 @@ export default {
           });
         })
         .catch((error) => {
-          console.error(error);
           this.errorMessage =
             "Could not create this item";
         });
