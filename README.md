@@ -379,10 +379,14 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
       <td>Kirollos Roufail</td>
       <td>
         <ul>
-          <li>?</li>
+          <li>Attended meetings</li>
+          <li>Added confirm password in the update librarian page</li>
+          <li>Made sure librarians and members cannot input blank fields</li>
+          <li>Changed error messages</li>
+          <li>Added a confirmation message to the member page</li>
         </ul>
       </td>
-      <td>x hours</td>
+      <td>15 hours</td>
     </tr>
     <tr>
       <td>Louis Hildebrand</td>
