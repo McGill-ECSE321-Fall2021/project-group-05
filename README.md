@@ -412,10 +412,15 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
       <td>Sebastian Ionascu</td>
       <td>
         <ul>
-          <li>?</li>
+          <li>Completed the user documentation in the wiki</li>
+          <li>Looked at Vue's PWA integration with our project</li>
+          <li>Assigned issues to teammates</li>
+          <li>Helped teammates resolve bugs</li>
+          <li>Participate in meetings and discussions</li>
+          <li>Review code and pull requests</li>
         </ul>
       </td>
-      <td>x hours</td>
+      <td>7 hours</td>
     </tr>
   </tbody>
 </table>
