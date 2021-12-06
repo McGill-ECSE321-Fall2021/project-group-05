@@ -13,6 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller to create, read, update, delete, and log in librarians.
+ *
+ * For detailed documentation for each endpoint, see the project wiki:
+ * https://github.com/McGill-ECSE321-Fall2021/project-group-05/wiki/RESTful-service-endpoints
+ */
 @CrossOrigin(origins = "*")
 @RestController
 public class LibrarianController {

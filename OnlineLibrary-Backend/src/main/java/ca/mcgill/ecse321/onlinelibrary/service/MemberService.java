@@ -19,6 +19,9 @@ import ca.mcgill.ecse321.onlinelibrary.model.Member;
 import ca.mcgill.ecse321.onlinelibrary.model.OnlineAccount;
 import ca.mcgill.ecse321.onlinelibrary.model.RoomBooking;
 
+/**
+ * Service to create, read, update, delete, or log in members.
+ */
 @Service
 public class MemberService {
 
@@ -32,10 +35,22 @@ public class MemberService {
 	private OnlineAccountRepository onlineAccountRepository;
 	@Autowired
 	private LoanRepository loanRepository;
-	
+
 	@Autowired
 	private RoomBookingRepository roomBookingRepository;
 
+	/**
+	 * Creates a new member. If the given member DTO has a non-null online
+	 * account, also creates a new online account.
+	 *
+	 * Throws an IllegalArgumentException if the full name or address is empty.
+	 * If the online account is non-null, also validates the online account. See
+	 * validateOnlineAccount() for the validation rules for an online account.
+	 *
+	 * @param newMember
+	 *            Credentials and account information for a new member
+	 * @return Account information for the newly-created member
+	 */
 	@Transactional
 	public Member registerMember(CreateMemberRequestDto newMember) {
 		if (newMember == null) {
@@ -63,6 +78,17 @@ public class MemberService {
 		return savedMember;
 	}
 
+	/**
+	 * Creates an online account for an existing member.
+	 *
+	 *
+	 *
+	 * @param memberId
+	 *            Primary key of an existing member
+	 * @param accountDto
+	 *            Credentials and account information for the new online account
+	 * @return Account information for the newly-created online account
+	 */
 	@Transactional
 	public OnlineAccount createOnlineAccount(int memberId, CreateOnlineAccountRequestDto accountDto) {
 		Member member = memberRepository.findMemberById(memberId);
@@ -89,6 +115,17 @@ public class MemberService {
 		return createdOnlineAccount;
 	}
 
+	/**
+	 * Validates the given member credentials. If the credentials are valid,
+	 * returns the member's account information. Otherwise, throws an
+	 * IllegalArgumentException.
+	 *
+	 * @param username
+	 *            Username of an existing member
+	 * @param password
+	 *            Password of the member
+	 * @return Account information for the member
+	 */
 	public Member logIn(String username, String password) {
 		// Find by username
 		OnlineAccount account = onlineAccountRepository.findOnlineAccountByUsername(username);
@@ -100,12 +137,21 @@ public class MemberService {
 		// TODO Implement password hashing
 		if (account.getPasswordHash().equals(password)) {
 			return account.getAccountOwner();
-		}
-		else {
+		} else {
 			throw new IllegalArgumentException("Invalid password.");
 		}
 	}
 
+	/**
+	 * Returns the account information for the member with the given ID.
+	 *
+	 * Throws an IllegalArgumentException if there is no member with the given
+	 * ID.
+	 *
+	 * @param id
+	 *            Primary key of an existing member
+	 * @return Account information for the member
+	 */
 	@Transactional
 	public Member getMemberById(int id) {
 		Member member = memberRepository.findMemberById(id);
@@ -117,12 +163,27 @@ public class MemberService {
 		return member;
 	}
 
+	/**
+	 * Returns the account information for all members.
+	 *
+	 * @return Account information for all members
+	 */
 	@Transactional
 	public Iterable<Member> getAllMembers() {
 		Iterable<Member> members = memberRepository.findAll();
 		return members;
 	}
 
+	/**
+	 * Marks the given member as active.
+	 *
+	 * Throws an IllegalStateException if the member's account is already
+	 * active.
+	 *
+	 * @param member
+	 *            Member to activate
+	 * @return Activated member
+	 */
 	@Transactional
 	public Member activateAccount(Member member) {
 		member.activate();
@@ -130,6 +191,15 @@ public class MemberService {
 		return member;
 	}
 
+	/**
+	 * Applies a penalty to the given member's account.
+	 *
+	 * Throws an IllegalStateException if the member's account is inactive.
+	 *
+	 * @param member
+	 *            Member to penalize
+	 * @return Updated member
+	 */
 	@Transactional
 	public Member applyStatusPenalty(Member member) {
 		member.applyStatusPenalty();
@@ -137,35 +207,85 @@ public class MemberService {
 		return member;
 	}
 
-	@Transactional
-	public Member updateMember(Integer id, String newAddress, String newFullName){
-		Member member = memberRepository.findMemberById(id);
-
-		if (member == null){
-			throw new IllegalArgumentException("A member with the id " + id + "does not exist");
-		}
-
-		if(newAddress.isBlank() || newFullName.isBlank()){
-			throw new IllegalArgumentException("address or full name cannot be blank");
-		}
-		member.setAddress(newAddress);
-		member.setFullName(newFullName);
-		return member;
-	}
-
+	/**
+	 * Removes a penalty from the given member's account.
+	 *
+	 * Throws an IllegalStateException if the member's account is inactive.
+	 *
+	 * @param member
+	 *            Member from whom to remove a penalty
+	 * @return Updated member
+	 */
 	@Transactional
 	public Member removeStatusPenalty(Member member) {
 		member.removeStatusPenalty();
 		member = memberRepository.save(member);
 		return member;
 	}
-	
+
+	/**
+	 * Updates the given member's account.
+	 *
+	 * Throws an IllegalArgumentException if there is no member with the given
+	 * ID or if the new address or new full name is empty.
+	 *
+	 * @param id
+	 *            Primary key of an existing member
+	 * @param newAddress
+	 *            New physical address for the member
+	 * @param newFullName
+	 *            New full name for the member
+	 * @return Updated member
+	 */
+	@Transactional
+	public Member updateMember(Integer id, String newAddress, String newFullName) {
+		Member member = memberRepository.findMemberById(id);
+		if (member == null) {
+			throw new IllegalArgumentException("A member with the id " + id + "does not exist");
+		}
+
+		ArrayList<String> errors = new ArrayList<String>(2);
+		if (newAddress == null || newAddress.isBlank()) {
+			errors.add("Address cannot be blank.");
+		}
+		if (newFullName == null || newFullName.isBlank()) {
+			errors.add("Full name cannot be blank.");
+		}
+		if (!errors.isEmpty()) {
+			throw new IllegalArgumentException(String.join(" ", errors));
+		}
+
+		member.setAddress(newAddress);
+		member.setFullName(newFullName);
+		return member;
+	}
+
+	/**
+	 * Gets the list of loans for the given member.
+	 *
+	 * Throws an IllegalArgumentException if there is no member with the given
+	 * ID.
+	 *
+	 * @param id
+	 *            Primary key of an existing member
+	 * @return Loans for the given member
+	 */
 	@Transactional
 	public Iterable<Loan> getLoansByMemberId(int id) {
 		Member member = this.getMemberById(id);
 		return loanRepository.findLoanByMember(member);
 	}
-	
+
+	/**
+	 * Gets the list of room bookings for the given member.
+	 *
+	 * Throws an IllegalArgumentException if there is no member with the given
+	 * ID.
+	 *
+	 * @param memberId
+	 *            Primary key of an existing member
+	 * @return All room bookings for the member
+	 */
 	@Transactional
 	public List<RoomBooking> getRoomBookingsByMemberId(int memberId) {
 		Member member = this.getMemberById(memberId);
@@ -176,6 +296,17 @@ public class MemberService {
 	// Helpers
 	// ========================================================================
 
+	/**
+	 * Validates the credentials and account information for a new member.
+	 *
+	 * Throws an IllegalArgumentException if the full name or address is empty.
+	 * If the online account is non-null, also validates the online account. See
+	 * validateOnlineAccount() for the validation rules for an online account.
+	 *
+	 * @param newMember
+	 *            Credentials and account information for a new member
+	 * @return List of error messages (empty list if none)
+	 */
 	private ArrayList<String> validateNewMember(CreateMemberRequestDto newMember) {
 		ArrayList<String> errors = new ArrayList<String>();
 
@@ -194,6 +325,19 @@ public class MemberService {
 		return errors;
 	}
 
+	/**
+	 * Validates the credentials and account information for a new online
+	 * account.
+	 *
+	 * Throws an IllegalArgumentException if the username is empty, if the
+	 * username is already taken, if the email address is empty, if the email
+	 * address is invalid, or if the password is less than 8 characters in
+	 * length.
+	 *
+	 * @param onlineAccount
+	 *            Credentials and account information for a new online account
+	 * @return Account information for the newly-created online account
+	 */
 	private ArrayList<String> validateNewOnlineAccount(CreateOnlineAccountRequestDto onlineAccount) {
 		ArrayList<String> errors = new ArrayList<String>();
 
@@ -226,8 +370,18 @@ public class MemberService {
 		return errors;
 	}
 
+	/**
+	 * Validates the given email address. The email address should have an '@'
+	 * preceded by at least one character and followed by at least one
+	 * character. That is, the email address must match the regular expression
+	 * '.+@.+'.
+	 *
+	 * @param emailAddress
+	 *            Email address to validate
+	 * @return True if the email address is valid and false otherwise
+	 */
 	private boolean isValidEmailAddress(String emailAddress) {
-		// Check that email address is in the format '.@.'
+		// Check that email address is in the format '.+@.+'
 		int indexOfAtSymbol = emailAddress.indexOf('@');
 		if (indexOfAtSymbol <= 0 || indexOfAtSymbol == emailAddress.length() - 1) {
 			return false;
