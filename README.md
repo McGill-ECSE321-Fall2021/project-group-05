@@ -388,10 +388,14 @@ Further documentation may be accessed via the [wiki](https://github.com/McGill-E
       <td>Louis Hildebrand</td>
       <td>
         <ul>
-          <li>?</li>
+          <li>Participate in meetings and discussions</li>
+          <li>Add comments and perform minor refactoring in member and librarian services</li>
+          <li>Document mobile app building and testing</li>
+          <li>Fix error when accessing frontend over HTTPS</li>
+          <li>Miscellaneous aesthetic improvements and cleanup in the frontend</li>
         </ul>
       </td>
-      <td>x hours</td>
+      <td>10 hours</td>
     </tr>
     <tr>
       <td>Mircea Gosman</td>
