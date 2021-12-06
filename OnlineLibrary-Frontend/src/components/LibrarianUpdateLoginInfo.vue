@@ -56,7 +56,7 @@
             {{ this.confirmPassword }}
           </b-form-invalid-feedback>
         </b-form-group>
-        <b-button @click="onSubmit" variant="primary" v-bind:disabled="!this.form.name || !this.form.username || !passwordState()"
+        <b-button @click="onSubmit" variant="primary" v-bind:disabled="!this.form.name.trim() || !this.form.username || !passwordState()"
           >Submit</b-button
         >
       </b-form>
@@ -131,16 +131,6 @@ export default {
         console.log(error);
       });
   },
-  disableButton: function () {
-    if (
-      this.form.name.length > 0 &&
-      this.form.username.length > 0 &&
-      this.form.password.length > 7 &&
-      this.confirmPassword > 7
-    ) {
-      return false;
-    } else return true;
-  },
   methods: {
     passwordState() {
       let size = this.form.password.length > 7;
@@ -179,7 +169,6 @@ export default {
           this.errorMessage =
             "Could not update your login info, please try again with a different username";
           this.confirmationMsg = "";
-          console.log(error);
         });
     },
   },
